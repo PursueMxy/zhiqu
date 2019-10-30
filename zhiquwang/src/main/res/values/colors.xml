@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="white">#ffffffff</color>
+    <color name="ff4e4d4d">#ff4e4d4d</color>
+    <color name="ffa5a5a5">#ffa5a5a5</color>
+    <color name="fffefefe">#fffefefe</color>
+    <color name="ff00b6ce">#ff00b6ce</color>
+    <color name="ff419cdb">#ff419cdb</color>
+    <color name="ffd6d6d6">#ffd6d6d6</color>
+    <color name="ff000000">#ff000000</color>
+    <color name="item_slt">#ff00b6ce</color>
+    <color name="fffee35b">#fffee35b</color>
+    <color name="ffb5b5b5">#ffb5b5b5</color>
+    <color name="fff2f2f2">#fff2f2f2</color>
+    <color name="ff0e1828">#ff0e1828</color>
+    <color name="item_normal">#ffb5b5b5</color>
+    <color name="ff28292d">#ff28292d</color>
+    <color name="FFF6FBFD">#FFF6FBFD</color>
+    <drawable name="FFFAFAFA">#FFFAFAFA</drawable>
+    <drawable name="ff18d2eb">#ff18d2eb</drawable>
+    <drawable name="fff2f2f2">#fff2f2f2</drawable>
+</resources>

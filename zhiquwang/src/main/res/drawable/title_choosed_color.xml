@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <!-- 选中 显示 的 颜色-->
+    <item android:left="@dimen/dp_10" android:right="@dimen/dp_10"
+        android:bottom="@dimen/dp_7">
+        <shape>
+            <solid android:color="@color/ff00b6ce"/>
+        </shape>
+    </item>
+
+    <item
+        android:left="@dimen/dp_5" android:right="@dimen/dp_5" android:bottom="@dimen/dp_10">
+        <shape>
+            <solid android:color="@color/white"/>
+        </shape>
+    </item>
+</layer-list>
+
