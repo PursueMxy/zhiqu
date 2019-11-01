@@ -162,6 +162,7 @@
           android:layout_width="match_parent"
           android:layout_height="@dimen/dp_100">
          <TextView
+             android:id="@+id/fm_record_overtime_overtime_statistics"
              android:gravity="center"
              android:layout_weight="1"
              android:drawablePadding="@dimen/dp_5"

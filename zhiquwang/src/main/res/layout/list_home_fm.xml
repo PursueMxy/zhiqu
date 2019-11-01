@@ -88,6 +88,7 @@
     />
 
     <RelativeLayout
+        android:id="@+id/list_home_fm_rl"
         android:layout_marginTop="@dimen/dp_10"
         android:layout_alignParentRight="true"
         android:background="@drawable/ic_bg_red"

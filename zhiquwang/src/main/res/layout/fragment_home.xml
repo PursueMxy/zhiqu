@@ -67,6 +67,7 @@
             />
     </RelativeLayout>
     <ImageView
+        android:id="@+id/fm_home_img_message"
         android:src="@mipmap/ic_remind"
         android:layout_alignParentRight="true"
         android:layout_marginTop="@dimen/dp_38"

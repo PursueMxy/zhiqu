@@ -17,9 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -31,7 +31,9 @@ import com.icarexm.zhiquwang.adapter.HomeFmAdapter;
 import com.icarexm.zhiquwang.adapter.TodayHeatAdapter;
 import com.icarexm.zhiquwang.custview.GlideImageLoader;
 import com.icarexm.zhiquwang.utils.MxyUtils;
-import com.icarexm.zhiquwang.view.actvity.RecruitDetailActivity;
+import com.icarexm.zhiquwang.view.activity.FamousRecruitmentActivity;
+import com.icarexm.zhiquwang.view.activity.MessageActivity;
+import com.icarexm.zhiquwang.view.activity.RecruitDetailActivity;
 import com.yyydjk.library.BannerLayout;
 import com.zhouyou.recyclerview.XRecyclerView;
 import com.zhouyou.recyclerview.adapter.BaseRecyclerViewAdapter;
@@ -42,7 +44,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private BannerLayout bannerLayout;
     //轮播图
@@ -62,6 +64,8 @@ public class HomeFragment extends Fragment {
     private XRecyclerView mRecyclerView;
     private HomeFmAdapter homeFmAdapter;
     private List<String> list=new ArrayList<>();
+    private GridAdapter gridAdapter;
+    private GridView home_gridview;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -96,8 +100,17 @@ public class HomeFragment extends Fragment {
         list.add("3");
         list.add("4");
         list.add("5");
-        GridView home_gridview = inflate.findViewById(R.id.fm_home_gridview);
-        home_gridview.setAdapter(new GridAdapter());
+        home_gridview = inflate.findViewById(R.id.fm_home_gridview);
+        gridAdapter = new GridAdapter();
+        home_gridview.setAdapter(gridAdapter);
+        home_gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i==0){
+                    startActivity(new Intent(mContext, FamousRecruitmentActivity.class));
+                }
+            }
+        });
         bannerLayout= inflate.findViewById(R.id.fm_home_banner);
         bannerLayout.setAutoPlay(true);
         bannerLayout.setImageLoader(new GlideImageLoader());
@@ -229,6 +242,7 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
+        inflate.findViewById(R.id.fm_home_img_message).setOnClickListener(this);
     }
 
     private String imageTranslateUri(int resId) {
@@ -242,7 +256,16 @@ public class HomeFragment extends Fragment {
         return uri.toString();
     }
 
-   public class GridAdapter extends BaseAdapter{
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.fm_home_img_message:
+                startActivity(new Intent(mContext, MessageActivity.class));
+                break;
+        }
+    }
+
+    public class GridAdapter extends BaseAdapter{
        @Override
        public int getCount() {
            return gridurls.size();

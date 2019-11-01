@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.actvity.RecruitDetailActivity">
+    tools:context=".view.activity.RecruitDetailActivity">
       <ScrollView
           android:layout_width="match_parent"
           android:layout_height="match_parent"
@@ -391,6 +391,8 @@
                 </RelativeLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginRight="@dimen/dp_15"
                     android:layout_marginBottom="@dimen/dp_70"
                     android:id="@+id/recruit_dtl_rcv_recruitList"
                     android:layout_marginTop="@dimen/dp_20"
@@ -409,6 +411,7 @@
         android:layout_height="@dimen/dp_60"
         >
         <TextView
+            android:id="@+id/recruit_dtl_tv_nearby_store"
             android:gravity="center"
             android:layout_marginTop="@dimen/dp_10"
             android:drawablePadding="@dimen/dp_5"
@@ -447,13 +450,14 @@
             android:background="@color/fff2f2f2"/>
 
         <TextView
+            android:id="@+id/recruit_dtl_tv_wechat"
             android:gravity="center"
             android:layout_marginTop="@dimen/dp_10"
             android:drawablePadding="@dimen/dp_5"
             android:drawableTop="@mipmap/ic_support"
             android:layout_width="@dimen/dp_80"
             android:layout_height="wrap_content"
-            android:text="推荐你好友"
+            android:text="推荐给好友"
             android:textColor="@color/ffb5b5b5"
             android:textSize="12sp"
             />

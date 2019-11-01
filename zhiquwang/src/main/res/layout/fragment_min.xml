@@ -45,6 +45,7 @@
             />
 
         <TextView
+            android:layout_marginTop="@dimen/dp_8"
             android:drawablePadding="@dimen/dp_8"
             android:drawableLeft="@mipmap/ic_location_white"
             android:layout_marginLeft="@dimen/dp_186"
@@ -55,6 +56,21 @@
             android:textColor="@color/FFF6FBFD"
             android:textSize="@dimen/sp_14"
             />
+
+        <com.icarexm.zhiquwang.custview.CircleImageView
+            android:id="@+id/fm_min_img_head"
+            android:layout_marginTop="@dimen/dp_23"
+            android:layout_marginLeft="@dimen/dp_94"
+            android:layout_width="@dimen/dp_72"
+            android:layout_height="@dimen/dp_72"
+            android:src="@mipmap/ic_avatar"/>
+        <ImageView
+            android:id="@+id/fm_min_img_edit"
+            android:layout_alignBottom="@+id/fm_min_img_head"
+            android:layout_alignRight="@+id/fm_min_img_head"
+            android:src="@mipmap/ic_edit_green"
+            android:layout_width="@dimen/dp_22"
+            android:layout_height="@dimen/dp_22"/>
     </RelativeLayout>
     <LinearLayout
         android:id="@+id/fm_min_ll_my"
@@ -66,6 +82,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_95">
         <RelativeLayout
+            android:id="@+id/fm_min_rl_waller"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -89,6 +106,7 @@
             android:layout_height="match_parent"
             android:background="@color/fff2f2f2"/>
         <RelativeLayout
+            android:id="@+id/fm_min_rl_myteam"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -117,6 +135,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_132">
         <RelativeLayout
+            android:id="@+id/fm_min_rl_myjobsearch"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_45">
             <TextView
@@ -275,7 +294,7 @@
              android:drawableLeft="@mipmap/ic_set"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
-             android:text="企业商务合作"
+             android:text="设置"
              android:textColor="@color/ff4e4d4d"
              android:textSize="@dimen/sp_14"/>
 

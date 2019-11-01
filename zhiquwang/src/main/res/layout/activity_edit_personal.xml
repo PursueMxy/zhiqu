@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFF8F9FD"
-    tools:context=".view.actvity.EditPersonalActivity">
+    tools:context=".view.activity.EditPersonalActivity">
     <RelativeLayout
         android:id="@+id/edit_personal_top"
         android:background="@color/white"

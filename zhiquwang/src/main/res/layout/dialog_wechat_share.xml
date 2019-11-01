@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+<LinearLayout
+    android:orientation="horizontal"
+    android:background="#fff4f4f4"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_119">
+    <TextView
+        android:drawablePadding="@dimen/dp_8"
+        android:drawableTop="@mipmap/ic_wechat"
+        android:layout_weight="1"
+        android:layout_marginTop="@dimen/dp_20"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="微信好友"
+        android:textColor="@color/ff4e4d4d"
+        android:textSize="@dimen/sp_15"
+        android:gravity="center"
+        />
+    <TextView
+        android:drawableTop="@mipmap/ic_chat_monments"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/dp_20"
+        android:drawablePadding="@dimen/dp_8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="微信朋友圈"
+        android:textColor="@color/ff4e4d4d"
+        android:textSize="@dimen/sp_15"
+        />
+</LinearLayout>
+    <Button
+        android:id="@+id/dialog_wechat_share_btn_back"
+        android:text="取消"
+        android:textColor="@color/ff4e4d4d"
+        android:textSize="@dimen/sp_15"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_44"/>
+</LinearLayout>
