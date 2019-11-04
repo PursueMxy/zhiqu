@@ -6,9 +6,13 @@
     tools:context=".view.fragment.MinFragment">
 
 <RelativeLayout
-    android:background="@mipmap/ic_min_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <RelativeLayout
+        android:background="@mipmap/ic_min_bg"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_255">
+    </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_64">
@@ -280,6 +284,7 @@
     </LinearLayout>
 
      <RelativeLayout
+         android:id="@+id/fm_min_rl_set"
          android:layout_marginRight="@dimen/dp_15"
          android:layout_marginLeft="@dimen/dp_15"
          android:layout_marginTop="@dimen/dp_10"

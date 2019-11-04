@@ -51,4 +51,6 @@ dependencies {
 
     //recyclerview
     implementation 'com.zhouyou:easyrecyclerview:1.0.5'
+
+    implementation 'com.haibin:calendarview:3.6.7'
 }

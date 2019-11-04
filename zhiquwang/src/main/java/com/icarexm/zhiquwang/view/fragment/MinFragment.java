@@ -18,6 +18,7 @@ import com.icarexm.zhiquwang.view.activity.EditPersonalActivity;
 import com.icarexm.zhiquwang.view.activity.MyJobSearchActivity;
 import com.icarexm.zhiquwang.view.activity.MyTeamActivity;
 import com.icarexm.zhiquwang.view.activity.MyWalletActivity;
+import com.icarexm.zhiquwang.view.activity.SetActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,6 +48,7 @@ public class MinFragment extends Fragment implements View.OnClickListener {
       inflate.findViewById(R.id.fm_min_rl_myteam).setOnClickListener(this);
       inflate.findViewById(R.id.fm_min_img_edit).setOnClickListener(this);
       inflate.findViewById(R.id.fm_min_rl_waller).setOnClickListener(this);
+      inflate.findViewById(R.id.fm_min_rl_set).setOnClickListener(this);
     }
 
     @Override
@@ -63,6 +65,9 @@ public class MinFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.fm_min_rl_waller:
                 startActivity(new Intent(mContext, MyWalletActivity.class));
+                break;
+            case R.id.fm_min_rl_set:
+                startActivity(new Intent(mContext, SetActivity.class));
                 break;
         }
     }

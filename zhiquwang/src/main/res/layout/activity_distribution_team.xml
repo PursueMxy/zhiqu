@@ -5,8 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@mipmap/ic_min_bg"
     tools:context=".view.activity.DistributionTeamActivity">
+    <RelativeLayout
+        android:background="@mipmap/ic_min_bg"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_255">
+    </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_64">

@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.fragment.RecordOvertimeFragment">
+<!--  正式工打卡  -->
    <RelativeLayout
+       android:visibility="gone"
        android:layout_width="match_parent"
        android:layout_height="match_parent">
    <RelativeLayout
@@ -195,4 +197,68 @@
              />
       </LinearLayout>
    </RelativeLayout>
+
+<!--  小时工打卡-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:background="@mipmap/ic_record_top"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_185">
+            <TextView
+                android:id="@+id/fm_record_overtime_two_tv_title"
+                android:layout_marginTop="@dimen/dp_33"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="工时制度：小时工记加班"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_17"
+                />
+            <TextView
+                android:id="@+id/fm_record_overtime_two_tv_set_basepay"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:background="@drawable/bg_white_6"
+                android:paddingTop="@dimen/dp_8"
+                android:paddingBottom="@dimen/dp_8"
+                android:paddingLeft="@dimen/dp_24"
+                android:paddingRight="@dimen/dp_24"
+                android:layout_below="@+id/fm_record_overtime_two_tv_title"
+                android:layout_marginTop="@dimen/dp_36"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="设置小时工资"
+                android:textColor="@color/ff00b6ce"
+                android:textSize="@dimen/sp_14"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_marginTop="@dimen/dp_170"
+            android:background="@mipmap/ic_income"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_141">
+            <TextView
+                android:id="@+id/fm_record_overtime_two_tv_income"
+                android:layout_marginLeft="@dimen/dp_35"
+                android:layout_marginTop="@dimen/dp_35"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="本月收入"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_17"
+                />
+            <TextView
+                android:layout_below="@+id/fm_record_overtime_two_tv_income"
+                android:id="@+id/fm_record_overtime_two_tv_salary"
+                android:layout_marginTop="@dimen/dp_18"
+                android:layout_marginLeft="@dimen/dp_35"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2050.00"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_22"
+                />
+        </RelativeLayout>
+    </RelativeLayout>
 </FrameLayout>

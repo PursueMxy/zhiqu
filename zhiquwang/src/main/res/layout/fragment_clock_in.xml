@@ -169,6 +169,7 @@
             </LinearLayout>
 
             <RelativeLayout
+                android:id="@+id/fm_clock_in_rl_attendance"
                 android:layout_marginBottom="@dimen/dp_20"
                 android:background="@color/white"
                 android:layout_marginTop="@dimen/dp_10"
