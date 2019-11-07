@@ -431,6 +431,7 @@
         android:background="@color/fff2f2f2"/>
 
         <TextView
+            android:id="@+id/recruit_dtl_tv_callPhone"
             android:gravity="center"
             android:layout_marginTop="@dimen/dp_10"
             android:drawablePadding="@dimen/dp_5"

@@ -380,6 +380,7 @@
     <dimen name="dp_365">365dp</dimen>
     <dimen name="dp_370">370dp</dimen>
     <dimen name="dp_378">378dp</dimen>
+    <dimen name="dp_395">395dp</dimen>
     <dimen name="dp_400">400dp</dimen>
     <dimen name="dp_404">404dp</dimen>
     <dimen name="dp_410">410dp</dimen>

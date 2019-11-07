@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".view.activity.PunchCardRecordActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_64">
+        <ImageView
+            android:id="@+id/distribution_team_img_back"
+            android:layout_marginTop="@dimen/dp_41"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_width="wrap_content"
+            android:src="@mipmap/ic_left_black"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_36"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="打卡记录"
+            android:textColor="@color/ff000000"
+            android:textSize="@dimen/sp_17"
+            />
+    </RelativeLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_marginTop="@dimen/dp_12"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2019年9月9日 星期一"
+            android:textColor="#ff4e4d4d"
+            android:textSize="17sp"
+            />
+
+        <com.icarexm.zhiquwang.custview.calender.SignDate
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginRight="@dimen/dp_15"
+            android:layout_marginBottom="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_20"
+            android:id="@+id/signDate"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_283">
+        </com.icarexm.zhiquwang.custview.calender.SignDate>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_95"
+        android:background="@color/white">
+        <TextView
+            android:id="@+id/punch_card_record_tv_startTime"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginLeft="@dimen/dp_34"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="打卡时间 9:00（上班打卡）"
+            android:textColor="@color/ff4e4d4d"
+            android:textSize="@dimen/sp_14"
+            />
+
+        <TextView
+            android:layout_below="@+id/punch_card_record_tv_startTime"
+            android:id="@+id/punch_card_record_tv_stopTime"
+            android:layout_marginTop="@dimen/dp_37"
+            android:layout_marginLeft="@dimen/dp_34"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="打卡时间 9:00（上班打卡）"
+            android:textColor="@color/ff4e4d4d"
+            android:textSize="@dimen/sp_14"
+            />
+
+        <ImageView
+            android:id="@+id/punch_card_record_img_startTime"
+            android:src="@drawable/bg_circle_gray"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginTop="@dimen/dp_15"
+            android:layout_width="@dimen/dp_11"
+            android:layout_height="@dimen/dp_11"/>
+         <View
+             android:layout_below="@+id/punch_card_record_img_startTime"
+             android:layout_marginLeft="@dimen/dp_20"
+             android:background="@drawable/fff2f2f2"
+             android:layout_width="@dimen/dp_1"
+             android:layout_height="@dimen/dp_52"/>
+        <ImageView
+            android:id="@+id/punch_card_record_img_stopTime"
+            android:layout_below="@+id/punch_card_record_img_startTime"
+            android:src="@drawable/bg_circle_green"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginTop="@dimen/dp_47"
+            android:layout_width="@dimen/dp_11"
+            android:layout_height="@dimen/dp_11"/>
+    </RelativeLayout>
+</LinearLayout>

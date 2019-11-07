@@ -167,27 +167,30 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_1"
             android:background="@color/fff2f2f2"/>
+
         <RelativeLayout
+            android:id="@+id/fm_min_rl_resume"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_45">
+
             <TextView
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/dp_10"
-                android:drawablePadding="@dimen/dp_10"
-                android:drawableLeft="@mipmap/ic_resume"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:drawableLeft="@mipmap/ic_resume"
+                android:drawablePadding="@dimen/dp_10"
                 android:text="我的简历"
                 android:textColor="@color/ff4e4d4d"
-                android:textSize="@dimen/sp_14"/>
+                android:textSize="@dimen/sp_14" />
 
             <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/dp_15"
-                android:src="@mipmap/ic_right_gray"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:src="@mipmap/ic_right_gray" />
         </RelativeLayout>
         <View
             android:layout_marginLeft="@dimen/dp_10"
@@ -197,6 +200,7 @@
             android:background="@color/fff2f2f2"/>
 
         <RelativeLayout
+            android:id="@+id/fm_min_rl_certification"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_45">
             <TextView
@@ -231,6 +235,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_91">
         <RelativeLayout
+            android:id="@+id/fm_min_rl_to_join"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_45">
             <TextView
@@ -260,6 +265,7 @@
             android:background="@color/fff2f2f2"/>
 
         <RelativeLayout
+            android:id="@+id/fm_min_rl_businessCooperation"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_45">
             <TextView

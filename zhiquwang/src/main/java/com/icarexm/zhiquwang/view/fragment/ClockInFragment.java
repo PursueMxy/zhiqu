@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.view.activity.AttendanceCardActivity;
+import com.icarexm.zhiquwang.view.activity.PunchCardRecordActivity;
+import com.icarexm.zhiquwang.view.activity.SetReminderActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,6 +40,8 @@ public class ClockInFragment extends Fragment implements View.OnClickListener {
 
     private void InitUI(View inflate) {
         inflate.findViewById(R.id.fm_clock_in_rl_attendance).setOnClickListener(this);
+        inflate.findViewById(R.id.fm_clock_in_punch_card_record).setOnClickListener(this);
+        inflate.findViewById(R.id.fm_clock_in_set_reminder).setOnClickListener(this);
     }
 
     @Override
@@ -45,6 +49,12 @@ public class ClockInFragment extends Fragment implements View.OnClickListener {
         switch (view.getId()){
             case R.id.fm_clock_in_rl_attendance:
                 startActivity(new Intent(mContext, AttendanceCardActivity.class));
+                break;
+            case R.id.fm_clock_in_punch_card_record:
+                startActivity(new Intent(mContext, PunchCardRecordActivity.class));
+                break;
+            case R.id.fm_clock_in_set_reminder:
+                startActivity(new Intent(mContext, SetReminderActivity.class));
                 break;
         }
     }

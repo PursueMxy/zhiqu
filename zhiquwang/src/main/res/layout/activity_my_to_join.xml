@@ -29,14 +29,16 @@
             android:src="@mipmap/ic_left_black"
             android:layout_height="wrap_content"/>
     </RelativeLayout>
+<!--    申请界面  -->
    <LinearLayout
-       android:visibility="gone"
+       android:id="@+id/my_to_join_ll_TypeOne"
        android:layout_marginTop="@dimen/dp_10"
        android:orientation="vertical"
        android:layout_width="match_parent"
-       android:layout_height="@dimen/dp_156"
-       android:background="@color/white">
+       android:layout_height="match_parent"
+      >
      <RelativeLayout
+         android:background="@color/white"
          android:layout_width="match_parent"
          android:layout_height="@dimen/dp_51">
          <TextView
@@ -67,6 +69,7 @@
            android:layout_height="@dimen/dp_1"
            android:background="@drawable/fff2f2f2"/>
        <RelativeLayout
+           android:background="@color/white"
            android:layout_width="match_parent"
            android:layout_height="@dimen/dp_51">
            <TextView
@@ -97,6 +100,7 @@
            android:layout_height="@dimen/dp_1"
            android:background="@drawable/fff2f2f2"/>
        <RelativeLayout
+           android:background="@color/white"
            android:layout_width="match_parent"
            android:layout_height="@dimen/dp_51">
            <TextView
@@ -127,9 +131,26 @@
                android:layout_marginRight="@dimen/dp_15"
                android:layout_centerVertical="true"/>
        </RelativeLayout>
-   </LinearLayout>
 
+       <RelativeLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent">
+           <Button
+               android:background="@drawable/btn_login"
+               android:layout_marginLeft="@dimen/dp_40"
+               android:layout_marginRight="@dimen/dp_40"
+               android:layout_marginBottom="@dimen/dp_40"
+               android:layout_alignParentBottom="true"
+               android:text="申请加盟"
+               android:textColor="@color/white"
+               android:textSize="@dimen/sp_15"
+               android:layout_width="match_parent"
+               android:layout_height="@dimen/dp_44"/>
+       </RelativeLayout>
+   </LinearLayout>
+<!--  审核中   -->
     <RelativeLayout
+        android:id="@+id/my_to_join_rl_TypeTwo"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -153,7 +174,10 @@
             android:textSize="15sp"
             />
     </RelativeLayout>
+<!--    审核通过 -->
     <RelativeLayout
+        android:id="@+id/my_to_join_rl_TypeThree"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ImageView

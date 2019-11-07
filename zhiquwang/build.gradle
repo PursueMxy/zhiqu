@@ -53,4 +53,7 @@ dependencies {
     implementation 'com.zhouyou:easyrecyclerview:1.0.5'
 
     implementation 'com.haibin:calendarview:3.6.7'
+
+    //权限申请框架
+    implementation 'com.hjq:xxpermissions:6.0'
 }

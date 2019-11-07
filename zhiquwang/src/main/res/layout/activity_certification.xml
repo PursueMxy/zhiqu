@@ -29,8 +29,9 @@
             android:src="@mipmap/ic_left_black"
             android:layout_height="wrap_content"/>
     </RelativeLayout>
-    <RelativeLayout
-        android:visibility="gone"
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/certification_rl_TypeOne"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     <LinearLayout
@@ -55,22 +56,23 @@
             >
             <ImageView
                 android:scaleType="fitXY"
+                android:layout_marginRight="@dimen/dp_5"
                 android:layout_toLeftOf="@+id/centerInParent"
                 android:src="@mipmap/ic_delete"
-                android:layout_width="@dimen/dp_11"
-                android:layout_height="@dimen/dp_11"/>
+                android:layout_width="@dimen/dp_12"
+                android:layout_height="@dimen/dp_12"/>
              <TextView
                  android:id="@+id/centerInParent"
                  android:layout_centerInParent="true"
                  android:layout_width="@dimen/dp_5"
-                 android:layout_height="wrap_content"/>
+                 android:layout_height="match_parent"/>
             <ImageView
                 android:scaleType="fitXY"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/dp_15"
                 android:src="@mipmap/ic_delete"
-                android:layout_width="@dimen/dp_11"
-                android:layout_height="@dimen/dp_11"/>
+                android:layout_width="@dimen/dp_12"
+                android:layout_height="@dimen/dp_12"/>
         </RelativeLayout>
         <LinearLayout
             android:layout_marginRight="@dimen/dp_15"
@@ -189,9 +191,11 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="@dimen/dp_40"/>
     </RelativeLayout>
-    </RelativeLayout>
+    </LinearLayout>
    <!-- 实名认证审核中-->
     <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/certification_rl_TypeTwo"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ImageView

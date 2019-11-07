@@ -13,10 +13,14 @@ import android.view.ViewGroup;
 
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.custview.ShadowDrawable;
+import com.icarexm.zhiquwang.view.activity.BusinessCooperationActivity;
+import com.icarexm.zhiquwang.view.activity.CertificationActivity;
 import com.icarexm.zhiquwang.view.activity.DistributionTeamActivity;
 import com.icarexm.zhiquwang.view.activity.EditPersonalActivity;
 import com.icarexm.zhiquwang.view.activity.MyJobSearchActivity;
+import com.icarexm.zhiquwang.view.activity.MyResumeActivity;
 import com.icarexm.zhiquwang.view.activity.MyTeamActivity;
+import com.icarexm.zhiquwang.view.activity.MyToJoinActivity;
 import com.icarexm.zhiquwang.view.activity.MyWalletActivity;
 import com.icarexm.zhiquwang.view.activity.SetActivity;
 
@@ -36,7 +40,6 @@ public class MinFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         mContext = getContext();
         View inflate = inflater.inflate(R.layout.fragment_min, container, false);
         InitUI(inflate);
@@ -49,6 +52,10 @@ public class MinFragment extends Fragment implements View.OnClickListener {
       inflate.findViewById(R.id.fm_min_img_edit).setOnClickListener(this);
       inflate.findViewById(R.id.fm_min_rl_waller).setOnClickListener(this);
       inflate.findViewById(R.id.fm_min_rl_set).setOnClickListener(this);
+      inflate.findViewById(R.id.fm_min_rl_resume).setOnClickListener(this);
+      inflate.findViewById(R.id.fm_min_rl_certification).setOnClickListener(this);
+      inflate.findViewById(R.id.fm_min_rl_to_join).setOnClickListener(this);
+      inflate.findViewById(R.id.fm_min_rl_businessCooperation).setOnClickListener(this);
     }
 
     @Override
@@ -68,6 +75,18 @@ public class MinFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.fm_min_rl_set:
                 startActivity(new Intent(mContext, SetActivity.class));
+                break;
+            case R.id.fm_min_rl_resume:
+                startActivity(new Intent(mContext, MyResumeActivity.class));
+                break;
+            case R.id.fm_min_rl_certification:
+                startActivity(new Intent(mContext, CertificationActivity.class));
+                break;
+            case R.id.fm_min_rl_to_join:
+                startActivity(new Intent(mContext, MyToJoinActivity.class));
+                break;
+            case R.id.fm_min_rl_businessCooperation:
+                startActivity(new Intent(mContext, BusinessCooperationActivity.class));
                 break;
         }
     }

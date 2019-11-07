@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rlItem"
+    android:paddingTop="@dimen/dp_23"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/tvWeek"
+        android:layout_width="@dimen/dp_23"
+        android:layout_height="@dimen/dp_23"
+        android:text="一"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:textColor="#666"
+        android:background="@android:color/white">
+    </TextView>
+    <ImageView
+        android:id="@+id/item_to_card_week"
+        android:layout_marginTop="@dimen/dp_2"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/tvWeek"
+        android:layout_width="@dimen/dp_4"
+        android:layout_height="@dimen/dp_4"
+        android:src="@drawable/bg_green_4"/>
+</RelativeLayout>

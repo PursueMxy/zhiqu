@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.view.WindowManager;
 
 import com.chaychan.library.BottomBarLayout;
+import com.hjq.permissions.OnPermission;
+import com.hjq.permissions.XXPermissions;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.custview.MyViewPager;
 import com.icarexm.zhiquwang.view.fragment.ClockInFragment;
@@ -40,6 +42,20 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+        //权限申请
+        XXPermissions.with(this)
+                .request(new OnPermission() {
+
+                    @Override
+                    public void hasPermission(List<String> granted, boolean isAll) {
+
+                    }
+
+                    @Override
+                    public void noPermission(List<String> denied, boolean quick) {
+
+                    }
+                });
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             // 透明状态栏
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);

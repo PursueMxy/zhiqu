@@ -1,6 +1,7 @@
 package com.icarexm.zhiquwang.view.activity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,12 +10,14 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.IndicatorAdapter;
@@ -47,6 +50,9 @@ public class RecruitDetailActivity extends AppCompatActivity {
     private int DELAYMILLIS=10000;
     private ViewPagerAdapter viewPagerAdapter;
     private IndicatorAdapter indicatorAdapter;
+    private View dialog_callphone;
+    private TextView tv_phone_number;
+    private AlertDialog alertDialog;
 
 
     @Override
@@ -63,7 +69,7 @@ public class RecruitDetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         InitUI();
     }
-    @OnClick({R.id.recruit_dtl_tv_wechat,R.id.recruit_dtl_tv_nearby_store})
+    @OnClick({R.id.recruit_dtl_tv_wechat,R.id.recruit_dtl_tv_nearby_store,R.id.recruit_dtl_tv_callPhone})
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.recruit_dtl_tv_wechat:
@@ -71,6 +77,10 @@ public class RecruitDetailActivity extends AppCompatActivity {
                 break;
             case R.id.recruit_dtl_tv_nearby_store:
                 startActivity(new Intent(mContext,NearbyStoreActivity.class));
+                break;
+            case R.id.recruit_dtl_tv_callPhone:
+                callPhoneDialog();
+                break;
         }
     }
 
@@ -161,6 +171,34 @@ public class RecruitDetailActivity extends AppCompatActivity {
             handler.postDelayed(runnable,DELAYMILLIS);
         }
     };
-
+    //电话联系
+    public void callPhoneDialog(){
+        dialog_callphone = getLayoutInflater().inflate(R.layout.dialog_callphone, null);
+        tv_phone_number = dialog_callphone.findViewById(R.id.dialog_callphone_tv_number);
+        dialog_callphone.findViewById(R.id.dialog_callphone_tv_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+        dialog_callphone.findViewById(R.id.dialog_callphone_tv_call).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String mobile = tv_phone_number.getText().toString();
+                Intent intentcall = new Intent();
+                //设置拨打电话的动作
+                intentcall.setAction(Intent.ACTION_CALL);
+                //设置拨打电话的号码
+                intentcall.setData(Uri.parse("tel:" + mobile));
+                //开启打电话的意图
+                startActivity(intentcall);
+                alertDialog.dismiss();
+            }
+        });
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        alertDialog = builder.setView(dialog_callphone)
+                .create();
+        alertDialog.show();
+    }
 
 }

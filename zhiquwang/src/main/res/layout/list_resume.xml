@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <View
+        android:layout_marginRight="@dimen/dp_15"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@drawable/fff2f2f2"/>
+    <TextView
+        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="公司名称XXXXXXXXXXXXXXXXX"
+        android:textColor="#ff4e4d4d"
+        android:textSize="14sp"
+        />
+
+    <TextView
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_marginTop="@dimen/dp_11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2018.01-2018.08"
+        android:textColor="#ffb5b5b5"
+        android:textSize="14sp"
+        />
+
+    <TextView
+        android:layout_marginTop="@dimen/dp_21"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="工作内容"
+        android:textColor="@color/ff4e4d4d"
+        android:textSize="@dimen/sp_14"
+        />
+
+    <TextView
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX..."
+        android:textColor="@color/ffb5b5b5"
+        android:textSize="@dimen/sp_14"
+        />
+
+    <View
+        android:layout_marginTop="@dimen/dp_11"
+        android:layout_marginRight="@dimen/dp_15"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@drawable/fff2f2f2"/>
+
+</LinearLayout>

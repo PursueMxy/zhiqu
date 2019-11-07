@@ -36,7 +36,4 @@
             android:textSize="@dimen/sp_17"
             />
     </RelativeLayout>
-    <CalendarView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_280"/>
 </LinearLayout>
