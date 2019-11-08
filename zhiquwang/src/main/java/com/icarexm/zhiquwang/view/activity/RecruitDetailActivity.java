@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -199,6 +200,14 @@ public class RecruitDetailActivity extends AppCompatActivity {
         alertDialog = builder.setView(dialog_callphone)
                 .create();
         alertDialog.show();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode==KeyEvent.KEYCODE_BACK){
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -11,6 +12,7 @@ import com.icarexm.zhiquwang.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class OvertimeApprovalActivity extends BaseActivity {
 
@@ -34,5 +36,23 @@ public class OvertimeApprovalActivity extends BaseActivity {
         }else {
             rl_overtime_mode.setVisibility(View.GONE);
         }
+    }
+
+    @OnClick({R.id.overtime_approval_img_back})
+    public void onViewClick(View view){
+        switch (view.getId()){
+            case R.id.overtime_approval_img_back:
+                finish();
+                break;
+
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode==KeyEvent.KEYCODE_BACK){
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

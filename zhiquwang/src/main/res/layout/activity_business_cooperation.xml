@@ -21,7 +21,7 @@
             android:textSize="@dimen/sp_17"
             />
         <ImageView
-            android:id="@+id/my_to_join_img_back"
+            android:id="@+id/business_cooperation_img_back"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="@dimen/dp_11"
             android:layout_marginLeft="@dimen/dp_15"

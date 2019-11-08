@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
 
 import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.CalendarView;
@@ -16,6 +18,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class AttendanceCardActivity extends BaseActivity {
 
@@ -37,5 +40,23 @@ public class AttendanceCardActivity extends BaseActivity {
     }
 
     private void initData() {
+    }
+
+    @OnClick({R.id.attendance_card_img_back})
+    public void onViewClick(View view){
+        switch (view.getId()){
+            case R.id.attendance_card_img_back:
+                finish();
+                break;
+
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode==KeyEvent.KEYCODE_BACK){
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

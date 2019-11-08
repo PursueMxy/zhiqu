@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_64">
         <ImageView
-            android:id="@+id/distribution_team_img_back"
+            android:id="@+id/punch_card_record_img_back"
             android:layout_marginTop="@dimen/dp_41"
             android:layout_marginLeft="@dimen/dp_15"
             android:layout_width="wrap_content"

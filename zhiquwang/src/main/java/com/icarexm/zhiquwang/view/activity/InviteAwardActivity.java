@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 
 import com.icarexm.zhiquwang.R;
@@ -40,6 +41,15 @@ public class InviteAwardActivity extends BaseActivity {
                 break;
         }
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode==KeyEvent.KEYCODE_BACK){
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     private void InitUI() {
         list.add("1");
         list.add("2");

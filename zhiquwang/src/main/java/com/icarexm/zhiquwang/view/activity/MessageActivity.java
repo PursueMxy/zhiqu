@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 
 import com.icarexm.zhiquwang.R;
@@ -83,5 +84,13 @@ public class MessageActivity extends BaseActivity {
                 finish();
                 break;
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode==KeyEvent.KEYCODE_BACK){
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

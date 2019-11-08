@@ -2,6 +2,7 @@ package com.icarexm.zhiquwang.view.activity;
 
 
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -10,6 +11,7 @@ import com.icarexm.zhiquwang.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MyToJoinActivity extends BaseActivity {
      @BindView(R.id.my_to_join_ll_TypeOne)
@@ -44,5 +46,23 @@ public class MyToJoinActivity extends BaseActivity {
             rl_typeTwo.setVisibility(View.GONE);
             ll_typeOne.setVisibility(View.GONE);
         }
+    }
+
+    @OnClick({R.id.my_to_join_img_back})
+    public void onViewClick(View view){
+        switch (view.getId()){
+            case R.id.my_to_join_img_back:
+                finish();
+                break;
+
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode==KeyEvent.KEYCODE_BACK){
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

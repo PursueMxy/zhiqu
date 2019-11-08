@@ -3,6 +3,7 @@ package com.icarexm.zhiquwang.view.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 
 import com.icarexm.zhiquwang.R;
@@ -25,5 +26,13 @@ public class BaseInformationActivity extends AppCompatActivity {
                 finish();
                 break;
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode==KeyEvent.KEYCODE_BACK){
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

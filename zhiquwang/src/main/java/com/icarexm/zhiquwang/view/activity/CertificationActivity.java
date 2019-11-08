@@ -3,6 +3,7 @@ package com.icarexm.zhiquwang.view.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -11,6 +12,7 @@ import com.icarexm.zhiquwang.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class CertificationActivity extends BaseActivity {
 
@@ -37,5 +39,23 @@ public class CertificationActivity extends BaseActivity {
           rl_TypeTwo.setVisibility(View.VISIBLE);
           rl_TypeOne.setVisibility(View.GONE);
       }
+    }
+
+    @OnClick({R.id.certification_img_back})
+    public void onViewClick(View view){
+        switch (view.getId()){
+            case R.id.certification_img_back:
+                finish();
+                break;
+
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode==KeyEvent.KEYCODE_BACK){
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
