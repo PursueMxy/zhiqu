@@ -38,7 +38,7 @@ public class MyMonthView extends MonthView {
         paint2.setTextAlign(Paint.Align.CENTER);
         dayBgBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_blue_select);
         TodayBgBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_blue_today);
-        daySuccessBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_abnormal);
+        daySuccessBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_abnormal);
         dayNormalBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_normal);
     }
 

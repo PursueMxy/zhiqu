@@ -5,13 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvTitle"
+    <ImageView
+        android:id="@+id/view_pager_img"
+        android:scaleType="fitXY"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+      />
+    <com.icarexm.zhiquwang.custview.CustomVideoView
+        android:visibility="gone"
+        android:id="@+id/view_pager_video"
+        android:padding="@dimen/dp_2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <ImageView
+        android:visibility="gone"
+        android:id="@+id/view_pager_img_play"
+        android:src="@mipmap/ic_video_play"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:textColor="@android:color/white"
-        android:textSize="32sp"
-        tools:text="item" />
+        />
 </RelativeLayout>
 

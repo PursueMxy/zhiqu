@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.custview.ShadowDrawable;
+import com.icarexm.zhiquwang.view.activity.BaseInformationActivity;
 import com.icarexm.zhiquwang.view.activity.BusinessCooperationActivity;
 import com.icarexm.zhiquwang.view.activity.CertificationActivity;
 import com.icarexm.zhiquwang.view.activity.DistributionTeamActivity;
@@ -68,7 +69,7 @@ public class MinFragment extends Fragment implements View.OnClickListener {
                 startActivity(new Intent(mContext, DistributionTeamActivity.class));
                 break;
             case R.id.fm_min_img_edit:
-                startActivity(new Intent(mContext, EditPersonalActivity.class));
+                startActivity(new Intent(mContext, BaseInformationActivity.class));
                 break;
             case R.id.fm_min_rl_waller:
                 startActivity(new Intent(mContext, MyWalletActivity.class));

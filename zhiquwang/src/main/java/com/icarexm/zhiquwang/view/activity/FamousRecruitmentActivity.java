@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,9 +16,14 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
+import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.FRAdapter;
+import com.icarexm.zhiquwang.bean.HomeDataBean;
+import com.icarexm.zhiquwang.contract.FamousRecruitmentContract;
+import com.icarexm.zhiquwang.presenter.FamousRecruitmentPresenter;
 import com.icarexm.zhiquwang.utils.MxyUtils;
 import com.zhouyou.recyclerview.XRecyclerView;
 import com.zhouyou.recyclerview.adapter.BaseRecyclerViewAdapter;
@@ -29,10 +35,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class FamousRecruitmentActivity extends AppCompatActivity {
+public class FamousRecruitmentActivity extends BaseActivity implements FamousRecruitmentContract.View {
      @BindView(R.id.famous_recruitment_recyclerView)
     XRecyclerView mRecyclerView;
-    private List<String> list=new ArrayList<>();
+     @BindView(R.id.famous_recruitment_tv_title)
+    TextView tv_title;
     private Context mContext;
     private FRAdapter frAdapter;
     private RadioGroup radioGroup;
@@ -41,29 +48,40 @@ public class FamousRecruitmentActivity extends AppCompatActivity {
     private RadioButton radiobutton_age;
     private RadioButton radiobutton_trade;
     private RadioButton radiobutton_work;
+    private String zone_id;
+    private FamousRecruitmentPresenter famousRecruitmentPresenter;
+    private SharedPreferences share;
+    private int limit=20;
+    private int page=0;
+    private String token;
+    private String area_id;
+    private String salary_id;
+    private String age_id;
+    private String vocation_id;
+    private String environment_id;
+    private String Job_id;
+    private List<HomeDataBean.DataBeanX.DataBean> homeDataList=new ArrayList<>();
+    private String zone_name;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_famous_recruitment);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // 透明状态栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            // 透明导航栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
         mContext = getApplicationContext();
+        share = mContext.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        token = share.getString("token", "");
+        Intent intent = getIntent();
+        zone_id = intent.getStringExtra("zone_id");
+        zone_name = intent.getStringExtra("zone_name");
         ButterKnife.bind(this);
         InitUI();
+        tv_title.setText(zone_name);
+        famousRecruitmentPresenter = new FamousRecruitmentPresenter(this);
+        famousRecruitmentPresenter.GetHomeData(token,limit+"",page+"",zone_id,area_id,salary_id,age_id,vocation_id,environment_id,Job_id);
     }
 
     private void InitUI() {
-        list.add("1");
-        list.add("2");
-        list.add("3");
-        list.add("4");
-        list.add("5");
-
         mRecyclerView.setNestedScrollingEnabled(false);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         frAdapter = new FRAdapter(mContext);
@@ -85,7 +103,6 @@ public class FamousRecruitmentActivity extends AppCompatActivity {
             }
         });
         mRecyclerView.setAdapter(frAdapter);
-        frAdapter.setListAll(list);
         mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
@@ -193,5 +210,18 @@ public class FamousRecruitmentActivity extends AppCompatActivity {
             finish();
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
+    public  void UpdateUI(int code,String msg, HomeDataBean.DataBeanX data){
+      if (code==1){
+          homeDataList = data.getData();
+          frAdapter.setListAll(homeDataList);
+          frAdapter.notifyDataSetChanged();
+      }
     }
 }

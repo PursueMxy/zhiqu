@@ -10,6 +10,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.WindowManager;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.chaychan.library.BottomBarLayout;
 import com.hjq.permissions.OnPermission;
 import com.hjq.permissions.XXPermissions;
@@ -20,6 +24,7 @@ import com.icarexm.zhiquwang.view.fragment.HomeFragment;
 import com.icarexm.zhiquwang.view.fragment.MinFragment;
 import com.icarexm.zhiquwang.view.fragment.RecordOvertimeFragment;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +40,6 @@ public class HomeActivity extends AppCompatActivity {
     private int currentItems=0;
     private List<Fragment> mFragmentList=new ArrayList<>();
     private Context mContext;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +68,6 @@ public class HomeActivity extends AppCompatActivity {
         }
         mContext = getApplicationContext();
         ButterKnife.bind(this);
-        mContext = getApplicationContext();
         AddFragment();
         InitUI();
     }
@@ -91,7 +94,6 @@ public class HomeActivity extends AppCompatActivity {
 
     private void InitUI() {
         home_bottombarly.setSmoothScroll(true);
-
         mVpContent.setAdapter(new MyAdapter(getSupportFragmentManager()));
         home_bottombarly.setViewPager(mVpContent);
         home_bottombarly.setCurrentItem(currentItems);

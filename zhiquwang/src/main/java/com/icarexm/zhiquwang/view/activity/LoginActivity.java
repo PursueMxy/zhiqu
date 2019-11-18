@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -14,13 +15,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.icarexm.zhiquwang.R;
+import com.icarexm.zhiquwang.contract.LoginContract;
+import com.icarexm.zhiquwang.presenter.LoginPresenter;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity implements LoginContract.View {
     @BindView(R.id.login_edt_mobile)
     EditText edt_mobile;
     @BindView(R.id.login_edt_password)
@@ -33,19 +36,25 @@ public class LoginActivity extends AppCompatActivity {
     private int AGREMEEN_CODE=1001;
 
     private Context mContext;
+    private LoginPresenter loginPresenter;
+    private String password;
+    private String mobile;
+    private SharedPreferences share;
+    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // 透明状态栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            // 透明导航栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
+        share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        token = share.getString("token", "");
+        mobile = share.getString("mobile", "");
+        password = share.getString("password", "");
+        loginPresenter = new LoginPresenter(this);
         mContext = getApplicationContext();
         ButterKnife.bind(this);
+        edt_mobile.setText(mobile);
+        edt_password.setText(password);
     }
 
     @OnClick({R.id.login_tv_create_account,R.id.login_tv_no_password,R.id.login_btn_start,R.id.login_tv_user_agreement
@@ -59,12 +68,12 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(new Intent(mContext,ResetPasswordActivity.class));
                 break;
             case R.id.login_btn_start:
-                startActivity(new Intent(mContext,HomeActivity.class));
-                String mobile = edt_mobile.getText().toString();
-                String password = edt_password.getText().toString();
+                mobile = edt_mobile.getText().toString();
+                password = edt_password.getText().toString();
                 if (login_cb.isChecked()) {
                     if (!mobile.equals("")) {
                         if (!password.equals("")) {
+                            loginPresenter.GetLogin(mobile, password);
                         } else {
                             ToastUtils.showToast(mContext, "密码不能为空");
                         }
@@ -92,4 +101,25 @@ public class LoginActivity extends AppCompatActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
+
+    //登录数据返回
+    public void Update(int code,String msg,String data){
+        if (code==1){
+            startActivity(new Intent(mContext,HomeActivity.class));
+            SharedPreferences.Editor editor = share.edit();
+            editor.putString("mobile",mobile);
+            editor.putString("password",password);
+            editor.putString("token",data);
+            editor.commit();//提交
+        }else {
+            ToastUtils.showToast(mContext,msg);
+        }
+    }
 }
+

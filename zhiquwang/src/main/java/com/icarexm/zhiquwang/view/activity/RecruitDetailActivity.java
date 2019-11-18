@@ -9,6 +9,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
@@ -18,14 +19,19 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.IndicatorAdapter;
 import com.icarexm.zhiquwang.adapter.RecruitAdapter;
 import com.icarexm.zhiquwang.adapter.ViewPagerAdapter;
+import com.icarexm.zhiquwang.bean.JobDetailBean;
+import com.icarexm.zhiquwang.contract.RecruitDetailContract;
 import com.icarexm.zhiquwang.custview.BottomDialog;
+import com.icarexm.zhiquwang.custview.CustomVideoView;
 import com.icarexm.zhiquwang.custview.LabelsView;
+import com.icarexm.zhiquwang.presenter.RecruitDetailPresenter;
 import com.icarexm.zhiquwang.utils.MxyUtils;
 
 import java.util.ArrayList;
@@ -35,7 +41,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class RecruitDetailActivity extends AppCompatActivity {
+public class RecruitDetailActivity extends BaseActivity implements RecruitDetailContract.View {
 
     private Context mContext;
     @BindView(R.id.recruit_dtl_viewPage)
@@ -46,29 +52,64 @@ public class RecruitDetailActivity extends AppCompatActivity {
     LabelsView labelsView;
     @BindView(R.id.recruit_dtl_rcv_recruitList)
     RecyclerView rcv_recruitList;
+    @BindView(R.id.recruit_dtl_tv_jobName)
+    TextView tv_job_name;
+    @BindView(R.id.recruit_dtl_tv_salary)
+    TextView tv_salary;
+    @BindView(R.id.recruit_dtl_tv_company)
+    TextView tv_company;
+    @BindView(R.id.recruit_dtl_tv_address)
+    TextView tv_address;
+    @BindView(R.id.recruit_dtl_tv_label_price)
+    TextView tv_label_price;
+    @BindView(R.id.recruit_dtl_tv_zhSalary)
+    TextView tv_zhSalary;
+    @BindView(R.id.recruit_dtl_tv_hourSalary)
+    TextView tv_hourSalary;
+    @BindView(R.id.recruit_dtl_tv_other_benefits)
+    TextView tv_other_benefits;
+    @BindView(R.id.recruit_dtl_ask_tv_age)
+    TextView tv_age;
+    @BindView(R.id.recruit_dtl_ask_tv_education)
+    TextView tv_education;
+    @BindView(R.id.recruit_dtl_ask_tv_workingLife)
+    TextView tv_workingLife;
+    @BindView(R.id.recruit_dtl_tv_other_ask)
+    TextView tv_other_ask;
+    @BindView(R.id.recruit_dtl_tv_workingContent)
+    TextView tv_workingContent;
+    @BindView(R.id.recruit_dtl_commuteDt)
+    TextView tv_commuteDt;
+    @BindView(R.id.recruit_dtl_tv_introduce)
+    TextView tv_introduce;
     private int CurrentItem=0;
-    private List<String> list;
+    private List<String> list=new ArrayList<>();
     private int DELAYMILLIS=10000;
     private ViewPagerAdapter viewPagerAdapter;
     private IndicatorAdapter indicatorAdapter;
     private View dialog_callphone;
     private TextView tv_phone_number;
     private AlertDialog alertDialog;
+    private RecruitDetailPresenter recruitDetailPresenter;
+    private String token;
+    private String job_id;
+    private List<String> img_arr=new ArrayList<>();
+    private int have_video=1;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recruit_detail);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // 透明状态栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            // 透明导航栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
         mContext = getApplicationContext();
+        Intent intent = getIntent();
+        job_id = intent.getStringExtra("job_id");
+        SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        token = share.getString("token", "");
         ButterKnife.bind(this);
         InitUI();
+        recruitDetailPresenter = new RecruitDetailPresenter(this);
+        recruitDetailPresenter.GetJobDetail(token,job_id);
     }
     @OnClick({R.id.recruit_dtl_tv_wechat,R.id.recruit_dtl_tv_nearby_store,R.id.recruit_dtl_tv_callPhone})
     public void onViewClick(View view){
@@ -86,19 +127,9 @@ public class RecruitDetailActivity extends AppCompatActivity {
     }
 
     private void InitUI() {
-        list = new ArrayList<>();
-        list.add("页面一");
-        list.add("页面二");
-        list.add("页面三");
-        list.add("页面四");
-        viewPagerAdapter = new ViewPagerAdapter(this, list, recruit_dtl_viewPage);
-        recruit_dtl_viewPage.setAdapter(viewPagerAdapter);
         handler.postDelayed(runnable,DELAYMILLIS);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
-        indicatorAdapter = new IndicatorAdapter(mContext, list, CurrentItem);
-        recyclerView.setAdapter(indicatorAdapter);
-        indicatorAdapter.refreshData(CurrentItem);
         recruit_dtl_viewPage.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             // 当前页面被滑动时调用
             @Override
@@ -111,6 +142,10 @@ public class RecruitDetailActivity extends AppCompatActivity {
                 CurrentItem=position;
                 indicatorAdapter.refreshData(CurrentItem);
                 indicatorAdapter.notifyDataSetChanged();
+                viewPagerAdapter.refreshData(CurrentItem);
+                if (CurrentItem==0&&have_video==2){
+                    viewPagerAdapter.notifyDataSetChanged();
+                }
                 super.onPageSelected(position);
             }
             // 当滑动状态改变时调用
@@ -119,10 +154,9 @@ public class RecruitDetailActivity extends AppCompatActivity {
                 super.onPageScrollStateChanged(state);
             }
         });
-
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
         rcv_recruitList.setLayoutManager(linearLayoutManager);
-        RecruitAdapter recruitAdapter = new RecruitAdapter(mContext, list);
+        RecruitAdapter recruitAdapter = new RecruitAdapter(mContext,list);
         rcv_recruitList.setAdapter(recruitAdapter);
         rcv_recruitList.addItemDecoration( new RecyclerView.ItemDecoration() {
             @Override
@@ -134,14 +168,6 @@ public class RecruitDetailActivity extends AppCompatActivity {
                         , MxyUtils.dpToPx(mContext, MxyUtils.getDimens(mContext, R.dimen.dp_10)));
             }
         });
-
-        ArrayList<String> label = new ArrayList<>();
-        label.add("Android");
-        label.add("IOS");
-        label.add("前端");
-        label.add("后台");
-        label.add("微信开发");
-        labelsView.setLabels(label); //直接设置一个字符串数组就可以了。
     }
 
     //转发微信弹出窗
@@ -210,4 +236,42 @@ public class RecruitDetailActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
+   //返回数据跟新UI
+    public void UpdateUI(int code, String msg, JobDetailBean.DataBean dataBean){
+        if (code==1){
+            img_arr = dataBean.getImg_arr();
+            have_video = dataBean.getHave_video();
+            viewPagerAdapter = new ViewPagerAdapter(this, img_arr, recruit_dtl_viewPage, have_video);
+            recruit_dtl_viewPage.setAdapter(viewPagerAdapter);
+            indicatorAdapter = new IndicatorAdapter(mContext, img_arr, CurrentItem, have_video);
+            recyclerView.setAdapter(indicatorAdapter);
+            indicatorAdapter.refreshData(CurrentItem);
+            List<JobDetailBean.DataBean.LabelArrBean> label_arr = dataBean.getLabel_arr();
+            ArrayList<String> label = new ArrayList<>();
+            for (int a=0;a<label_arr.size();a++){
+                label.add(label_arr.get(a).getLabel_name());
+            }
+            labelsView.setLabels(label);
+            tv_job_name.setText(dataBean.getJob_name());
+            tv_salary.setText(dataBean.getSalary()+"/月("+dataBean.getSalary_hour()+"/小时)");
+            tv_company.setText(dataBean.getEnterprise_name());
+            tv_address.setText(dataBean.getAddress());
+            tv_label_price.setText(dataBean.getLabel_price());
+            tv_zhSalary.setText("综合工资："+dataBean.getSalary()+"/月");
+            tv_hourSalary.setText("小时工资："+dataBean.getSalary_hour()+"/日");
+            tv_other_benefits.setText("其它福利 ："+dataBean.getSalary_other());
+            tv_age.setText("性别年龄："+dataBean.getAge_explain());
+            tv_education.setText("学      历："+dataBean.getEducation());
+            tv_workingLife.setText("工作年限："+dataBean.getWork_year());
+            tv_other_ask.setText(dataBean.getNeed_other());
+            tv_workingContent.setText(dataBean.getWork_describe());
+//            tv_commuteDt.setText(dataBean.get);
+            tv_introduce.setText(dataBean.getIntroduce());
+        }
+    }
 }

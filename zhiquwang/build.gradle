@@ -56,4 +56,15 @@ dependencies {
 
     //权限申请框架
     implementation 'com.hjq:xxpermissions:6.0'
+
+    implementation 'com.lzy.net:okgo:3.0.4'
+
+    //bugly
+    implementation 'com.tencent.bugly:crashreport:latest.release'
+    implementation 'com.tencent.bugly:nativecrashreport:latest.release'
+
+    implementation 'com.google.code.gson:gson:2.8.2'
+
+    //定位
+    implementation 'com.amap.api:location:latest.integration'
 }

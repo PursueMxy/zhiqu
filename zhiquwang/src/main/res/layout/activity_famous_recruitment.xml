@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_65">
         <TextView
+            android:id="@+id/famous_recruitment_tv_title"
             android:layout_marginBottom="@dimen/dp_7"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"

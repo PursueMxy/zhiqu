@@ -49,6 +49,7 @@ public class MyResumeActivity extends BaseActivity {
         mRecyclerView.setLayoutManager(layoutManager);
         MyResumeAdapter myResumeAdapter = new MyResumeAdapter(mContext);
         mRecyclerView.setAdapter(myResumeAdapter);
+
     }
 
     @OnClick({R.id.my_resume_img_edit,R.id.my_resume_add_workHistory,R.id.my_resume_img_back})

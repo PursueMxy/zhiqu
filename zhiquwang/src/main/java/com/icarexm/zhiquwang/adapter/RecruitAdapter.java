@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.ViewHolder>{
-    private List<String> mData;
+    private List<String> mData=new ArrayList<>();
     private Context mContext;
 
     public RecruitAdapter(Context context, List<String> data){

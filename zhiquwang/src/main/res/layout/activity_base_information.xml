@@ -67,6 +67,7 @@
                 android:textSize="@dimen/sp_14"
                 />
              <TextView
+                 android:id="@+id/base_information_tv_name"
                  android:layout_marginRight="@dimen/dp_5"
                  android:gravity="right"
                  android:layout_toLeftOf="@+id/base_information_img_edtname"
@@ -106,6 +107,7 @@
                 android:textSize="@dimen/sp_14"
                 />
             <TextView
+                android:id="@+id/base_information_tv_mobile"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/dp_10"
                 android:gravity="right"
@@ -137,6 +139,7 @@
                 android:textSize="@dimen/sp_14"
                 />
             <TextView
+                android:id="@+id/base_information_tv_is_auth"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/dp_10"
                 android:gravity="right"

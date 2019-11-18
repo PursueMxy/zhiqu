@@ -13,18 +13,18 @@ import com.icarexm.zhiquwang.R;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class EditPersonalActivity extends AppCompatActivity {
+
+/**
+ * 手机号注册成功打开页面
+ */
+public class EditPersonalActivity extends BaseActivity {
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_personal);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // 透明状态栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            // 透明导航栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
         ButterKnife.bind(this);
     }
     @OnClick({R.id.edit_personal_img_back})
