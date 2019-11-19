@@ -32,6 +32,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/cash_withdrawal_rl_nobank"
         android:layout_marginTop="@dimen/dp_10"
         android:layout_marginLeft="@dimen/dp_15"
         android:layout_marginRight="@dimen/dp_15"
@@ -68,6 +69,7 @@
     </RelativeLayout>
 <!--    已经绑定银行卡过了-->
     <RelativeLayout
+        android:id="@+id/cash_withdrawal_rl_bank"
         android:visibility="gone"
         android:layout_marginTop="@dimen/dp_10"
         android:layout_marginLeft="@dimen/dp_15"
@@ -84,6 +86,7 @@
             android:src="@mipmap/ic_price"/>
 
         <TextView
+            android:id="@+id/cash_withdrawal_tv_bank_name"
             android:layout_marginLeft="@dimen/dp_10"
             android:layout_toRightOf="@+id/cash_withdrawal_img_type"
             android:layout_alignTop="@+id/cash_withdrawal_img_type"
@@ -95,6 +98,7 @@
             />
 
         <TextView
+            android:id="@+id/cash_withdrawal_tv_bank_num"
             android:layout_marginLeft="@dimen/dp_10"
             android:layout_toRightOf="@+id/cash_withdrawal_img_type"
             android:layout_alignBottom="@+id/cash_withdrawal_img_type"
@@ -131,12 +135,13 @@
             android:textSize="@dimen/sp_17"
             />
         <TextView
+            android:id="@+id/cash_withdrawal_tv_withdrawal"
             android:layout_alignTop="@+id/cash_withdrawal_tv_txje"
             android:padding="@dimen/dp_2"
             android:layout_toRightOf="@+id/cash_withdrawal_tv_txje"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="(最少提现X元)"
+            android:text="(最少提现0元)"
             android:textColor="#ff00b6ce"
             android:textSize="@dimen/sp_14"
             />
@@ -187,6 +192,7 @@
         android:layout_height="match_parent"
         >
         <Button
+            android:id="@+id/cash_withdrawal_btn_cash"
             android:layout_marginRight="@dimen/dp_40"
             android:layout_marginLeft="@dimen/dp_40"
             android:layout_marginBottom="@dimen/dp_40"

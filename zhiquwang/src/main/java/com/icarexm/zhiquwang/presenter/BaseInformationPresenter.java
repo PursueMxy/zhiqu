@@ -25,4 +25,15 @@ public class BaseInformationPresenter implements BaseInformationContract.Present
         BaseInforBean.DataBean data = baseInforBean.getData();
         mView.UpdateUI(baseInforBean.getCode(),baseInforBean.getMsg(), baseInforBean.getData());
     }
+
+    //修改个人信息
+    public void GetUpdateUser(String token,String username,String avatar){
+        baseInformationModel.PostUpdateUser(this,token,username,avatar);
+    }
+
+    //修改返回
+    public void  SetUpdateUser(String content){
+        PublicResultBean resultBean = new GsonBuilder().create().fromJson(content, PublicResultBean.class);
+        mView.UpdateUI(resultBean.getCode(),resultBean.getMsg());
+    }
 }

@@ -3,6 +3,7 @@ package com.icarexm.zhiquwang.view.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,9 +11,15 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
+import com.icarexm.zhiquwang.bean.BaseInforBean;
+import com.icarexm.zhiquwang.custview.CircleImageView;
 import com.icarexm.zhiquwang.custview.ShadowDrawable;
+import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.view.activity.BaseInformationActivity;
 import com.icarexm.zhiquwang.view.activity.BusinessCooperationActivity;
 import com.icarexm.zhiquwang.view.activity.CertificationActivity;
@@ -24,6 +31,9 @@ import com.icarexm.zhiquwang.view.activity.MyTeamActivity;
 import com.icarexm.zhiquwang.view.activity.MyToJoinActivity;
 import com.icarexm.zhiquwang.view.activity.MyWalletActivity;
 import com.icarexm.zhiquwang.view.activity.SetActivity;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +42,10 @@ public class MinFragment extends Fragment implements View.OnClickListener {
 
 
     private Context mContext;
+    private String token;
+    private TextView tv_nickname;
+    private TextView tv_address;
+    private CircleImageView img_avatar;
 
     public MinFragment() {
         // Required empty public constructor
@@ -42,9 +56,29 @@ public class MinFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mContext = getContext();
+        SharedPreferences share = mContext.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        token = share.getString("token", "");
         View inflate = inflater.inflate(R.layout.fragment_min, container, false);
         InitUI(inflate);
+        InitData();
         return inflate;
+    }
+
+    private void InitData() {
+        OkGo.<String>post(RequstUrl.URL.BasicsInfo)
+                .params("token",token)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        BaseInforBean baseInforBean = new GsonBuilder().create().fromJson(response.body(), BaseInforBean.class);
+                        if (baseInforBean.getCode()==1){
+                            BaseInforBean.DataBean data = baseInforBean.getData();
+//                            tv_address.setText();
+                            tv_nickname.setText(data.getUser_name());
+                            Glide.with(mContext).load(data.getAvatar()).into(img_avatar);
+                        }
+                    }
+                });
     }
 
     private void InitUI(View inflate) {
@@ -57,6 +91,9 @@ public class MinFragment extends Fragment implements View.OnClickListener {
       inflate.findViewById(R.id.fm_min_rl_certification).setOnClickListener(this);
       inflate.findViewById(R.id.fm_min_rl_to_join).setOnClickListener(this);
       inflate.findViewById(R.id.fm_min_rl_businessCooperation).setOnClickListener(this);
+        img_avatar = inflate.findViewById(R.id.fm_min_img_head);
+        tv_nickname = inflate.findViewById(R.id.fm_min_tv_nickname);
+        tv_address = inflate.findViewById(R.id.fm_min_tv_address);
     }
 
     @Override

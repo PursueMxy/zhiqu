@@ -36,7 +36,7 @@
         android:background="@drawable/bg_white_8"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_91">
+        android:layout_height="@dimen/dp_128">
      <RelativeLayout
          android:layout_width="match_parent"
          android:layout_height="match_parent"
@@ -52,9 +52,10 @@
              />
 
          <EditText
+             android:id="@+id/add_bank_card_edt_bank_user"
              android:layout_centerVertical="true"
              android:layout_marginLeft="@dimen/dp_77"
-             android:text="请输入持卡人姓名"
+             android:hint="请输入持卡人姓名"
              android:textColor="@color/ffb5b5b5"
              android:textSize="@dimen/sp_14"
              android:layout_width="match_parent"
@@ -82,9 +83,41 @@
                 />
 
             <EditText
+                android:id="@+id/add_bank_card_edt_bank_num"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/dp_77"
-                android:text="请输入银行卡卡号"
+                android:hint="请输入银行卡卡号"
+                android:textColor="@color/ffb5b5b5"
+                android:textSize="@dimen/sp_14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"/>
+        </RelativeLayout>
+        <View
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_1"
+            android:background="@drawable/fff2f2f2"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <TextView
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="收卡银行"
+                android:textColor="@color/ff4e4d4d"
+                android:textSize="@dimen/sp_14"
+                />
+
+            <EditText
+                android:id="@+id/add_bank_card_edt_bank_name"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp_77"
+                android:hint="请输入银行名称"
                 android:textColor="@color/ffb5b5b5"
                 android:textSize="@dimen/sp_14"
                 android:layout_width="match_parent"
@@ -98,6 +131,7 @@
         android:layout_height="match_parent"
         >
         <Button
+            android:id="@+id/add_bank_card_btn_confirm"
             android:layout_marginRight="@dimen/dp_40"
             android:layout_marginLeft="@dimen/dp_40"
             android:layout_marginBottom="@dimen/dp_40"

@@ -47,11 +47,12 @@
             android:textSize="@dimen/sp_17"
             />
         <TextView
+            android:id="@+id/my_wallet_tv_price"
             android:layout_marginLeft="@dimen/dp_20"
             android:layout_marginTop="@dimen/dp_51"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="60.00元"
+            android:text="0.00元"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_22"
             />

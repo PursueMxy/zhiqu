@@ -51,6 +51,7 @@
             />
 
         <TextView
+            android:id="@+id/about_tv_versionName"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/dp_226"
             android:layout_width="wrap_content"
@@ -64,11 +65,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
-            android:text="关于我们介绍编辑器内容编辑器内容编辑器内容编辑
-            关于我们介绍编辑器内容编辑器内容编辑器内容编辑器关于我们介
-            绍编辑器内容编辑器内容编辑器内容编辑器关于我们介绍编辑
-            器内容编辑器内容编辑器内容编辑器关于我们介绍编辑器内容
-            编辑器内容编辑器内容编辑器关于我们介绍编辑器内容编辑器内容编辑器内容编辑器"
+            android:id="@+id/about_tv_content"
+            android:text=""
             android:lineSpacingExtra="@dimen/dp_10"
             android:layout_marginRight="@dimen/dp_15"
             android:layout_marginLeft="@dimen/dp_15"

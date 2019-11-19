@@ -106,6 +106,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     cityName = aMapLocation.getCity();
                     tv_cityname.setText(cityName);
                     InitData();
+                    SharedPreferences.Editor editor = share.edit();
+                    editor.putString("latitude",start_latitude+"");
+                    editor.putString("longitude",start_longitude+"");
+                    editor.commit();//提交
                 }
             }
         }

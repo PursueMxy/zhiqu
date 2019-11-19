@@ -19,4 +19,18 @@ public class BaseInformationModel implements BaseInformationContract.Model {
                     }
                 });
     }
+
+    //修改个人信息
+    public void PostUpdateUser(BaseInformationPresenter baseInformationPresenter,String token,String username,String avatar){
+        OkGo.<String>post(RequstUrl.URL.SetUsername)
+                .params("token",token)
+                .params("username",username)
+                .params("avatar",avatar)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                    baseInformationPresenter.SetUpdateUser(response.body());
+                    }
+                });
+    }
 }

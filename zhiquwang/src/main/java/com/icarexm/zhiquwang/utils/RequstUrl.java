@@ -20,5 +20,37 @@ public class RequstUrl {
         //个人信息
         public static  String BasicsInfo=HOST+"/api/basicsInfo";
 
+        //上传图片
+        public static String UploadImg=HOST+"/api/uploadImg";
+
+        //修改个人信息
+        public static String SetUsername=HOST+"/api/setUsername";
+
+        //修改密码
+        public static String EditPass=HOST+"/api/editPass";
+
+        //关于我们
+        public static  String About=HOST+"/api/aboutUs";
+
+        //意见反馈
+        public static  String SbmitIdea=HOST+"/api/submitIdea";
+
+        //我的提现
+        public static  String MyBalance=HOST+"/api/myBalance";
+
+        //我的提现
+        public static  String addBank=HOST+"/api/addBank";
+
+        //银行卡列表
+        public static String  myBank=HOST+"/api/myBank";
+
+        //提现
+        public static String doWithdrawal=HOST+"/api/doWithdrawal";
+
+        //提现列表
+        public static  String SeeFund=HOST+"/api/seeFund";
+
+        //分销团队首页
+        public static String TeamInfo=HOST+"/api/teamInfo";
     }
 }

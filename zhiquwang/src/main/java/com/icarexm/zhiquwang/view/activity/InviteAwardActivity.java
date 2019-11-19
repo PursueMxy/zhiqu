@@ -4,12 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.TextView;
 
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.CommissionAdapter;
+import com.icarexm.zhiquwang.bean.SeeFundBean;
+import com.icarexm.zhiquwang.contract.InviteAwardContract;
+import com.icarexm.zhiquwang.presenter.InviteAwardPresenter;
 import com.zhouyou.recyclerview.XRecyclerView;
 
 import java.util.ArrayList;
@@ -19,18 +24,28 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class InviteAwardActivity extends BaseActivity {
+public class InviteAwardActivity extends BaseActivity implements InviteAwardContract.View {
     @BindView(R.id.invite_award_recyclerView)
     XRecyclerView mRecyclerView;
-    private List<String> list=new ArrayList<>();
+    @BindView(R.id.invite_award_tv_money)
+    TextView tv_money;
+    private List<SeeFundBean.DataBeanX.ListBean.DataBean> dataList=new ArrayList<>();
     private Context mContext;
+    private CommissionAdapter commissionAdapter;
+    private InviteAwardPresenter inviteAwardPresenter;
+    private String token;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite_award);
+        SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        token = share.getString("token", "");
         mContext = getApplicationContext();
         ButterKnife.bind(this);
         InitUI();
+        inviteAwardPresenter = new InviteAwardPresenter(this);
+        inviteAwardPresenter.GetSeeFund(token,"4");
     }
 
     @OnClick({R.id.invite_award_img_back})
@@ -51,14 +66,9 @@ public class InviteAwardActivity extends BaseActivity {
     }
 
     private void InitUI() {
-        list.add("1");
-        list.add("2");
-        list.add("3");
-        list.add("4");
-        list.add("5");
         mRecyclerView.setNestedScrollingEnabled(false);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
-        CommissionAdapter commissionAdapter = new CommissionAdapter(mContext);
+        commissionAdapter = new CommissionAdapter(mContext);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setFootViewText("拼命加载中","已经全部");
         mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
@@ -68,7 +78,6 @@ public class InviteAwardActivity extends BaseActivity {
                 mRecyclerView.loadMoreComplete();//加载动画完成
                 mRecyclerView.refreshComplete();//刷新动画完成
             }
-
             @Override
             public void onLoadMore() {
                 //加载更多
@@ -77,6 +86,21 @@ public class InviteAwardActivity extends BaseActivity {
             }
         });
         mRecyclerView.setAdapter(commissionAdapter);
-        commissionAdapter.setListAll(list);
+        commissionAdapter.setListAll(dataList);
+    }
+
+    public void Update(int code, String msg, SeeFundBean.DataBeanX data){
+        SeeFundBean.DataBeanX.ListBean list = data.getList();
+        dataList = list.getData();
+        commissionAdapter.setListAll(dataList);
+        commissionAdapter.notifyDataSetChanged();
+        String total_price = data.getTotal_price();
+        tv_money.setText(total_price);
+
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }

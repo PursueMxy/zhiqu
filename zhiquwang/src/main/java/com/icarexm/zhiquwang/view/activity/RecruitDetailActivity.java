@@ -26,6 +26,7 @@ import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.IndicatorAdapter;
 import com.icarexm.zhiquwang.adapter.RecruitAdapter;
 import com.icarexm.zhiquwang.adapter.ViewPagerAdapter;
+import com.icarexm.zhiquwang.bean.HomeDataBean;
 import com.icarexm.zhiquwang.bean.JobDetailBean;
 import com.icarexm.zhiquwang.contract.RecruitDetailContract;
 import com.icarexm.zhiquwang.custview.BottomDialog;
@@ -83,7 +84,6 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
     @BindView(R.id.recruit_dtl_tv_introduce)
     TextView tv_introduce;
     private int CurrentItem=0;
-    private List<String> list=new ArrayList<>();
     private int DELAYMILLIS=10000;
     private ViewPagerAdapter viewPagerAdapter;
     private IndicatorAdapter indicatorAdapter;
@@ -93,8 +93,18 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
     private RecruitDetailPresenter recruitDetailPresenter;
     private String token;
     private String job_id;
+    private int limit=20;
+    private int page=0;
+    private String area_id;
+    private String salary_id;
+    private String age_id;
+    private String vocation_id;
+    private String environment_id;
+    private String zone_id;
     private List<String> img_arr=new ArrayList<>();
     private int have_video=1;
+    private List<HomeDataBean.DataBeanX.DataBean> homeDataList=new ArrayList<>();
+    private RecruitAdapter recruitAdapter;
 
 
     @Override
@@ -110,6 +120,7 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
         InitUI();
         recruitDetailPresenter = new RecruitDetailPresenter(this);
         recruitDetailPresenter.GetJobDetail(token,job_id);
+        recruitDetailPresenter.GetHomeData(token,limit+"",page+"",zone_id,area_id,salary_id,age_id,vocation_id,environment_id,job_id);
     }
     @OnClick({R.id.recruit_dtl_tv_wechat,R.id.recruit_dtl_tv_nearby_store,R.id.recruit_dtl_tv_callPhone})
     public void onViewClick(View view){
@@ -156,7 +167,7 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
         });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
         rcv_recruitList.setLayoutManager(linearLayoutManager);
-        RecruitAdapter recruitAdapter = new RecruitAdapter(mContext,list);
+        recruitAdapter = new RecruitAdapter(mContext,homeDataList);
         rcv_recruitList.setAdapter(recruitAdapter);
         rcv_recruitList.addItemDecoration( new RecyclerView.ItemDecoration() {
             @Override
@@ -189,7 +200,7 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
     private Runnable runnable=new Runnable() {
         @Override
         public void run() {
-            if (CurrentItem<list.size()-1){
+            if (CurrentItem<homeDataList.size()-1){
                 CurrentItem++;
             }else {
                 CurrentItem=0;
@@ -272,6 +283,15 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
             tv_workingContent.setText(dataBean.getWork_describe());
 //            tv_commuteDt.setText(dataBean.get);
             tv_introduce.setText(dataBean.getIntroduce());
+        }
+    }
+
+
+    public  void UpdateUI(int code,String msg, HomeDataBean.DataBeanX data){
+        if (code==1){
+            homeDataList = data.getData();
+            recruitAdapter = new RecruitAdapter(mContext,homeDataList);
+            recruitAdapter.notifyDataSetChanged();
         }
     }
 }

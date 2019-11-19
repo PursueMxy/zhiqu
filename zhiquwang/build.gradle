@@ -67,4 +67,7 @@ dependencies {
 
     //定位
     implementation 'com.amap.api:location:latest.integration'
+
+    //图片选择框框
+    implementation 'com.zhihu.android:matisse:0.5.3-beta3'
 }

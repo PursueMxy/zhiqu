@@ -5,8 +5,10 @@ public interface AddBankCardContract {
     }
 
     interface View {
+        void UpdateUI(int code,String msg);
     }
 
     interface Presenter {
+
     }
 }

@@ -8,8 +8,10 @@ public interface BaseInformationContract {
 
     interface View {
         void UpdateUI(int code, String msg, BaseInforBean.DataBean data);
+        void UpdateUI(int code,String msg);
     }
 
     interface Presenter {
+        void  SetUpdateUser(String content);
     }
 }

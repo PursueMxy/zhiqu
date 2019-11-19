@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.CommissionAdapter;
+import com.icarexm.zhiquwang.bean.SeeFundBean;
 import com.zhouyou.recyclerview.XRecyclerView;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class CommissionActivity extends BaseActivity {
 
      @BindView(R.id.commission_recyclerView)
     XRecyclerView mRecyclerView;
-    private List<String> list=new ArrayList<>();
+    private List<SeeFundBean.DataBeanX.ListBean.DataBean> dataList=new ArrayList<>();
     private Context mContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +51,6 @@ public class CommissionActivity extends BaseActivity {
     }
 
     private void InitUI() {
-        list.add("1");
-        list.add("2");
-        list.add("3");
-        list.add("4");
-        list.add("5");
         mRecyclerView.setNestedScrollingEnabled(false);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         CommissionAdapter commissionAdapter = new CommissionAdapter(mContext);
@@ -76,6 +72,6 @@ public class CommissionActivity extends BaseActivity {
             }
         });
         mRecyclerView.setAdapter(commissionAdapter);
-        commissionAdapter.setListAll(list);
+        commissionAdapter.setListAll(dataList);
     }
 }
