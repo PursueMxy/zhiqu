@@ -89,6 +89,15 @@
         <activity android:name=".view.activity.GuidePageActivity"></activity>
         <activity android:name=".MainActivity" />
         <service android:name="com.amap.api.location.APSService"></service>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.icarexm.zhiquwang.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths_public" />
+        </provider>
     </application>
 
 </manifest>

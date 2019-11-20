@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -23,8 +24,12 @@ public class CommissionActivity extends BaseActivity {
 
      @BindView(R.id.commission_recyclerView)
     XRecyclerView mRecyclerView;
+     @BindView(R.id.commission_tv_money)
+    TextView tv_money;
     private List<SeeFundBean.DataBeanX.ListBean.DataBean> dataList=new ArrayList<>();
     private Context mContext;
+    private CommissionAdapter commissionAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +58,7 @@ public class CommissionActivity extends BaseActivity {
     private void InitUI() {
         mRecyclerView.setNestedScrollingEnabled(false);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
-        CommissionAdapter commissionAdapter = new CommissionAdapter(mContext);
+        commissionAdapter = new CommissionAdapter(mContext);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setFootViewText("拼命加载中","已经全部");
         mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
@@ -73,5 +78,14 @@ public class CommissionActivity extends BaseActivity {
         });
         mRecyclerView.setAdapter(commissionAdapter);
         commissionAdapter.setListAll(dataList);
+    }
+
+    public void Update(int code, String msg, SeeFundBean.DataBeanX data){
+        SeeFundBean.DataBeanX.ListBean list = data.getList();
+        dataList = list.getData();
+        commissionAdapter.setListAll(dataList);
+        commissionAdapter.notifyDataSetChanged();
+        String total_price = data.getTotal_price();
+        tv_money.setText(total_price);
     }
 }

@@ -52,5 +52,17 @@ public class RequstUrl {
 
         //分销团队首页
         public static String TeamInfo=HOST+"/api/teamInfo";
+
+        //实名认证进入
+        public static String AutoNym=HOST+"/api/autoNym";
+
+        //实名信息上传
+        public static String DoAutoNym=HOST+"/api/doAutoNym";
+
+        //我的简历
+        public static String MineInfo=HOST+"/api/mineInfo";
+
+        //保存简历
+        public static  String AddResume=HOST+"/api/addResume";
     }
 }

@@ -4,15 +4,24 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.icarexm.zhiquwang.R;
+import com.icarexm.zhiquwang.bean.RegionBean;
 import com.icarexm.zhiquwang.custview.BottomDialog;
 import com.icarexm.zhiquwang.custview.mywheel.MyWheelView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.channels.NonReadableChannelException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,6 +51,14 @@ public class UpdateBaseInforActivity extends BaseActivity {
     private String[] SEX_LIST=new String[]{"男","女"};
     private String sex="男";
     private String[] SltNull=new String[]{"请先选择上级"};
+    private static final Gson gson = new Gson();
+    private static final JsonParser parser = new JsonParser();
+    private static final String jsonFile = "region.json";// assets文件夹中
+    private List<String> provinceList=new ArrayList<>();
+    private List<String> CityList=new ArrayList<>();
+    private List<RegionBean> jsonData=new ArrayList<>();
+    private String ProvinceName;
+    private String CityName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +67,21 @@ public class UpdateBaseInforActivity extends BaseActivity {
         mContext = getApplicationContext();
         ButterKnife.bind(this);
         InitYear();
+        InitAddress();
+
+    }
+
+    private void InitAddress() {
+        jsonData = getJsonData(mContext);
+        for(int a=0;a<jsonData.size();a++){
+            provinceList.add(jsonData.get(a).provinceName);
+        }
+    }
+    private void cityList(List<RegionBean.City> citys) {
+        CityList.clear();
+        for(int a=0;a<citys.size();a++){
+            CityList.add(citys.get(a).cityName);
+        }
     }
 
     private void InitYear() {
@@ -58,7 +90,62 @@ public class UpdateBaseInforActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.update_base_infor_img_back,R.id.update_base_infor_rl_education,R.id.update_base_rl_time,R.id.update_base_rl_sex})
+    public static List<RegionBean> getJsonData(Context context) {
+        List<RegionBean> result = new ArrayList<>();
+        try {
+            String jsonString = loadJson2Str(context, jsonFile);
+            JsonArray jsonArray = stringToJsonArray(jsonString);
+            if (jsonArray == null) {
+                return result;
+            }
+
+            for (JsonElement j : jsonArray) {
+                result.add(gson.fromJson(j, RegionBean.class));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static String loadJson2Str(Context context, String fileName) {
+        String result = "";
+        InputStream is = null;
+        ByteArrayOutputStream bos = null;
+        try {
+            is = context.getAssets().open(fileName);
+            bos = new ByteArrayOutputStream();
+            byte[] bytes = new byte[4 * 1024];
+            int len = 0;
+            while ((len = is.read(bytes)) != -1) {
+                bos.write(bytes, 0, len);
+            }
+            result = new String(bos.toByteArray());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (is != null)
+                    is.close();
+                if (bos != null)
+                    bos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    public static JsonArray stringToJsonArray(String str) {
+        try {
+            return parser.parse(str).getAsJsonArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @OnClick({R.id.update_base_infor_img_back,R.id.update_base_infor_rl_education,R.id.update_base_rl_time,R.id.update_base_rl_sex,R.id.update_base_rl_address})
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.update_base_infor_img_back:
@@ -73,7 +160,54 @@ public class UpdateBaseInforActivity extends BaseActivity {
             case R.id.update_base_rl_sex:
                 SexDialog();
                 break;
+            case R.id.update_base_rl_address:
+               AddressDialog();
+                break;
         }
+    }
+
+    private void AddressDialog() {
+        final BottomDialog age_groupDialog = new BottomDialog(this, R.style.ActionSheetDialogStyle);
+        View  BirthDateInflate = LayoutInflater.from(mContext).inflate(R.layout.dialog_bottom_address, null);
+        MyWheelView groupwva_one = BirthDateInflate.findViewById(R.id.dialog_bottom_wheel_one);
+        groupwva_one.setItems(provinceList,0);
+        MyWheelView groupwva_two = BirthDateInflate.findViewById(R.id.dialog_bottom_wheel_two);
+        groupwva_two.setItems(Arrays.asList(SltNull),0);
+        groupwva_one.setOnItemSelectedListener(new MyWheelView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int selectedIndex, String item) {
+                ProvinceName=item;
+                RegionBean regionBean = jsonData.get(selectedIndex);
+                cityList(regionBean.citys);
+                groupwva_two.setItems(CityList,0);
+            }
+        });
+        groupwva_two.setOnItemSelectedListener(new MyWheelView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int selectedIndex, String item) {
+                CityName=item;
+            }
+        });
+        BirthDateInflate.findViewById(R.id.dialog_bottom_img_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                age_groupDialog.dismiss();
+            }
+        });
+        BirthDateInflate.findViewById(R.id.dialog_bottom_img_opt).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tv_birth_date.setText( SltYear+SltMonth);
+                age_groupDialog.dismiss();
+            }
+        });
+        //防止弹出两个窗口
+        if (age_groupDialog !=null && age_groupDialog.isShowing()) {
+            return;
+        }
+
+        age_groupDialog.setContentView(BirthDateInflate);
+        age_groupDialog.show();
     }
 
     private void EducationDialog() {

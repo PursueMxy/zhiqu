@@ -330,6 +330,8 @@ public class MyWheelView extends View {
     }
 
 
+
+
     public final String getSelectedItem() {
         if(selectedItem >=items.size()||selectedItem<0)
             return "";

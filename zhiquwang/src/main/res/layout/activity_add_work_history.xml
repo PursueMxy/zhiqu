@@ -43,6 +43,7 @@
             />
 
         <EditText
+            android:id="@+id/add_work_history_edt_company_name"
             android:layout_marginLeft="@dimen/dp_101"
             android:gravity="center|left"
             android:layout_marginRight="@dimen/dp_33"
@@ -76,6 +77,7 @@
             />
 
         <TextView
+            android:id="@+id/add_work_history_tv_job_start"
             android:layout_marginLeft="@dimen/dp_101"
             android:gravity="center|left"
             android:layout_marginRight="@dimen/dp_33"
@@ -108,6 +110,7 @@
             />
 
         <TextView
+            android:id="@+id/add_work_history_tv_job_end"
             android:layout_marginLeft="@dimen/dp_101"
             android:gravity="center|left"
             android:layout_marginRight="@dimen/dp_33"
@@ -155,6 +158,7 @@
                 />
         </RelativeLayout>
         <EditText
+            android:id="@+id/add_work_history_edt_job_content"
             android:layout_marginTop="@dimen/dp_46"
             android:layout_marginLeft="@dimen/dp_17"
             android:hint="请输入工作内容"
@@ -198,6 +202,7 @@
                 />
         </RelativeLayout>
         <EditText
+            android:id="@+id/add_work_history_edt_job_cause"
             android:layout_marginTop="@dimen/dp_46"
             android:layout_marginLeft="@dimen/dp_17"
             android:hint="请输入离职原因"
@@ -215,6 +220,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <Button
+            android:id="@+id/add_work_history_btn_confirm"
             android:layout_marginRight="@dimen/dp_40"
             android:layout_marginLeft="@dimen/dp_40"
             android:layout_marginBottom="@dimen/dp_40"
