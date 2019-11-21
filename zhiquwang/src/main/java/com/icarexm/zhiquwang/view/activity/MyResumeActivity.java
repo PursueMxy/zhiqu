@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.MyResumeAdapter;
+import com.icarexm.zhiquwang.adapter.OnItemClickListener;
 import com.icarexm.zhiquwang.adapter.TodayHeatAdapter;
 import com.icarexm.zhiquwang.bean.AddResumeBean;
 import com.icarexm.zhiquwang.bean.ResumeBean;
@@ -48,7 +49,7 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
     EditText edt_personal_introduce;
     private int  ADDWORKHISTORY=5120;
     private int  BASEINFOCODE=5121;
-    private List<AddResumeBean> addResumeList=new ArrayList<>();
+    private List<ResumeBean.DataBean.ExperienceBean> addResumeList=new ArrayList<>();
     private MyResumeAdapter myResumeAdapter;
     private String experience="";
     private MyResumePresenter myResumePresenter;
@@ -59,6 +60,10 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
     private String birth;
     private String city;
     private String education;
+    private String mobile;
+    private String address;
+    private String birth_date;
+    private String age;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,14 +90,27 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
         mRecyclerView.setLayoutManager(layoutManager);
         myResumeAdapter = new MyResumeAdapter(mContext,addResumeList);
         mRecyclerView.setAdapter(myResumeAdapter);
-
+        myResumeAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(mContext, AddWorkHistoryActivity.class);
+                startActivityForResult(intent,ADDWORKHISTORY);
+            }
+        });
     }
 
-    @OnClick({R.id.my_resume_img_edit,R.id.my_resume_add_workHistory,R.id.my_resume_img_back})
+    @OnClick({R.id.my_resume_img_edit,R.id.my_resume_add_workHistory,R.id.my_resume_img_back,R.id.my_resume_btn_confirm})
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.my_resume_img_edit:
                 Intent intent1 = new Intent(mContext, UpdateBaseInforActivity.class);
+                intent1.putExtra("avatar",avatar);
+                intent1.putExtra("city",city);
+                intent1.putExtra("real_name",real_name);
+                intent1.putExtra("sex",sex);
+                intent1.putExtra("birth",birth);
+                intent1.putExtra("education",education);
+                intent1.putExtra("mobile",mobile);
                 startActivityForResult(intent1,BASEINFOCODE);
                 break;
             case R.id.my_resume_img_back:
@@ -101,6 +119,10 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
             case R.id.my_resume_add_workHistory:
                 Intent intent = new Intent(mContext, AddWorkHistoryActivity.class);
                 startActivityForResult(intent,ADDWORKHISTORY);
+                break;
+            case R.id.my_resume_btn_confirm:
+                String personal_introduce = edt_personal_introduce.getText().toString();
+                myResumePresenter.GetAddResume(token,avatar,real_name,sex,birth_date,address,education,personal_introduce,experience);
                 break;
         }
     }
@@ -118,10 +140,23 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
         super.onActivityResult(requestCode, resultCode, data);
             if (requestCode==ADDWORKHISTORY&&resultCode==ADDWORKHISTORY){
                 String bean = data.getStringExtra("bean");
-                addResumeList.add(new GsonBuilder().create().fromJson(bean,AddResumeBean.class));
+                addResumeList.add(new GsonBuilder().create().fromJson(bean,ResumeBean.DataBean.ExperienceBean.class));
                 experience = new GsonBuilder().create().toJson(addResumeList);
                 myResumeAdapter = new MyResumeAdapter(mContext,addResumeList);
                 mRecyclerView.setAdapter(myResumeAdapter);
+                myResumeAdapter.setOnItemClickListener(new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Intent intent = new Intent(mContext, AddWorkHistoryActivity.class);
+                        startActivityForResult(intent,ADDWORKHISTORY);
+                    }
+                });
+            }else  if (requestCode==BASEINFOCODE&&resultCode==BASEINFOCODE){
+                sex = data.getStringExtra("sex");
+                address = data.getStringExtra("address");
+                birth_date = data.getStringExtra("birth_date");
+                education = data.getStringExtra("education");
+                tv_education.setText(age+education);
             }
     }
 
@@ -134,7 +169,26 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
         if (code==1){
          tv_name.setText(data.getUser_name());
          tv_education.setText(data.getEducation());
-            Glide.with(mContext).load(data.getAvatar()).into(img_acatar);
+          Glide.with(mContext).load(data.getAvatar()).into(img_acatar);
+          avatar = data.getAvatar();
+          real_name = data.getUser_name();
+          birth = data.getBirth();
+          education = data.getEducation();
+          city = data.getCity();
+          sex = data.getSex();
+          age = data.getAge();
+          mobile = data.getMobile();
+          tv_education.setText(age+education);
+          addResumeList= data.getExperience();
+          myResumeAdapter = new MyResumeAdapter(mContext,addResumeList);
+          mRecyclerView.setAdapter(myResumeAdapter);
+          myResumeAdapter.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    Intent intent = new Intent(mContext, AddWorkHistoryActivity.class);
+                    startActivityForResult(intent,ADDWORKHISTORY);
+                }
+            });
         }
     }
 }

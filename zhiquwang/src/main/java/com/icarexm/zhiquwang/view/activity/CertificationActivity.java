@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -64,6 +65,8 @@ public class CertificationActivity extends BaseActivity implements Certification
    ImageView img_dlt_reverse;
    @BindView(R.id.certification_rl_audit)
    RelativeLayout rl_audit;
+   @BindView(R.id.certification_btn_submit)
+    Button btn_submit;
 
    private int Type=1;
     private CertificationPresenter certificationPresenter;
@@ -223,6 +226,7 @@ public class CertificationActivity extends BaseActivity implements Certification
                 img_card_frond.setClickable(true);
                 img_card_reverse.setClickable(true);
                 rl_TypeTwo.setVisibility(View.GONE);
+                btn_submit.setVisibility(View.VISIBLE);
                 rl_TypeOne.setVisibility(View.VISIBLE);
                 img_dlt_front.setVisibility(View.VISIBLE);
                 img_dlt_reverse.setVisibility(View.VISIBLE);
@@ -230,24 +234,29 @@ public class CertificationActivity extends BaseActivity implements Certification
                 rl_TypeOne.setVisibility(View.GONE);
                 rl_TypeTwo.setVisibility(View.VISIBLE);
             }else if (audit==2){
-                rl_TypeOne.setVisibility(View.GONE);
                 edt_username.setEnabled(false);
                 edt_car_number.setEnabled(false);
                 img_card_frond.setClickable(false);
                 img_card_reverse.setClickable(false);
                 img_dlt_front.setVisibility(View.GONE);
                 img_dlt_reverse.setVisibility(View.GONE);
+                rl_TypeTwo.setVisibility(View.GONE);
+                btn_submit.setVisibility(View.GONE);
+                rl_TypeOne.setVisibility(View.VISIBLE);
+                img_card_frond.setVisibility(View.VISIBLE);
+                img_card_reverse.setVisibility(View.VISIBLE);
                 CertificationBean.DataBean.InfoBean info = dataBean.getInfo();
                 edt_car_number.setText(info.getCard_num());
                 edt_username.setText(info.getReal_name());
-                Glide.with(mContext).load(RequstUrl.URL.Home+info.getCard_front()).into(img_card_frond);
-                Glide.with(mContext).load(RequstUrl.URL.Home+info.getCard_reverse()).into(img_card_reverse);
+                Glide.with(mContext).load(RequstUrl.URL.HOST+info.getCard_front()).into(img_card_frond);
+                Glide.with(mContext).load(RequstUrl.URL.HOST+info.getCard_reverse()).into(img_card_reverse);
             }else if (audit==3){
                 edt_username.setEnabled(true);
                 edt_car_number.setEnabled(true);
                 img_card_frond.setClickable(true);
                 img_card_reverse.setClickable(true);
                 rl_TypeTwo.setVisibility(View.GONE);
+                btn_submit.setVisibility(View.VISIBLE);
                 rl_TypeOne.setVisibility(View.VISIBLE);
                 rl_audit.setVisibility(View.VISIBLE);
                 img_dlt_front.setVisibility(View.VISIBLE);

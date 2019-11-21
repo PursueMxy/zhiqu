@@ -48,7 +48,8 @@ public class SetActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.set_img_back,R.id.set_rl_clean_cache,R.id.set_rl_about,R.id.set_rl_change_password,R.id.set_rl_contact_us,R.id.set_rl_feedback,R.id.set_rl_messageset})
+    @OnClick({R.id.set_img_back,R.id.set_rl_clean_cache,R.id.set_rl_about,R.id.set_rl_change_password,
+            R.id.set_rl_contact_us,R.id.set_rl_feedback,R.id.set_rl_messageset,R.id.set_btn_out_login})
     public  void onViewClick(View view){
         switch (view.getId()) {
             case R.id.set_img_back:
@@ -85,6 +86,10 @@ public class SetActivity extends BaseActivity {
                     startActivity(intent);
                     return;
                 }
+                break;
+            case R.id.set_btn_out_login:
+                startActivity(new Intent(mContext,LoginActivity.class));
+                break;
         }
     }
 

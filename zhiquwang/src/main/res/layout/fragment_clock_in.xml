@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".view.fragment.ClockInFragment">
 <RelativeLayout
+    android:id="@+id/fm_clock_in_rl_entry"
     android:background="@drawable/FFFAFAFA"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -17,10 +18,12 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
     <RelativeLayout
+        android:id="@+id/fm_clock_in_rl_certification"
         android:layout_marginTop="@dimen/dp_64"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_158">
         <TextView
+            android:id="@+id/fm_clock_in_tv_certification"
             android:background="@color/ff00b6ce"
             android:gravity="center"
             android:layout_centerHorizontal="true"
@@ -196,7 +199,48 @@
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>
+</RelativeLayout>
+<RelativeLayout
+    android:id="@+id/fm_clock_in_rl_no_entry"
+    android:visibility="gone"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <RelativeLayout
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+   <ImageView
+       android:id="@+id/fm_clock_in_no_entry"
+       android:layout_centerHorizontal="true"
+       android:src="@mipmap/ic_no_entry"
+       android:layout_width="@dimen/dp_132"
+       android:layout_height="@dimen/dp_132"/>
+
+    <TextView
+        android:layout_marginTop="@dimen/dp_21"
+        android:layout_below="@+id/fm_clock_in_no_entry"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="您还未入职，请先前往求职"
+        android:textColor="@color/ffa5a5a5"
+        android:textSize="@dimen/sp_15"
+        />
+
+    <TextView
+        android:layout_below="@+id/fm_clock_in_no_entry"
+        android:layout_marginTop="@dimen/dp_52"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="前往求职 >"
+        android:textColor="@color/ff00b6ce"
+        android:textSize="@dimen/sp_15"
+        />
+    </RelativeLayout>
+</RelativeLayout>
+ <RelativeLayout
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_64">
@@ -223,40 +267,4 @@
             android:textSize="@dimen/sp_12"
             />
     </RelativeLayout>
-</RelativeLayout>
-<RelativeLayout
-    android:visibility="gone"
-    android:background="@color/white"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-   <ImageView
-       android:id="@+id/fm_clock_in_no_entry"
-       android:layout_centerHorizontal="true"
-       android:layout_marginTop="@dimen/dp_85"
-       android:src="@mipmap/ic_no_entry"
-       android:layout_width="@dimen/dp_132"
-       android:layout_height="@dimen/dp_132"/>
-
-    <TextView
-        android:layout_marginTop="@dimen/dp_21"
-        android:layout_below="@+id/fm_clock_in_no_entry"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="您还未入职，请先前往求职"
-        android:textColor="@color/ffa5a5a5"
-        android:textSize="@dimen/sp_15"
-        />
-
-    <TextView
-        android:layout_below="@+id/fm_clock_in_no_entry"
-        android:layout_marginTop="@dimen/dp_52"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="前往求职 >"
-        android:textColor="@color/ff00b6ce"
-        android:textSize="@dimen/sp_15"
-        />
-</RelativeLayout>
 </FrameLayout>

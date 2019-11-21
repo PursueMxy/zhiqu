@@ -5,6 +5,8 @@ public interface BusinessCooperationContract {
     }
 
     interface View {
+        void UpdateUI(int code,String msg);
+        void UpdateUI(int code,String msg,String mobile);
     }
 
     interface Presenter {

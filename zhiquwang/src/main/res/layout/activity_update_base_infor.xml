@@ -109,7 +109,7 @@
                 android:layout_marginTop="@dimen/dp_18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="女"
+                android:hint="请选择"
                 android:textColor="@color/ffa5a5a5"
                 android:textSize="@dimen/sp_14"/>
 
@@ -149,7 +149,7 @@
                 android:layout_marginTop="@dimen/dp_18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="福建省厦门市"
+                android:hint="请选择"
                 android:textColor="@color/ffa5a5a5"
                 android:textSize="@dimen/sp_14"/>
 
@@ -189,7 +189,7 @@
                 android:layout_marginTop="@dimen/dp_18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2018年6月"
+                android:hint="请选择"
                 android:textColor="@color/ffa5a5a5"
                 android:textSize="@dimen/sp_14"/>
 
@@ -221,6 +221,7 @@
                 android:textSize="@dimen/sp_14"
                 />
             <TextView
+                android:id="@+id/update_base_tv_mobile"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/dp_24"
                 android:gravity="right"
@@ -260,7 +261,7 @@
                 android:layout_marginTop="@dimen/dp_18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="本科"
+                android:hint="请选择"
                 android:textColor="@color/ffa5a5a5"
                 android:textSize="@dimen/sp_14"/>
 
@@ -285,6 +286,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
      <Button
+         android:id="@+id/update_base_btn_confirm"
          android:layout_marginBottom="@dimen/dp_40"
          android:layout_alignParentBottom="true"
          android:layout_marginRight="@dimen/dp_40"

@@ -3,6 +3,7 @@ package com.icarexm.zhiquwang.view.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 import com.icarexm.zhiquwang.R;
@@ -38,6 +40,12 @@ public class RecordOvertimeFragment extends Fragment implements View.OnClickList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mContext = getContext();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // 透明状态栏
+            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            // 透明导航栏
+            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
         View inflate = inflater.inflate(R.layout.fragment_record_overtime, container, false);
         InitUI(inflate);
         return inflate;

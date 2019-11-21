@@ -79,6 +79,7 @@
                 />
 
             <EditText
+                android:id="@+id/business_cooperation_edt_company"
                 android:layout_marginLeft="@dimen/dp_101"
                 android:gravity="center|left"
                 android:layout_marginRight="@dimen/dp_33"
@@ -111,6 +112,7 @@
                 />
 
             <EditText
+                android:id="@+id/business_cooperation_edt_mobile"
                 android:layout_marginLeft="@dimen/dp_101"
                 android:gravity="center|left"
                 android:layout_marginRight="@dimen/dp_33"
@@ -141,6 +143,7 @@
             android:textSize="14sp"
             />
         <EditText
+            android:id="@+id/business_cooperation_edt_need"
             android:background="@null"
             android:layout_marginLeft="@dimen/dp_15"
             android:layout_marginRight="@dimen/dp_15"
@@ -148,7 +151,7 @@
             android:layout_below="@+id/business_cooperation_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="请填写您的商务合作需求"
+            android:hint="请填写您的商务合作需求"
             android:textColor="#ffb5b5b5"
             android:textSize="14sp"
             android:lineSpacingExtra="@dimen/dp_10"
@@ -170,6 +173,7 @@
             android:textSize="@dimen/sp_14"
             />
         <TextView
+            android:id="@+id/business_cooperation_tv_mobile"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/dp_30"
             android:layout_alignParentRight="true"
@@ -191,6 +195,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <Button
+            android:id="@+id/business_cooperation_btn_confirm"
             android:text="提交"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_14"

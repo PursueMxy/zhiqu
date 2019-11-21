@@ -64,5 +64,30 @@ public class RequstUrl {
 
         //保存简历
         public static  String AddResume=HOST+"/api/addResume";
+
+        //进入商务合作
+        public static String Cooperation=HOST+"/api/cooperation";
+
+        //添加合作需求
+        public static  String doCooperation=HOST+"/api/doCooperation";
+
+        //附件门店
+        public static String NearbyStores=HOST+"/api/nearbyStores";
+
+        //门店报名
+        public static String toApplication=HOST+"/api/toApplication";
+
+        //点击报名
+        public static String applicationInfo=HOST+"/api/applicationInfo";
+
+        //打卡页面
+        public static String playInfo=HOST+"/api/playInfo";
+
+        //发送短信
+        public static String sendMsg=HOST+"/api/sendMsg";
+
+        //找回密码
+        public static String findPass=HOST+"/api/findPass";
+
     }
 }

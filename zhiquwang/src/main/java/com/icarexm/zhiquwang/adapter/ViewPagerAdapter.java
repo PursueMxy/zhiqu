@@ -79,7 +79,6 @@ public class ViewPagerAdapter  extends RecyclerView.Adapter<ViewPagerAdapter.Vie
                 return true;
             }
         });
-        Log.e("滑动监听","jd"+mCurrentItem);
     }
 
     public void refreshData(int heatNum){

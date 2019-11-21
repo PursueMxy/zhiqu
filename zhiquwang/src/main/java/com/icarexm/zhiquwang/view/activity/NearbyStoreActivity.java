@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +17,10 @@ import android.view.WindowManager;
 
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.NearbyStoreAdapter;
+import com.icarexm.zhiquwang.bean.NearbyStoreBean;
+import com.icarexm.zhiquwang.contract.NearbyStoreContract;
+import com.icarexm.zhiquwang.presenter.NearbyStorePresenter;
+import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.zhouyou.recyclerview.XRecyclerView;
 import com.zhouyou.recyclerview.adapter.BaseRecyclerViewAdapter;
 
@@ -26,36 +31,41 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class NearbyStoreActivity extends AppCompatActivity {
+public class NearbyStoreActivity extends BaseActivity implements NearbyStoreContract.View {
     @BindView(R.id.nearby_story_recyclerView)
     XRecyclerView mRecyclerView;
     private Context mContext;
-    private List<String> list=new ArrayList<>();
+    private List<NearbyStoreBean.DataBeanX.DataBean> list=new ArrayList<>();
+    private String token;
+    private String latitude;
+    private String longitude;
+    private NearbyStorePresenter nearbyStorePresenter;
+    private String 	limit="30";
+    private int page=0;
+    private NearbyStoreAdapter nearbyStoreAdapter;
+    private String job_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nearby_store);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // 透明状态栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            // 透明导航栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
         ButterKnife.bind(this);
         mContext = getApplicationContext();
+        Intent intent = getIntent();
+        job_id = intent.getStringExtra("job_id");
+        SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        token = share.getString("token", "");
+        latitude = share.getString("latitude", "");
+        longitude = share.getString("longitude", "");
         InitUI();
+        nearbyStorePresenter = new NearbyStorePresenter(this);
+        nearbyStorePresenter.GetNearbyStore(token,longitude,latitude,limit,page+"");
     }
 
     private void InitUI() {
-        list.add("1");
-        list.add("2");
-        list.add("3");
-        list.add("4");
-        list.add("5");
         mRecyclerView.setNestedScrollingEnabled(false);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
-        NearbyStoreAdapter nearbyStoreAdapter = new NearbyStoreAdapter(mContext);
+        nearbyStoreAdapter = new NearbyStoreAdapter(this,job_id);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setFootViewText("拼命加载中","已经全部");
         mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
@@ -73,8 +83,8 @@ public class NearbyStoreActivity extends AppCompatActivity {
                 mRecyclerView.refreshComplete();//刷新动画完成
             }
         });
-        mRecyclerView.setAdapter(nearbyStoreAdapter);
         nearbyStoreAdapter.setListAll(list);
+        mRecyclerView.setAdapter(nearbyStoreAdapter);
         mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
@@ -91,7 +101,7 @@ public class NearbyStoreActivity extends AppCompatActivity {
                 startActivity(new Intent(mContext, RecruitDetailActivity.class));
             }
         });
-        nearbyStoreAdapter.notifyDataSetChanged();
+        mRecyclerView.setRefreshing(true);//没有更多数据
     }
 
     @OnClick({R.id.nearby_story_img_back})
@@ -109,5 +119,20 @@ public class NearbyStoreActivity extends AppCompatActivity {
             finish();
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
+    public void UpdateUI(int code, String msg, NearbyStoreBean.DataBeanX data){
+        if (code==1){
+           list = data.getData();
+           nearbyStoreAdapter.setListAll(list);
+           nearbyStoreAdapter.notifyDataSetChanged();
+        }else {
+            ToastUtils.showToast(mContext,msg);
+        }
     }
 }

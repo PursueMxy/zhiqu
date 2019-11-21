@@ -31,7 +31,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends BaseActivity {
 
     @BindView(R.id.home_myviewpager)
     MyViewPager mVpContent;
@@ -60,12 +60,6 @@ public class HomeActivity extends AppCompatActivity {
 
                     }
                 });
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // 透明状态栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            // 透明导航栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
         mContext = getApplicationContext();
         ButterKnife.bind(this);
         AddFragment();

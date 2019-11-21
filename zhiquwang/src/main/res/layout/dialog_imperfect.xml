@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_white_20"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_marginTop="@dimen/dp_30"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40">
+        <TextView
+            android:text="姓名："
+            android:gravity="right|center"
+            android:layout_centerVertical="true"
+            android:textSize="@dimen/sp_13"
+            android:textColor="@color/ff000000"
+            android:layout_width="@dimen/dp_100"
+            android:layout_height="match_parent"/>
+
+        <EditText
+            android:id="@+id/dialog_imperfect_edt_name"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginBottom="@dimen/dp_5"
+            android:layout_marginRight="@dimen/dp_20"
+            android:layout_centerVertical="true"
+            android:textSize="@dimen/sp_13"
+            android:textColor="@color/ffb5b5b5"
+            android:background="@drawable/edt_gray_bg"
+            android:hint="请输入姓名"
+            android:layout_marginLeft="@dimen/dp_101"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40">
+        <TextView
+            android:text="联系方式："
+            android:gravity="right|center"
+            android:layout_centerVertical="true"
+            android:textSize="@dimen/sp_13"
+            android:textColor="@color/ff000000"
+            android:layout_width="@dimen/dp_100"
+            android:layout_height="match_parent"/>
+
+        <EditText
+            android:id="@+id/dialog_imperfect_edt_mobile"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginBottom="@dimen/dp_5"
+            android:layout_marginRight="@dimen/dp_20"
+            android:layout_centerVertical="true"
+            android:textSize="@dimen/sp_13"
+            android:textColor="@color/ffb5b5b5"
+            android:background="@drawable/edt_gray_bg"
+            android:hint="请输入联系方式"
+            android:layout_marginLeft="@dimen/dp_101"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
+        <Button
+            android:layout_marginBottom="@dimen/dp_15"
+            android:layout_marginTop="@dimen/dp_20"
+            android:id="@+id/dialog_imperfect_btn_confirm"
+            android:textColor="@color/white"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="@dimen/sp_15"
+            android:text="取消"
+            android:background="@color/ffb5b5b5"
+            android:layout_weight="1"
+            android:layout_width="@dimen/dp_150"
+            android:layout_height="@dimen/dp_30"/>
+</LinearLayout>

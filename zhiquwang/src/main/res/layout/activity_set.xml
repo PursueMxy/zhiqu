@@ -237,6 +237,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <Button
+            android:id="@+id/set_btn_out_login"
             android:layout_alignParentBottom="true"
             android:background="@drawable/btn_login"
             android:layout_marginRight="@dimen/dp_40"

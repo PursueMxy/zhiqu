@@ -14,7 +14,7 @@ import com.icarexm.zhiquwang.R;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class RecruitActivity extends AppCompatActivity {
+public class RecruitActivity extends BaseActivity {
 
     private Context mContext;
 
@@ -22,12 +22,6 @@ public class RecruitActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recruit);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // 透明状态栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            // 透明导航栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
         mContext = getApplicationContext();
         ButterKnife.bind(this);
     }

@@ -176,6 +176,7 @@
             </RelativeLayout>
 
                 <Button
+                    android:id="@+id/my_resume_btn_confirm"
                     android:layout_below="@+id/my_resume_rl_sss"
                     android:layout_marginRight="@dimen/dp_40"
                     android:layout_marginBottom="@dimen/dp_40"

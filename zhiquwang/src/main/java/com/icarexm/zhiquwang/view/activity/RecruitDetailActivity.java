@@ -15,25 +15,35 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.IndicatorAdapter;
+import com.icarexm.zhiquwang.adapter.OnItemClickListener;
 import com.icarexm.zhiquwang.adapter.RecruitAdapter;
 import com.icarexm.zhiquwang.adapter.ViewPagerAdapter;
 import com.icarexm.zhiquwang.bean.HomeDataBean;
 import com.icarexm.zhiquwang.bean.JobDetailBean;
+import com.icarexm.zhiquwang.bean.PublicResultBean;
 import com.icarexm.zhiquwang.contract.RecruitDetailContract;
 import com.icarexm.zhiquwang.custview.BottomDialog;
 import com.icarexm.zhiquwang.custview.CustomVideoView;
 import com.icarexm.zhiquwang.custview.LabelsView;
 import com.icarexm.zhiquwang.presenter.RecruitDetailPresenter;
 import com.icarexm.zhiquwang.utils.MxyUtils;
+import com.icarexm.zhiquwang.utils.RequstUrl;
+import com.icarexm.zhiquwang.utils.ToastUtils;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,17 +132,139 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
         recruitDetailPresenter.GetJobDetail(token,job_id);
         recruitDetailPresenter.GetHomeData(token,limit+"",page+"",zone_id,area_id,salary_id,age_id,vocation_id,environment_id,job_id);
     }
-    @OnClick({R.id.recruit_dtl_tv_wechat,R.id.recruit_dtl_tv_nearby_store,R.id.recruit_dtl_tv_callPhone})
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        job_id = intent.getStringExtra("job_id");
+        recruitDetailPresenter.GetJobDetail(token,job_id);
+    }
+
+    @OnClick({R.id.recruit_dtl_tv_wechat,R.id.recruit_dtl_tv_nearby_store,R.id.recruit_dtl_tv_callPhone,R.id.recruit_dtl_btn_one_key_enroll
+    ,R.id.recruit_dtl_img_back})
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.recruit_dtl_tv_wechat:
                 WechatDialog();
                 break;
             case R.id.recruit_dtl_tv_nearby_store:
-                startActivity(new Intent(mContext,NearbyStoreActivity.class));
+                Intent intent = new Intent(mContext, NearbyStoreActivity.class);
+                intent.putExtra("job_id",job_id);
+                startActivity(intent);
                 break;
             case R.id.recruit_dtl_tv_callPhone:
                 callPhoneDialog();
+                break;
+            case R.id.recruit_dtl_btn_one_key_enroll:
+                OkGo.<String>post(RequstUrl.URL.applicationInfo)
+                        .params("token",token)
+                        .params("job_id",job_id)
+                        .execute(new StringCallback() {
+                            private int code;
+                            private String msg;
+
+                            @Override
+                            public void onSuccess(Response<String> response) {
+                                PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
+                                msg = resultBean.getMsg();
+                                code = resultBean.getCode();
+                                if (resultBean.getCode()==1){
+                                    enrollDialog();
+                                }else if (resultBean.getCode()==10003){
+                                    enrollDialog();
+                                }else if (resultBean.getCode()==20001){
+                                    imperdectDialog();
+                                }else {
+                                    ToastUtils.showToast(mContext,msg);
+                                }
+                            }
+
+                            private void enrollDialog() {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(RecruitDetailActivity.this);
+                                View dialog_affirm = getLayoutInflater().inflate(R.layout.dialog_affirm, null);
+                                TextView tv_content= dialog_affirm.findViewById(R.id.dialog_affirm_tv_content);
+                                builder.setView(dialog_affirm);
+                                AlertDialog alertDialog = builder.create();
+                                alertDialog.show();
+                                tv_content.setText(msg);
+                                dialog_affirm.findViewById(R.id.dialog_affirm_btn_back).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        alertDialog.dismiss();
+                                    }
+                                });
+                                dialog_affirm.findViewById(R.id.dialog_affirm_btn_confirm).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        if (code==1) {
+                                            OkGo.<String>post(RequstUrl.URL.toApplication)
+                                                    .params("token", token)
+                                                    .params("job_id", job_id)
+                                                    .execute(new StringCallback() {
+                                                        @Override
+                                                        public void onSuccess(Response<String> response) {
+                                                            PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
+                                                            if (resultBean.getCode() == 1) {
+                                                                mContext.startActivity(new Intent(mContext, RecruitDetailActivity.class));
+                                                            }
+                                                            ToastUtils.showToast(mContext, resultBean.getMsg());
+
+                                                        }
+                                                    });
+                                            alertDialog.dismiss();
+                                        }else if (code==20001){
+                                            alertDialog.dismiss();
+                                        }
+                                    }
+                                });
+
+                            }
+
+
+                            private void imperdectDialog(){
+                                AlertDialog.Builder builder = new AlertDialog.Builder(RecruitDetailActivity.this);
+                                View dialog_affirm = getLayoutInflater().inflate(R.layout.dialog_affirm, null);
+                                EditText edt_name= dialog_affirm.findViewById(R.id.dialog_imperfect_edt_name);
+                                EditText edt_mobile= dialog_affirm.findViewById(R.id.dialog_imperfect_edt_mobile);
+                                builder.setView(dialog_affirm);
+                                AlertDialog alertDialog = builder.create();
+                                alertDialog.show();
+                                dialog_affirm.findViewById(R.id.dialog_imperfect_btn_confirm).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        String mobile = edt_mobile.getText().toString();
+                                        String name = edt_name.getText().toString();
+                                        if (!mobile.equals("")){
+                                            if (!name.equals("")){
+                                                OkGo.<String>post(RequstUrl.URL.toApplication)
+                                                        .params("token", token)
+                                                        .params("job_id", job_id)
+                                                        .execute(new StringCallback() {
+                                                            @Override
+                                                            public void onSuccess(Response<String> response) {
+                                                                PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
+                                                                if (resultBean.getCode() == 1) {
+                                                                    mContext.startActivity(new Intent(mContext, RecruitDetailActivity.class));
+                                                                }
+                                                                ToastUtils.showToast(mContext, resultBean.getMsg());
+
+                                                            }
+                                                        });
+                                                alertDialog.dismiss();
+                                            }else {
+                                                ToastUtils.showToast(mContext,"姓名不能为空");
+                                            }
+                                        }else {
+                                            ToastUtils.showToast(mContext,"手机号不能为空");
+                                        }
+
+                                    }
+                                });
+                            }
+                        });
+                break;
+            case R.id.recruit_dtl_img_back:
+                finish();
                 break;
         }
     }
@@ -177,6 +309,16 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
                         , 0
                         , 0
                         , MxyUtils.dpToPx(mContext, MxyUtils.getDimens(mContext, R.dimen.dp_10)));
+            }
+        });
+        recruitAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                finish();
+                Intent intent = new Intent(mContext, RecruitDetailActivity.class);
+                intent.putExtra("job_id",homeDataList.get(position).getJob_id()+"");
+                startActivity(intent);
+                Log.e("点击了23","djfhjdsf");
             }
         });
     }
@@ -281,7 +423,6 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
             tv_workingLife.setText("工作年限："+dataBean.getWork_year());
             tv_other_ask.setText(dataBean.getNeed_other());
             tv_workingContent.setText(dataBean.getWork_describe());
-//            tv_commuteDt.setText(dataBean.get);
             tv_introduce.setText(dataBean.getIntroduce());
         }
     }
@@ -291,7 +432,17 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
         if (code==1){
             homeDataList = data.getData();
             recruitAdapter = new RecruitAdapter(mContext,homeDataList);
-            recruitAdapter.notifyDataSetChanged();
+            rcv_recruitList.setAdapter(recruitAdapter);
+            recruitAdapter.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    Log.e("点击了0","djfhjdsf");
+                    finish();
+                    Intent intent = new Intent(mContext, RecruitDetailActivity.class);
+                    intent.putExtra("job_id",homeDataList.get(position).getJob_id()+"");
+                    startActivity(intent);
+                }
+            });
         }
     }
 }

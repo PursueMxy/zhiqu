@@ -3,6 +3,7 @@ package com.icarexm.zhiquwang.view.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -17,7 +19,9 @@ import com.google.gson.JsonParser;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.RegionBean;
 import com.icarexm.zhiquwang.custview.BottomDialog;
+import com.icarexm.zhiquwang.custview.CircleImageView;
 import com.icarexm.zhiquwang.custview.mywheel.MyWheelView;
+import com.icarexm.zhiquwang.utils.ToastUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -39,6 +43,14 @@ public class UpdateBaseInforActivity extends BaseActivity {
      TextView tv_birth_date;
      @BindView(R.id.update_base_infor_tv_sex)
      TextView tv_sex;
+     @BindView(R.id.update_base_tv_address)
+     TextView tv_address;
+     @BindView(R.id.update_base_tv_nickname)
+     TextView tv_nickname;
+     @BindView(R.id.update_base_tv_mobile)
+     TextView tv_mobile;
+     @BindView(R.id.base_information_img_avatar)
+    CircleImageView img_avatar;
     private Context mContext;
     private static final String[] AGEGROUP = new String[]{"博士","硕士","本科","大专", "高中","中专","初中及以下"};
     private String ageGroupString="本科";
@@ -57,18 +69,39 @@ public class UpdateBaseInforActivity extends BaseActivity {
     private List<String> provinceList=new ArrayList<>();
     private List<String> CityList=new ArrayList<>();
     private List<RegionBean> jsonData=new ArrayList<>();
-    private String ProvinceName;
-    private String CityName;
+    private int  BASEINFOCODE=5121;
+    private String ProvinceName="";
+    private String CityName="";
+    private String city;
+    private String avatar;
+    private String real_name;
+    private String birth;
+    private String education;
+    private String mobile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_base_infor);
         mContext = getApplicationContext();
+        Intent intent = getIntent();
+        avatar = intent.getStringExtra("avatar");
+        city = intent.getStringExtra("city");
+        real_name = intent.getStringExtra("real_name");
+        sex = intent.getStringExtra("sex");
+        birth = intent.getStringExtra("birth");
+        education = intent.getStringExtra("education");
+        mobile = intent.getStringExtra("mobile");
         ButterKnife.bind(this);
         InitYear();
         InitAddress();
-
+        tv_education.setText(education);
+        tv_sex.setText(sex);
+        tv_birth_date.setText(birth);
+        tv_address.setText(city);
+        tv_nickname.setText(real_name);
+        tv_mobile.setText(mobile);
+        Glide.with(mContext).load(avatar).into(img_avatar);
     }
 
     private void InitAddress() {
@@ -145,7 +178,7 @@ public class UpdateBaseInforActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.update_base_infor_img_back,R.id.update_base_infor_rl_education,R.id.update_base_rl_time,R.id.update_base_rl_sex,R.id.update_base_rl_address})
+    @OnClick({R.id.update_base_infor_img_back,R.id.update_base_infor_rl_education,R.id.update_base_rl_time,R.id.update_base_rl_sex,R.id.update_base_rl_address,R.id.update_base_btn_confirm})
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.update_base_infor_img_back:
@@ -163,10 +196,41 @@ public class UpdateBaseInforActivity extends BaseActivity {
             case R.id.update_base_rl_address:
                AddressDialog();
                 break;
+            case R.id.update_base_btn_confirm:
+                String sex= tv_sex.getText().toString();
+                String address = tv_address.getText().toString();
+                String birth_date= tv_birth_date.getText().toString();
+                String education = tv_education.getText().toString();
+                if (!address.equals("")){
+                    if (!sex.equals("")){
+                       if (!birth_date.equals("")){
+                           if (!education.equals("")){
+                               Intent intent = new Intent(mContext, MyResumeActivity.class);
+                               intent.putExtra("sex",sex);
+                               intent.putExtra("address",address);
+                               intent.putExtra("birth_date",birth_date);
+                               intent.putExtra("education",education);
+                               setResult(BASEINFOCODE,intent);
+                               finish();
+                           }else {
+                               ToastUtils.showToast(mContext,"学历不能为空");
+                           }
+                       }else {
+                           ToastUtils.showToast(mContext,"出生年月不能为空");
+                       }
+                    }else {
+                        ToastUtils.showToast(mContext,"性别不能为空");
+                    }
+                }else {
+                    ToastUtils.showToast(mContext,"地址不能为空");
+                }
+                break;
         }
     }
 
     private void AddressDialog() {
+        ProvinceName="";
+        CityName="";
         final BottomDialog age_groupDialog = new BottomDialog(this, R.style.ActionSheetDialogStyle);
         View  BirthDateInflate = LayoutInflater.from(mContext).inflate(R.layout.dialog_bottom_address, null);
         MyWheelView groupwva_one = BirthDateInflate.findViewById(R.id.dialog_bottom_wheel_one);
@@ -197,8 +261,12 @@ public class UpdateBaseInforActivity extends BaseActivity {
         BirthDateInflate.findViewById(R.id.dialog_bottom_img_opt).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tv_birth_date.setText( SltYear+SltMonth);
-                age_groupDialog.dismiss();
+                if (!CityName.equals("")) {
+                    tv_address.setText(ProvinceName + CityName);
+                    age_groupDialog.dismiss();
+                }else {
+                    ToastUtils.showToast(mContext,"你没有修改地址");
+                }
             }
         });
         //防止弹出两个窗口
@@ -211,6 +279,8 @@ public class UpdateBaseInforActivity extends BaseActivity {
     }
 
     private void EducationDialog() {
+        ageGroupString="本科";
+        tv_education.setText(ageGroupString);
         final BottomDialog age_groupDialog = new BottomDialog(this, R.style.ActionSheetDialogStyle);
         View age_groupinflate = LayoutInflater.from(mContext).inflate(R.layout.dialog_bottom_education, null);
         TextView tv_title = age_groupinflate.findViewById(R.id.dialog_bottom_education_tv_title);
@@ -240,29 +310,34 @@ public class UpdateBaseInforActivity extends BaseActivity {
         if (age_groupDialog !=null && age_groupDialog.isShowing()) {
             return;
         }
-
         age_groupDialog.setContentView(age_groupinflate);
         age_groupDialog.show();
     }
 
 
     private void BirthDateDialog(){
+        SltYear="1990";
+        SltMonth="01";
         final BottomDialog age_groupDialog = new BottomDialog(this, R.style.ActionSheetDialogStyle);
         View  BirthDateInflate = LayoutInflater.from(mContext).inflate(R.layout.dialog_bottom_birth_date, null);
         MyWheelView groupwva_one = BirthDateInflate.findViewById(R.id.dialog_bottom_wheel_one);
-        groupwva_one.setItems(YearList,90);
+        groupwva_one.setItems(YearList,92);
         MyWheelView groupwva_two = BirthDateInflate.findViewById(R.id.dialog_bottom_wheel_two);
         groupwva_two.setItems(Arrays.asList(SltNull),0);
         groupwva_one.setOnItemSelectedListener(new MyWheelView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(int selectedIndex, String item) {
                 SltYear=item;
+                SltMonth="01";
                 groupwva_two.setItems(Arrays.asList(BIRTH_MONTH),0);
             }
         });
         groupwva_two.setOnItemSelectedListener(new MyWheelView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(int selectedIndex, String item) {
+                if(item.equals("请先选择上级")){
+                    item="01";
+                }
                 SltMonth=item;
             }
         });

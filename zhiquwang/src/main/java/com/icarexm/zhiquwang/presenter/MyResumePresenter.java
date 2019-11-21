@@ -4,6 +4,7 @@ import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.bean.ResumeBean;
 import com.icarexm.zhiquwang.contract.MyResumeContract;
 import com.icarexm.zhiquwang.model.MyResumeModel;
+import com.lzy.okgo.OkGo;
 
 public class MyResumePresenter implements MyResumeContract.Presenter {
 
@@ -25,4 +26,17 @@ public class MyResumePresenter implements MyResumeContract.Presenter {
         ResumeBean resumeBean = new GsonBuilder().create().fromJson(content, ResumeBean.class);
          mView.UpdateUI(resumeBean.getCode(),resumeBean.getMsg(),resumeBean.getData());
     }
+
+    //保存个人信息
+    public void GetAddResume(String token,String avatar,String real_name,String sex,String birth,String city,
+                            String education,String personal_introduce,String experience){
+            myResumeModel.PostaddResume(this,token,avatar,real_name,sex,birth,city,education,
+                    personal_introduce,experience);
+    }
+
+    //保存个人信息返回
+    public void SetAddResume(String content){
+
+    }
+
 }

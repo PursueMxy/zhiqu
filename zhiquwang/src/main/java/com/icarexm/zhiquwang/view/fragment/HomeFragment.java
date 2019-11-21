@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
@@ -160,8 +162,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View inflate = inflater.inflate(R.layout.fragment_home, container, false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // 透明状态栏
+            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            // 透明导航栏
+            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
         mContext = getContext();
+        View inflate = inflater.inflate(R.layout.fragment_home, container, false);
         share = mContext.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
         String s = imageTranslateUri(R.mipmap.ic_home_banner);
