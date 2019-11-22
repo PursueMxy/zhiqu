@@ -25,8 +25,8 @@ public class IndicatorAdapter extends RecyclerView.Adapter<IndicatorAdapter.View
     private int Have_video=1;
 
     public IndicatorAdapter(Context context, List<String> data,int currentItem,int have_video){
-        this.mCurrentItem=currentItem;
         this.mContext=context;
+        this.mCurrentItem=currentItem;
         this.mData = data;
         this.Have_video=have_video;
     }
@@ -55,6 +55,11 @@ public class IndicatorAdapter extends RecyclerView.Adapter<IndicatorAdapter.View
             holder.indicator_img.setImageResource(R.drawable.ic_circle_dot);
         }
 
+    }
+    public void refreshData( List<String> data,int currentItem,int have_video){
+        this.mCurrentItem=currentItem;
+        this.mData = data;
+        this.Have_video=have_video;
     }
     public void refreshData(int heatNum){
         mCurrentItem=heatNum;

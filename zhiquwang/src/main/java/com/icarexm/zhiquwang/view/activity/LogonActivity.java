@@ -3,6 +3,7 @@ package com.icarexm.zhiquwang.view.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -59,7 +60,7 @@ public class LogonActivity extends BaseActivity implements LogonContract.View {
                     if(!code.equals("")){
                         if (!password.equals("")){
                             if (repassword.equals(password)){
-                                logonPresenter.GetFindPass(mobile,code,password,repassword);
+                                logonPresenter.GetRegister(mobile,code,password,repassword);
                             }else {
                                 ToastUtils.showToast(mContext,"两次密码输入不一致");
                             }
@@ -79,7 +80,7 @@ public class LogonActivity extends BaseActivity implements LogonContract.View {
                     Timesecond =59;
                     timeHandler.postDelayed(timeRunnable,1000);
                     tv_mobileCode.setClickable(false);
-                    logonPresenter.GetSendMsg(mobile,"2");
+                    logonPresenter.GetSendMsg(mobile,"1");
                 }else {
                     ToastUtils.showToast(mContext,"手机号码不能为空");
                 }
@@ -115,5 +116,14 @@ public class LogonActivity extends BaseActivity implements LogonContract.View {
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+
+    public void UpdateUI(int code,String msg){
+        if (code==10001){
+            finish();
+            startActivity(new Intent(mContext,LoginActivity.class));
+        }else {
+            ToastUtils.showToast(mContext,msg);
+        }
     }
 }

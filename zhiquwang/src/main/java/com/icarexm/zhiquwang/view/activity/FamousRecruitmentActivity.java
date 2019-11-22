@@ -13,18 +13,29 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.FRAdapter;
+import com.icarexm.zhiquwang.bean.HomeBannerBean;
 import com.icarexm.zhiquwang.bean.HomeDataBean;
 import com.icarexm.zhiquwang.contract.FamousRecruitmentContract;
 import com.icarexm.zhiquwang.presenter.FamousRecruitmentPresenter;
 import com.icarexm.zhiquwang.utils.MxyUtils;
+import com.icarexm.zhiquwang.utils.RequstUrl;
+import com.icarexm.zhiquwang.view.fragment.HomeFragment;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.Response;
 import com.zhouyou.recyclerview.XRecyclerView;
 import com.zhouyou.recyclerview.adapter.BaseRecyclerViewAdapter;
 
@@ -40,6 +51,27 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
     XRecyclerView mRecyclerView;
      @BindView(R.id.famous_recruitment_tv_title)
     TextView tv_title;
+     @BindView(R.id.famous_recruitment_list_city)
+    ListView list_city;
+     @BindView(R.id.famous_recruitment_list_salary)
+     ListView list_salary;
+    @BindView(R.id.famous_recruitment_list_age)
+    ListView list_age;
+    @BindView(R.id.famous_recruitment_list_vocation)
+    ListView list_vocation;
+    @BindView(R.id.famous_recruitment_list_environment)
+    ListView list_environment;
+    @BindView(R.id.famous_recruitment_rl_city)
+    RelativeLayout rl_city;
+    @BindView(R.id.famous_recruitment_rl_salary)
+    RelativeLayout rl_salary;
+    @BindView(R.id.famous_recruitment_rl_age)
+    RelativeLayout rl_age;
+    @BindView(R.id.famous_recruitment_rl_vocation)
+    RelativeLayout rl_vocation;
+    @BindView(R.id.famous_recruitment_rl_environment)
+    RelativeLayout rl_environment;
+
     private Context mContext;
     private FRAdapter frAdapter;
     private RadioGroup radioGroup;
@@ -59,9 +91,25 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
     private String age_id;
     private String vocation_id;
     private String environment_id;
-    private String Job_id;
+    private String job_id;
     private List<HomeDataBean.DataBeanX.DataBean> homeDataList=new ArrayList<>();
     private String zone_name;
+    private String city_name;
+    private List<HomeBannerBean.DataBean.OptionListBean.AreaListBean> area_list=new ArrayList<>();
+    private CityAdapter cityAdapter;
+    private SalaryAdapter salaryAdapter;
+    private AgeAdapter ageAdapter;
+    private VocationAdapter vocationAdapter;
+    private EnvironmentAdapter environmentAdapter;
+    private boolean IsArea=true;
+    private boolean IsSalary=true;
+    private boolean IsAge=true;
+    private boolean IsVocation=true;
+    private boolean IsEironment=true;
+    private List<HomeBannerBean.DataBean.OptionListBean.SalaryBean> salary=new ArrayList<>();
+    private List<HomeBannerBean.DataBean.OptionListBean.AgeBean> ageList=new ArrayList<>();
+    private List<HomeBannerBean.DataBean.OptionListBean.EnvironmentBean> environment=new ArrayList<>();
+    private List<HomeBannerBean.DataBean.OptionListBean.VocationBean> vocation=new ArrayList<>();
 
 
     @Override
@@ -74,11 +122,13 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
         Intent intent = getIntent();
         zone_id = intent.getStringExtra("zone_id");
         zone_name = intent.getStringExtra("zone_name");
+        city_name = intent.getStringExtra("city_name");
         ButterKnife.bind(this);
         InitUI();
+        InitData();
         tv_title.setText(zone_name);
         famousRecruitmentPresenter = new FamousRecruitmentPresenter(this);
-        famousRecruitmentPresenter.GetHomeData(token,limit+"",page+"",zone_id,area_id,salary_id,age_id,vocation_id,environment_id,Job_id);
+        famousRecruitmentPresenter.GetHomeData(token,limit+"",page+"",zone_id,area_id,salary_id,age_id,vocation_id,environment_id,job_id);
     }
 
     private void InitUI() {
@@ -126,11 +176,16 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
         radiobutton_age = findViewById(R.id.famous_recruitment_radiobutton_age);
         radiobutton_trade = findViewById(R.id.famous_recruitment_radiobutton_trade);
         radiobutton_work = findViewById(R.id.famous_recruitment_radiobutton_work);
+        SltAdapter();
+        radiobuttonClick();
+    }
+
+    private void radiobuttonClick() {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 switch (i){
-                    case R.id.famous_recruitment_radiobutton_area:
+                    case R.id.fm_home_radiobutton_area:
                         radiobutton_area.setBackgroundResource(R.drawable.title_choosed_color);
                         radiobutton_area.setTextColor(getResources().getColor(R.color.ff00b6ce));
                         radiobutton_salary.setBackgroundResource(R.drawable.title_nochoosed_color);
@@ -141,8 +196,12 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
                         radiobutton_trade.setTextColor(getResources().getColor(R.color.ff4e4d4d));
                         radiobutton_work.setBackgroundResource(R.drawable.title_nochoosed_color);
                         radiobutton_work.setTextColor(getResources().getColor(R.color.ff4e4d4d));
+                        rl_salary.setVisibility(View.GONE);
+                        rl_age.setVisibility(View.GONE);
+                        rl_vocation.setVisibility(View.GONE);
+                        rl_environment.setVisibility(View.GONE);
                         break;
-                    case R.id.famous_recruitment_radiobutton_salary:
+                    case R.id.fm_home_radiobutton_salary:
                         radiobutton_area.setBackgroundResource(R.drawable.title_nochoosed_color);
                         radiobutton_area.setTextColor(getResources().getColor(R.color.ff4e4d4d));
                         radiobutton_salary.setBackgroundResource(R.drawable.title_choosed_color);
@@ -153,8 +212,12 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
                         radiobutton_trade.setTextColor(getResources().getColor(R.color.ff4e4d4d));
                         radiobutton_work.setBackgroundResource(R.drawable.title_nochoosed_color);
                         radiobutton_work.setTextColor(getResources().getColor(R.color.ff4e4d4d));
+                        rl_city.setVisibility(View.GONE);
+                        rl_age.setVisibility(View.GONE);
+                        rl_vocation.setVisibility(View.GONE);
+                        rl_environment.setVisibility(View.GONE);
                         break;
-                    case R.id.famous_recruitment_radiobutton_age:
+                    case R.id.fm_home_radiobutton_age:
                         radiobutton_area.setBackgroundResource(R.drawable.title_nochoosed_color);
                         radiobutton_area.setTextColor(getResources().getColor(R.color.ff4e4d4d));
                         radiobutton_salary.setBackgroundResource(R.drawable.title_nochoosed_color);
@@ -165,8 +228,12 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
                         radiobutton_trade.setTextColor(getResources().getColor(R.color.ff4e4d4d));
                         radiobutton_work.setBackgroundResource(R.drawable.title_nochoosed_color);
                         radiobutton_work.setTextColor(getResources().getColor(R.color.ff4e4d4d));
+                        rl_city.setVisibility(View.GONE);
+                        rl_salary.setVisibility(View.GONE);
+                        rl_vocation.setVisibility(View.GONE);
+                        rl_environment.setVisibility(View.GONE);
                         break;
-                    case R.id.famous_recruitment_radiobutton_trade:
+                    case R.id.fm_home_radiobutton_trade:
                         radiobutton_area.setBackgroundResource(R.drawable.title_nochoosed_color);
                         radiobutton_area.setTextColor(getResources().getColor(R.color.ff4e4d4d));
                         radiobutton_salary.setBackgroundResource(R.drawable.title_nochoosed_color);
@@ -177,8 +244,12 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
                         radiobutton_trade.setTextColor(getResources().getColor(R.color.ff00b6ce));
                         radiobutton_work.setBackgroundResource(R.drawable.title_nochoosed_color);
                         radiobutton_work.setTextColor(getResources().getColor(R.color.ff4e4d4d));
+                        rl_city.setVisibility(View.GONE);
+                        rl_salary.setVisibility(View.GONE);
+                        rl_age.setVisibility(View.GONE);
+                        rl_environment.setVisibility(View.GONE);
                         break;
-                    case R.id.famous_recruitment_radiobutton_work:
+                    case R.id.fm_home_radiobutton_work:
                         radiobutton_area.setBackgroundResource(R.drawable.title_nochoosed_color);
                         radiobutton_area.setTextColor(getResources().getColor(R.color.ff4e4d4d));
                         radiobutton_salary.setBackgroundResource(R.drawable.title_nochoosed_color);
@@ -189,8 +260,168 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
                         radiobutton_trade.setTextColor(getResources().getColor(R.color.ff4e4d4d));
                         radiobutton_work.setBackgroundResource(R.drawable.title_choosed_color);
                         radiobutton_work.setTextColor(getResources().getColor(R.color.ff00b6ce));
+                        rl_city.setVisibility(View.GONE);
+                        rl_salary.setVisibility(View.GONE);
+                        rl_vocation.setVisibility(View.GONE);
+                        rl_age.setVisibility(View.GONE);
                         break;
                 }
+            }
+        });
+        radiobutton_area.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (IsArea) {
+                    rl_city.setVisibility(View.VISIBLE);
+                }else {
+                    rl_city.setVisibility(View.GONE);
+                }
+                IsArea=!IsArea;
+                IsSalary=true;
+                IsAge=true;
+                IsVocation=true;
+                IsEironment=true;
+            }
+        });
+        radiobutton_salary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (IsSalary) {
+                    rl_salary.setVisibility(View.VISIBLE);
+                }else {
+                    rl_salary.setVisibility(View.GONE);
+                }
+                IsSalary=!IsSalary;
+                IsArea=true;
+                IsAge=true;
+                IsVocation=true;
+                IsEironment=true;
+            }
+        });
+        radiobutton_age.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (IsAge) {
+                    rl_age.setVisibility(View.VISIBLE);
+                }else {
+                    rl_age.setVisibility(View.GONE);
+                }
+                IsAge=!IsAge;
+                IsArea=true;
+                IsSalary=true;
+                IsVocation=true;
+                IsEironment=true;
+            }
+        });
+        radiobutton_trade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (IsVocation) {
+                    rl_vocation.setVisibility(View.VISIBLE);
+                }else {
+                    rl_vocation.setVisibility(View.GONE);
+                }
+                IsVocation=!IsVocation;
+                IsArea=true;
+                IsSalary=true;
+                IsAge=true;
+                IsEironment=true;
+            }
+        });
+        radiobutton_work.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (IsEironment) {
+                    rl_environment.setVisibility(View.VISIBLE);
+                }else {
+                    rl_environment.setVisibility(View.GONE);
+                }
+                IsEironment=!IsEironment;
+                IsArea=true;
+                IsSalary=true;
+                IsAge=true;
+                IsVocation=true;
+            }
+        });
+    }
+
+    private void InitData() {
+        OkGo.<String>post(RequstUrl.URL.Home)
+                .params("city",city_name)
+                .params("token",token)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        HomeBannerBean homeBannerBean = new GsonBuilder().create().fromJson(response.body(), HomeBannerBean.class);
+                        if (homeBannerBean.getCode()==1){
+                            HomeBannerBean.DataBean data = homeBannerBean.getData();
+                            if (data!=null){
+                                HomeBannerBean.DataBean.OptionListBean option_list = data.getOption_list();
+                                area_list = option_list.getArea_list();
+                                cityAdapter.notifyDataSetChanged();
+                                salary = option_list.getSalary();
+                                salaryAdapter.notifyDataSetChanged();
+                                ageList = option_list.getAge();
+                                ageAdapter.notifyDataSetChanged();
+                                vocation = option_list.getVocation();
+                                vocationAdapter.notifyDataSetChanged();
+                                environment = option_list.getEnvironment();
+                                environmentAdapter.notifyDataSetChanged();
+                            }
+                        }
+                    }
+                });
+    }
+
+    private void SltAdapter() {
+        cityAdapter = new CityAdapter();
+        list_city.setAdapter(cityAdapter);
+        list_city.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                age_id=area_list.get(i).getArea_id()+"";
+                rl_city.setVisibility(View.GONE);
+                IsArea=true;
+            }
+        });
+        salaryAdapter = new SalaryAdapter();
+        list_salary.setAdapter(salaryAdapter);
+        list_salary.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                salary_id= salary.get(i).getSalary_id()+"";
+                rl_salary.setVisibility(View.GONE);
+                IsSalary=true;
+            }
+        });
+        ageAdapter = new AgeAdapter();
+        list_age.setAdapter(ageAdapter);
+        list_age.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                age_id= ageList.get(i).getAge_id()+"";
+                rl_age.setVisibility(View.GONE);
+                IsAge=true;
+            }
+        });
+        vocationAdapter = new VocationAdapter();
+        list_vocation.setAdapter(vocationAdapter);
+        list_vocation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                vocation_id= vocation.get(i).getVocation_id()+"";
+                rl_vocation.setVisibility(View.GONE);
+                IsVocation=true;
+            }
+        });
+        environmentAdapter = new EnvironmentAdapter();
+        list_environment.setAdapter(environmentAdapter);
+        list_environment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                environment_id= environment.get(i).getEnvironment_id()+"";
+                rl_environment.setVisibility(View.GONE);
+                IsEironment=true;
             }
         });
     }
@@ -224,4 +455,131 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
           frAdapter.notifyDataSetChanged();
       }
     }
+
+    public class CityAdapter extends BaseAdapter {
+        @Override
+        public int getCount() {
+            return area_list.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            View inflate = getLayoutInflater().inflate(R.layout.home_list_item, null);
+            TextView tv_city= inflate.findViewById(R.id.home_list_item_tv_content);
+            tv_city.setText(area_list.get(i).getArea_name());
+            return inflate;
+        }
+    }
+
+    public class SalaryAdapter extends  BaseAdapter{
+        @Override
+        public int getCount() {
+            return salary.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            View inflate = getLayoutInflater().inflate(R.layout.home_list_item, null);
+            TextView tv_city= inflate.findViewById(R.id.home_list_item_tv_content);
+            tv_city.setText(salary.get(i).getSalary_value()+"元");
+            return inflate;
+        }
+    }
+
+    public class AgeAdapter extends  BaseAdapter{
+        @Override
+        public int getCount() {
+            return ageList.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            View inflate = getLayoutInflater().inflate(R.layout.home_list_item, null);
+            TextView tv_city= inflate.findViewById(R.id.home_list_item_tv_content);
+            tv_city.setText(ageList.get(i).getAge_value());
+            return inflate;
+        }
+    }
+
+    public class VocationAdapter extends  BaseAdapter{
+        @Override
+        public int getCount() {
+            return vocation.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            View inflate = getLayoutInflater().inflate(R.layout.home_list_item, null);
+            TextView tv_city= inflate.findViewById(R.id.home_list_item_tv_content);
+            tv_city.setText(vocation.get(i).getVocation_value());
+            return inflate;
+        }
+    }
+
+    public class EnvironmentAdapter extends  BaseAdapter{
+        @Override
+        public int getCount() {
+            return environment.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            View inflate = getLayoutInflater().inflate(R.layout.home_list_item, null);
+            TextView tv_city= inflate.findViewById(R.id.home_list_item_tv_content);
+            tv_city.setText(environment.get(i).getEnvironment_value());
+            return inflate;
+        }
+    }
+
+
 }

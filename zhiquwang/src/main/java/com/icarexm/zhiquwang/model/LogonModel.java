@@ -23,7 +23,7 @@ public class LogonModel implements LogonContract.Model {
     /**
      * 修改密码
      */
-    public void PsotFindPass(LogonPresenter LogonPresenter, String mobile, String code,
+    public void PsotRegister(LogonPresenter LogonPresenter, String mobile, String code,
                              String password, String repassword) {
         OkGo.<String>post(RequstUrl.URL.findPass)
                 .params("mobile", mobile)
@@ -33,7 +33,7 @@ public class LogonModel implements LogonContract.Model {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        LogonPresenter.SetFindPass(response.body());
+                        LogonPresenter.SetRegister(response.body());
                     }
                 });
     }

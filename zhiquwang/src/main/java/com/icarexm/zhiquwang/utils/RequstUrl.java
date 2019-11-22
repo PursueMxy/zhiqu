@@ -89,5 +89,8 @@ public class RequstUrl {
         //找回密码
         public static String findPass=HOST+"/api/findPass";
 
+        //注册
+        public static String Register=HOST+"/api/register";
+
     }
 }

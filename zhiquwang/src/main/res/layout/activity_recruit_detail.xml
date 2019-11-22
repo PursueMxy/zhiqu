@@ -396,15 +396,17 @@
                         android:background="@color/ffd6d6d6"/>
                 </RelativeLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
+
+                <com.icarexm.zhiquwang.custview.NoScrollListView
+                    android:id="@+id/recruit_dtl_listview"
+                    android:divider="@drawable/FFFAFAFA"
                     android:layout_marginLeft="@dimen/dp_15"
                     android:layout_marginRight="@dimen/dp_15"
                     android:layout_marginBottom="@dimen/dp_70"
-                    android:id="@+id/recruit_dtl_rcv_recruitList"
                     android:layout_marginTop="@dimen/dp_20"
+                    android:dividerHeight="@dimen/dp_10"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                </androidx.recyclerview.widget.RecyclerView>
+                    android:layout_height="match_parent"/>
             </LinearLayout>
       </ScrollView>
     <RelativeLayout

@@ -1,5 +1,7 @@
 package com.icarexm.zhiquwang.presenter;
 
+import com.google.gson.GsonBuilder;
+import com.icarexm.zhiquwang.bean.PublicResultBean;
 import com.icarexm.zhiquwang.contract.LogonContract;
 import com.icarexm.zhiquwang.contract.LogonContract;
 import com.icarexm.zhiquwang.model.LogonModel;
@@ -20,12 +22,13 @@ public class LogonPresenter implements LogonContract.Presenter {
     }
 
     //找回密码
-    public void GetFindPass(String mobile,String code,String password,String repassword){
-        LogonModel.PsotFindPass(this,mobile,code,password,repassword);
+    public void GetRegister(String mobile,String code,String password,String repassword){
+        LogonModel.PsotRegister(this,mobile,code,password,repassword);
     }
 
     //数据返回
-    public void SetFindPass(String content){
-
+    public void SetRegister(String content){
+        PublicResultBean resultBean = new GsonBuilder().create().fromJson(content, PublicResultBean.class);
+        mView.UpdateUI(resultBean.getCode(),resultBean.getMsg());
     }
 }

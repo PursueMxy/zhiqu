@@ -98,7 +98,7 @@ public class NearbyStoreActivity extends BaseActivity implements NearbyStoreCont
         nearbyStoreAdapter.setOnItemClickListener(new BaseRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, Object item, int position) {
-                startActivity(new Intent(mContext, RecruitDetailActivity.class));
+//                startActivity(new Intent(mContext, RecruitDetailActivity.class));
             }
         });
         mRecyclerView.setRefreshing(true);//没有更多数据

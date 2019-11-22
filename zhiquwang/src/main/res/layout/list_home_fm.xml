@@ -38,7 +38,7 @@
         android:textSize="@dimen/sp_12"
         />
 
-      <com.icarexm.zhiquwang.custview.LabelsView
+    <com.icarexm.zhiquwang.custview.LabelsView
           android:layout_marginTop="@dimen/dp_6"
           android:layout_marginLeft="@dimen/dp_10"
           android:layout_below="@+id/list_home_fm_tv_salary"
@@ -81,12 +81,12 @@
         android:layout_marginLeft="@dimen/dp_10"
         android:drawablePadding="@dimen/dp_5"
         android:drawableLeft="@mipmap/ic_location_gary"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="福建省厦门市思明区连扳国贸大厦"
-    android:textColor="#ffa5a5a5"
-    android:textSize="12sp"
-    />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="福建省厦门市思明区连扳国贸大厦"
+        android:textColor="#ffa5a5a5"
+        android:textSize="12sp"
+        />
 
     <RelativeLayout
         android:id="@+id/list_home_fm_rl"

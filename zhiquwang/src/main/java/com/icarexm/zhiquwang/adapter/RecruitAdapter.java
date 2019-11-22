@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,8 +31,12 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View inflate = LayoutInflater.from(mContext).inflate(R.layout.list_home_fm, parent, false);
-       ViewHolder holder = new ViewHolder(inflate);
+        ViewHolder holder = new ViewHolder(inflate);
         return holder;
+    }
+
+    public void SetData(List<HomeDataBean.DataBeanX.DataBean> mData){
+        this.mData=mData;
     }
 
     @Override
@@ -52,7 +57,11 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.ViewHold
         for (int a=0;a<label_arr.size();a++){
             label.add(label_arr.get(a).getLabel_name());
         }
-        holder.labels.setLabels(label); //直接设置一个字符串数组就可以了。
+        holder.labels.setLabels(label);
+        holder.tv_position.setText(mData.get(position).getJob_name());
+        holder.tv_salary.setText(mData.get(position).getSalary()+"/月"+mData.get(position).getSalary_hour()+"/时");
+        holder.tv_age.setText(mData.get(position).getAge());
+        holder.tv_address.setText(mData.get(position).getAddress());
     }
     @Override
     public int getItemCount() {
@@ -61,9 +70,18 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final LabelsView labels;
+        private final TextView tv_position;
+        private final TextView tv_salary;
+        private final TextView tv_age;
+        private final TextView tv_address;
+
         public ViewHolder(View itemView) {
             super(itemView);
             labels = itemView.findViewById(R.id.labels);
+            tv_position = itemView.findViewById(R.id.list_home_fm_tv_position);
+            tv_salary = itemView.findViewById(R.id.list_home_fm_tv_salary);
+            tv_age = itemView.findViewById(R.id.list_home_fm_tv_age);
+            tv_address = itemView.findViewById(R.id.list_home_fm_tv_address);
             itemView.findViewById(R.id.list_home_fm_rl).setVisibility(View.GONE);
         }
     }

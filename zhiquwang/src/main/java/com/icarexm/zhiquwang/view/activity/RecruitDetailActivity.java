@@ -19,9 +19,12 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.GsonBuilder;
@@ -61,8 +64,6 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
     RecyclerView recyclerView;
     @BindView(R.id.recruit_dtl_labels)
     LabelsView labelsView;
-    @BindView(R.id.recruit_dtl_rcv_recruitList)
-    RecyclerView rcv_recruitList;
     @BindView(R.id.recruit_dtl_tv_jobName)
     TextView tv_job_name;
     @BindView(R.id.recruit_dtl_tv_salary)
@@ -93,6 +94,8 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
     TextView tv_commuteDt;
     @BindView(R.id.recruit_dtl_tv_introduce)
     TextView tv_introduce;
+    @BindView(R.id.recruit_dtl_listview)
+    ListView list_tuijian;
     private int CurrentItem=0;
     private int DELAYMILLIS=10000;
     private ViewPagerAdapter viewPagerAdapter;
@@ -114,7 +117,7 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
     private List<String> img_arr=new ArrayList<>();
     private int have_video=1;
     private List<HomeDataBean.DataBeanX.DataBean> homeDataList=new ArrayList<>();
-    private RecruitAdapter recruitAdapter;
+    private MyAdapter myAdapter;
 
 
     @Override
@@ -270,9 +273,10 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
     }
 
     private void InitUI() {
-        handler.postDelayed(runnable,DELAYMILLIS);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
+        indicatorAdapter = new IndicatorAdapter(mContext, img_arr, CurrentItem, have_video);
+        recyclerView.setAdapter(indicatorAdapter);
         recruit_dtl_viewPage.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             // 当前页面被滑动时调用
             @Override
@@ -297,28 +301,16 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
                 super.onPageScrollStateChanged(state);
             }
         });
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
-        rcv_recruitList.setLayoutManager(linearLayoutManager);
-        recruitAdapter = new RecruitAdapter(mContext,homeDataList);
-        rcv_recruitList.setAdapter(recruitAdapter);
-        rcv_recruitList.addItemDecoration( new RecyclerView.ItemDecoration() {
+        myAdapter = new MyAdapter();
+        list_tuijian.setAdapter(myAdapter);
+        list_tuijian.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-                super.getItemOffsets(outRect, view, parent, state);
-                outRect.set(0
-                        , 0
-                        , 0
-                        , MxyUtils.dpToPx(mContext, MxyUtils.getDimens(mContext, R.dimen.dp_10)));
-            }
-        });
-        recruitAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Log.e("点开了","哈哈哈");
                 finish();
                 Intent intent = new Intent(mContext, RecruitDetailActivity.class);
                 intent.putExtra("job_id",homeDataList.get(position).getJob_id()+"");
                 startActivity(intent);
-                Log.e("点击了23","djfhjdsf");
             }
         });
     }
@@ -338,19 +330,19 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
     }
 
 
-    private Handler handler=new Handler();
-    private Runnable runnable=new Runnable() {
-        @Override
-        public void run() {
-            if (CurrentItem<homeDataList.size()-1){
-                CurrentItem++;
-            }else {
-                CurrentItem=0;
-            }
-            recruit_dtl_viewPage.setCurrentItem(CurrentItem);
-            handler.postDelayed(runnable,DELAYMILLIS);
-        }
-    };
+//    private Handler handler=new Handler();
+//    private Runnable runnable=new Runnable() {
+//        @Override
+//        public void run() {
+//            if (CurrentItem<homeDataList.size()-1){
+//                CurrentItem++;
+//            }else {
+//                CurrentItem=0;
+//            }
+//            recruit_dtl_viewPage.setCurrentItem(CurrentItem);
+//            handler.postDelayed(runnable,DELAYMILLIS);
+//        }
+//    };
     //电话联系
     public void callPhoneDialog(){
         dialog_callphone = getLayoutInflater().inflate(R.layout.dialog_callphone, null);
@@ -401,9 +393,9 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
             have_video = dataBean.getHave_video();
             viewPagerAdapter = new ViewPagerAdapter(this, img_arr, recruit_dtl_viewPage, have_video);
             recruit_dtl_viewPage.setAdapter(viewPagerAdapter);
-            indicatorAdapter = new IndicatorAdapter(mContext, img_arr, CurrentItem, have_video);
-            recyclerView.setAdapter(indicatorAdapter);
+            indicatorAdapter.refreshData( img_arr, CurrentItem, have_video);
             indicatorAdapter.refreshData(CurrentItem);
+            indicatorAdapter.notifyDataSetChanged();
             List<JobDetailBean.DataBean.LabelArrBean> label_arr = dataBean.getLabel_arr();
             ArrayList<String> label = new ArrayList<>();
             for (int a=0;a<label_arr.size();a++){
@@ -431,18 +423,46 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
     public  void UpdateUI(int code,String msg, HomeDataBean.DataBeanX data){
         if (code==1){
             homeDataList = data.getData();
-            recruitAdapter = new RecruitAdapter(mContext,homeDataList);
-            rcv_recruitList.setAdapter(recruitAdapter);
-            recruitAdapter.setOnItemClickListener(new OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    Log.e("点击了0","djfhjdsf");
-                    finish();
-                    Intent intent = new Intent(mContext, RecruitDetailActivity.class);
-                    intent.putExtra("job_id",homeDataList.get(position).getJob_id()+"");
-                    startActivity(intent);
-                }
-            });
+            myAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public class MyAdapter extends  BaseAdapter{
+        @Override
+        public int getCount() {
+            return homeDataList.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View view, ViewGroup viewGroup) {
+            View itemView = LayoutInflater.from(mContext).inflate(R.layout.list_home_fm, null);
+           LabelsView labels = itemView.findViewById(R.id.labels);
+           TextView tv_position = itemView.findViewById(R.id.list_home_fm_tv_position);
+           TextView tv_salary = itemView.findViewById(R.id.list_home_fm_tv_salary);
+           TextView tv_age = itemView.findViewById(R.id.list_home_fm_tv_age);
+           TextView tv_address = itemView.findViewById(R.id.list_home_fm_tv_address);
+            itemView.findViewById(R.id.list_home_fm_rl).setVisibility(View.GONE);
+            List<HomeDataBean.DataBeanX.DataBean.LabelArrBean> label_arr = homeDataList.get(position).getLabel_arr();
+            ArrayList<String> label = new ArrayList<>();
+            for (int a=0;a<label_arr.size();a++){
+                label.add(label_arr.get(a).getLabel_name());
+            }
+            labels.setLabels(label);
+            tv_position.setText(homeDataList.get(position).getJob_name());
+            tv_salary.setText(homeDataList.get(position).getSalary()+"/月"+homeDataList.get(position).getSalary_hour()+"/时");
+            tv_age.setText(homeDataList.get(position).getAge());
+            tv_address.setText(homeDataList.get(position).getAddress());
+            return itemView;
         }
     }
 }

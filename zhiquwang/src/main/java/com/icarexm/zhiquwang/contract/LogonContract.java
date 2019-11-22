@@ -5,6 +5,7 @@ public interface LogonContract {
     }
 
     interface View {
+      void  UpdateUI(int code,String msg);
     }
 
     interface Presenter {

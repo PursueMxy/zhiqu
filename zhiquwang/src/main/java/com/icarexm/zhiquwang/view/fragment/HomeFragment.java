@@ -152,6 +152,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private String environment_id;
     private String job_id;
     private List<HomeDataBean.DataBeanX.DataBean> homeDataList=new ArrayList<>();
+    private boolean IsArea=true;
+    private boolean IsSalary=true;
+    private boolean IsAge=true;
+    private boolean IsVocation=true;
+    private boolean IsEiroment=true;
 
 
     public HomeFragment() {
@@ -172,7 +177,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         View inflate = inflater.inflate(R.layout.fragment_home, container, false);
         share = mContext.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
-        String s = imageTranslateUri(R.mipmap.ic_home_banner);
         InitUI(inflate);
         startLocation();
         InitData();
@@ -282,38 +286,26 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void InitUI(View inflate) {
+        radioGroup = inflate.findViewById(R.id.fm_home_radioGroup);
+        radiobutton_area = inflate.findViewById(R.id.fm_home_radiobutton_area);
+        radiobutton_salary = inflate.findViewById(R.id.fm_home_radiobutton_salary);
+        radiobutton_age = inflate.findViewById(R.id.fm_home_radiobutton_age);
+        radiobutton_trade = inflate.findViewById(R.id.fm_home_radiobutton_trade);
+        radiobutton_work = inflate.findViewById(R.id.fm_home_radiobutton_work);
+        recyclerView = inflate.findViewById(R.id.fm_home_recyclerView);
+        mRecyclerView = inflate.findViewById(R.id.fm_home_content_xRecyclerView);
+        rl_city = inflate.findViewById(R.id.fm_home_rl_city);
         list_city = inflate.findViewById(R.id.fm_home_list_city);
-        cityAdapter = new CityAdapter();
-        list_city.setAdapter(cityAdapter);
         rl_salary = inflate.findViewById(R.id.fm_home_rl_salary);
         list_salary = inflate.findViewById(R.id.fm_home_list_salary);
-        salaryAdapter = new SalaryAdapter();
-        list_salary.setAdapter(salaryAdapter);
         rl_age = inflate.findViewById(R.id.fm_home_rl_age);
         list_age = inflate.findViewById(R.id.fm_home_list_age);
-        ageAdapter = new AgeAdapter();
-        list_age.setAdapter(ageAdapter);
         rl_vocation = inflate.findViewById(R.id.fm_home_rl_vocation);
         list_vocation = inflate.findViewById(R.id.fm_home_list_vocation);
-        vocationAdapter = new VocationAdapter();
-        list_vocation.setAdapter(vocationAdapter);
         rl_environment = inflate.findViewById(R.id.fm_home_rl_environment);
         list_environment = inflate.findViewById(R.id.fm_home_list_environment);
-        environmentAdapter = new EnvironmentAdapter();
-        list_environment.setAdapter(environmentAdapter);
         home_gridview = inflate.findViewById(R.id.fm_home_gridview);
         tv_cityname = inflate.findViewById(R.id.fm_home_tv_cityname);
-        gridAdapter = new GridAdapter();
-        home_gridview.setAdapter(gridAdapter);
-        home_gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(mContext, FamousRecruitmentActivity.class);
-                intent.putExtra("zone_id",zone_list.get(i).getZone_id()+"");
-                intent.putExtra("zone_name",zone_list.get(i).getZone_name());
-                startActivity(intent);
-            }
-        });
         bannerLayout= inflate.findViewById(R.id.fm_home_banner);
         bannerLayout.setAutoPlay(true);
         bannerLayout.setImageLoader(new GlideImageLoader());
@@ -323,13 +315,92 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             public void onItemClick(int position) {
             }
         });
-        recyclerView = inflate.findViewById(R.id.fm_home_recyclerView);
+        inflate.findViewById(R.id.fm_home_img_message).setOnClickListener(this);
+        SltGridAdapter();
+        SltAdapter();
+        recyclerViewAT();
+        radiobuttonClick();
+    }
+
+    private void SltGridAdapter() {
+        gridAdapter = new GridAdapter();
+        home_gridview.setAdapter(gridAdapter);
+        home_gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(mContext, FamousRecruitmentActivity.class);
+                intent.putExtra("zone_id",zone_list.get(i).getZone_id()+"");
+                intent.putExtra("zone_name",zone_list.get(i).getZone_name());
+                intent.putExtra("city_name",cityName);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void SltAdapter() {
+        cityAdapter = new CityAdapter();
+        list_city.setAdapter(cityAdapter);
+        list_city.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                age_id=area_list.get(i).getArea_id()+"";
+                rl_city.setVisibility(View.GONE);
+                IsArea=true;
+                InitHomeData();
+            }
+        });
+        salaryAdapter = new SalaryAdapter();
+        list_salary.setAdapter(salaryAdapter);
+        list_salary.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                salary_id=salary.get(i).getSalary_id()+"";
+                rl_salary.setVisibility(View.GONE);
+                IsSalary=true;
+                InitHomeData();
+            }
+        });
+        ageAdapter = new AgeAdapter();
+        list_age.setAdapter(ageAdapter);
+        list_age.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                age_id=ageList.get(i).getAge_id()+"";
+                rl_age.setVisibility(View.GONE);
+                IsAge=true;
+                InitHomeData();
+            }
+        });
+        vocationAdapter = new VocationAdapter();
+        list_vocation.setAdapter(vocationAdapter);
+        list_vocation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                vocation_id=vocation.get(i).getVocation_id()+"";
+                rl_vocation.setVisibility(View.GONE);
+                IsVocation=true;
+                InitHomeData();
+            }
+        });
+        environmentAdapter = new EnvironmentAdapter();
+        list_environment.setAdapter(environmentAdapter);
+        list_environment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                environment_id=environment.get(i).getEnvironment_id()+"";
+                rl_environment.setVisibility(View.GONE);
+                IsEiroment=true;
+                InitHomeData();
+            }
+        });
+    }
+
+    private void recyclerViewAT() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
         todayHeatAdapter = new TodayHeatAdapter(mContext);
         recyclerView.setAdapter(todayHeatAdapter);
         todayHeatAdapter.refreshData(5);
-        mRecyclerView = inflate.findViewById(R.id.fm_home_content_xRecyclerView);
         mRecyclerView.setNestedScrollingEnabled(false);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         homeFmAdapter = new HomeFmAdapter(mContext);
@@ -370,12 +441,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         });
         homeFmAdapter.notifyDataSetChanged();
-        radioGroup = inflate.findViewById(R.id.fm_home_radioGroup);
-        radiobutton_area = inflate.findViewById(R.id.fm_home_radiobutton_area);
-        radiobutton_salary = inflate.findViewById(R.id.fm_home_radiobutton_salary);
-        radiobutton_age = inflate.findViewById(R.id.fm_home_radiobutton_age);
-        radiobutton_trade = inflate.findViewById(R.id.fm_home_radiobutton_trade);
-        radiobutton_work = inflate.findViewById(R.id.fm_home_radiobutton_work);
+    }
+
+    private void radiobuttonClick() {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -395,7 +463,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         rl_age.setVisibility(View.GONE);
                         rl_vocation.setVisibility(View.GONE);
                         rl_environment.setVisibility(View.GONE);
-                        rl_city.setVisibility(View.VISIBLE);
                         break;
                     case R.id.fm_home_radiobutton_salary:
                         radiobutton_area.setBackgroundResource(R.drawable.title_nochoosed_color);
@@ -412,7 +479,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         rl_age.setVisibility(View.GONE);
                         rl_vocation.setVisibility(View.GONE);
                         rl_environment.setVisibility(View.GONE);
-                        rl_salary.setVisibility(View.VISIBLE);
                         break;
                     case R.id.fm_home_radiobutton_age:
                         radiobutton_area.setBackgroundResource(R.drawable.title_nochoosed_color);
@@ -429,7 +495,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         rl_salary.setVisibility(View.GONE);
                         rl_vocation.setVisibility(View.GONE);
                         rl_environment.setVisibility(View.GONE);
-                        rl_age.setVisibility(View.VISIBLE);
                         break;
                     case R.id.fm_home_radiobutton_trade:
                         radiobutton_area.setBackgroundResource(R.drawable.title_nochoosed_color);
@@ -446,7 +511,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         rl_salary.setVisibility(View.GONE);
                         rl_age.setVisibility(View.GONE);
                         rl_environment.setVisibility(View.GONE);
-                        rl_vocation.setVisibility(View.VISIBLE);
                         break;
                     case R.id.fm_home_radiobutton_work:
                         radiobutton_area.setBackgroundResource(R.drawable.title_nochoosed_color);
@@ -463,13 +527,85 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         rl_salary.setVisibility(View.GONE);
                         rl_vocation.setVisibility(View.GONE);
                         rl_age.setVisibility(View.GONE);
-                        rl_environment.setVisibility(View.VISIBLE);
                         break;
                 }
             }
         });
-        inflate.findViewById(R.id.fm_home_img_message).setOnClickListener(this);
-        rl_city = inflate.findViewById(R.id.fm_home_rl_city);
+        radiobutton_area.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (IsArea) {
+                    rl_city.setVisibility(View.VISIBLE);
+                }else {
+                    rl_city.setVisibility(View.GONE);
+                }
+                IsArea=!IsArea;
+                IsSalary=true;
+                IsAge=true;
+                IsVocation=true;
+                IsEiroment=true;
+            }
+        });
+        radiobutton_salary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (IsSalary) {
+                    rl_salary.setVisibility(View.VISIBLE);
+                }else {
+                    rl_salary.setVisibility(View.GONE);
+                }
+                IsSalary=!IsSalary;
+                IsArea=true;
+                IsAge=true;
+                IsVocation=true;
+                IsEiroment=true;
+            }
+        });
+        radiobutton_age.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (IsAge) {
+                    rl_age.setVisibility(View.VISIBLE);
+                }else {
+                    rl_age.setVisibility(View.GONE);
+                }
+                IsAge=!IsAge;
+                IsArea=true;
+                IsSalary=true;
+                IsVocation=true;
+                IsEiroment=true;
+            }
+        });
+        radiobutton_trade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (IsVocation) {
+                    rl_vocation.setVisibility(View.VISIBLE);
+                }else {
+                    rl_vocation.setVisibility(View.GONE);
+                }
+                IsVocation=!IsVocation;
+                IsArea=true;
+                IsSalary=true;
+                IsAge=true;
+                IsEiroment=true;
+            }
+        });
+        radiobutton_work.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (IsEiroment) {
+                    rl_environment.setVisibility(View.VISIBLE);
+                }else {
+                    rl_environment.setVisibility(View.GONE);
+                }
+                IsEiroment=!IsEiroment;
+                IsArea=true;
+                IsSalary=true;
+                IsAge=true;
+                IsVocation=true;
+            }
+        });
     }
 
     private String imageTranslateUri(int resId) {
@@ -520,7 +656,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
        }
    }
 
-   public class CityAdapter extends  BaseAdapter{
+    public class CityAdapter extends  BaseAdapter{
        @Override
        public int getCount() {
            return area_list.size();
