@@ -2,15 +2,19 @@ package com.icarexm.zhiquwang.adapter;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.TextView;
 
 import com.icarexm.zhiquwang.R;
+import com.icarexm.zhiquwang.bean.HomeDataBean;
+import com.icarexm.zhiquwang.bean.JobSearchBean;
 import com.icarexm.zhiquwang.custview.LabelsView;
 import com.zhouyou.recyclerview.adapter.HelperRecyclerViewAdapter;
 import com.zhouyou.recyclerview.adapter.HelperRecyclerViewHolder;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class MyJobSearchAdapter extends HelperRecyclerViewAdapter<String> {
+public class MyJobSearchAdapter extends HelperRecyclerViewAdapter<JobSearchBean.DataBeanX.DataBean> {
     public Context context;
 
     public MyJobSearchAdapter(Context context) {
@@ -20,15 +24,23 @@ public class MyJobSearchAdapter extends HelperRecyclerViewAdapter<String> {
 
 
     @Override
-    protected void HelperBindData(HelperRecyclerViewHolder viewHolder, final int position,String item) {
-        LabelsView labels = viewHolder.getView(R.id.labels);
+    protected void HelperBindData(HelperRecyclerViewHolder viewHolder, final int position,JobSearchBean.DataBeanX.DataBean item) {
         viewHolder.getView(R.id.list_home_fm_rl).setVisibility(View.GONE);
+        LabelsView labels= viewHolder.getView(R.id.labels);
+        List<JobSearchBean.DataBeanX.DataBean.LabelArrBean> label_arr = item.getLabel_arr();
+        //LabelsView可以设置任何类型的数据，而不仅仅是String。
         ArrayList<String> label = new ArrayList<>();
-        label.add("Android");
-        label.add("IOS");
-        label.add("前端");
-        label.add("后台");
-        label.add("微信开发");
-        labels.setLabels(label); //直接设置一个字符串数组就可以了。
+        for (int a=0;a<label_arr.size();a++){
+            label.add(label_arr.get(a).getLabel_name());
+        }
+        labels.setLabels(label);
+        TextView tv_position= viewHolder.getView(R.id.list_home_fm_tv_position);
+        tv_position.setText(item.getJob_name());
+        TextView tv_salary = viewHolder.getView(R.id.list_home_fm_tv_salary);
+        tv_salary.setText(item.getSalary()+"/月("+item.getSalary_hour()+"/小时)");
+        TextView tv_age= viewHolder.getView(R.id.list_home_fm_tv_age);
+        tv_age.setText(item.getAge());
+        TextView tv_address = viewHolder.getView(R.id.list_home_fm_tv_address);
+        tv_address.setText(item.getAddress());
     }
 }

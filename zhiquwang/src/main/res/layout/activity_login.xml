@@ -127,6 +127,7 @@
               android:textColor="@color/ff4e4d4d"
               android:textSize="@dimen/sp_12"
               android:id="@+id/login_cb"
+              android:checked="true"
               android:layout_marginLeft="@dimen/dp_20"
               android:text="已阅读并同意"
               android:layout_width="wrap_content"
@@ -205,7 +206,7 @@
            android:layout_below="@+id/login_rl_fast_login"
            android:layout_centerHorizontal="true"
            android:src="@mipmap/ic_wechat"
-           android:id="@+id/login_img"
+           android:id="@+id/login_img_wechat"
            android:layout_width="@dimen/dp_52"
            android:layout_height="@dimen/dp_52" />
 </RelativeLayout>

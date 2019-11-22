@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -12,6 +13,9 @@ import android.view.View;
 
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.MyJobSearchAdapter;
+import com.icarexm.zhiquwang.bean.JobSearchBean;
+import com.icarexm.zhiquwang.contract.MyJobSearchContract;
+import com.icarexm.zhiquwang.presenter.MyJobSearchPresenter;
 import com.icarexm.zhiquwang.utils.MxyUtils;
 import com.zhouyou.recyclerview.XRecyclerView;
 
@@ -22,30 +26,35 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MyJobSearchActivity extends BaseActivity {
+public class MyJobSearchActivity extends BaseActivity implements MyJobSearchContract.View {
 
     @BindView(R.id.my_job_search_recyclerView)
     XRecyclerView mRecyclerView;
-    private List<String> list=new ArrayList<>();
     private Context mContext;
+    private MyJobSearchPresenter myJobSearchPresenter;
+    private String token;
+    private String limit="20";
+    private int page=0;
+    private List<JobSearchBean.DataBeanX.DataBean> dataList=new ArrayList<>();
+    private MyJobSearchAdapter myJobSearchAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_job_search);
         mContext = getApplicationContext();
+        SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        token = share.getString("token", "");
         ButterKnife.bind(this);
         InitUI();
+        myJobSearchPresenter = new MyJobSearchPresenter(this);
+        myJobSearchPresenter.GetMyJob(token,limit,page+"");
     }
 
     private void InitUI() {
-        list.add("1");
-        list.add("2");
-        list.add("3");
-        list.add("4");
-        list.add("5");
         mRecyclerView.setNestedScrollingEnabled(false);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
-        MyJobSearchAdapter myJobSearchAdapter = new MyJobSearchAdapter(mContext);
+        myJobSearchAdapter = new MyJobSearchAdapter(mContext);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setFootViewText("拼命加载中","已经全部");
         mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
@@ -64,7 +73,7 @@ public class MyJobSearchActivity extends BaseActivity {
             }
         });
         mRecyclerView.setAdapter(myJobSearchAdapter);
-        myJobSearchAdapter.setListAll(list);
+        myJobSearchAdapter.setListAll(dataList);
         mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
@@ -92,5 +101,18 @@ public class MyJobSearchActivity extends BaseActivity {
             finish();
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
+    public void UpdateUI(int code, String msg, JobSearchBean.DataBeanX data){
+        if (code==1){
+            dataList = data.getData();
+            myJobSearchAdapter.setListAll(dataList);
+            myJobSearchAdapter.notifyDataSetChanged();
+        }
     }
 }

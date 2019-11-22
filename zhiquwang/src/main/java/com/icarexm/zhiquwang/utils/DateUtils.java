@@ -31,6 +31,18 @@ public class DateUtils {
         return format.format(new Date());
     }
 
+    public static String getTodayHour() {
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm",
+                Locale.getDefault());
+        return format.format(new Date());
+    }
+
+    public static String getTodaySecond() {
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss",
+                Locale.getDefault());
+        return format.format(new Date());
+    }
+
     /*
      * 将时间转换为时间戳
      */

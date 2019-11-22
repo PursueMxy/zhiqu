@@ -8,16 +8,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.icarexm.zhiquwang.MyApplication;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.contract.LoginContract;
 import com.icarexm.zhiquwang.presenter.LoginPresenter;
 import com.icarexm.zhiquwang.utils.ToastUtils;
+import com.icarexm.zhiquwang.wxapi.WXEntryActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,11 +44,13 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     private String mobile;
     private SharedPreferences share;
     private String token;
+    private String type="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Intent intent = getIntent();
         share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
         mobile = share.getString("mobile", "");
@@ -55,10 +60,18 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         ButterKnife.bind(this);
         edt_mobile.setText(mobile);
         edt_password.setText(password);
+        try {
+            type = intent.getStringExtra("type");
+            if (type.equals("wechat")) {
+                String code = intent.getStringExtra("code");
+                Log.e("微信code", code);
+            }
+        }catch (Exception e){}
     }
 
+
     @OnClick({R.id.login_tv_create_account,R.id.login_tv_no_password,R.id.login_btn_start,R.id.login_tv_user_agreement
-    ,R.id.login_img_avatar})
+    ,R.id.login_img_avatar,R.id.login_img_wechat})
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.login_tv_create_account:
@@ -90,6 +103,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
                 break;
             case R.id.login_img_avatar:
                 startActivity(new Intent(mContext,EditPersonalActivity.class));
+                break;
+            case R.id.login_img_wechat:
+                WXEntryActivity.loginWeixin(mContext, MyApplication.iwxapi);
                 break;
         }
     }

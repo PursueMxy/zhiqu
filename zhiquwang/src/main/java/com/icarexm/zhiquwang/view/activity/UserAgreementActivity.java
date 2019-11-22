@@ -6,17 +6,28 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 
+import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
+import com.icarexm.zhiquwang.bean.PublicResultBean;
+import com.icarexm.zhiquwang.utils.RequstUrl;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.Response;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class UserAgreementActivity extends AppCompatActivity {
+public class UserAgreementActivity extends BaseActivity {
 
+    @BindView(R.id.user_agreement_tv_content)
+    TextView tv_content;
     private Context mContext;
     private int AGREMEEN_CODE=1001;
 
@@ -24,14 +35,22 @@ public class UserAgreementActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_agreement);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // 透明状态栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            // 透明导航栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
         mContext = getApplicationContext();
         ButterKnife.bind(this);
+        InitData();
+    }
+
+    private void InitData() {
+        OkGo.<String>post(RequstUrl.URL.getProtocol)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
+                        if (resultBean.getCode()==1){
+                            tv_content.setText( Html.fromHtml(resultBean.getData()));
+                        }
+                    }
+                });
     }
 
     @OnClick({R.id.user_agreement_img_back,R.id.logon_btn_agree})

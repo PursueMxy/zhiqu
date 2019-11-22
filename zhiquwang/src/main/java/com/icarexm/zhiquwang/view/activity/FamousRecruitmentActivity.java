@@ -152,6 +152,7 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
                 mRecyclerView.refreshComplete();//刷新动画完成
             }
         });
+        frAdapter.setListAll(homeDataList);
         mRecyclerView.setAdapter(frAdapter);
         mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override

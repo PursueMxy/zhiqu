@@ -32,6 +32,9 @@ public class RequstUrl {
         //关于我们
         public static  String About=HOST+"/api/aboutUs";
 
+        //用户协议
+        public static String getProtocol=HOST+"/api/getProtocol";
+
         //意见反馈
         public static  String SbmitIdea=HOST+"/api/submitIdea";
 
@@ -91,6 +94,12 @@ public class RequstUrl {
 
         //注册
         public static String Register=HOST+"/api/register";
+
+        //我的求职
+        public static  String MyJob=HOST+"/api/myJob";
+
+        //打卡
+        public static String ToPlay=HOST+"/api/toPlay";
 
     }
 }

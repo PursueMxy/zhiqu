@@ -21,11 +21,11 @@ public class LogonModel implements LogonContract.Model {
     }
 
     /**
-     * 修改密码
+     * 注册
      */
     public void PsotRegister(LogonPresenter LogonPresenter, String mobile, String code,
                              String password, String repassword) {
-        OkGo.<String>post(RequstUrl.URL.findPass)
+        OkGo.<String>post(RequstUrl.URL.Register)
                 .params("mobile", mobile)
                 .params("code", code)
                 .params("password", password)

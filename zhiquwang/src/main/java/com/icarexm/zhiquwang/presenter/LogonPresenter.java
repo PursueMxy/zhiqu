@@ -21,12 +21,12 @@ public class LogonPresenter implements LogonContract.Presenter {
         LogonModel.PostSendMsg(this,mobile,type);
     }
 
-    //找回密码
+    //注册
     public void GetRegister(String mobile,String code,String password,String repassword){
         LogonModel.PsotRegister(this,mobile,code,password,repassword);
     }
 
-    //数据返回
+    //注册数据返回
     public void SetRegister(String content){
         PublicResultBean resultBean = new GsonBuilder().create().fromJson(content, PublicResultBean.class);
         mView.UpdateUI(resultBean.getCode(),resultBean.getMsg());

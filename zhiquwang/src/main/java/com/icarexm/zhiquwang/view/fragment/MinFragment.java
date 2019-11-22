@@ -82,7 +82,6 @@ public class MinFragment extends Fragment implements View.OnClickListener {
                         BaseInforBean baseInforBean = new GsonBuilder().create().fromJson(response.body(), BaseInforBean.class);
                         if (baseInforBean.getCode()==1){
                             BaseInforBean.DataBean data = baseInforBean.getData();
-//                            tv_address.setText();
                             tv_nickname.setText(data.getUser_name());
                             Glide.with(mContext).load(data.getAvatar()).into(img_avatar);
                         }
