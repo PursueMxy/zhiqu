@@ -20,7 +20,7 @@ public class DateUtils {
     private final static long year = 12 * month;
 
     public static String getTodayDate() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd",
+        SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日",
                 Locale.getDefault());
         return format.format(new Date());
     }
@@ -48,9 +48,9 @@ public class DateUtils {
      */
     public static long dateToStamp1(String s) throws ParseException {
         String res;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
         Date date = simpleDateFormat.parse(s);
-        long ts = date.getTime();
+        long ts = date.getTime()/1000;
         return    ts;
     }
 

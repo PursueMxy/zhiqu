@@ -14,6 +14,7 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.chaychan.library.BottomBarItem;
 import com.chaychan.library.BottomBarLayout;
 import com.hjq.permissions.OnPermission;
 import com.hjq.permissions.XXPermissions;
@@ -91,6 +92,12 @@ public class HomeActivity extends BaseActivity {
         mVpContent.setAdapter(new MyAdapter(getSupportFragmentManager()));
         home_bottombarly.setViewPager(mVpContent);
         home_bottombarly.setCurrentItem(currentItems);
+        home_bottombarly.setOnItemSelectedListener(new BottomBarLayout.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(BottomBarItem bottomBarItem, int i, int i1) {
+
+            }
+        });
     }
 
 

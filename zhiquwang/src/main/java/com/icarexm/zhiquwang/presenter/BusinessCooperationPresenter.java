@@ -3,7 +3,7 @@ package com.icarexm.zhiquwang.presenter;
 import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.bean.PublicResultBean;
 import com.icarexm.zhiquwang.contract.BusinessCooperationContract;
-import com.icarexm.zhiquwang.contract.CooperationBean;
+import com.icarexm.zhiquwang.bean.CooperationBean;
 import com.icarexm.zhiquwang.model.BusinessCooperationModel;
 
 public class BusinessCooperationPresenter implements BusinessCooperationContract.Presenter {

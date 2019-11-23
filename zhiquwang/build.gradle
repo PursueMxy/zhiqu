@@ -72,4 +72,7 @@ dependencies {
 
     //图片选择框框
     implementation 'com.zhihu.android:matisse:0.5.3-beta3'
+
+    //数据库
+    implementation 'org.litepal.android:java:3.0.0'
 }

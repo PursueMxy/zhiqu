@@ -1,6 +1,9 @@
 package com.icarexm.zhiquwang.custview.calender;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Administrator on 2017/8/16.
@@ -28,5 +31,11 @@ public class DateUtil {
         a.set(Calendar.DAY_OF_MONTH,1);
         int i = a.get(Calendar.DAY_OF_WEEK);
         return i;
+    }
+
+    public static String getToday() {
+        SimpleDateFormat format = new SimpleDateFormat("dd",
+                Locale.getDefault());
+        return format.format(new Date());
     }
 }

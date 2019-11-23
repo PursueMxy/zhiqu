@@ -27,13 +27,17 @@ public class AdapterDate extends BaseAdapter {
     private List<Integer> days = new ArrayList<>();
     //日历数据
     private List<Boolean> status = new ArrayList<>();
+
+
     //签到状态，实际应用中初始化签到状态可通过该字段传递
     private OnSignedSuccess onSignedSuccess;
     private final int maxDay;
+    private int today=1;
     //签到成功的回调方法，相应的可自行添加签到失败时的回调方法
 
     public AdapterDate(Context context) {
         this.context = context;
+        today = Integer.parseInt(DateUtil.getToday());
         //获取当月天数
         maxDay = DateUtil.getCurrentMonthLastDay();
         for (int i = 0; i < DateUtil.getFirstDayOfMonth() - 1; i++) {
@@ -88,8 +92,13 @@ public class AdapterDate extends BaseAdapter {
             viewHolder.tv.setTextColor(Color.parseColor("#FFFFFF"));
             viewHolder.tv.setBackgroundResource(R.drawable.bg_green_22);
         }else{
-            viewHolder.tv.setTextColor(Color.parseColor("#666666"));
-            viewHolder.tv.setBackgroundColor(context.getResources().getColor(R.color.white));
+            if (days.get(i)==today){
+                viewHolder.tv.setTextColor(Color.parseColor("#FFFFFF"));
+                viewHolder.tv.setBackgroundResource(R.drawable.bg_green_22);
+            }else {
+                viewHolder.tv.setTextColor(Color.parseColor("#666666"));
+                viewHolder.tv.setBackgroundColor(context.getResources().getColor(R.color.white));
+            }
         }
         view.setOnClickListener(new View.OnClickListener() {
             @Override

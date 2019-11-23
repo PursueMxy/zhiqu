@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <TextView
+        android:textSize="@dimen/sp_14"
         android:id="@+id/tvWeek"
         android:layout_width="@dimen/dp_23"
         android:layout_height="@dimen/dp_23"

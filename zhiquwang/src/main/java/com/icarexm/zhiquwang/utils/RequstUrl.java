@@ -101,5 +101,20 @@ public class RequstUrl {
         //打卡
         public static String ToPlay=HOST+"/api/toPlay";
 
+        //加班设置基本信息
+        public static String setOvertime=HOST+"/api/setOvertime";
+
+        //加班初始化页面
+        public static String Overtime=HOST+"/api/overtime";
+
+        //补卡页面
+        public static String RepairInfo=HOST+"/api/repairInfo";
+
+        //加班页面设置
+        public static String OvertimeInfo=HOST+"/api/overtimeInfo";
+
+        //补卡
+        public static String Reissue=HOST+"/api/reissue";
+
     }
 }

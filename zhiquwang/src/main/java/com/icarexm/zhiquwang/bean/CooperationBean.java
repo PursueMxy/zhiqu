@@ -1,4 +1,4 @@
-package com.icarexm.zhiquwang.contract;
+package com.icarexm.zhiquwang.bean;
 
 public class CooperationBean {
 

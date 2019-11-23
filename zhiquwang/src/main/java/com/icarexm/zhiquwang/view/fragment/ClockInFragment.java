@@ -96,6 +96,7 @@ public class ClockInFragment extends Fragment implements View.OnClickListener {
     private AMapLocationClient mLocationClient;
     private RelativeLayout rl_clockin;
     private RelativeLayout rl_clockOut;
+    private View driver;
 
     public ClockInFragment() {
         // Required empty public constructor
@@ -142,8 +143,19 @@ public class ClockInFragment extends Fragment implements View.OnClickListener {
                                 int end_status = data.getEnd_status();
                                 if (start_status==2){
                                     ll_playStatus.setVisibility(View.VISIBLE);
+                                    rl_clockin.setVisibility(View.GONE);
+                                    driver.setVisibility(View.GONE);
+                                    tv_start_time.setText("打卡时间  "+data.getStart_time()+"（上班打卡）");
+                                    rl_clockOut.setBackgroundResource(R.drawable.bg_circle_green);
                                 }else {
+                                    rl_clockOut.setClickable(false);
                                     ll_playStatus.setVisibility(View.GONE);
+                                }
+                                if (end_status==2){
+                                    rl_clockOut.setVisibility(View.GONE);
+                                    tv_end_time.setText("打卡时间 "+data.getEnd_time()+"（下班打卡）");
+                                }else {
+                                    tv_end_time.setText("还未打卡 "+data.getEnd_time()+"（下班打卡）");
                                 }
                             }else {
                                 tv_certification.setVisibility(View.VISIBLE);
@@ -166,6 +178,7 @@ public class ClockInFragment extends Fragment implements View.OnClickListener {
         ll_playStatus = inflate.findViewById(R.id.clock_in_ll_playStats);
         tv_start_time = inflate.findViewById(R.id.clock_in_tv_start_time);
         tv_end_time = inflate.findViewById(R.id.clock_in_tv_end_time);
+        driver = inflate.findViewById(R.id.fm_clockin_driver);
         inflate.findViewById(R.id.fm_clock_in_no_entry).setOnClickListener(this);
         inflate.findViewById(R.id.fm_clock_in_rl_attendance).setOnClickListener(this);
         inflate.findViewById(R.id.fm_clock_in_punch_card_record).setOnClickListener(this);
@@ -236,7 +249,10 @@ public class ClockInFragment extends Fragment implements View.OnClickListener {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-
+                        PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
+                        if (resultBean.getCode()==1){
+                            InitData();
+                        }
                     }
                 });
     }
