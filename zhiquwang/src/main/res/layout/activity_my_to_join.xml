@@ -52,6 +52,7 @@
              />
 
          <EditText
+             android:id="@+id/my_to_join_edt_name"
              android:layout_centerVertical="true"
              android:layout_marginLeft="@dimen/dp_102"
              android:layout_width="wrap_content"
@@ -83,6 +84,7 @@
                />
 
            <EditText
+               android:id="@+id/my_to_join_edt_mobile"
                android:layout_centerVertical="true"
                android:layout_marginLeft="@dimen/dp_102"
                android:layout_width="wrap_content"
@@ -114,6 +116,7 @@
                />
 
            <TextView
+               android:id="@+id/my_to_join_edt_area"
                android:layout_centerVertical="true"
                android:layout_marginLeft="@dimen/dp_102"
                android:layout_width="wrap_content"
@@ -136,6 +139,7 @@
            android:layout_width="match_parent"
            android:layout_height="match_parent">
            <Button
+               android:id="@+id/my_to_join_btn_confirm"
                android:background="@drawable/btn_login"
                android:layout_marginLeft="@dimen/dp_40"
                android:layout_marginRight="@dimen/dp_40"

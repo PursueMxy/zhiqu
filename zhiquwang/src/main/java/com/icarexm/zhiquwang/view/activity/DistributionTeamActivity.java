@@ -14,6 +14,7 @@ import com.icarexm.zhiquwang.bean.TeamBean;
 import com.icarexm.zhiquwang.contract.DistributionTeamContract;
 import com.icarexm.zhiquwang.custview.CircleImageView;
 import com.icarexm.zhiquwang.presenter.DistributionTeamPresenter;
+import com.icarexm.zhiquwang.utils.RequstUrl;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,7 +43,8 @@ public class DistributionTeamActivity extends BaseActivity implements Distributi
         distributionTeamPresenter = new DistributionTeamPresenter(this);
         distributionTeamPresenter.GetTeam(token);
     }
-    @OnClick({R.id.distribution_team_rl_team,R.id.distribution_team_img_back,R.id.distribution_team_rl_commission,R.id.distribution_team_rl_poster})
+    @OnClick({R.id.distribution_team_rl_team,R.id.distribution_team_img_back,R.id.distribution_team_rl_commission
+            ,R.id.distribution_team_rl_poster,R.id.distribution_team_img_message})
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.distribution_team_rl_team:
@@ -56,6 +58,9 @@ public class DistributionTeamActivity extends BaseActivity implements Distributi
                 break;
             case R.id.distribution_team_rl_poster:
                 startActivity(new Intent(mContext,DistributionPosterActivity.class));
+                break;
+            case R.id.distribution_team_img_message:
+                startActivity(new Intent(mContext,MessageActivity.class));
                 break;
         }
     }
@@ -76,6 +81,6 @@ public class DistributionTeamActivity extends BaseActivity implements Distributi
     public void UpdateUI(int code,String msg, TeamBean.DataBean data){
         tv_money.setText(data.getTotal_commission());
         tv_nickname.setText(data.getUser_name());
-        Glide.with(mContext).load(data.getAvatar()).into(img_head);
+        Glide.with(mContext).load(RequstUrl.URL.HOST+data.getAvatar()).into(img_head);
     }
 }

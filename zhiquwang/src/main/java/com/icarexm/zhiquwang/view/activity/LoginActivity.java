@@ -65,6 +65,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
             if (type.equals("wechat")) {
                 String code = intent.getStringExtra("code");
                 Log.e("微信code", code);
+                loginPresenter.GetWechatLogin(code);
             }
         }catch (Exception e){}
     }
@@ -135,6 +136,18 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
             editor.commit();//提交
         }else {
             ToastUtils.showToast(mContext,msg);
+        }
+    }
+
+    //微信
+    public void WechatLoginUpdateUI(int code,String msg,String data){
+        if (code==10001){
+
+        }else {
+            startActivity(new Intent(mContext,HomeActivity.class));
+            SharedPreferences.Editor editor = share.edit();
+            editor.putString("token",data);
+            editor.commit();//提交
         }
     }
 }

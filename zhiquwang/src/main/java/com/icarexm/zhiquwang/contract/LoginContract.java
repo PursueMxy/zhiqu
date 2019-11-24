@@ -9,6 +9,7 @@ public interface LoginContract {
 
     interface View {
         void Update(int code,String msg,String data);
+        void WechatLoginUpdateUI(int code,String msg,String data);
     }
 
     interface Presenter {

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -13,6 +14,8 @@ import android.view.View;
 
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.MyTeamAdapter;
+import com.icarexm.zhiquwang.contract.MyTeamContract;
+import com.icarexm.zhiquwang.presenter.MyTeamPresenter;
 import com.zhouyou.recyclerview.XRecyclerView;
 
 import java.util.ArrayList;
@@ -22,27 +25,31 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MyTeamActivity extends BaseActivity {
+public class MyTeamActivity extends BaseActivity implements MyTeamContract.View {
 
     @BindView(R.id.my_team_recyclerView)
     XRecyclerView mRecyclerView;
     private List<String> list=new ArrayList<>();
     private Context mContext;
+    private MyTeamPresenter myTeamPresenter;
+    private String token;
+    private String limit="20";
+    private int page=0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_team);
          mContext = getApplicationContext();
+        SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        token = share.getString("token", "");
         ButterKnife.bind(this);
         InitUI();
+        myTeamPresenter = new MyTeamPresenter(this);
+        myTeamPresenter.GetMyTeam(token,limit,page+"");
     }
 
     private void InitUI() {
-        list.add("1");
-        list.add("2");
-        list.add("3");
-        list.add("4");
-        list.add("5");
         mRecyclerView.setNestedScrollingEnabled(false);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         MyTeamAdapter myTeamAdapter = new MyTeamAdapter(mContext);
@@ -82,5 +89,10 @@ public class MyTeamActivity extends BaseActivity {
             finish();
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }

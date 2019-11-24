@@ -12,7 +12,6 @@ public class PublicCodeBean {
 
     private int code;
     private String msg;
-    private List<?> data;
 
     public int getCode() {
         return code;
@@ -30,11 +29,4 @@ public class PublicCodeBean {
         this.msg = msg;
     }
 
-    public List<?> getData() {
-        return data;
-    }
-
-    public void setData(List<?> data) {
-        this.data = data;
-    }
 }

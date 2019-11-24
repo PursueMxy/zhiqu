@@ -20,4 +20,18 @@ public class LoginModel implements LoginContract.Model {
                     }
                 });
     }
+
+    /**
+     * 微信登陆
+     */
+    public void PostWechatLogin(LoginPresenter loginPresenter,String code){
+        OkGo.<String>post(RequstUrl.URL.WechatLogin)
+                .params("code",code)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                      loginPresenter.SetWechatLogin(response.body());
+                    }
+                });
+    }
 }

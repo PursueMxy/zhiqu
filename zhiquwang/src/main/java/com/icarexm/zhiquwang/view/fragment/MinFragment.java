@@ -27,6 +27,7 @@ import com.icarexm.zhiquwang.view.activity.BusinessCooperationActivity;
 import com.icarexm.zhiquwang.view.activity.CertificationActivity;
 import com.icarexm.zhiquwang.view.activity.DistributionTeamActivity;
 import com.icarexm.zhiquwang.view.activity.EditPersonalActivity;
+import com.icarexm.zhiquwang.view.activity.MessageActivity;
 import com.icarexm.zhiquwang.view.activity.MyJobSearchActivity;
 import com.icarexm.zhiquwang.view.activity.MyResumeActivity;
 import com.icarexm.zhiquwang.view.activity.MyTeamActivity;
@@ -83,7 +84,7 @@ public class MinFragment extends Fragment implements View.OnClickListener {
                         if (baseInforBean.getCode()==1){
                             BaseInforBean.DataBean data = baseInforBean.getData();
                             tv_nickname.setText(data.getUser_name());
-                            Glide.with(mContext).load(data.getAvatar()).into(img_avatar);
+                            Glide.with(mContext).load(RequstUrl.URL.HOST+data.getAvatar()).into(img_avatar);
                         }
                     }
                 });
@@ -99,6 +100,7 @@ public class MinFragment extends Fragment implements View.OnClickListener {
       inflate.findViewById(R.id.fm_min_rl_certification).setOnClickListener(this);
       inflate.findViewById(R.id.fm_min_rl_to_join).setOnClickListener(this);
       inflate.findViewById(R.id.fm_min_rl_businessCooperation).setOnClickListener(this);
+      inflate.findViewById(R.id.fm_min_message).setOnClickListener(this);
         img_avatar = inflate.findViewById(R.id.fm_min_img_head);
         tv_nickname = inflate.findViewById(R.id.fm_min_tv_nickname);
         tv_address = inflate.findViewById(R.id.fm_min_tv_address);
@@ -133,6 +135,9 @@ public class MinFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.fm_min_rl_businessCooperation:
                 startActivity(new Intent(mContext, BusinessCooperationActivity.class));
+                break;
+            case R.id.fm_min_message:
+                startActivity(new Intent(mContext, MessageActivity.class));
                 break;
         }
     }

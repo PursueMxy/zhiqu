@@ -80,7 +80,7 @@ public class PunchCardRecordActivity extends BaseActivity implements PunchCardRe
     }
 
     private void InitUI() {
-        tv_time.setText(today+" "+week);
+        tv_time.setText(todayDate+" "+week);
         gvWeek.setAdapter(new AdapterWeek(mContext));
         adapterDate = new AdapterDate(mContext);
         gvDate.setAdapter(adapterDate);

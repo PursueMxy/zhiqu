@@ -18,6 +18,12 @@ android {
             sourceCompatibility JavaVersion.VERSION_1_8
             targetCompatibility JavaVersion.VERSION_1_8
         }
+
+        manifestPlaceholders = [
+                JPUSH_PKGNAME : "com.icarexm.zhiquwang",
+                JPUSH_APPKEY :  "b2cca66fbf5829eb96699896", //JPush 上注册的包名对应的 Appkey.
+                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+        ]
     }
     buildTypes {
         release {
@@ -75,4 +81,7 @@ dependencies {
 
     //数据库
     implementation 'org.litepal.android:java:3.0.0'
+
+    implementation 'cn.jiguang.sdk:jpush:3.4.0'  // 此处以JPush 3.4.0 版本为例。
+    implementation 'cn.jiguang.sdk:jcore:2.2.2'  // 此处以JCore 2.2.2 版本为例。
 }

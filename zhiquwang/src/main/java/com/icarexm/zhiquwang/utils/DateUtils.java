@@ -25,6 +25,12 @@ public class DateUtils {
         return format.format(new Date());
     }
 
+    public static String getMonthDate() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月",
+                Locale.getDefault());
+        return format.format(new Date());
+    }
+
     public static String getTodayDateHour() {
         SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm",
                 Locale.getDefault());
@@ -333,7 +339,7 @@ public class DateUtils {
         String Week = "星期";
 
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
         Calendar c = Calendar.getInstance();
         try {
 

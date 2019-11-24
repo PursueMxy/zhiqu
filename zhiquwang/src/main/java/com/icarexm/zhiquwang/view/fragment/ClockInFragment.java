@@ -26,6 +26,7 @@ import com.amap.api.location.AMapLocationListener;
 import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.PlayInfoBean;
+import com.icarexm.zhiquwang.bean.PublicCodeBean;
 import com.icarexm.zhiquwang.bean.PublicResultBean;
 import com.icarexm.zhiquwang.custview.calender.DateUtil;
 import com.icarexm.zhiquwang.utils.DateUtils;
@@ -249,7 +250,7 @@ public class ClockInFragment extends Fragment implements View.OnClickListener {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
+                        PublicCodeBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicCodeBean.class);
                         if (resultBean.getCode()==1){
                             InitData();
                         }

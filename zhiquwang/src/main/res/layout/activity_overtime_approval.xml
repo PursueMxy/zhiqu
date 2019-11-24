@@ -41,6 +41,7 @@
         android:layout_height="wrap_content"
         android:background="@color/white">
     <TextView
+        android:id="@+id/overtime_approval_tv_time"
         android:layout_marginTop="@dimen/dp_15"
         android:layout_marginLeft="@dimen/dp_15"
         android:layout_width="wrap_content"
@@ -54,15 +55,28 @@
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    <com.icarexm.zhiquwang.custview.calender.SignDate
-        android:layout_marginLeft="@dimen/dp_15"
-        android:layout_marginRight="@dimen/dp_15"
-        android:layout_marginBottom="@dimen/dp_20"
-        android:layout_marginTop="@dimen/dp_36"
-        android:id="@+id/signDate"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_283">
-    </com.icarexm.zhiquwang.custview.calender.SignDate>
+        <com.icarexm.zhiquwang.custview.calender.InnerGridView
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginRight="@dimen/dp_15"
+            android:id="@+id/overtime_approval_gvWeek"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:numColumns="7">
+        </com.icarexm.zhiquwang.custview.calender.InnerGridView>
+
+        <com.icarexm.zhiquwang.custview.calender.InnerGridView
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_below="@+id/overtime_approval_gvWeek"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginRight="@dimen/dp_15"
+            android:layout_marginBottom="@dimen/dp_36"
+            android:id="@+id/overtime_approval_gvDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:numColumns="7">
+        </com.icarexm.zhiquwang.custview.calender.InnerGridView>
     </RelativeLayout>
     <LinearLayout
         android:orientation="vertical"
@@ -73,6 +87,7 @@
         android:layout_height="wrap_content"
         android:background="@color/white">
         <RelativeLayout
+            android:id="@+id/overtime_approval_rl_hours"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_51">
             <TextView
@@ -85,12 +100,13 @@
                 android:textSize="@dimen/sp_14"
                 />
             <TextView
+                android:id="@+id/overtime_approval_tv_hours"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/dp_30"
                 android:layout_alignParentRight="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="3小时"
+                android:text="0小时"
                 android:textColor="@color/ffb5b5b5"
                 android:textSize="@dimen/sp_14"
                 />
@@ -109,6 +125,7 @@
             android:layout_height="@dimen/dp_1"
             android:background="@drawable/fff2f2f2"/>
         <RelativeLayout
+            android:id="@+id/overtime_approval_rl_classes"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_51">
             <TextView
@@ -121,6 +138,7 @@
                 android:textSize="@dimen/sp_14"
                 />
             <TextView
+                android:id="@+id/overtime_approval_tv_classes"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/dp_30"
                 android:layout_alignParentRight="true"
@@ -145,7 +163,7 @@
             android:layout_height="@dimen/dp_1"
             android:background="@drawable/fff2f2f2"/>
         <RelativeLayout
-            android:id="@+id/overtime_approval_rl_mode"
+            android:id="@+id/overtime_approval_rl_festival"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_51">
             <TextView
@@ -158,6 +176,7 @@
                 android:textSize="@dimen/sp_14"
                 />
             <TextView
+                android:id="@+id/overtime_approval_tv_festival"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/dp_30"
                 android:layout_alignParentRight="true"
@@ -180,10 +199,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <Button
+                    android:id="@+id/overtime_approval_btn_confirm"
                     android:layout_marginLeft="@dimen/dp_40"
                     android:layout_marginRight="@dimen/dp_40"
                     android:layout_marginBottom="@dimen/dp_37"
-                    android:layout_marginTop="@dimen/dp_23"
+                    android:layout_alignParentBottom="true"
                     android:text="提交"
                     android:textColor="@color/white"
                     android:textSize="@dimen/sp_15"

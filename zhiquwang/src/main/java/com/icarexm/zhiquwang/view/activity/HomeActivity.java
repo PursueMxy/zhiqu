@@ -31,6 +31,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.jpush.android.api.JPushInterface;
 
 public class HomeActivity extends BaseActivity {
 
@@ -47,6 +48,7 @@ public class HomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+        JPushInterface.resumePush(getApplicationContext());
         //权限申请
         XXPermissions.with(this)
                 .request(new OnPermission() {

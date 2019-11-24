@@ -56,6 +56,9 @@ public class RequstUrl {
         //分销团队首页
         public static String TeamInfo=HOST+"/api/teamInfo";
 
+        //我的团队
+        public static String MyTeam=HOST+"/api/myTeam";
+
         //实名认证进入
         public static String AutoNym=HOST+"/api/autoNym";
 
@@ -115,6 +118,21 @@ public class RequstUrl {
 
         //补卡
         public static String Reissue=HOST+"/api/reissue";
+
+        //加班页面
+        public static String overtimeRecords=HOST+"/api/overtimeRecords";
+
+        //提交加班
+        public static String doRecords=HOST+"/api/doRecords";
+
+        //微信登录
+        public static String WechatLogin=HOST+"/api/wechatLogin";
+
+        //消息列表
+        public static String message=HOST+"/api/message";
+
+        //申请商务合作
+        public static String doAlliance=HOST+"/api/doAlliance";
 
     }
 }

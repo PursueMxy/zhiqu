@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -13,6 +14,8 @@ import android.view.View;
 
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.MessageAdapter;
+import com.icarexm.zhiquwang.contract.MessageContract;
+import com.icarexm.zhiquwang.presenter.MessagePresenter;
 import com.zhouyou.recyclerview.XRecyclerView;
 
 import java.util.ArrayList;
@@ -22,19 +25,27 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MessageActivity extends BaseActivity {
+public class MessageActivity extends BaseActivity implements MessageContract.View {
      @BindView(R.id.message_recyclerView)
     XRecyclerView mRecyclerView;
     private List<String> list=new ArrayList<>();
     private Context mContext;
+    private MessagePresenter messagePresenter;
+    private String token;
+    private String limit="20";
+    private int page=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
         mContext = getApplicationContext();
+        SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        token = share.getString("token", "");
         ButterKnife.bind(this);
         InitUI();
+        messagePresenter = new MessagePresenter(this);
+        messagePresenter.getMessage(token,limit,page+"");
     }
 
     private void InitUI() {
@@ -92,5 +103,10 @@ public class MessageActivity extends BaseActivity {
             finish();
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }

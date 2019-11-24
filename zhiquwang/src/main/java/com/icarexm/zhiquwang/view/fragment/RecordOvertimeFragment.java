@@ -80,17 +80,20 @@ public class RecordOvertimeFragment extends Fragment implements View.OnClickList
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        OverTimeBean overTimeBean = new GsonBuilder().create().fromJson(response.body(), OverTimeBean.class);
-                        if (overTimeBean.getCode()==1){
-                            if (TypeOfWork.equals("1")){
-                                tv_salary.setText(overTimeBean.getData().getPrice()+"");
-                                tv_hour.setText(overTimeBean.getData().getHours()+"H");
-                                tv_price.setText(overTimeBean.getData().getOver_price()+"");
-                            }else if (TypeOfWork.equals("2")){
-                                two_tv_dt.setText(overTimeBean.getData().getHours()+"H");
-                                two_tv_salary.setText(overTimeBean.getData().getPrice()+"");
+                        try {
+                            OverTimeBean overTimeBean = new GsonBuilder().create().fromJson(response.body(), OverTimeBean.class);
+                            if (overTimeBean.getCode()==1){
+                                if (TypeOfWork.equals("1")){
+                                    tv_salary.setText(overTimeBean.getData().getPrice()+"");
+                                    tv_hour.setText(overTimeBean.getData().getHours()+"H");
+                                    tv_price.setText(overTimeBean.getData().getOver_price()+"");
+                                }else if (TypeOfWork.equals("2")){
+                                    two_tv_dt.setText(overTimeBean.getData().getHours()+"H");
+                                    two_tv_salary.setText(overTimeBean.getData().getPrice()+"");
+                                }
                             }
-                        }
+                        }catch (Exception e){}
+
                     }
                 });
     }
