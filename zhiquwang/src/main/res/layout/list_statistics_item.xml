@@ -3,6 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <TextView
+        android:id="@+id/list_statistics_item_tv_name"
+        android:layout_marginTop="@dimen/dp_18"
+        android:layout_marginBottom="@dimen/dp_15"
         android:layout_marginLeft="@dimen/dp_10"
         android:layout_centerVertical="true"
         android:layout_width="wrap_content"
@@ -12,9 +15,9 @@
         android:textSize="@dimen/sp_14"
         />
     <TextView
-        android:layout_toLeftOf="@+id/overtime_statistics_tv_dayShift_holidays_price"
+        android:layout_toLeftOf="@+id/list_statistics_item_holidays_price"
         android:layout_marginRight="@dimen/dp_3"
-        android:id="@+id/overtime_statistics_tv_dayShift_holidays"
+        android:id="@+id/list_statistics_item_tv_holidays"
         android:layout_centerVertical="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,7 +29,7 @@
         android:layout_marginRight="@dimen/dp_10"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:id="@+id/overtime_statistics_tv_dayShift_holidays_price"
+        android:id="@+id/list_statistics_item_holidays_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="￥0.00"

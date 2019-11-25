@@ -23,7 +23,6 @@ public class OvertimeStatisticsPresenter implements OvertimeStatisticsContract.P
     //加班数据返回
     public void SetRecords(String content){
         StatisticsBean statisticsBean = new GsonBuilder().create().fromJson(content, StatisticsBean.class);
-        StatisticsBean.DataBean data = statisticsBean.getData();
-
+            mView.UpdateUI(statisticsBean.getCode(),statisticsBean.getMsg(),statisticsBean.getData());
     }
 }

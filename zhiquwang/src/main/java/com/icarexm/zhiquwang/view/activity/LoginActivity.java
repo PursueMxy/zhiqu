@@ -134,7 +134,15 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
             editor.putString("password",password);
             editor.putString("token",data);
             editor.commit();//提交
-        }else {
+        }else if (code==10002){
+            startActivity(new Intent(mContext,EditPersonalActivity.class));
+            SharedPreferences.Editor editor = share.edit();
+            editor.putString("mobile",mobile);
+            editor.putString("password",password);
+            editor.putString("token",data);
+            editor.commit();//提交
+        }
+        else {
             ToastUtils.showToast(mContext,msg);
         }
     }

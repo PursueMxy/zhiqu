@@ -28,7 +28,9 @@
         android:textColor="@color/ff000000"
         android:textSize="@dimen/sp_17"
         />
-      <ImageView
+      <com.icarexm.zhiquwang.custview.CircleImageView
+          android:id="@+id/edt_personal_img_avatar"
+          android:layout_marginTop="@dimen/dp_15"
           android:layout_centerHorizontal="true"
           android:layout_below="@+id/edit_personal_tv_avatar"
           android:src="@mipmap/ic_avatar"
@@ -53,13 +55,15 @@
             android:textColor="@color/ff4e4d4d"
             android:textSize="@dimen/sp_14"
             />
-        <TextView
+        <EditText
+            android:id="@+id/edt_personal_edt_nickname"
+            android:background="@null"
             android:layout_marginRight="@dimen/dp_15"
             android:layout_toLeftOf="@+id/edit_personal_img_edit_username"
             android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="王晓晓"
+            android:hint="请输入昵称"
             android:textColor="@color/ff4e4d4d"
             android:textSize="@dimen/sp_14"
             />

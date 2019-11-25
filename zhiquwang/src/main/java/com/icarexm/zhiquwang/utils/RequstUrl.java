@@ -143,5 +143,8 @@ public class RequstUrl {
         //打开提醒页面测试化
         public static String ClockRemindedInfo=HOST+"/api/clockRemindedInfo";
 
+        //设置头像昵称
+        public static String setUsername=HOST+"/api/setUsername";
+
     }
 }

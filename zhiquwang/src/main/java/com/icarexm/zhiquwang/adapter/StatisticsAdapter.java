@@ -1,13 +1,9 @@
 package com.icarexm.zhiquwang.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.icarexm.zhiquwang.R;
@@ -16,17 +12,17 @@ import com.icarexm.zhiquwang.bean.StatisticsBean;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 public class StatisticsAdapter extends BaseExpandableListAdapter {
 
     private final Context mContext;
     private List<StatisticsBean.DataBean.TotalInfoBean> data=new ArrayList<>();
-    private boolean isSelectAll = false;
-    private double total_price;
 
-    public StatisticsAdapter(Context context,List<StatisticsBean.DataBean.TotalInfoBean> data) {
+    public StatisticsAdapter(Context context) {
         this.mContext = context;
-        this.data=data;
 
     }
 
@@ -94,6 +90,9 @@ public class StatisticsAdapter extends BaseExpandableListAdapter {
         } else {
             groupViewHolder = (GroupViewHolder) convertView.getTag();
         }
+        groupViewHolder.tv_name.setText( data.get(groupPosition).getClasses_name());
+        groupViewHolder.tv_hours.setText("共"+data.get(groupPosition).getHours()+"小时");
+        groupViewHolder.tv_dayShift_price.setText("¥ "+data.get(groupPosition).getPrice());
         return convertView;
     }
 
@@ -108,6 +107,9 @@ public class StatisticsAdapter extends BaseExpandableListAdapter {
             childViewHolder = (ChildViewHolder) convertView.getTag();
         }
         StatisticsBean.DataBean.TotalInfoBean totalInfoBean = data.get(groupPosition);
+        childViewHolder.item_tv_name.setText(totalInfoBean.getClasses_name());
+        childViewHolder.tv_holidays.setText("共"+totalInfoBean.getHours()+"小时");
+        childViewHolder.tv_holidays_price.setText("¥ "+totalInfoBean.getPrice()+"");
         return convertView;
     }
 
@@ -117,13 +119,26 @@ public class StatisticsAdapter extends BaseExpandableListAdapter {
     }
 
     static class GroupViewHolder {
+          @BindView(R.id.list_statistics_tv_name)
+          TextView tv_name;
+          @BindView(R.id.list_statistics_tv_hours)
+                  TextView tv_hours;
+          @BindView(R.id.list_statistics_tv_dayShift_price)
+                  TextView tv_dayShift_price;
         GroupViewHolder(View view) {
+            ButterKnife.bind(this,view);
         }
     }
 
     static class ChildViewHolder {
+        @BindView(R.id.list_statistics_item_tv_name)
+                TextView item_tv_name;
+        @BindView(R.id.list_statistics_item_tv_holidays)
+                TextView tv_holidays;
+        @BindView(R.id.list_statistics_item_holidays_price)
+                TextView tv_holidays_price;
         ChildViewHolder(View view) {
-
+            ButterKnife.bind(this,view);
         }
     }
 }

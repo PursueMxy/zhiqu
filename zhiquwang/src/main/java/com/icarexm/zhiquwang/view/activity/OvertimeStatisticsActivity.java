@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
@@ -39,15 +40,12 @@ public class OvertimeStatisticsActivity extends BaseActivity implements Overtime
 
     @BindView(R.id.overtime_statistics_time)
     TextView tv_time;
-    @BindView(R.id.overtime_statistics_listView)
-    NoScrollListView listView_statistics;
     @BindView(R.id.overtime_statistics_elv)
     ExpandableListView statistics_elv;
     private String token;
     private OvertimeStatisticsPresenter overtimeStatisticsPresenter;
     private String typeOfWork;
-    private List<StatisticsBean.DataBean.TotalInfoBean> total_info=new ArrayList<>();
-    private MyAdapter myAdapter;
+    private List<StatisticsBean.DataBean.TotalInfoBean> total_info = new ArrayList<>();
     private Context mContext;
     private StatisticsAdapter myOrderAdapter;
 
@@ -65,7 +63,7 @@ public class OvertimeStatisticsActivity extends BaseActivity implements Overtime
         tv_time.setText(monthDate);
         initExpandableListView();
         overtimeStatisticsPresenter = new OvertimeStatisticsPresenter(this);
-        overtimeStatisticsPresenter.GetRecords(token,typeOfWork);
+        overtimeStatisticsPresenter.GetRecords(token, typeOfWork);
     }
 
 
@@ -74,13 +72,42 @@ public class OvertimeStatisticsActivity extends BaseActivity implements Overtime
      * 创建数据适配器adapter，并进行初始化操作
      */
     private void initExpandableListView() {
-        myOrderAdapter = new StatisticsAdapter(mContext,total_info);
+        initExpandableListViewData(total_info);
+        myOrderAdapter = new StatisticsAdapter(mContext);
         statistics_elv.setAdapter(myOrderAdapter);
     }
 
+    /**
+     * 初始化ExpandableListView的数据
+     * 并在数据刷新时，页面保持当前位置
+     *
+     * @param datas 购物车的数据
+     */
+    private void initExpandableListViewData(List<StatisticsBean.DataBean.TotalInfoBean> datas) {
+        if (datas != null && datas.size() > 0) {
+            //刷新数据时，保持当前位置
+            myOrderAdapter.setData(datas);
+            //使所有组展开
+            for (int i = 0; i < myOrderAdapter.getGroupCount(); i++) {
+                statistics_elv.expandGroup(i);
+            }
+
+            //使组点击无效果（true）
+            statistics_elv.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+
+                @Override
+                public boolean onGroupClick(ExpandableListView parent, View v,
+                                            int groupPosition, long id) {
+//                    Log.e("点击事件",groupPosition+"加"+id);
+                    return true;
+                }
+            });
+        }
+    }
+
     @OnClick({R.id.overtime_sss_img_back})
-    public void onViewClick(View view){
-        switch (view.getId()){
+    public void onViewClick(View view) {
+        switch (view.getId()) {
             case R.id.overtime_sss_img_back:
                 finish();
                 break;
@@ -89,7 +116,7 @@ public class OvertimeStatisticsActivity extends BaseActivity implements Overtime
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode==KeyEvent.KEYCODE_BACK){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             finish();
         }
         return super.onKeyDown(keyCode, event);
@@ -100,44 +127,12 @@ public class OvertimeStatisticsActivity extends BaseActivity implements Overtime
 
     }
 
-    public void UpdateUI(int code, String message, StatisticsBean.DataBean data){
-        if (code==1) {
+    public void UpdateUI(int code, String message, StatisticsBean.DataBean data) {
+        if (code == 1) {
             total_info = data.getTotal_info();
-//            myAdapter.notifyDataSetChanged();
-            myOrderAdapter = new StatisticsAdapter(mContext,total_info);
-            statistics_elv.setAdapter(myOrderAdapter);
-        }else {
-            ToastUtils.showToast(mContext,message);
+            initExpandableListViewData(total_info);
+        } else {
+            ToastUtils.showToast(mContext, message);
         }
-    }
-
-    public class MyAdapter extends BaseAdapter{
-        @Override
-        public int getCount() {
-            return total_info.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return 0;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            View inflate = getLayoutInflater().inflate(R.layout.list_statistics, null);
-            RecyclerView recyclerView = inflate.findViewById(R.id.list_recyclerView);
-            List<StatisticsBean.DataBean.TotalInfoBean.InfoBean> info = total_info.get(i).getInfo();
-            LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
-            recyclerView.setLayoutManager(layoutManager);
-            ListStatisticsAdapter listStatisticsAdapter = new ListStatisticsAdapter(mContext, info);
-            recyclerView.setAdapter(listStatisticsAdapter);
-            return inflate;
-        }
-
     }
 }
