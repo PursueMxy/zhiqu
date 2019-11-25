@@ -125,6 +125,9 @@ public class RequstUrl {
         //提交加班
         public static String doRecords=HOST+"/api/doRecords";
 
+        //加班统计
+        public static String Records=HOST+"/api/records";
+
         //微信登录
         public static String WechatLogin=HOST+"/api/wechatLogin";
 
@@ -133,6 +136,12 @@ public class RequstUrl {
 
         //申请商务合作
         public static String doAlliance=HOST+"/api/doAlliance";
+
+        //打卡提醒设置
+        public static String ClockReminded=HOST+"/api/clockReminded";
+
+        //打开提醒页面测试化
+        public static String ClockRemindedInfo=HOST+"/api/clockRemindedInfo";
 
     }
 }

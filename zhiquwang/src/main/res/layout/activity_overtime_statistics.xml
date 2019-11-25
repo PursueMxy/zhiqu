@@ -95,7 +95,27 @@
         android:textSize="19sp"
         />
 </RelativeLayout>
+            <com.icarexm.zhiquwang.custview.NoScrollListView
+                android:id="@+id/overtime_statistics_listView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <ExpandableListView
+                android:layout_marginTop="@dimen/dp_20"
+                android:childDivider="#ededed"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:layout_marginRight="@dimen/dp_15"
+                android:id="@+id/overtime_statistics_elv"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="#ededed"
+                android:divider="@null"
+                android:groupIndicator="@null"
+                android:scrollbars="none"
+                android:visibility="gone" />
     <LinearLayout
+        android:visibility="gone"
         android:layout_marginRight="@dimen/dp_15"
         android:layout_marginLeft="@dimen/dp_15"
         android:orientation="vertical"
@@ -263,6 +283,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:visibility="gone"
         android:layout_marginBottom="@dimen/dp_20"
         android:layout_marginTop="@dimen/dp_10"
         android:layout_marginRight="@dimen/dp_15"

@@ -5,6 +5,7 @@ import org.litepal.crud.LitePalSupport;
 public class LiteWeekBean extends LitePalSupport {
     private String week_name;
     private int week_code;
+    private int slt_code;
 
     public int getWeek_code() {
         return week_code;
@@ -22,8 +23,13 @@ public class LiteWeekBean extends LitePalSupport {
         this.week_name = week_name;
     }
 
-    public LiteWeekBean(String week_name, int week_code) {
-        this.week_name = week_name;
-        this.week_code = week_code;
+    public int getSlt_code() {
+        return slt_code;
     }
+
+    public void setSlt_code(int slt_code) {
+        this.slt_code= slt_code;
+    }
+
+
 }

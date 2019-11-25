@@ -10,20 +10,22 @@ import android.os.Handler;
 
 import com.icarexm.zhiquwang.R;
 
-public class LunchActivity extends BaseActivity {
+public class LunchActivity extends AppCompatActivity {
     private Context mContext;
     Handler handler = new Handler();
 
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            if (!token.equals("")) {
-                Intent intent = new Intent(mContext, LoginActivity.class);
-                startActivity(intent);
-            }else {
-                Intent intent = new Intent(mContext, GuidePageActivity.class);
-                startActivity(intent);
-            }
+//            if (!token.equals("")) {
+//                Intent intent = new Intent(mContext, LoginActivity.class);
+//                startActivity(intent);
+//            }else {
+//                Intent intent = new Intent(mContext, GuidePageActivity.class);
+//                startActivity(intent);
+//            }
+            Intent intent = new Intent(mContext, LoginActivity.class);
+            startActivity(intent);
             finish();
         }
     };

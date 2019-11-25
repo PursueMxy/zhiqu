@@ -5,6 +5,13 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.fragment.HomeFragment">
+    <com.icarexm.zhiquwang.custview.MyScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
 <RelativeLayout
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -271,6 +278,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </RelativeLayout>
-</RelativeLayout>
-
+   </RelativeLayout>
+        </RelativeLayout>
+    </com.icarexm.zhiquwang.custview.MyScrollView>
 </FrameLayout>

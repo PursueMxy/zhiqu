@@ -24,7 +24,7 @@ public class OvertimeApprovalPresenter implements OvertimeApprovalContract.Prese
         mView.UpdateUI(overtimeApproverBean.getCode(),overtimeApproverBean.getMsg(),overtimeApproverBean.getData());
     }
 
-    public void GetdoRecords(String token,String type,String classes_id,String festival_id,String hours){
-       overtimeApprovalModel.PostdoRecords(this,token,type,classes_id,festival_id,hours);
+    public void GetdoRecords(String token,String type,String classes_id,String festival_id,String hours,String day){
+       overtimeApprovalModel.PostdoRecords(this,token,type,classes_id,festival_id,hours,day);
     }
 }

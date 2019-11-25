@@ -91,6 +91,8 @@
                 android:textSize="@dimen/sp_14"
                 />
             <EditText
+                android:id="@+id/base_pay_edt_pay"
+                android:inputType="number"
                 android:textSize="@dimen/sp_12"
                 android:layout_marginLeft="@dimen/dp_150"
                 android:gravity="center|right"
@@ -138,167 +140,10 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_1"
             android:background="@drawable/fff2f2f2"/>
-
-        <RelativeLayout
+        <com.icarexm.zhiquwang.custview.NoScrollListView
+            android:id="@+id/base_pay_listView"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_56">
-            <TextView
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/dp_16"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="交通补贴"
-                android:textColor="@color/ff4e4d4d"
-                android:textSize="@dimen/sp_14"
-                />
-
-            <TextView
-                android:layout_marginRight="@dimen/dp_15"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="元"
-                android:textColor="@color/ff4e4d4d"
-                android:textSize="@dimen/sp_14"
-                />
-            <EditText
-                android:textSize="@dimen/sp_12"
-                android:layout_marginLeft="@dimen/dp_150"
-                android:gravity="center|right"
-                android:layout_marginRight="@dimen/dp_33"
-                android:hint="请输入金额"
-                android:background="@null"
-                android:layout_centerVertical="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </RelativeLayout>
-
-        <View
-            android:layout_marginRight="@dimen/dp_15"
-            android:layout_marginLeft="@dimen/dp_15"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_1"
-            android:background="@drawable/fff2f2f2"/>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_56">
-            <TextView
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/dp_16"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="住宿补贴"
-                android:textColor="@color/ff4e4d4d"
-                android:textSize="@dimen/sp_14"
-                />
-
-            <TextView
-                android:layout_marginRight="@dimen/dp_15"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="元"
-                android:textColor="@color/ff4e4d4d"
-                android:textSize="@dimen/sp_14"
-                />
-            <EditText
-                android:textSize="@dimen/sp_12"
-                android:layout_marginLeft="@dimen/dp_150"
-                android:gravity="center|right"
-                android:layout_marginRight="@dimen/dp_33"
-                android:hint="请输入金额"
-                android:background="@null"
-                android:layout_centerVertical="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </RelativeLayout>
-
-        <View
-            android:layout_marginRight="@dimen/dp_15"
-            android:layout_marginLeft="@dimen/dp_15"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_1"
-            android:background="@drawable/fff2f2f2"/>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_56">
-            <TextView
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/dp_16"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="伙食补贴"
-                android:textColor="@color/ff4e4d4d"
-                android:textSize="@dimen/sp_14"
-                />
-
-            <TextView
-                android:layout_marginRight="@dimen/dp_15"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="元"
-                android:textColor="@color/ff4e4d4d"
-                android:textSize="@dimen/sp_14"
-                />
-            <EditText
-                android:textSize="@dimen/sp_12"
-                android:layout_marginLeft="@dimen/dp_150"
-                android:gravity="center|right"
-                android:layout_marginRight="@dimen/dp_33"
-                android:hint="请输入金额"
-                android:background="@null"
-                android:layout_centerVertical="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </RelativeLayout>
-
-        <View
-            android:layout_marginRight="@dimen/dp_15"
-            android:layout_marginLeft="@dimen/dp_15"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_1"
-            android:background="@drawable/fff2f2f2"/>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_56">
-            <TextView
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/dp_16"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="业绩补贴"
-                android:textColor="@color/ff4e4d4d"
-                android:textSize="@dimen/sp_14"
-                />
-
-            <TextView
-                android:layout_marginRight="@dimen/dp_15"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="元"
-                android:textColor="@color/ff4e4d4d"
-                android:textSize="@dimen/sp_14"
-                />
-            <EditText
-                android:textSize="@dimen/sp_12"
-                android:layout_marginLeft="@dimen/dp_150"
-                android:gravity="center|right"
-                android:layout_marginRight="@dimen/dp_33"
-                android:hint="请输入金额"
-                android:background="@null"
-                android:layout_centerVertical="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </RelativeLayout>
+            android:layout_height="wrap_content"/>
         <View
             android:layout_marginRight="@dimen/dp_15"
             android:layout_marginLeft="@dimen/dp_15"

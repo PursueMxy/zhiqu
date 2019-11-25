@@ -27,14 +27,14 @@ public class OvertimeApprovalModel implements OvertimeApprovalContract.Model {
      * 提交加班信息
      */
     public void PostdoRecords(OvertimeApprovalPresenter approvalPresenter,String token,String type,String classes_id,
-                              String festival_id,String hours){
+                              String festival_id,String hours,String day){
                         OkGo.<String>post(RequstUrl.URL.doRecords)
                                 .params("token",token)
                                 .params("type",type)
                                 .params("classes_id",classes_id)
                                 .params("festival_id",festival_id)
                                 .params("hours",hours)
-                                .params("witch_day",17)
+                                .params("day",day)
                                 .execute(new StringCallback() {
                                     @Override
                                     public void onSuccess(Response<String> response) {

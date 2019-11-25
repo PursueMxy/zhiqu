@@ -1,15 +1,14 @@
 package com.icarexm.zhiquwang.bean;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
 
 public class OvertimeApproverBean {
 
+
     /**
      * code : 1
      * msg : 获取成功
-     * data : {"month":[{"day":1,"hours":"","classes_id":"","festival_id":""},{"day":2,"hours":"","classes_id":"","festival_id":""},{"day":3,"hours":"","classes_id":"","festival_id":""},{"day":4,"hours":"","classes_id":"","festival_id":""},{"day":5,"hours":"","classes_id":"","festival_id":""},{"day":6,"hours":"","classes_id":"","festival_id":""},{"day":7,"hours":"","classes_id":"","festival_id":""},{"day":8,"hours":"","classes_id":"","festival_id":""},{"day":9,"hours":"","classes_id":"","festival_id":""},{"day":10,"hours":"","classes_id":"","festival_id":""},{"day":11,"hours":"","classes_id":"","festival_id":""},{"day":12,"hours":"","classes_id":"","festival_id":""},{"day":13,"hours":"","classes_id":"","festival_id":""},{"day":14,"hours":"","classes_id":"","festival_id":""},{"day":15,"hours":"","classes_id":"","festival_id":""},{"day":16,"hours":"","classes_id":"","festival_id":""},{"day":17,"hours":"","classes_id":"","festival_id":""},{"day":18,"hours":"","classes_id":"","festival_id":""},{"day":19,"hours":"","classes_id":"","festival_id":""},{"day":20,"hours":"","classes_id":"","festival_id":""},{"day":21,"hours":"","classes_id":"","festival_id":""},{"day":22,"hours":"","classes_id":"","festival_id":""},{"day":23,"hours":"","classes_id":"","festival_id":""},{"day":24,"hours":"","classes_id":"","festival_id":""}],"classes":{"2":"白班","3":"夜班"},"festival":{"2":"国庆","3":"中秋","4":"工作日"}}
+     * data : {"month":[{"day":1,"hours":"","classes_id":"","festival_id":""},{"day":2,"hours":"","classes_id":"","festival_id":""},{"day":3,"hours":"","classes_id":"","festival_id":""},{"day":4,"hours":"","classes_id":"","festival_id":""},{"day":5,"hours":"","classes_id":"","festival_id":""},{"day":6,"hours":"","classes_id":"","festival_id":""},{"day":7,"hours":"","classes_id":"","festival_id":""},{"day":8,"hours":"","classes_id":"","festival_id":""},{"day":9,"hours":"","classes_id":"","festival_id":""},{"day":10,"hours":"","classes_id":"","festival_id":""},{"day":11,"hours":"","classes_id":"","festival_id":""},{"day":12,"hours":"","classes_id":"","festival_id":""},{"day":13,"hours":"","classes_id":"","festival_id":""},{"day":14,"hours":"","classes_id":"","festival_id":""},{"day":15,"hours":"","classes_id":"","festival_id":""},{"day":16,"hours":"","classes_id":"","festival_id":""},{"day":17,"hours":"","classes_id":"","festival_id":""},{"day":18,"hours":"","classes_id":"","festival_id":""},{"day":19,"hours":"","classes_id":"","festival_id":""},{"day":20,"hours":"","classes_id":"","festival_id":""},{"day":21,"hours":"","classes_id":"","festival_id":""},{"day":22,"hours":"","classes_id":"","festival_id":""},{"day":23,"hours":"","classes_id":"","festival_id":""},{"day":24,"hours":"","classes_id":"","festival_id":""},{"day":25,"hours":"","classes_id":"","festival_id":""}],"classes":[{"classes_name":"白班","classes_id":2},{"classes_name":"夜班","classes_id":3}],"festival":[{"festival_name":"国庆","festival_id":2},{"festival_name":"中秋","festival_id":3},{"festival_name":"工作日","festival_id":4}]}
      */
 
     private int code;
@@ -41,31 +40,9 @@ public class OvertimeApproverBean {
     }
 
     public static class DataBean {
-        /**
-         * month : [{"day":1,"hours":"","classes_id":"","festival_id":""},{"day":2,"hours":"","classes_id":"","festival_id":""},{"day":3,"hours":"","classes_id":"","festival_id":""},{"day":4,"hours":"","classes_id":"","festival_id":""},{"day":5,"hours":"","classes_id":"","festival_id":""},{"day":6,"hours":"","classes_id":"","festival_id":""},{"day":7,"hours":"","classes_id":"","festival_id":""},{"day":8,"hours":"","classes_id":"","festival_id":""},{"day":9,"hours":"","classes_id":"","festival_id":""},{"day":10,"hours":"","classes_id":"","festival_id":""},{"day":11,"hours":"","classes_id":"","festival_id":""},{"day":12,"hours":"","classes_id":"","festival_id":""},{"day":13,"hours":"","classes_id":"","festival_id":""},{"day":14,"hours":"","classes_id":"","festival_id":""},{"day":15,"hours":"","classes_id":"","festival_id":""},{"day":16,"hours":"","classes_id":"","festival_id":""},{"day":17,"hours":"","classes_id":"","festival_id":""},{"day":18,"hours":"","classes_id":"","festival_id":""},{"day":19,"hours":"","classes_id":"","festival_id":""},{"day":20,"hours":"","classes_id":"","festival_id":""},{"day":21,"hours":"","classes_id":"","festival_id":""},{"day":22,"hours":"","classes_id":"","festival_id":""},{"day":23,"hours":"","classes_id":"","festival_id":""},{"day":24,"hours":"","classes_id":"","festival_id":""}]
-         * classes : {"2":"白班","3":"夜班"}
-         * festival : {"2":"国庆","3":"中秋","4":"工作日"}
-         */
-
-        private ClassesBean classes;
-        private FestivalBean festival;
         private List<MonthBean> month;
-
-        public ClassesBean getClasses() {
-            return classes;
-        }
-
-        public void setClasses(ClassesBean classes) {
-            this.classes = classes;
-        }
-
-        public FestivalBean getFestival() {
-            return festival;
-        }
-
-        public void setFestival(FestivalBean festival) {
-            this.festival = festival;
-        }
+        private List<ClassesBean> classes;
+        private List<FestivalBean> festival;
 
         public List<MonthBean> getMonth() {
             return month;
@@ -75,71 +52,20 @@ public class OvertimeApproverBean {
             this.month = month;
         }
 
-        public static class ClassesBean {
-            /**
-             * 2 : 白班
-             * 3 : 夜班
-             */
-
-            @SerializedName("2")
-            private String _$2;
-            @SerializedName("3")
-            private String _$3;
-
-            public String get_$2() {
-                return _$2;
-            }
-
-            public void set_$2(String _$2) {
-                this._$2 = _$2;
-            }
-
-            public String get_$3() {
-                return _$3;
-            }
-
-            public void set_$3(String _$3) {
-                this._$3 = _$3;
-            }
+        public List<ClassesBean> getClasses() {
+            return classes;
         }
 
-        public static class FestivalBean {
-            /**
-             * 2 : 国庆
-             * 3 : 中秋
-             * 4 : 工作日
-             */
+        public void setClasses(List<ClassesBean> classes) {
+            this.classes = classes;
+        }
 
-            @SerializedName("2")
-            private String _$2;
-            @SerializedName("3")
-            private String _$3;
-            @SerializedName("4")
-            private String _$4;
+        public List<FestivalBean> getFestival() {
+            return festival;
+        }
 
-            public String get_$2() {
-                return _$2;
-            }
-
-            public void set_$2(String _$2) {
-                this._$2 = _$2;
-            }
-
-            public String get_$3() {
-                return _$3;
-            }
-
-            public void set_$3(String _$3) {
-                this._$3 = _$3;
-            }
-
-            public String get_$4() {
-                return _$4;
-            }
-
-            public void set_$4(String _$4) {
-                this._$4 = _$4;
-            }
+        public void setFestival(List<FestivalBean> festival) {
+            this.festival = festival;
         }
 
         public static class MonthBean {
@@ -184,6 +110,58 @@ public class OvertimeApproverBean {
             }
 
             public void setFestival_id(String festival_id) {
+                this.festival_id = festival_id;
+            }
+        }
+
+        public static class ClassesBean {
+            /**
+             * classes_name : 白班
+             * classes_id : 2
+             */
+
+            private String classes_name;
+            private int classes_id;
+
+            public String getClasses_name() {
+                return classes_name;
+            }
+
+            public void setClasses_name(String classes_name) {
+                this.classes_name = classes_name;
+            }
+
+            public int getClasses_id() {
+                return classes_id;
+            }
+
+            public void setClasses_id(int classes_id) {
+                this.classes_id = classes_id;
+            }
+        }
+
+        public static class FestivalBean {
+            /**
+             * festival_name : 国庆
+             * festival_id : 2
+             */
+
+            private String festival_name;
+            private int festival_id;
+
+            public String getFestival_name() {
+                return festival_name;
+            }
+
+            public void setFestival_name(String festival_name) {
+                this.festival_name = festival_name;
+            }
+
+            public int getFestival_id() {
+                return festival_id;
+            }
+
+            public void setFestival_id(int festival_id) {
                 this.festival_id = festival_id;
             }
         }

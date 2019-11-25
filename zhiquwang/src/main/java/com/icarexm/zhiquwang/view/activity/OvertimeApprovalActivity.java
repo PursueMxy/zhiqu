@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,12 +70,17 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
     private String token;
     private AdapterDate adapterDate;
     private OvertimeApprovalPresenter overtimeApprovalPresenter;
-    private String[] CLASSES_LIST=new String[]{"白班","夜班"};
     private String CLASSES;
-    private String[] Festival_List=new String[]{"国庆","中秋","工作日"};
     private String Festival;
     private List<String> Hours_List=new ArrayList<>();
     private String overtime_hours;
+    private int todays;
+    private List<OvertimeApproverBean.DataBean.FestivalBean> festival_list=new ArrayList<>();
+    private List<String> CLASSES_LIST=new ArrayList<>();
+    private int festival_id;
+    private List<OvertimeApproverBean.DataBean.ClassesBean> classes_list=new ArrayList<>();
+    private List<String> Festival_List=new ArrayList<>();
+    private int classes_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +97,7 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
         TypeOfWork=intent.getStringExtra("TypeOfWork");
         InitHours();
         InitUI();
+        todays=Integer.parseInt(DateUtil.getToday());
         overtimeApprovalPresenter = new OvertimeApprovalPresenter(this);
         overtimeApprovalPresenter.GetOertimeRecords(token,TypeOfWork);
     }
@@ -115,7 +122,7 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
     }
 
     @OnClick({R.id.overtime_approval_img_back,R.id.overtime_approval_rl_classes,R.id.overtime_approval_rl_festival,
-            R.id.overtime_approval_rl_hours,R.id.overtime_approval_btn_confirm})
+            R.id.overtime_approval_rl_hours,R.id.overtime_approval_btn_confirms})
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.overtime_approval_img_back:
@@ -130,8 +137,9 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
             case R.id.overtime_approval_rl_hours:
                 HoursDialog();
                 break;
-            case R.id.overtime_approval_btn_confirm:
-                overtimeApprovalPresenter.GetdoRecords(token,TypeOfWork,"2","4",overtime_hours);
+            case R.id.overtime_approval_btn_confirms:
+                Log.e("提交","jdsfhjsd");
+                overtimeApprovalPresenter.GetdoRecords(token,TypeOfWork, classes_id+"",festival_id+"",overtime_hours,todays+"");
                 break;
 
         }
@@ -217,6 +225,7 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
                 viewHolder.tv.setBackgroundResource(R.drawable.bg_green_22);
             } else {
                 if (days.get(i) == today) {
+                    todays = days.get(i);
                     viewHolder.tv.setTextColor(Color.parseColor("#FFFFFF"));
                     viewHolder.tv.setBackgroundResource(R.drawable.bg_today_22);
                 } else {
@@ -227,8 +236,8 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Integer integer = days.get(i);
-                    if (monthList.size()+1>integer&&monthList.size()>1) {
+                    Integer  integer = days.get(i);
+                    if (monthList.size()+1> integer &&monthList.size()>1) {
                         if (status.get(i)) {
                             Toast.makeText(context, "重复选择", Toast.LENGTH_SHORT).show();
                         } else {
@@ -242,8 +251,9 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
                             }
                         }
                         String classes_id = monthList.get(integer-1).getClasses_id();
-                        String festival_id = monthList.get(integer - 1).getFestival_id();
-                        overtime_hours = monthList.get(integer - 1).getHours();
+                        String festival_id = monthList.get(integer-1).getFestival_id();
+                        overtime_hours = monthList.get(integer-1).getHours();
+                        todays = days.get(i);
                         UpdateUI(classes_id,festival_id,overtime_hours);
                     }else {
                         ToastUtils.showToast(mContext,"超出当前时间");
@@ -266,20 +276,24 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
 
     public void UpdateUI(String classes_id,String festival_id,String hours){
         tv_hours.setText(hours+"小时");
+
     }
 
     //班次
     private void ClassesDialog() {
+        classes_id = classes_list.get(0).getClasses_id();
+        tv_classes.setText(classes_list.get(0).getClasses_name());
         final BottomDialog SexDialog = new BottomDialog(this, R.style.ActionSheetDialogStyle);
         View Sexinflate = LayoutInflater.from(mContext).inflate(R.layout.dialog_bottom_education, null);
         TextView tv_title =Sexinflate.findViewById(R.id.dialog_bottom_education_tv_title);
         tv_title.setText("班次");
         MyWheelView age_groupwva = Sexinflate.findViewById(R.id.dialog_bottom_wheel);
-        age_groupwva.setItems(Arrays.asList(CLASSES_LIST),0);
+        age_groupwva.setItems(CLASSES_LIST,0);
         age_groupwva.setOnItemSelectedListener(new MyWheelView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(int selectedIndex, String item) {
                 CLASSES =item;
+                classes_id = classes_list.get(selectedIndex).getClasses_id();
             }
         });
         Sexinflate.findViewById(R.id.dialog_bottom_img_cancel).setOnClickListener(new View.OnClickListener() {
@@ -306,16 +320,19 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
 
     //加班类型
     private void FestivalDialog(){
+        festival_id = festival_list.get(0).getFestival_id();
+        tv_festival.setText(festival_list.get(0).getFestival_name());
         final BottomDialog SexDialog = new BottomDialog(this, R.style.ActionSheetDialogStyle);
         View Sexinflate = LayoutInflater.from(mContext).inflate(R.layout.dialog_bottom_education, null);
         TextView tv_title =Sexinflate.findViewById(R.id.dialog_bottom_education_tv_title);
         tv_title.setText("加班模式");
         MyWheelView age_groupwva = Sexinflate.findViewById(R.id.dialog_bottom_wheel);
-        age_groupwva.setItems(Arrays.asList(Festival_List),0);
+        age_groupwva.setItems(Festival_List,0);
         age_groupwva.setOnItemSelectedListener(new MyWheelView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(int selectedIndex, String item) {
                 Festival =item;
+                festival_id = festival_list.get(selectedIndex).getFestival_id();
             }
         });
         Sexinflate.findViewById(R.id.dialog_bottom_img_cancel).setOnClickListener(new View.OnClickListener() {
@@ -378,6 +395,14 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
 
     public void UpdateUI(int code, String msg, OvertimeApproverBean.DataBean data){
         List<OvertimeApproverBean.DataBean.MonthBean> month = data.getMonth();
+        festival_list = data.getFestival();
+        for (int a=0;a<festival_list.size();a++){
+            Festival_List.add(festival_list.get(a).getFestival_name());
+        }
+        classes_list = data.getClasses();
+        for (int b=0;b<classes_list.size();b++){
+            CLASSES_LIST.add( classes_list.get(b).getClasses_name());
+        }
         monthList=month;
         adapterDate.notifyDataSetChanged();
     }

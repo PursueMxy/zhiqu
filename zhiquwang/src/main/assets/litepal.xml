@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <litepal>
     <dbname value="zhiquwangsql" />
-    <version value="1" />
+    <version value="3" />
     <list>
         <mapping class="com.icarexm.zhiquwang.bean.LiteWeekBean" />
+        <mapping class="com.icarexm.zhiquwang.bean.LiteSubsidyBean" />
     </list>
 </litepal>

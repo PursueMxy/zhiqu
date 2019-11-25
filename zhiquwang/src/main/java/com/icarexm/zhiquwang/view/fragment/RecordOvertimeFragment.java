@@ -66,7 +66,9 @@ public class RecordOvertimeFragment extends Fragment implements View.OnClickList
         share = mContext.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
         TypeOfWork = share.getString("TypeOfWork", "");
-        Log.e("TypeOfWork",TypeOfWork);
+        if (TypeOfWork.equals("")){
+            TypeOfWork="1";
+        }
         View inflate = inflater.inflate(R.layout.fragment_record_overtime, container, false);
         InitUI(inflate);
         InitData();
@@ -80,7 +82,6 @@ public class RecordOvertimeFragment extends Fragment implements View.OnClickList
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        try {
                             OverTimeBean overTimeBean = new GsonBuilder().create().fromJson(response.body(), OverTimeBean.class);
                             if (overTimeBean.getCode()==1){
                                 if (TypeOfWork.equals("1")){
@@ -92,8 +93,6 @@ public class RecordOvertimeFragment extends Fragment implements View.OnClickList
                                     two_tv_salary.setText(overTimeBean.getData().getPrice()+"");
                                 }
                             }
-                        }catch (Exception e){}
-
                     }
                 });
     }
@@ -141,32 +140,32 @@ public class RecordOvertimeFragment extends Fragment implements View.OnClickList
         switch (view.getId()){
             case R.id.fm_record_overtime_tv_set_basepay:
                 Intent intent4 = new Intent(mContext, BasePayActivity.class);
-                intent4.putExtra("Base_Type","1");
+                intent4.putExtra("Base_Type",TypeOfWork);
                 startActivity(intent4);
                 break;
             case R.id.fm_record_overtime_two_tv_set_basepay:
                 Intent intent5 = new Intent(mContext, BasePayActivity.class);
-                intent5.putExtra("Base_Type","2");
+                intent5.putExtra("Base_Type",TypeOfWork);
                 startActivity(intent5);
                 break;
             case R.id.fm_record_overtime_overtime_statistics:
                 Intent intent = new Intent(mContext, OvertimeStatisticsActivity.class);
-                intent.putExtra("TypeOfWork","1");
+                intent.putExtra("TypeOfWork",TypeOfWork);
                 startActivity(intent);
                 break;
             case R.id.fm_record_overtime_overtime_approval:
                 Intent intent1 = new Intent(mContext, OvertimeApprovalActivity.class);
-                intent1.putExtra("TypeOfWork","1");
+                intent1.putExtra("TypeOfWork",TypeOfWork);
                 startActivity(intent1);
                 break;
             case R.id.fm_record_overtime_overtime_two_tv_approval:
                 Intent intent2 = new Intent(mContext, OvertimeApprovalActivity.class);
-                intent2.putExtra("TypeOfWork","2");
+                intent2.putExtra("TypeOfWork",TypeOfWork);
                 startActivity(intent2);
                 break;
             case R.id.fm_record_overtime_overtime_two_tv_statistics:
                 Intent intent3 = new Intent(mContext, OvertimeStatisticsActivity.class);
-                intent3.putExtra("TypeOfWork","2");
+                intent3.putExtra("TypeOfWork",TypeOfWork);
                 startActivity(intent3);
                 break;
             case R.id.fm_record_overtime_two_tv_title:
@@ -174,7 +173,6 @@ public class RecordOvertimeFragment extends Fragment implements View.OnClickList
                 rl_typeTwo.setVisibility(View.GONE);
                 rl_typeOne.setVisibility(View.VISIBLE);
                 SharedPreferences.Editor editor = share.edit();
-                editor.putString("TypeOfWork",TypeOfWork);
                 editor.commit();//提交
                 InitData();
                 break;
@@ -183,7 +181,6 @@ public class RecordOvertimeFragment extends Fragment implements View.OnClickList
                 rl_typeOne.setVisibility(View.GONE);
                 rl_typeTwo.setVisibility(View.VISIBLE);
                 SharedPreferences.Editor editor1 = share.edit();
-                editor1.putString("TypeOfWork",TypeOfWork);
                 editor1.commit();//提交
                 InitData();
                 break;

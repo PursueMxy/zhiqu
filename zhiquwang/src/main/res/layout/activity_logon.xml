@@ -99,7 +99,7 @@
                 android:layout_centerVertical="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="请输入密码"
+                android:hint="请输入验证码"
                 android:textColor="@color/ffa5a5a5"
                 android:textSize="@dimen/sp_15"
                 />
@@ -141,6 +141,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="请输入密码"
+            android:inputType="textPassword"
             android:textColor="@color/ffa5a5a5"
             android:textSize="15sp"
             />
@@ -166,6 +167,7 @@
         <EditText
             android:id="@+id/logon_edt_repassword"
             android:background="@null"
+            android:inputType="textPassword"
             android:layout_marginRight="@dimen/dp_20"
             android:layout_marginLeft="@dimen/dp_20"
             android:layout_marginTop="@dimen/dp_10"

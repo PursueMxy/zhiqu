@@ -209,9 +209,11 @@ public class PunchCardRecordActivity extends BaseActivity implements PunchCardRe
                             onSignedSuccess.OnSignedSuccess();
                         }
                         Integer integer = days.get(i);
-                        if (today>integer-1) {
-                            UpdateSlt(integer);
-                        }
+                        try {
+                            if (today>integer-1) {
+                                UpdateSlt(integer);
+                            }
+                        }catch (Exception e){}
                     }
                 }
             });
