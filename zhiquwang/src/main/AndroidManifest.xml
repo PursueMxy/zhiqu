@@ -53,6 +53,11 @@
             android:value="a3943e611480b87c48027607be918ad4" />
 
         <activity android:name=".view.activity.LunchActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".view.activity.OvertimeApprovalActivity" />
         <activity android:name=".view.activity.SetReminderActivity" />
@@ -99,11 +104,6 @@
             android:launchMode="singleTask" />
         <activity android:name=".view.activity.LoginActivity" />
         <activity android:name=".view.activity.GuidePageActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
         <activity
