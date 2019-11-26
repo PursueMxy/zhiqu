@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.WindowManager;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -22,7 +23,7 @@ import com.icarexm.zhiquwang.view.fragment.GuideTwoFragment;
 
 import java.util.ArrayList;
 
-public class GuidePageActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
+public class GuidePageActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
 
     private ViewPager mViewPager;
     private LinearLayout mDotLayout;
@@ -35,20 +36,21 @@ public class GuidePageActivity extends AppCompatActivity implements ViewPager.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guide_page);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // 透明状态栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            // 透明导航栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
         share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         String bootpage = share.getString("bootpage", "");
-        if (bootpage.equals("true")){
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
-        }else {
+        try {
+            if (bootpage.equals("true")){
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            }else {
+                InitUI();
+                initData();
+                initDots();
+                initListeners();
+            }
+        }catch (Exception e){
             InitUI();
             initData();
             initDots();
@@ -61,7 +63,6 @@ public class GuidePageActivity extends AppCompatActivity implements ViewPager.On
     }
 
     private void initData() {
-
         mFragments = new ArrayList<Fragment>();
         mFragments.add(GuideOneFragment.newInstance());
         mFragments.add(GuideTwoFragment.newInstance());
@@ -71,12 +72,10 @@ public class GuidePageActivity extends AppCompatActivity implements ViewPager.On
     }
 
     private void initListeners() {
-
         mViewPager.addOnPageChangeListener(this);
     }
 
     private void initDots() {
-
         dots = new ImageView[mFragments.size()];
         for (int i = 0; i < mFragments.size(); i++) {
             dots[i] = (ImageView) mDotLayout.getChildAt(i);

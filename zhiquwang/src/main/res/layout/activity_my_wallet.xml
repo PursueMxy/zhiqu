@@ -80,7 +80,7 @@
         android:layout_marginLeft="@dimen/dp_15"
         android:layout_marginRight="@dimen/dp_15"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_132">
+        android:layout_height="@dimen/dp_135">
         <RelativeLayout
             android:id="@+id/my_wallet_rl_entry_award"
             android:layout_width="match_parent"

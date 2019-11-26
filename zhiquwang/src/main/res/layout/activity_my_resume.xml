@@ -55,7 +55,7 @@
             android:layout_toRightOf="@+id/my_resume_img_avatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="王小明"
+            android:text=""
             android:maxLength="5"
             android:textColor="#ff4e4d4d"
             android:textSize="20sp"
@@ -68,7 +68,7 @@
             android:layout_below="@+id/my_resume_tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="24岁·本科"
+            android:text=""
             android:textColor="@color/ff4e4d4d"
             android:textSize="@dimen/sp_12"
             />

@@ -15,12 +15,13 @@ import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.AddResumeBean;
 import com.icarexm.zhiquwang.bean.ResumeBean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyResumeAdapter extends RecyclerView.Adapter<MyResumeAdapter.ViewHolder> {
 
     public Context mContext;
-    List<ResumeBean.DataBean.ExperienceBean> addResumeList;
+    List<ResumeBean.DataBean.ExperienceBean> addResumeList=new ArrayList<>();
 
     public MyResumeAdapter(Context context, List<ResumeBean.DataBean.ExperienceBean> addResumeList){
         mContext=context;
@@ -50,6 +51,10 @@ public class MyResumeAdapter extends RecyclerView.Adapter<MyResumeAdapter.ViewHo
                 }
             });
         }
+    }
+
+    public void setData(List<ResumeBean.DataBean.ExperienceBean> addResumeList){
+
     }
 
     @Override

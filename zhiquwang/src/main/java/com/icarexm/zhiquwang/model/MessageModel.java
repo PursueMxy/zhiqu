@@ -20,7 +20,7 @@ public class MessageModel implements MessageContract.Model {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-
+                    messagePresenter.SetMessage(response.body());
                     }
                 });
     }

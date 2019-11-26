@@ -16,6 +16,7 @@ import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.PublicResultBean;
 import com.icarexm.zhiquwang.utils.RequstUrl;
+import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
@@ -48,6 +49,10 @@ public class UserAgreementActivity extends BaseActivity {
                         PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
                         if (resultBean.getCode()==1){
                             tv_content.setText( Html.fromHtml(resultBean.getData()));
+                        }else if (resultBean.getCode() ==10001){
+                            ToastUtils.showToast(mContext,resultBean.getMsg());
+                            startActivity(new Intent(mContext,LoginActivity.class));
+                            finish();
                         }
                     }
                 });

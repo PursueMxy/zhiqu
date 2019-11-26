@@ -42,6 +42,10 @@ public class OvertimeStatisticsActivity extends BaseActivity implements Overtime
     TextView tv_time;
     @BindView(R.id.overtime_statistics_elv)
     ExpandableListView statistics_elv;
+    @BindView(R.id.overtime_statistics_tv_money)
+    TextView tv_money;
+    @BindView(R.id.overtime_statistics_total_day)
+    TextView tv_total_day;
     private String token;
     private OvertimeStatisticsPresenter overtimeStatisticsPresenter;
     private String typeOfWork;
@@ -131,7 +135,13 @@ public class OvertimeStatisticsActivity extends BaseActivity implements Overtime
         if (code == 1) {
             total_info = data.getTotal_info();
             initExpandableListViewData(total_info);
-        } else {
+            tv_money.setText(data.getTotal_price()+"");
+            tv_total_day.setText("加班"+data.getTotal_day()+"天 共"+data.getTotal_time()+"小时");
+        } else if (code ==10001){
+            ToastUtils.showToast(mContext,message);
+            startActivity(new Intent(mContext,LoginActivity.class));
+            finish();
+        }else {
             ToastUtils.showToast(mContext, message);
         }
     }

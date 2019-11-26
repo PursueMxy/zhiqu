@@ -45,13 +45,35 @@ public class AddWorkHistoryActivity extends BaseActivity {
     private Context mContext;
     private int  ADDWORKHISTORY=5120;
     private View timepickerview;
+    private String type;
+    private String position="00000";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_work_history);
         mContext = getApplicationContext();
+        Intent intent = getIntent();
+        type = intent.getStringExtra("type");
         ButterKnife.bind(this);
+        try {
+            if (type.equals("update")) {
+                String company_name = intent.getStringExtra("company_name");
+                String job_content = intent.getStringExtra("job_content");
+                String job_start = intent.getStringExtra("job_start");
+                String job_end = intent.getStringExtra("job_end");
+                String leave_cause = intent.getStringExtra("leave_cause");
+                position = intent.getStringExtra("position");
+                edt_company_name.setText(company_name);
+                edt_job_cause.setText(leave_cause);
+                edt_job_content.setText(job_content);
+                tv_job_end.setText(job_end);
+                tv_job_start.setText(job_start);
+                Log.e("position",position);
+            }
+        }catch (Exception e){
+
+        }
     }
 
     @OnClick({R.id.add_work_history_img_back,R.id.add_work_history_btn_confirm,R.id.add_work_history_tv_job_start,R.id.add_work_history_tv_job_end})
@@ -73,6 +95,11 @@ public class AddWorkHistoryActivity extends BaseActivity {
                                 AddResumeBean addResumeBean = new AddResumeBean(company_name, job_start, job_end, job_content, job_cause);
                                 String s1 = new GsonBuilder().create().toJson(addResumeBean);
                                 Intent intent = new Intent(mContext, MyResumeActivity.class);
+                                if (type.equals("update")){
+                                    intent.putExtra("position",position);
+                                }else {
+                                    intent.putExtra("position","00000");
+                                }
                                 intent.putExtra("bean",s1);
                                 setResult(ADDWORKHISTORY,intent);
                                 finish();

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -14,8 +15,10 @@ import android.view.View;
 
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.MessageAdapter;
+import com.icarexm.zhiquwang.bean.MessageBean;
 import com.icarexm.zhiquwang.contract.MessageContract;
 import com.icarexm.zhiquwang.presenter.MessagePresenter;
+import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.zhouyou.recyclerview.XRecyclerView;
 
 import java.util.ArrayList;
@@ -28,12 +31,13 @@ import butterknife.OnClick;
 public class MessageActivity extends BaseActivity implements MessageContract.View {
      @BindView(R.id.message_recyclerView)
     XRecyclerView mRecyclerView;
-    private List<String> list=new ArrayList<>();
     private Context mContext;
     private MessagePresenter messagePresenter;
     private String token;
     private String limit="20";
     private int page=0;
+    private List<MessageBean.DataBeanX.DataBean> dataBeanList=new ArrayList<>();
+    private MessageAdapter messageAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,14 +53,9 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
     }
 
     private void InitUI() {
-        list.add("1");
-        list.add("2");
-        list.add("3");
-        list.add("4");
-        list.add("5");
         mRecyclerView.setNestedScrollingEnabled(false);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
-        MessageAdapter messageAdapter = new MessageAdapter(mContext);
+        messageAdapter = new MessageAdapter(mContext);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setFootViewText("拼命加载中","已经全部");
         mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
@@ -75,7 +74,7 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
             }
         });
         mRecyclerView.setAdapter(messageAdapter);
-        messageAdapter.setListAll(list);
+        messageAdapter.setListAll(dataBeanList);
         mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
@@ -108,5 +107,17 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+
+    public void UpdateUI(int code ,String msg, MessageBean.DataBeanX data){
+        if (code==1){
+            dataBeanList = data.getData();
+            messageAdapter.setListAll(dataBeanList);
+            messageAdapter.notifyDataSetChanged();
+        }else if (code ==10001){
+            ToastUtils.showToast(mContext,msg);
+            startActivity(new Intent(mContext,LoginActivity.class));
+            finish();
+        }
     }
 }

@@ -115,7 +115,7 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_50"
             android:layout_weight="1"
-            android:background="@drawable/title_choosed_color"
+            android:background="@drawable/title_nochoosed_color"
             android:button="@null"
             android:gravity="center"
             android:text="区域"/>
@@ -211,7 +211,7 @@
         android:layout_width="@dimen/dp_85"
         android:layout_height="wrap_content"
         android:background="@color/white">
-        <ListView
+        <com.icarexm.zhiquwang.custview.NoScrollListView
             android:layout_centerHorizontal="true"
             android:id="@+id/fm_home_list_city"
             android:layout_width="wrap_content"
@@ -226,7 +226,7 @@
         android:layout_width="@dimen/dp_85"
         android:layout_height="wrap_content"
         android:background="@color/white">
-        <ListView
+        <com.icarexm.zhiquwang.custview.NoScrollListView
             android:layout_centerHorizontal="true"
             android:id="@+id/fm_home_list_salary"
             android:layout_width="wrap_content"
@@ -241,7 +241,7 @@
         android:layout_width="@dimen/dp_85"
         android:layout_height="wrap_content"
         android:background="@color/white">
-        <ListView
+        <com.icarexm.zhiquwang.custview.NoScrollListView
             android:layout_centerHorizontal="true"
             android:id="@+id/fm_home_list_age"
             android:layout_width="wrap_content"
@@ -256,7 +256,7 @@
         android:layout_width="@dimen/dp_85"
         android:layout_height="wrap_content"
         android:background="@color/white">
-        <ListView
+        <com.icarexm.zhiquwang.custview.NoScrollListView
             android:layout_centerHorizontal="true"
             android:id="@+id/fm_home_list_vocation"
             android:layout_width="wrap_content"
@@ -272,7 +272,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white">
-        <ListView
+        <com.icarexm.zhiquwang.custview.NoScrollListView
             android:layout_centerHorizontal="true"
             android:id="@+id/fm_home_list_environment"
             android:layout_width="wrap_content"

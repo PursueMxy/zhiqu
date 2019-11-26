@@ -3,6 +3,7 @@ package com.icarexm.zhiquwang.view.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -88,10 +89,21 @@ public class BusinessCooperationActivity extends BaseActivity implements Busines
     }
 
     public void UpdateUI(int code,String msg,String mobile){
-        tv_mobile.setText(mobile);
+        if (code==1) {
+            tv_mobile.setText(mobile);
+        }else if (code ==10001){
+            ToastUtils.showToast(mContext,msg);
+            startActivity(new Intent(mContext,LoginActivity.class));
+            finish();
+        }
     }
     public void UpdateUI(int code,String msg){
         if (code==1){
+            ToastUtils.showToast(mContext,msg);
+            finish();
+        }else if (code ==10001){
+            ToastUtils.showToast(mContext,msg);
+            startActivity(new Intent(mContext,LoginActivity.class));
             finish();
         }else {
             ToastUtils.showToast(mContext,msg);

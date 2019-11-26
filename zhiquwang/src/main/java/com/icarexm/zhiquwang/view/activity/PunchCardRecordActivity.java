@@ -3,6 +3,7 @@ package com.icarexm.zhiquwang.view.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import com.icarexm.zhiquwang.custview.calender.OnSignedSuccess;
 import com.icarexm.zhiquwang.custview.calender.SignDate;
 import com.icarexm.zhiquwang.presenter.PunchCardRecordPresenter;
 import com.icarexm.zhiquwang.utils.DateUtils;
+import com.icarexm.zhiquwang.utils.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -237,6 +239,10 @@ public class PunchCardRecordActivity extends BaseActivity implements PunchCardRe
             monthList.addAll(data.getMonth());
             adapterDate.notifyDataSetChanged();
             UpdateSlt(today);
+        }else if (code ==10001){
+            ToastUtils.showToast(mContext,msg);
+            startActivity(new Intent(mContext,LoginActivity.class));
+            finish();
         }
 
     }

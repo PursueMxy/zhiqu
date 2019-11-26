@@ -3,6 +3,7 @@ package com.icarexm.zhiquwang.view.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -28,17 +29,28 @@ public class AddBankCardActivity extends BaseActivity implements AddBankCardCont
     private AddBankCardPresenter addBankCardPresenter;
     private Context mContext;
     private String token;
+    private String type;
+    private int ADDBANK=20001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_bank_card);
         mContext = getApplicationContext();
+        Intent intent = getIntent();
+        type = intent.getStringExtra("type");
         SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
         ButterKnife.bind(this);
         addBankCardPresenter = new AddBankCardPresenter(this);
+
     }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+    }
+
     @OnClick({R.id.add_bank_card_img_back,R.id.add_bank_card_btn_confirm})
     public void onViewClick(View view){
         switch (view.getId()){
@@ -81,8 +93,19 @@ public class AddBankCardActivity extends BaseActivity implements AddBankCardCont
 
     public void UpdateUI(int code,String msg){
         if (code==1){
-          finish();
-        }else {
+            if (type.equals("20001")){
+                Intent intent = new Intent(mContext, BankListActivity.class);
+                setResult(ADDBANK,intent);
+                finish();
+            }else {
+              finish();
+            }
+        }else if (code ==10001){
+            ToastUtils.showToast(mContext,msg);
+            startActivity(new Intent(mContext,LoginActivity.class));
+            finish();
+        }
+        else {
             ToastUtils.showToast(mContext,msg);
         }
     }

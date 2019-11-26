@@ -3,6 +3,7 @@ package com.icarexm.zhiquwang.view.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -308,6 +309,12 @@ public class AttendanceCardActivity extends BaseActivity implements AttendanceCa
             monthList.clear();
             monthList.addAll(data.getMonth());
             adapterDate.notifyDataSetChanged();
+        }else if (code ==10001){
+            ToastUtils.showToast(mContext,msg);
+            startActivity(new Intent(mContext,LoginActivity.class));
+            finish();
+        }else {
+            ToastUtils.showToast(mContext,msg);
         }
     }
 
@@ -396,9 +403,12 @@ public class AttendanceCardActivity extends BaseActivity implements AttendanceCa
     }
 
     public void UpdateUI(int code,String msg){
-     if (code==1){
+        ToastUtils.showToast(mContext,msg);
+        if (code==1){
          attendanceCardPresenter.GetRepairInfo(token);
+     }else if (code ==10001){
+         startActivity(new Intent(mContext,LoginActivity.class));
+         finish();
      }
-     ToastUtils.showToast(mContext,msg);
     }
 }

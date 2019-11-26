@@ -2,6 +2,7 @@ package com.icarexm.zhiquwang.view.activity;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -123,5 +124,17 @@ public class ResetPasswordActivity extends BaseActivity implements ResetPassword
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+
+    public void UpdateUI(int code,String msg){
+     if (code==1){
+         ToastUtils.showToast(mContext,msg);
+         startActivity(new Intent(mContext,LoginActivity.class));
+         finish();
+     }else if (code ==10001){
+         ToastUtils.showToast(mContext,msg);
+         startActivity(new Intent(mContext,LoginActivity.class));
+         finish();
+     }
     }
 }

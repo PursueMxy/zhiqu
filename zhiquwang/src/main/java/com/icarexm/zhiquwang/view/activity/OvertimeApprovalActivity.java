@@ -81,6 +81,7 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
     private List<OvertimeApproverBean.DataBean.ClassesBean> classes_list=new ArrayList<>();
     private List<String> Festival_List=new ArrayList<>();
     private int classes_id;
+    private Integer SltDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +99,7 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
         InitHours();
         InitUI();
         todays=Integer.parseInt(DateUtil.getToday());
+        SltDay=todays;
         overtimeApprovalPresenter = new OvertimeApprovalPresenter(this);
         overtimeApprovalPresenter.GetOertimeRecords(token,TypeOfWork);
     }
@@ -138,8 +140,7 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
                 HoursDialog();
                 break;
             case R.id.overtime_approval_btn_confirms:
-                Log.e("提交","jdsfhjsd");
-                overtimeApprovalPresenter.GetdoRecords(token,TypeOfWork, classes_id+"",festival_id+"",overtime_hours,todays+"");
+                overtimeApprovalPresenter.GetdoRecords(token,TypeOfWork, classes_id+"",festival_id+"",overtime_hours,SltDay+"");
                 break;
 
         }
@@ -225,7 +226,6 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
                 viewHolder.tv.setBackgroundResource(R.drawable.bg_green_22);
             } else {
                 if (days.get(i) == today) {
-                    todays = days.get(i);
                     viewHolder.tv.setTextColor(Color.parseColor("#FFFFFF"));
                     viewHolder.tv.setBackgroundResource(R.drawable.bg_today_22);
                 } else {
@@ -238,6 +238,7 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
                 public void onClick(View view) {
                     Integer  integer = days.get(i);
                     if (monthList.size()+1> integer &&monthList.size()>1) {
+                        SltDay =integer;
                         if (status.get(i)) {
                             Toast.makeText(context, "重复选择", Toast.LENGTH_SHORT).show();
                         } else {
@@ -253,8 +254,8 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
                         String classes_id = monthList.get(integer-1).getClasses_id();
                         String festival_id = monthList.get(integer-1).getFestival_id();
                         overtime_hours = monthList.get(integer-1).getHours();
-                        todays = days.get(i);
-                        UpdateUI(classes_id,festival_id,overtime_hours);
+                        UpdateUI( festival_id,classes_id,overtime_hours);
+
                     }else {
                         ToastUtils.showToast(mContext,"超出当前时间");
                     }
@@ -276,7 +277,18 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
 
     public void UpdateUI(String classes_id,String festival_id,String hours){
         tv_hours.setText(hours+"小时");
+        tv_classes.setText(classes_id);
+        tv_festival.setText(festival_id);
+    }
 
+    public void UpdateUI(int code,String msg){
+        if (code ==10001){
+            ToastUtils.showToast(mContext,msg);
+            startActivity(new Intent(mContext,LoginActivity.class));
+            finish();
+        }else {
+            ToastUtils.showToast(mContext, msg);
+        }
     }
 
     //班次

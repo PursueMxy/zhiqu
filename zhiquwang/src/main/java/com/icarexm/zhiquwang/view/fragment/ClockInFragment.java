@@ -59,7 +59,7 @@ public class ClockInFragment extends Fragment implements View.OnClickListener {
     private TextView tv_clockInDt;
     private TextView tv_clockOutDt;
     private String todaySecond;
-    private LinearLayout ll_playStatus;
+    private RelativeLayout ll_playStatus;
     private TextView tv_start_time;
     private TextView tv_end_time;
     private double latitude;
@@ -184,6 +184,7 @@ public class ClockInFragment extends Fragment implements View.OnClickListener {
         inflate.findViewById(R.id.fm_clock_in_rl_attendance).setOnClickListener(this);
         inflate.findViewById(R.id.fm_clock_in_punch_card_record).setOnClickListener(this);
         inflate.findViewById(R.id.fm_clock_in_set_reminder).setOnClickListener(this);
+        inflate.findViewById(R.id.fm_clcokin_tv_start_recruit).setOnClickListener(this);
         rl_clockin = inflate.findViewById(R.id.fm_clockin_rl_clockin);
         rl_clockin.setOnClickListener(this);
         rl_clockOut = inflate.findViewById(R.id.fm_clockin_rl_clockOut);
@@ -225,6 +226,11 @@ public class ClockInFragment extends Fragment implements View.OnClickListener {
             case R.id.fm_clockin_rl_clockOut:
                 ToPlay("2");
                 break;
+            case R.id.fm_clcokin_tv_start_recruit:
+                Intent intent = new Intent(mContext, HomeActivity.class);
+                intent.putExtra("currentItems","0");
+                startActivity(intent);
+                break;
         }
     }
 
@@ -237,7 +243,7 @@ public class ClockInFragment extends Fragment implements View.OnClickListener {
             todaySecond = DateUtils.getTodaySecond();
             tv_clockInDt.setText(todaySecond);
             tv_clockOutDt.setText(todaySecond);
-            TimeHandle.postDelayed(TimeRunnable,1000);
+            TimeHandle.postDelayed(TimeRunnable,5000);
         }
     };
 

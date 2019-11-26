@@ -1,5 +1,7 @@
 package com.icarexm.zhiquwang.presenter;
 
+import com.google.gson.GsonBuilder;
+import com.icarexm.zhiquwang.bean.PublicCodeBean;
 import com.icarexm.zhiquwang.contract.ResetPasswordContract;
 import com.icarexm.zhiquwang.model.ResetPasswordModel;
 
@@ -26,7 +28,8 @@ public class ResetPasswordPresenter implements ResetPasswordContract.Presenter {
 
     //数据返回
     public void SetFindPass(String content){
-
+        PublicCodeBean publicCodeBean = new GsonBuilder().create().fromJson(content, PublicCodeBean.class);
+        mView.UpdateUI(publicCodeBean.getCode(),publicCodeBean.getMsg());
     }
 
 }

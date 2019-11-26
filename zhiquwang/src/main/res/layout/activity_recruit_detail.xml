@@ -45,7 +45,7 @@
                           android:layout_marginTop="@dimen/dp_10"
                           android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
-                          android:text="职位名称XXXXX限制最多18个字..."
+                          android:text=""
                           android:textColor="@color/ff28292d"
                           android:textSize="@dimen/sp_15"
                           android:maxLength="18"
@@ -57,7 +57,7 @@
                           android:layout_marginTop="@dimen/dp_7"
                           android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
-                          android:text="4000-5500/月 (25元/小时)"
+                          android:text=""
                           android:textColor="#ff4e4d4d"
                           android:textSize="12sp"
                           />
@@ -94,7 +94,7 @@
                           android:layout_marginTop="@dimen/dp_13"
                           android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
-                          android:text="在乎科技有限公司"
+                          android:text=""
                           android:textColor="@color/ff4e4d4d"
                           android:textSize="@dimen/sp_14"
                           />
@@ -111,7 +111,7 @@
                           android:lines="1"
                           android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
-                          android:text="福建省厦门市思明区连扳国贸大厦"
+                          android:text=""
                           android:textColor="#ffa5a5a5"
                           android:textSize="@dimen/sp_12"
                           />
@@ -129,7 +129,7 @@
                               android:layout_centerVertical="true"
                               android:layout_width="wrap_content"
                               android:layout_height="wrap_content"
-                              android:text="在职满30天立返￥5"
+                              android:text=""
                               android:textColor="@color/white"
                               android:textSize="@dimen/sp_11"
                               android:lines="1"
@@ -162,7 +162,7 @@
                         android:layout_marginLeft="@dimen/dp_10"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="综合工资：4000-5500/月"
+                        android:text="综合工资：0/月"
                         android:textColor="@color/ff4e4d4d"
                         android:textSize="@dimen/sp_14"
                         />
@@ -173,7 +173,7 @@
                         android:id="@+id/recruit_dtl_tv_hourSalary"
                         android:layout_width="134dp"
                         android:layout_height="19dp"
-                        android:text="小时工资：25元/小时"
+                        android:text="小时工资：0元/小时"
                         android:textColor="#ff4e4d4d"
                         android:textSize="14sp"
                         />
@@ -197,7 +197,7 @@
                         android:id="@+id/recruit_dtl_tv_other_benefits"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="包吃包住、交通补贴、包吃包住、交通补贴"
+                        android:text=""
                         android:textColor="@color/ff4e4d4d"
                         android:textSize="@dimen/sp_14"
                         />
@@ -228,7 +228,7 @@
                         android:layout_marginLeft="@dimen/dp_10"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="性别年龄：男24-30  女25-30"
+                        android:text="性别年龄："
                         android:textColor="@color/ff4e4d4d"
                         android:textSize="@dimen/sp_14"
                         />
@@ -239,7 +239,7 @@
                         android:id="@+id/recruit_dtl_ask_tv_education"
                         android:layout_width="134dp"
                         android:layout_height="19dp"
-                        android:text="学      历： 初中及以上"
+                        android:text="学      历： "
                         android:textColor="#ff4e4d4d"
                         android:textSize="14sp"
                         />
@@ -251,7 +251,7 @@
                         android:id="@+id/recruit_dtl_ask_tv_workingLife"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="工作年限：不限"
+                        android:text="工作年限："
                         android:textColor="@color/ff4e4d4d"
                         android:textSize="@dimen/sp_14"
                         />
@@ -276,7 +276,7 @@
                         android:id="@+id/recruit_dtl_tv_other_ask"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1. 要有驾驶证  2. 能服从公司安排  3. XXXXXXXXXXX"
+                        android:text=""
                         android:textColor="@color/ff4e4d4d"
                         android:textSize="@dimen/sp_14"
                         />
@@ -307,7 +307,7 @@
                         android:layout_marginLeft="@dimen/dp_10"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1. 从事公司安保相关工作"
+                        android:text="1. "
                         android:textColor="@color/ff4e4d4d"
                         android:textSize="@dimen/sp_14"
                         />
@@ -331,7 +331,7 @@
                         android:id="@+id/recruit_dtl_tv_commuteDt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="白班(8：00-22：00)\n夜班(23：00-5：00)"
+                        android:text=""
                         android:textColor="@color/ff4e4d4d"
                         android:textSize="@dimen/sp_14"
                         android:layout_marginBottom="@dimen/dp_10"
@@ -362,7 +362,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:lineSpacingExtra="@dimen/dp_5"
-                        android:text="在乎科技成立于2015年，总部位于厦门，专注于移动互联网应用解决方案领域，以互联网技术驱动为核心，为客户提供专业高效的产品与技术服务，助力企业的互联网+转型，通过信息化提升企业运作效率与竞争力；我们崇尚互联网产品思维，坚信技术创造更美好的未来，不断的去发现和创造更符合用户需求的产品，致力于成为行业领先的移动互联网应用方案服务商"
+                        android:text=""
                         android:textColor="#ff4e4d4d"
                         android:textSize="14sp"
                         />

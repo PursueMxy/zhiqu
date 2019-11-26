@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context=".view.activity.OvertimeStatisticsActivity">
     <RelativeLayout
         android:background="@color/white"
@@ -65,6 +66,7 @@
               android:textSize="@dimen/sp_19"
               />
           <TextView
+               android:id="@+id/overtime_statistics_tv_money"
               android:layout_marginTop="@dimen/dp_6"
               android:layout_centerHorizontal="true"
               android:layout_below="@+id/overtime_statistics_jbsr"
@@ -77,6 +79,7 @@
       </RelativeLayout>
 
     <TextView
+        android:id="@+id/overtime_statistics_total_day"
         android:layout_marginTop="@dimen/dp_20"
         android:layout_below="@+id/overtime_statistics_rl_one"
         android:gravity="center"

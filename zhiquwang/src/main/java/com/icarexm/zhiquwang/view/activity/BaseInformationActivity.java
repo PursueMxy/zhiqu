@@ -152,14 +152,22 @@ public class BaseInformationActivity extends BaseActivity implements BaseInforma
             tv_is_auth.setText(data.getIs_auth());
             tv_mobile.setText(data.getMobile());
             tv_name.setText(data.getUser_name());
-            Glide.with(mContext).load(data.getAvatar()).into(img_avatar);
+            Glide.with(mContext).load(RequstUrl.URL.HOST+data.getAvatar()).into(img_avatar);
             url=data.getAvatar();
+        }else if (code ==10001){
+            ToastUtils.showToast(mContext,msg);
+            startActivity(new Intent(mContext,LoginActivity.class));
+            finish();
         }
     }
 
     public void UpdateUI(int code,String msg){
         if (code==1){
              finish();
+        }else if (code ==10001){
+            ToastUtils.showToast(mContext,msg);
+            startActivity(new Intent(mContext,LoginActivity.class));
+            finish();
         }else {
             ToastUtils.showToast(mContext,msg);
         }

@@ -26,6 +26,8 @@ import com.icarexm.zhiquwang.bean.AddResumeBean;
 import com.icarexm.zhiquwang.bean.ResumeBean;
 import com.icarexm.zhiquwang.contract.MyResumeContract;
 import com.icarexm.zhiquwang.presenter.MyResumePresenter;
+import com.icarexm.zhiquwang.utils.RequstUrl;
+import com.icarexm.zhiquwang.utils.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,9 +72,9 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_resume);
         mContext = getApplicationContext();
-        ButterKnife.bind(this);
         SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
+        ButterKnife.bind(this);
         InitUI();
         myResumePresenter = new MyResumePresenter(this);
         myResumePresenter.GetMineInfo(token);
@@ -81,19 +83,21 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
 
 
     private void InitUI() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false){
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        };
-        mRecyclerView.setLayoutManager(layoutManager);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
+        mRecyclerView.setLayoutManager(mLayoutManager);
         myResumeAdapter = new MyResumeAdapter(mContext,addResumeList);
         mRecyclerView.setAdapter(myResumeAdapter);
         myResumeAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(mContext, AddWorkHistoryActivity.class);
+                intent.putExtra("type","update");
+                intent.putExtra("company_name",addResumeList.get(position).getCompany_name());
+                intent.putExtra("job_content",addResumeList.get(position).getJob_content());
+                intent.putExtra("job_start",addResumeList.get(position).getJob_start());
+                intent.putExtra("job_end",addResumeList.get(position).getJob_end());
+                intent.putExtra("leave_cause",addResumeList.get(position).getLeave_cause());
+                intent.putExtra("position",position+"");
                 startActivityForResult(intent,ADDWORKHISTORY);
             }
         });
@@ -118,6 +122,7 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
                 break;
             case R.id.my_resume_add_workHistory:
                 Intent intent = new Intent(mContext, AddWorkHistoryActivity.class);
+                intent.putExtra("type","add");
                 startActivityForResult(intent,ADDWORKHISTORY);
                 break;
             case R.id.my_resume_btn_confirm:
@@ -140,6 +145,10 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
         super.onActivityResult(requestCode, resultCode, data);
             if (requestCode==ADDWORKHISTORY&&resultCode==ADDWORKHISTORY){
                 String bean = data.getStringExtra("bean");
+                String position = data.getStringExtra("position");
+                if (!position.equals("00000")){
+                    addResumeList.remove(Integer.parseInt(position));
+                }
                 addResumeList.add(new GsonBuilder().create().fromJson(bean,ResumeBean.DataBean.ExperienceBean.class));
                 experience = new GsonBuilder().create().toJson(addResumeList);
                 myResumeAdapter = new MyResumeAdapter(mContext,addResumeList);
@@ -148,6 +157,13 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
                     @Override
                     public void onItemClick(View view, int position) {
                         Intent intent = new Intent(mContext, AddWorkHistoryActivity.class);
+                        intent.putExtra("type","update");
+                        intent.putExtra("company_name",addResumeList.get(position).getCompany_name());
+                        intent.putExtra("job_content",addResumeList.get(position).getJob_content());
+                        intent.putExtra("job_start",addResumeList.get(position).getJob_start());
+                        intent.putExtra("job_end",addResumeList.get(position).getJob_end());
+                        intent.putExtra("leave_cause",addResumeList.get(position).getLeave_cause());
+                        intent.putExtra("position",position+"");
                         startActivityForResult(intent,ADDWORKHISTORY);
                     }
                 });
@@ -169,7 +185,7 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
         if (code==1){
          tv_name.setText(data.getUser_name());
          tv_education.setText(data.getEducation());
-          Glide.with(mContext).load(data.getAvatar()).into(img_acatar);
+          Glide.with(mContext).load(RequstUrl.URL.HOST+data.getAvatar()).into(img_acatar);
           avatar = data.getAvatar();
           real_name = data.getUser_name();
           birth = data.getBirth();
@@ -178,17 +194,30 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
           sex = data.getSex();
           age = data.getAge();
           mobile = data.getMobile();
-          tv_education.setText(age+education);
-          addResumeList= data.getExperience();
+          tv_education.setText(age+"·"+education);
+          addResumeList = data.getExperience();
           myResumeAdapter = new MyResumeAdapter(mContext,addResumeList);
           mRecyclerView.setAdapter(myResumeAdapter);
           myResumeAdapter.setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position) {
                     Intent intent = new Intent(mContext, AddWorkHistoryActivity.class);
+                    intent.putExtra("type","update");
+                    intent.putExtra("company_name",addResumeList.get(position).getCompany_name());
+                    intent.putExtra("job_content",addResumeList.get(position).getJob_content());
+                    intent.putExtra("job_start",addResumeList.get(position).getJob_start());
+                    intent.putExtra("job_end",addResumeList.get(position).getJob_end());
+                    intent.putExtra("leave_cause",addResumeList.get(position).getLeave_cause());
+                    intent.putExtra("position",position+"");
                     startActivityForResult(intent,ADDWORKHISTORY);
                 }
             });
+        }else if (code==20002){
+            ToastUtils.showToast(mContext,msg);
+        }else if (code ==10001){
+            ToastUtils.showToast(mContext,msg);
+            startActivity(new Intent(mContext,LoginActivity.class));
+            finish();
         }
     }
 }

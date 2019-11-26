@@ -38,7 +38,7 @@ public class OvertimeApprovalModel implements OvertimeApprovalContract.Model {
                                 .execute(new StringCallback() {
                                     @Override
                                     public void onSuccess(Response<String> response) {
-
+                                       approvalPresenter.SetRecorde(response.body());
                                     }
                                 });
     }

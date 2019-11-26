@@ -5,6 +5,7 @@ public interface ResetPasswordContract {
     }
 
     interface View {
+        void UpdateUI(int code,String msg);
     }
 
     interface Presenter {

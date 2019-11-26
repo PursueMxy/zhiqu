@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.icarexm.zhiquwang">
+
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -19,22 +20,17 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 在SDCard中创建与删除文件权限 -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-
-    <!-- Required -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- Required -->
     <permission
         android:name="com.icarexm.zhiquwang.permission.JPUSH_MESSAGE"
-        android:protectionLevel="signature" />
-
-    <!-- Required -->
+        android:protectionLevel="signature" /> <!-- Required -->
     <uses-permission android:name="com.icarexm.zhiquwang.permission.JPUSH_MESSAGE" />
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-    <!-- Optional. Required for location feature -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+        tools:ignore="ProtectedPermissions" /> <!-- Optional. Required for location feature -->
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 用于开启 debug 版本的应用在 6.0 系统上的层叠窗口权限 -->
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
@@ -44,22 +40,19 @@
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".view.activity.BankListActivity"  android:launchMode="singleTask"></activity>
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="a3943e611480b87c48027607be918ad4"/>
-        <activity android:name=".view.activity.LunchActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:value="a3943e611480b87c48027607be918ad4" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity android:name=".view.activity.LunchActivity">
         </activity>
         <activity android:name=".view.activity.OvertimeApprovalActivity" />
         <activity android:name=".view.activity.SetReminderActivity" />
@@ -97,21 +90,32 @@
         <activity android:name=".view.activity.NearbyStoreActivity" />
         <activity android:name=".view.activity.RecruitDetailActivity" />
         <activity android:name=".view.activity.RecruitActivity" />
-        <activity android:name=".view.activity.HomeActivity" />
+        <activity android:name=".view.activity.HomeActivity"  android:launchMode="singleTask" />
         <activity android:name=".view.activity.EditPersonalActivity" />
         <activity android:name=".view.activity.UserAgreementActivity" />
         <activity android:name=".view.activity.ResetPasswordActivity" />
-        <activity android:name=".view.activity.LogonActivity"  android:launchMode="singleTask"/>
+        <activity
+            android:name=".view.activity.LogonActivity"
+            android:launchMode="singleTask" />
         <activity android:name=".view.activity.LoginActivity" />
-        <activity android:name=".view.activity.GuidePageActivity"></activity>
+        <activity android:name=".view.activity.GuidePageActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".MainActivity" />
-        <activity android:name=".wxapi.WXEntryActivity"
-            android:taskAffinity="net.sourceforge.simcpux"
-            android:launchMode="singleTask"
-            android:exported="true"
+        <activity
+            android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"></activity>
-        <service android:name="com.amap.api.location.APSService"></service>
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:taskAffinity="net.sourceforge.simcpux" />
+
+        <service android:name="com.amap.api.location.APSService" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.icarexm.zhiquwang.fileprovider"
@@ -120,36 +124,36 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths_public" />
-        </provider>
-
-        <!-- 若您的业务中有使用极光富媒体功能，或者极光早上好功能，需要把此 Activity 的 exported 修改成 true 覆盖 jcenter 上的组件。 -->
+        </provider> <!-- 若您的业务中有使用极光富媒体功能，或者极光早上好功能，需要把此 Activity 的 exported 修改成 true 覆盖 jcenter 上的组件。 -->
         <activity
             android:name="cn.jpush.android.ui.PopWinActivity"
             android:exported="true"
-            tools:node="replace"
-            android:theme="@style/MyDialogStyle">
+            android:theme="@style/MyDialogStyle"
+            tools:node="replace">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <action android:name="cn.jpush.android.ui.PopWinActivity" />
+
                 <category android:name="com.icarexm.zhiquwang" />
             </intent-filter>
-        </activity>
-
-        <!-- 若您的业务中有使用极光富媒体功能，或者极光早上好功能，需要把此 Activity 的 exported 修改成 true 覆盖 jcenter 上的组件。 -->
+        </activity> <!-- 若您的业务中有使用极光富媒体功能，或者极光早上好功能，需要把此 Activity 的 exported 修改成 true 覆盖 jcenter 上的组件。 -->
         <activity
             android:name="cn.jpush.android.ui.PushActivity"
             android:configChanges="orientation|keyboardHidden"
             android:exported="true"
-            tools:node="replace"
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:theme="@android:style/Theme.NoTitleBar"
+            tools:node="replace">
             <intent-filter>
                 <action android:name="cn.jpush.android.ui.PushActivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="com.icarexm.zhiquwang" />
             </intent-filter>
         </activity>
 
-        <service android:name=".PushService"
+        <service
+            android:name=".PushService"
             android:enabled="true"
             android:exported="false"
             android:process=":pushcore">
@@ -157,7 +161,6 @@
                 <action android:name="cn.jiguang.user.service.action" />
             </intent-filter>
         </service>
-
     </application>
 
 </manifest>

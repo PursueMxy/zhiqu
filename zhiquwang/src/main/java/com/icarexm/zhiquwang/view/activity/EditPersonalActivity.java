@@ -18,6 +18,7 @@ import android.widget.EditText;
 import com.bumptech.glide.Glide;
 import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
+import com.icarexm.zhiquwang.bean.PublicResultBean;
 import com.icarexm.zhiquwang.bean.UploadImgBean;
 import com.icarexm.zhiquwang.custview.CircleImageView;
 import com.icarexm.zhiquwang.utils.GifSizeFilter;
@@ -77,11 +78,20 @@ public class EditPersonalActivity extends BaseActivity {
                         OkGo.<String>post(RequstUrl.URL.setUsername)
                                 .params("token", token)
                                 .params("username", nickname)
-                                .params("avatar",RequstUrl.URL.HOST+ url)
+                                .params("avatar",url)
                                 .execute(new StringCallback() {
                                     @Override
                                     public void onSuccess(Response<String> response) {
-
+                                        PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
+                                        if (resultBean.getCode()==1){
+                                         startActivity(new Intent(mContext,HomeActivity.class));
+                                        }else if (resultBean.getCode() ==10001){
+                                            ToastUtils.showToast(mContext,resultBean.getMsg());
+                                            startActivity(new Intent(mContext,LoginActivity.class));
+                                            finish();
+                                        }else {
+                                            ToastUtils.showToast(mContext,resultBean.getMsg());
+                                        }
                                     }
                                 });
                     }else {

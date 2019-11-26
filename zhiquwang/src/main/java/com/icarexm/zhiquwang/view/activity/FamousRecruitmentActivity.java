@@ -29,9 +29,11 @@ import com.icarexm.zhiquwang.adapter.FRAdapter;
 import com.icarexm.zhiquwang.bean.HomeBannerBean;
 import com.icarexm.zhiquwang.bean.HomeDataBean;
 import com.icarexm.zhiquwang.contract.FamousRecruitmentContract;
+import com.icarexm.zhiquwang.custview.NoScrollListView;
 import com.icarexm.zhiquwang.presenter.FamousRecruitmentPresenter;
 import com.icarexm.zhiquwang.utils.MxyUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
+import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.icarexm.zhiquwang.view.fragment.HomeFragment;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
@@ -52,15 +54,15 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
      @BindView(R.id.famous_recruitment_tv_title)
     TextView tv_title;
      @BindView(R.id.famous_recruitment_list_city)
-    ListView list_city;
+     NoScrollListView list_city;
      @BindView(R.id.famous_recruitment_list_salary)
-     ListView list_salary;
+     NoScrollListView list_salary;
     @BindView(R.id.famous_recruitment_list_age)
-    ListView list_age;
+    NoScrollListView list_age;
     @BindView(R.id.famous_recruitment_list_vocation)
-    ListView list_vocation;
+    NoScrollListView list_vocation;
     @BindView(R.id.famous_recruitment_list_environment)
-    ListView list_environment;
+    NoScrollListView list_environment;
     @BindView(R.id.famous_recruitment_rl_city)
     RelativeLayout rl_city;
     @BindView(R.id.famous_recruitment_rl_salary)
@@ -186,7 +188,7 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 switch (i){
-                    case R.id.fm_home_radiobutton_area:
+                    case R.id.famous_recruitment_radiobutton_area:
                         radiobutton_area.setBackgroundResource(R.drawable.title_choosed_color);
                         radiobutton_area.setTextColor(getResources().getColor(R.color.ff00b6ce));
                         radiobutton_salary.setBackgroundResource(R.drawable.title_nochoosed_color);
@@ -202,7 +204,7 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
                         rl_vocation.setVisibility(View.GONE);
                         rl_environment.setVisibility(View.GONE);
                         break;
-                    case R.id.fm_home_radiobutton_salary:
+                    case R.id.famous_recruitment_radiobutton_salary:
                         radiobutton_area.setBackgroundResource(R.drawable.title_nochoosed_color);
                         radiobutton_area.setTextColor(getResources().getColor(R.color.ff4e4d4d));
                         radiobutton_salary.setBackgroundResource(R.drawable.title_choosed_color);
@@ -218,7 +220,7 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
                         rl_vocation.setVisibility(View.GONE);
                         rl_environment.setVisibility(View.GONE);
                         break;
-                    case R.id.fm_home_radiobutton_age:
+                    case R.id.famous_recruitment_radiobutton_age:
                         radiobutton_area.setBackgroundResource(R.drawable.title_nochoosed_color);
                         radiobutton_area.setTextColor(getResources().getColor(R.color.ff4e4d4d));
                         radiobutton_salary.setBackgroundResource(R.drawable.title_nochoosed_color);
@@ -234,7 +236,7 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
                         rl_vocation.setVisibility(View.GONE);
                         rl_environment.setVisibility(View.GONE);
                         break;
-                    case R.id.fm_home_radiobutton_trade:
+                    case R.id.famous_recruitment_radiobutton_trade:
                         radiobutton_area.setBackgroundResource(R.drawable.title_nochoosed_color);
                         radiobutton_area.setTextColor(getResources().getColor(R.color.ff4e4d4d));
                         radiobutton_salary.setBackgroundResource(R.drawable.title_nochoosed_color);
@@ -250,7 +252,7 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
                         rl_age.setVisibility(View.GONE);
                         rl_environment.setVisibility(View.GONE);
                         break;
-                    case R.id.fm_home_radiobutton_work:
+                    case R.id.famous_recruitment_radiobutton_work:
                         radiobutton_area.setBackgroundResource(R.drawable.title_nochoosed_color);
                         radiobutton_area.setTextColor(getResources().getColor(R.color.ff4e4d4d));
                         radiobutton_salary.setBackgroundResource(R.drawable.title_nochoosed_color);
@@ -380,7 +382,7 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
         list_city.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                age_id=area_list.get(i).getArea_id()+"";
+                area_id=area_list.get(i).getArea_id()+"";
                 rl_city.setVisibility(View.GONE);
                 IsArea=true;
             }
@@ -454,6 +456,10 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
           homeDataList = data.getData();
           frAdapter.setListAll(homeDataList);
           frAdapter.notifyDataSetChanged();
+      }else if (code ==10001){
+          ToastUtils.showToast(mContext,msg);
+          startActivity(new Intent(mContext,LoginActivity.class));
+          finish();
       }
     }
 

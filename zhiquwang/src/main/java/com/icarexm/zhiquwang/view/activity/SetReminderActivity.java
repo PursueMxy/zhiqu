@@ -3,6 +3,7 @@ package com.icarexm.zhiquwang.view.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -262,6 +263,10 @@ public class SetReminderActivity extends BaseActivity implements SetReminderCont
     public void UpdateUI(int code,String msg){
         if (code==1){
             finish();
+        }else if (code ==10001){
+            ToastUtils.showToast(mContext,msg);
+            startActivity(new Intent(mContext,LoginActivity.class));
+            finish();
         }else {
             ToastUtils.showToast(mContext,msg);
         }
@@ -292,6 +297,10 @@ public class SetReminderActivity extends BaseActivity implements SetReminderCont
             tv_stop_time.setText(data.getEnd_time());
             liteWeekBeanList = LitePal.findAll(LiteWeekBean.class);
             myAdapter.notifyDataSetChanged();
+        }else if (code ==10001){
+            ToastUtils.showToast(mContext,msg);
+            startActivity(new Intent(mContext,LoginActivity.class));
+            finish();
         }
     }
 }

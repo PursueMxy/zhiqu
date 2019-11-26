@@ -76,7 +76,7 @@
              android:layout_marginLeft="@dimen/dp_35"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
-             android:text="2050.00"
+             android:text="0.00"
              android:textColor="@color/white"
              android:textSize="@dimen/sp_22"
              />
@@ -111,7 +111,7 @@
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="50.00"
+                android:text="0.00"
                 android:textColor="@color/ff4e4d4d"
                 android:textSize="@dimen/sp_19"
                 />
@@ -145,7 +145,7 @@
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="10H"
+                android:text="0H"
                 android:textColor="@color/ff4e4d4d"
                 android:textSize="@dimen/sp_19"
                 />
@@ -166,7 +166,17 @@
           android:layout_marginTop="@dimen/dp_10"
           android:layout_below="@+id/fm_record_overtime_ll"
           android:layout_width="match_parent"
-          android:layout_height="@dimen/dp_100">
+          android:layout_height="@dimen/dp_101">
+          <RelativeLayout
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/dp_50">
+              <ImageView
+                  android:layout_alignParentRight="true"
+                  android:layout_centerVertical="true"
+                  android:layout_marginRight="@dimen/dp_15"
+                  android:src="@mipmap/ic_right_gray"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content" />
          <TextView
              android:id="@+id/fm_record_overtime_overtime_approval"
              android:gravity="center|left"
@@ -180,13 +190,16 @@
              android:textColor="@color/ff4e4d4d"
              android:textSize="@dimen/sp_14"
              />
+          </RelativeLayout>
          <View
              android:layout_marginRight="@dimen/dp_10"
              android:layout_marginLeft="@dimen/dp_10"
-             android:background="@color/ff4e4d4d"
+             android:background="#fff2f2f2"
              android:layout_width="match_parent"
              android:layout_height="@dimen/dp_1"/>
-
+          <RelativeLayout
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/dp_50">
          <TextView
              android:id="@+id/fm_record_overtime_overtime_statistics"
              android:gravity="center|left"
@@ -200,6 +213,14 @@
              android:textColor="@color/ff4e4d4d"
              android:textSize="@dimen/sp_14"
              />
+          <ImageView
+              android:layout_alignParentRight="true"
+              android:layout_centerVertical="true"
+              android:layout_marginRight="@dimen/dp_15"
+              android:src="@mipmap/ic_right_gray"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content" />
+          </RelativeLayout>
       </LinearLayout>
    </RelativeLayout>
 
@@ -264,7 +285,7 @@
                 android:layout_marginLeft="@dimen/dp_35"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2050.00"
+                android:text="0.00"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_22"
                 />
@@ -303,6 +324,9 @@
             android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_100">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50">
             <TextView
                 android:id="@+id/fm_record_overtime_overtime_two_tv_approval"
                 android:gravity="center"
@@ -316,13 +340,23 @@
                 android:textColor="@color/ff4e4d4d"
                 android:textSize="@dimen/sp_14"
                 />
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/dp_15"
+                    android:src="@mipmap/ic_right_gray"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
             <View
                 android:layout_marginRight="@dimen/dp_10"
                 android:layout_marginLeft="@dimen/dp_10"
                 android:background="@color/fff2f2f2"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_1"/>
-
+           <RelativeLayout
+               android:layout_width="match_parent"
+               android:layout_height="@dimen/dp_50">
             <TextView
                 android:id="@+id/fm_record_overtime_overtime_two_tv_statistics"
                 android:gravity="center"
@@ -336,6 +370,14 @@
                 android:textColor="@color/ff4e4d4d"
                 android:textSize="@dimen/sp_14"
                 />
+               <ImageView
+                   android:layout_alignParentRight="true"
+                   android:layout_centerVertical="true"
+                   android:layout_marginRight="@dimen/dp_15"
+                   android:src="@mipmap/ic_right_gray"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content" />
+           </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>
 </FrameLayout>

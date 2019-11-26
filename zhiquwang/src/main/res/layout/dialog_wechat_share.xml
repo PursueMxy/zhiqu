@@ -9,6 +9,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp_119">
     <TextView
+        android:id="@+id/dialog_wechat_share_tv_friend"
         android:drawablePadding="@dimen/dp_8"
         android:drawableTop="@mipmap/ic_wechat"
         android:layout_weight="1"

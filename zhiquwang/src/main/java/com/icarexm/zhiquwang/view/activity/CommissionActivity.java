@@ -1,6 +1,7 @@
 package com.icarexm.zhiquwang.view.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.CommissionAdapter;
 import com.icarexm.zhiquwang.bean.SeeFundBean;
+import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.zhouyou.recyclerview.XRecyclerView;
 
 import java.util.ArrayList;
@@ -81,11 +83,17 @@ public class CommissionActivity extends BaseActivity {
     }
 
     public void Update(int code, String msg, SeeFundBean.DataBeanX data){
-        SeeFundBean.DataBeanX.ListBean list = data.getList();
-        dataList = list.getData();
-        commissionAdapter.setListAll(dataList);
-        commissionAdapter.notifyDataSetChanged();
-        String total_price = data.getTotal_price();
-        tv_money.setText(total_price);
+        if (code==1) {
+            SeeFundBean.DataBeanX.ListBean list = data.getList();
+            dataList = list.getData();
+            commissionAdapter.setListAll(dataList);
+            commissionAdapter.notifyDataSetChanged();
+            String total_price = data.getTotal_price();
+            tv_money.setText(total_price);
+        }else if (code ==10001){
+            ToastUtils.showToast(mContext,msg);
+            startActivity(new Intent(mContext,LoginActivity.class));
+            finish();
+        }
     }
 }

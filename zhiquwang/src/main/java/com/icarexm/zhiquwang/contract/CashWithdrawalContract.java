@@ -10,6 +10,7 @@ public interface CashWithdrawalContract {
 
     interface View {
         void BankList(int code, String msg, List<MyBankBean.DataBean> data);
+        void UpdateUI(int code,String msg);
     }
 
     interface Presenter {

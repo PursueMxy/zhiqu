@@ -102,6 +102,7 @@
            android:layout_height="@dimen/dp_1"
            android:background="@drawable/fff2f2f2"/>
        <RelativeLayout
+           android:id="@+id/my_to_join_rl_address"
            android:background="@color/white"
            android:layout_width="match_parent"
            android:layout_height="@dimen/dp_51">

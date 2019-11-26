@@ -15,6 +15,7 @@ import com.icarexm.zhiquwang.contract.DistributionTeamContract;
 import com.icarexm.zhiquwang.custview.CircleImageView;
 import com.icarexm.zhiquwang.presenter.DistributionTeamPresenter;
 import com.icarexm.zhiquwang.utils.RequstUrl;
+import com.icarexm.zhiquwang.utils.ToastUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -79,8 +80,14 @@ public class DistributionTeamActivity extends BaseActivity implements Distributi
     }
 
     public void UpdateUI(int code,String msg, TeamBean.DataBean data){
-        tv_money.setText(data.getTotal_commission());
-        tv_nickname.setText(data.getUser_name());
-        Glide.with(mContext).load(RequstUrl.URL.HOST+data.getAvatar()).into(img_head);
+        if (code==1) {
+            tv_money.setText(data.getTotal_commission());
+            tv_nickname.setText(data.getUser_name());
+            Glide.with(mContext).load(RequstUrl.URL.HOST + data.getAvatar()).into(img_head);
+        }else if (code ==10001){
+            ToastUtils.showToast(mContext,msg);
+            startActivity(new Intent(mContext,LoginActivity.class));
+            finish();
+        }
     }
 }

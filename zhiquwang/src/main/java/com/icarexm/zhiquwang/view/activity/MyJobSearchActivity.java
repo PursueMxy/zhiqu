@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import com.icarexm.zhiquwang.bean.JobSearchBean;
 import com.icarexm.zhiquwang.contract.MyJobSearchContract;
 import com.icarexm.zhiquwang.presenter.MyJobSearchPresenter;
 import com.icarexm.zhiquwang.utils.MxyUtils;
+import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.zhouyou.recyclerview.XRecyclerView;
 
 import java.util.ArrayList;
@@ -113,6 +115,10 @@ public class MyJobSearchActivity extends BaseActivity implements MyJobSearchCont
             dataList = data.getData();
             myJobSearchAdapter.setListAll(dataList);
             myJobSearchAdapter.notifyDataSetChanged();
+        }else if (code ==10001){
+            ToastUtils.showToast(mContext,msg);
+            startActivity(new Intent(mContext,LoginActivity.class));
+            finish();
         }
     }
 }

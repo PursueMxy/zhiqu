@@ -43,9 +43,11 @@ import com.icarexm.zhiquwang.adapter.TodayHeatAdapter;
 import com.icarexm.zhiquwang.bean.HomeBannerBean;
 import com.icarexm.zhiquwang.bean.HomeDataBean;
 import com.icarexm.zhiquwang.custview.GlideImageLoader;
+import com.icarexm.zhiquwang.custview.NoScrollListView;
 import com.icarexm.zhiquwang.utils.MxyUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.view.activity.FamousRecruitmentActivity;
+import com.icarexm.zhiquwang.view.activity.HomeActivity;
 import com.icarexm.zhiquwang.view.activity.MessageActivity;
 import com.icarexm.zhiquwang.view.activity.RecruitDetailActivity;
 import com.lzy.okgo.OkGo;
@@ -58,6 +60,7 @@ import com.zhouyou.recyclerview.adapter.BaseRecyclerViewAdapter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.annotation.ElementType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,6 +112,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     tv_cityname.setText(cityName);
                     InitData();
                     SharedPreferences.Editor editor = share.edit();
+                    editor.putString("cityName",cityName);
                     editor.putString("latitude",start_latitude+"");
                     editor.putString("longitude",start_longitude+"");
                     editor.commit();//提交
@@ -123,21 +127,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private String token;
     private List<HomeBannerBean.DataBean.BannerListBean> banner_list=new ArrayList<>();
     private List<HomeBannerBean.DataBean.ZoneListBean> zone_list=new ArrayList<>();
-    private ListView list_city;
+    private NoScrollListView list_city;
     private CityAdapter cityAdapter;
     private RelativeLayout rl_city;
     private RelativeLayout rl_salary;
-    private ListView list_salary;
+    private NoScrollListView list_salary;
     private SalaryAdapter salaryAdapter;
     private List<HomeBannerBean.DataBean.OptionListBean.SalaryBean> salary=new ArrayList<>();
     private RelativeLayout rl_age;
-    private ListView list_age;
+    private NoScrollListView list_age;
     private AgeAdapter ageAdapter;
     private List<HomeBannerBean.DataBean.OptionListBean.AgeBean> ageList=new ArrayList<>();
     private RelativeLayout rl_environment;
-    private ListView list_environment;
+    private NoScrollListView list_environment;
     private RelativeLayout rl_vocation;
-    private ListView list_vocation;
+    private NoScrollListView list_vocation;
     private List<HomeBannerBean.DataBean.OptionListBean.VocationBean> vocation=new ArrayList<>();
     private List<HomeBannerBean.DataBean.OptionListBean.EnvironmentBean> environment=new ArrayList<>();
     private VocationAdapter vocationAdapter;
@@ -191,6 +195,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        try {
+                            HomeActivity homeActivity = (HomeActivity) getActivity();
+                            homeActivity.onCancel();
+                        }catch (Exception e){
+
+                        }
                         HomeBannerBean homeBannerBean = new GsonBuilder().create().fromJson(response.body(), HomeBannerBean.class);
                         if (homeBannerBean.getCode()==1){
                             HomeBannerBean.DataBean data = homeBannerBean.getData();

@@ -1,5 +1,6 @@
 package com.icarexm.zhiquwang.view.activity;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -48,6 +49,7 @@ public class CashWithdrawalActivity extends BaseActivity implements CashWithdraw
     private String withdrawal;
     private int bank_id=0;
     private String balance;
+    private int BANKLIST=22222;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +66,13 @@ public class CashWithdrawalActivity extends BaseActivity implements CashWithdraw
         cashWithdrawalPresenter.GetWithdrawal(token);
         tv_withdrawal.setText("(最少提现"+withdrawal+"元)");
     }
-    @OnClick({R.id.cash_withdrawal_tv_add_bank_card,R.id.cash_withdrawal_img_back,R.id.cash_withdrawal_btn_cash})
+    @OnClick({R.id.cash_withdrawal_tv_add_bank_card,R.id.cash_withdrawal_img_back,R.id.cash_withdrawal_btn_cash,R.id.cash_withdrawal_rl_bank})
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.cash_withdrawal_tv_add_bank_card:
-                startActivity(new Intent(mContext,AddBankCardActivity.class));
+                Intent intent = new Intent(mContext, AddBankCardActivity.class);
+                intent.putExtra("type","10001");
+                startActivity(intent);
                 break;
             case R.id.cash_withdrawal_img_back:
                 finish();
@@ -78,7 +82,6 @@ public class CashWithdrawalActivity extends BaseActivity implements CashWithdraw
                 double money= Double.parseDouble(cash_money);
                 double withdrawal_money = Double.parseDouble(withdrawal);
                 double balance_money = Double.parseDouble(balance);
-                Log.e("金额",money+"和"+withdrawal_money);
                 if (money>withdrawal_money||money==withdrawal_money){
                    if (money<balance_money){
                        cashWithdrawalPresenter.GetdoWithdrawal(token,cash_money,bank_id+"");
@@ -88,6 +91,10 @@ public class CashWithdrawalActivity extends BaseActivity implements CashWithdraw
                 }else {
                     ToastUtils.showToast(mContext,"不能小于最低提现金额");
                 }
+                break;
+            case R.id.cash_withdrawal_rl_bank:
+                Intent intent1 = new Intent(mContext, BankListActivity.class);
+                startActivityForResult(intent1,BANKLIST);
                 break;
         }
     }
@@ -114,6 +121,9 @@ public class CashWithdrawalActivity extends BaseActivity implements CashWithdraw
              tv_bank_name.setText(banklist.get(0).getBank_name());
              tv_bank_num.setText("账号："+banklist.get(0).getBank_num());
              bank_id = banklist.get(0).getBank_id();
+            }else {
+                rl_nobank.setVisibility(View.VISIBLE);
+                rl_bank.setVisibility(View.GONE);
             }
         }else {
             ToastUtils.showToast(mContext,msg);
@@ -123,8 +133,24 @@ public class CashWithdrawalActivity extends BaseActivity implements CashWithdraw
     public void UpdateUI(int code,String msg){
         if (code==1){
             finish();
+        }else if (code ==10001){
+            ToastUtils.showToast(mContext,msg);
+            startActivity(new Intent(mContext,LoginActivity.class));
+            finish();
         }else {
             ToastUtils.showToast(mContext,msg);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==BANKLIST&&resultCode==BANKLIST){
+          bank_id=Integer.parseInt(data.getStringExtra("bank_id"));
+            String bank_name = data.getStringExtra("bank_name");
+            String bank_num = data.getStringExtra("bank_num");
+            tv_bank_name.setText(bank_name);
+            tv_bank_num.setText("账号："+bank_num );
         }
     }
 }

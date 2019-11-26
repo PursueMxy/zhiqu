@@ -141,6 +141,10 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
             editor.putString("password",password);
             editor.putString("token",data);
             editor.commit();//提交
+        }else if (code ==10001){
+            ToastUtils.showToast(mContext,msg);
+            startActivity(new Intent(mContext,LoginActivity.class));
+            finish();
         }
         else {
             ToastUtils.showToast(mContext,msg);
@@ -148,14 +152,12 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     }
 
     //微信
-    public void WechatLoginUpdateUI(int code,String msg,String data){
+    public void WechatLoginUpdateUI(int code,String msg){
         if (code==10001){
-
-        }else {
+            startActivity(new Intent(mContext,LogonActivity.class));
+            finish();
+        }else if (code==1){
             startActivity(new Intent(mContext,HomeActivity.class));
-            SharedPreferences.Editor editor = share.edit();
-            editor.putString("token",data);
-            editor.commit();//提交
         }
     }
 }

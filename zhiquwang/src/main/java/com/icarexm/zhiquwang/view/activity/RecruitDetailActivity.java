@@ -41,12 +41,19 @@ import com.icarexm.zhiquwang.custview.BottomDialog;
 import com.icarexm.zhiquwang.custview.CustomVideoView;
 import com.icarexm.zhiquwang.custview.LabelsView;
 import com.icarexm.zhiquwang.presenter.RecruitDetailPresenter;
+import com.icarexm.zhiquwang.utils.AppContUtils;
 import com.icarexm.zhiquwang.utils.MxyUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
+import com.icarexm.zhiquwang.wxapi.WXEntryActivity;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXTextObject;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,6 +125,8 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
     private int have_video=1;
     private List<HomeDataBean.DataBeanX.DataBean> homeDataList=new ArrayList<>();
     private MyAdapter myAdapter;
+    private IWXAPI iwxapi;
+    private int mTargetScene = SendMessageToWX.Req.WXSceneSession;
 
 
     @Override
@@ -130,10 +139,18 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
         SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
         ButterKnife.bind(this);
+        InitWeixin();
         InitUI();
         recruitDetailPresenter = new RecruitDetailPresenter(this);
         recruitDetailPresenter.GetJobDetail(token,job_id);
         recruitDetailPresenter.GetHomeData(token,limit+"",page+"",zone_id,area_id,salary_id,age_id,vocation_id,environment_id,job_id);
+    }
+
+    private void InitWeixin() {
+        final IWXAPI api = WXAPIFactory.createWXAPI(getApplicationContext(), null,true);
+        // 将该app注册到微信
+        api.registerApp(AppContUtils.WX_APP_ID);
+        iwxapi = WXEntryActivity.InitWeiXin(this, AppContUtils.WX_APP_ID);
     }
 
     @Override
@@ -165,105 +182,22 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
                         .execute(new StringCallback() {
                             private int code;
                             private String msg;
-
                             @Override
                             public void onSuccess(Response<String> response) {
                                 PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
                                 msg = resultBean.getMsg();
                                 code = resultBean.getCode();
                                 if (resultBean.getCode()==1){
-                                    enrollDialog();
+                                    enrollDialog(code,msg);
                                 }else if (resultBean.getCode()==10003){
-                                    enrollDialog();
+                                    enrollDialog(code,msg);
                                 }else if (resultBean.getCode()==20001){
-                                    imperdectDialog();
+                                    imperdectDialog(code,msg);
                                 }else {
                                     ToastUtils.showToast(mContext,msg);
                                 }
                             }
 
-                            private void enrollDialog() {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(RecruitDetailActivity.this);
-                                View dialog_affirm = getLayoutInflater().inflate(R.layout.dialog_affirm, null);
-                                TextView tv_content= dialog_affirm.findViewById(R.id.dialog_affirm_tv_content);
-                                builder.setView(dialog_affirm);
-                                AlertDialog alertDialog = builder.create();
-                                alertDialog.show();
-                                tv_content.setText(msg);
-                                dialog_affirm.findViewById(R.id.dialog_affirm_btn_back).setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        alertDialog.dismiss();
-                                    }
-                                });
-                                dialog_affirm.findViewById(R.id.dialog_affirm_btn_confirm).setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        if (code==1) {
-                                            OkGo.<String>post(RequstUrl.URL.toApplication)
-                                                    .params("token", token)
-                                                    .params("job_id", job_id)
-                                                    .execute(new StringCallback() {
-                                                        @Override
-                                                        public void onSuccess(Response<String> response) {
-                                                            PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
-                                                            if (resultBean.getCode() == 1) {
-                                                                mContext.startActivity(new Intent(mContext, RecruitDetailActivity.class));
-                                                            }
-                                                            ToastUtils.showToast(mContext, resultBean.getMsg());
-
-                                                        }
-                                                    });
-                                            alertDialog.dismiss();
-                                        }else if (code==20001){
-                                            alertDialog.dismiss();
-                                        }
-                                    }
-                                });
-
-                            }
-
-
-                            private void imperdectDialog(){
-                                AlertDialog.Builder builder = new AlertDialog.Builder(RecruitDetailActivity.this);
-                                View dialog_affirm = getLayoutInflater().inflate(R.layout.dialog_affirm, null);
-                                EditText edt_name= dialog_affirm.findViewById(R.id.dialog_imperfect_edt_name);
-                                EditText edt_mobile= dialog_affirm.findViewById(R.id.dialog_imperfect_edt_mobile);
-                                builder.setView(dialog_affirm);
-                                AlertDialog alertDialog = builder.create();
-                                alertDialog.show();
-                                dialog_affirm.findViewById(R.id.dialog_imperfect_btn_confirm).setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        String mobile = edt_mobile.getText().toString();
-                                        String name = edt_name.getText().toString();
-                                        if (!mobile.equals("")){
-                                            if (!name.equals("")){
-                                                OkGo.<String>post(RequstUrl.URL.toApplication)
-                                                        .params("token", token)
-                                                        .params("job_id", job_id)
-                                                        .execute(new StringCallback() {
-                                                            @Override
-                                                            public void onSuccess(Response<String> response) {
-                                                                PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
-                                                                if (resultBean.getCode() == 1) {
-                                                                    mContext.startActivity(new Intent(mContext, RecruitDetailActivity.class));
-                                                                }
-                                                                ToastUtils.showToast(mContext, resultBean.getMsg());
-
-                                                            }
-                                                        });
-                                                alertDialog.dismiss();
-                                            }else {
-                                                ToastUtils.showToast(mContext,"姓名不能为空");
-                                            }
-                                        }else {
-                                            ToastUtils.showToast(mContext,"手机号不能为空");
-                                        }
-
-                                    }
-                                });
-                            }
                         });
                 break;
             case R.id.recruit_dtl_img_back:
@@ -325,11 +259,122 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
                 bottomDialog.dismiss();
             }
         });
+        inflate.findViewById(R.id.dialog_wechat_share_tv_friend).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String text="测试分享功能";
+                //初始化一个 WXTextObject 对象，填写分享的文本内容
+                WXTextObject textObj = new WXTextObject();
+                textObj.text = text;
+
+//用 WXTextObject 对象初始化一个 WXMediaMessage 对象
+                WXMediaMessage msg = new WXMediaMessage();
+                msg.mediaObject = textObj;
+                msg.description = text;
+
+                SendMessageToWX.Req req = new SendMessageToWX.Req();
+                req.transaction = buildTransaction("text");
+                req.message = msg;
+                req.scene = mTargetScene;
+           //调用api接口，发送数据到微信
+                iwxapi.sendReq(req);
+
+            }
+        });
         bottomDialog.setContentView(inflate);
         bottomDialog.show();
     }
 
+    private void enrollDialog(int code,String msg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(RecruitDetailActivity.this);
+        View dialog_affirm = getLayoutInflater().inflate(R.layout.dialog_affirm, null);
+        TextView tv_content= dialog_affirm.findViewById(R.id.dialog_affirm_tv_content);
+        builder.setView(dialog_affirm);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+        tv_content.setText(msg);
+        dialog_affirm.findViewById(R.id.dialog_affirm_btn_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+        dialog_affirm.findViewById(R.id.dialog_affirm_btn_confirm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (code==1) {
+                    OkGo.<String>post(RequstUrl.URL.toApplication)
+                            .params("token", token)
+                            .params("job_id", job_id)
+                            .execute(new StringCallback() {
+                                @Override
+                                public void onSuccess(Response<String> response) {
+                                    PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
+                                    if (resultBean.getCode() == 1) {
+                                        mContext.startActivity(new Intent(mContext, RecruitDetailActivity.class));
+                                    }
+                                    ToastUtils.showToast(mContext, resultBean.getMsg());
 
+                                }
+                            });
+                    alertDialog.dismiss();
+                }else if (code==20001){
+                    alertDialog.dismiss();
+                }
+            }
+        });
+
+    }
+    private String buildTransaction(final String type) {
+        return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
+    }
+
+    private void imperdectDialog(int code,String msg){
+        AlertDialog.Builder builder = new AlertDialog.Builder(RecruitDetailActivity.this);
+        View dialog_affirm = getLayoutInflater().inflate(R.layout.dialog_imperfect, null);
+        EditText edt_name= dialog_affirm.findViewById(R.id.dialog_imperfect_edt_name);
+        EditText edt_mobile= dialog_affirm.findViewById(R.id.dialog_imperfect_edt_mobile);
+        builder.setView(dialog_affirm);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+        dialog_affirm.findViewById(R.id.dialog_imperfect_btn_confirm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String mobile = edt_mobile.getText().toString();
+                String name = edt_name.getText().toString();
+                if (!mobile.equals("")){
+                    if (!name.equals("")){
+                        OkGo.<String>post(RequstUrl.URL.toApplication)
+                                .params("token", token)
+                                .params("job_id", job_id)
+                                .params("real_name",name)
+                                .params("phone",mobile)
+                                .execute(new StringCallback() {
+                                    @Override
+                                    public void onSuccess(Response<String> response) {
+                                        PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
+                                        if (resultBean.getCode() == 1) {
+                                            mContext.startActivity(new Intent(mContext, RecruitDetailActivity.class));
+                                        }else if (resultBean.getCode() ==10001){
+                                            ToastUtils.showToast(mContext,resultBean.getMsg());
+                                            startActivity(new Intent(mContext,LoginActivity.class));
+                                            finish();
+                                        }
+                                        ToastUtils.showToast(mContext, resultBean.getMsg());
+
+                                    }
+                                });
+                        alertDialog.dismiss();
+                    }else {
+                        ToastUtils.showToast(mContext,"姓名不能为空");
+                    }
+                }else {
+                    ToastUtils.showToast(mContext,"手机号不能为空");
+                }
+
+            }
+        });
+    }
 //    private Handler handler=new Handler();
 //    private Runnable runnable=new Runnable() {
 //        @Override
@@ -416,6 +461,10 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
             tv_other_ask.setText(dataBean.getNeed_other());
             tv_workingContent.setText(dataBean.getWork_describe());
             tv_introduce.setText(dataBean.getIntroduce());
+        }else if (code ==10001){
+            ToastUtils.showToast(mContext,msg);
+            startActivity(new Intent(mContext,LoginActivity.class));
+            finish();
         }
     }
 
@@ -424,6 +473,10 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
         if (code==1){
             homeDataList = data.getData();
             myAdapter.notifyDataSetChanged();
+        }else if (code ==10001){
+            ToastUtils.showToast(mContext,msg);
+            startActivity(new Intent(mContext,LoginActivity.class));
+            finish();
         }
     }
 

@@ -2,6 +2,7 @@ package com.icarexm.zhiquwang.presenter;
 
 import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.bean.OvertimeApproverBean;
+import com.icarexm.zhiquwang.bean.PublicCodeBean;
 import com.icarexm.zhiquwang.contract.OvertimeApprovalContract;
 import com.icarexm.zhiquwang.model.OvertimeApprovalModel;
 
@@ -26,5 +27,10 @@ public class OvertimeApprovalPresenter implements OvertimeApprovalContract.Prese
 
     public void GetdoRecords(String token,String type,String classes_id,String festival_id,String hours,String day){
        overtimeApprovalModel.PostdoRecords(this,token,type,classes_id,festival_id,hours,day);
+    }
+
+    public void SetRecorde(String content){
+        PublicCodeBean publicCodeBean = new GsonBuilder().create().fromJson(content, PublicCodeBean.class);
+        mView.UpdateUI(publicCodeBean.getCode(),publicCodeBean.getMsg());
     }
 }

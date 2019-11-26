@@ -3,6 +3,7 @@ package com.icarexm.zhiquwang.view.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -80,6 +81,10 @@ public class FeedBackActivity extends BaseActivity {
                                 public void onSuccess(Response<String> response) {
                                     PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
                                     if (resultBean.getCode()==1){
+                                        finish();
+                                    }else if (resultBean.getCode() ==10001){
+                                        ToastUtils.showToast(mContext,resultBean.getMsg());
+                                        startActivity(new Intent(mContext,LoginActivity.class));
                                         finish();
                                     }else {
                                         ToastUtils.showToast(mContext,resultBean.getMsg());

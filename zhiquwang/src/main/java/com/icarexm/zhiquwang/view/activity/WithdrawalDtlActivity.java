@@ -17,6 +17,7 @@ import com.icarexm.zhiquwang.adapter.CommissionAdapter;
 import com.icarexm.zhiquwang.bean.SeeFundBean;
 import com.icarexm.zhiquwang.contract.WithdrawalDtlContract;
 import com.icarexm.zhiquwang.presenter.WithdrawalDtlPresenter;
+import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.zhouyou.recyclerview.XRecyclerView;
 
 import java.util.ArrayList;
@@ -98,12 +99,17 @@ public class WithdrawalDtlActivity extends BaseActivity implements WithdrawalDtl
     }
 
     public void Update(int code, String msg, SeeFundBean.DataBeanX data){
-        SeeFundBean.DataBeanX.ListBean list = data.getList();
-        dataList = list.getData();
-        commissionAdapter.setListAll(dataList);
-        commissionAdapter.notifyDataSetChanged();
-        String total_price = data.getTotal_price();
-        tv_money.setText(total_price);
-
+        if (code==1) {
+            SeeFundBean.DataBeanX.ListBean list = data.getList();
+            dataList = list.getData();
+            commissionAdapter.setListAll(dataList);
+            commissionAdapter.notifyDataSetChanged();
+            String total_price = data.getTotal_price();
+            tv_money.setText(total_price);
+        }else if (code ==10001){
+            ToastUtils.showToast(mContext,msg);
+            startActivity(new Intent(mContext,LoginActivity.class));
+            finish();
+        }
     }
 }

@@ -8,6 +8,25 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 
 public class MyToJoinModel implements MyToJoinContract.Model {
+
+    /**
+     *  今日页面
+     */
+    public void PostAllianceInfo(MyToJoinPresenter myToJoinPresenter,String token){
+        OkGo.<String>post(RequstUrl.URL.allianceInfo)
+                .params("token",token)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                  myToJoinPresenter.SetallianceInfo(response.body());
+                    }
+                });
+    }
+
+
+    /**
+     * 申请加入
+     */
     public void PostMyTojoin(MyToJoinPresenter myToJoinPresenter,String token, String name, String mobile, String area){
         OkGo.<String>post(RequstUrl.URL.doAlliance)
                 .params("token",token)

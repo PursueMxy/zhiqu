@@ -3,6 +3,7 @@ package com.icarexm.zhiquwang.view.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -89,6 +90,10 @@ public class ChangePasswordActivity extends BaseActivity implements ChangePasswo
             SharedPreferences.Editor editor = share.edit();
             editor.putString("password",newpassword);
             editor.commit();//提交
+            finish();
+        }else if (code ==10001){
+            ToastUtils.showToast(mContext,msg);
+            startActivity(new Intent(mContext,LoginActivity.class));
             finish();
         }else {
             ToastUtils.showToast(mContext,msg);

@@ -131,6 +131,10 @@ public class NearbyStoreActivity extends BaseActivity implements NearbyStoreCont
            list = data.getData();
            nearbyStoreAdapter.setListAll(list);
            nearbyStoreAdapter.notifyDataSetChanged();
+        }else if (code ==10001){
+            ToastUtils.showToast(mContext,msg);
+            startActivity(new Intent(mContext,LoginActivity.class));
+            finish();
         }else {
             ToastUtils.showToast(mContext,msg);
         }

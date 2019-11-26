@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.WindowManager;
@@ -19,6 +20,7 @@ import com.chaychan.library.BottomBarLayout;
 import com.hjq.permissions.OnPermission;
 import com.hjq.permissions.XXPermissions;
 import com.icarexm.zhiquwang.R;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.MyViewPager;
 import com.icarexm.zhiquwang.view.fragment.ClockInFragment;
 import com.icarexm.zhiquwang.view.fragment.HomeFragment;
@@ -42,6 +44,7 @@ public class HomeActivity extends BaseActivity {
     private int currentItems=0;
     private List<Fragment> mFragmentList=new ArrayList<>();
     private Context mContext;
+    private CustomProgressDialog progressDialog = null;//加载页
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +70,23 @@ public class HomeActivity extends BaseActivity {
         ButterKnife.bind(this);
         AddFragment();
         InitUI();
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        try {
+            currentItems = Integer.parseInt(intent.getStringExtra("currentItems"));
+        }catch (Exception e){
+            currentItems=0;
+        }
+        home_bottombarly.setCurrentItem(currentItems);
+    }
 
     private void AddFragment() {
         HomeFragment homeFragment = new HomeFragment();
@@ -97,11 +115,9 @@ public class HomeActivity extends BaseActivity {
         home_bottombarly.setOnItemSelectedListener(new BottomBarLayout.OnItemSelectedListener() {
             @Override
             public void onItemSelected(BottomBarItem bottomBarItem, int i, int i1) {
-
             }
         });
     }
-
 
     class MyAdapter extends FragmentStatePagerAdapter {
 
@@ -117,6 +133,17 @@ public class HomeActivity extends BaseActivity {
         @Override
         public int getCount() {
             return mFragmentList.size();
+        }
+    }
+
+    public void  onCancel(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
         }
     }
 }

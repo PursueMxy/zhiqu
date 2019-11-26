@@ -14,6 +14,7 @@ import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.WalletBean;
 import com.icarexm.zhiquwang.contract.MyWalletContract;
 import com.icarexm.zhiquwang.presenter.MyWalletPresenter;
+import com.icarexm.zhiquwang.utils.ToastUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,8 +77,14 @@ public class MyWalletActivity extends BaseActivity implements MyWalletContract.V
     }
 
     public void UpdateUI(int code, String msg, WalletBean.DataBean data){
-        tv_price.setText(data.getBalance()+"元");
-        withdrawal = data.getWithdrawal();
-        balance = data.getBalance();
+        if (code==1) {
+            tv_price.setText(data.getBalance() + "元");
+            withdrawal = data.getWithdrawal();
+            balance = data.getBalance();
+        }else if (code ==10001){
+            ToastUtils.showToast(mContext,msg);
+            startActivity(new Intent(mContext,LoginActivity.class));
+            finish();
+        }
     }
 }

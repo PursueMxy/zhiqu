@@ -7,7 +7,9 @@ public interface OvertimeApprovalContract {
     }
 
     interface View {
+        void UpdateUI(int code,String msg);
         void UpdateUI(int code, String msg, OvertimeApproverBean.DataBean data);
+
     }
 
     interface Presenter {

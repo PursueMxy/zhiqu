@@ -35,5 +35,6 @@ public class LoginPresenter implements LoginContract.Presenter {
     //微信登陆返回
     public void SetWechatLogin(String content){
         PublicCodeBean publicCodeBean = new GsonBuilder().create().fromJson(content, PublicCodeBean.class);
+        mView.WechatLoginUpdateUI(publicCodeBean.getCode(),publicCodeBean.getMsg());
     }
 }

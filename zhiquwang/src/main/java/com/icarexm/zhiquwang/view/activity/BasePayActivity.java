@@ -129,11 +129,19 @@ public class BasePayActivity extends BaseActivity implements BasePayContract.Vie
             }
             all = LitePal.findAll(LiteSubsidyBean.class);
             myAdapter.notifyDataSetChanged();
+        }else if (code ==10001){
+            ToastUtils.showToast(mContext,msg);
+            startActivity(new Intent(mContext,LoginActivity.class));
+            finish();
         }
     }
 
     public void UpdateUI(int code,String msg){
         if (code==1){
+            finish();
+        }else if (code ==10001){
+            ToastUtils.showToast(mContext,msg);
+            startActivity(new Intent(mContext,LoginActivity.class));
             finish();
         }
     }

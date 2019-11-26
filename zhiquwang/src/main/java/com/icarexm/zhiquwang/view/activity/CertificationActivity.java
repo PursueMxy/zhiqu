@@ -262,12 +262,20 @@ public class CertificationActivity extends BaseActivity implements Certification
                 img_dlt_front.setVisibility(View.VISIBLE);
                 img_dlt_reverse.setVisibility(View.VISIBLE);
             }
+        }else if (code ==10001){
+            ToastUtils.showToast(mContext,msg);
+            startActivity(new Intent(mContext,LoginActivity.class));
+            finish();
         }
     }
 
     public void UpdateUI(int code,String msg){
      if (code==1){
        finish();
+     }else if (code ==10001){
+         ToastUtils.showToast(mContext,msg);
+         startActivity(new Intent(mContext,LoginActivity.class));
+         finish();
      }else {
          ToastUtils.showToast(mContext,msg);
      }

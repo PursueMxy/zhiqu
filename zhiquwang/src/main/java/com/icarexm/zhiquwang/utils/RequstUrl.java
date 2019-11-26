@@ -3,7 +3,7 @@ package com.icarexm.zhiquwang.utils;
 public class RequstUrl {
     public static class URL {
         //请求头
-        public static String HOST = "http://192.168.1.22:8080";
+        public static String HOST = "http://zqw.lippngu.top";
 
         //登录接口
         public static String Login=HOST+"/api/login";
@@ -137,6 +137,9 @@ public class RequstUrl {
         //申请商务合作
         public static String doAlliance=HOST+"/api/doAlliance";
 
+        //进入加盟页面
+        public static String allianceInfo=HOST+"/api/allianceInfo";
+
         //打卡提醒设置
         public static String ClockReminded=HOST+"/api/clockReminded";
 
@@ -145,6 +148,18 @@ public class RequstUrl {
 
         //设置头像昵称
         public static String setUsername=HOST+"/api/setUsername";
+
+        //邀请二维码
+        public static String inviteQr=HOST+"/api/inviteQr";
+
+        //我的
+        public static String mine=HOST+"/api/mine";
+
+        //开放城市
+        public static String getCity=HOST+"/api/getCity";
+
+        //q区域
+        public static String getArea=HOST+"/api/getArea";
 
     }
 }

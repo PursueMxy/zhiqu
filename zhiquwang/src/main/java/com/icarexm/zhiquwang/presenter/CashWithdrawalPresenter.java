@@ -32,7 +32,7 @@ public class CashWithdrawalPresenter implements CashWithdrawalContract.Presenter
 
     public void SetdoWithdrawal(String content){
         PublicResultBean resultBean = new GsonBuilder().create().fromJson(content, PublicResultBean.class);
-
+        mView.UpdateUI(resultBean.getCode(),resultBean.getMsg());
     }
 
 }

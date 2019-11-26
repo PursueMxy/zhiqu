@@ -46,6 +46,5 @@
             android:layout_gravity="center_vertical"
             android:clickable="true"
             android:scaleType="centerInside" />
-
     </LinearLayout>
 </RelativeLayout>
