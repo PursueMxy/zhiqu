@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.MyBankBean;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.NoScrollListView;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
@@ -40,6 +41,7 @@ public class BankListActivity extends BaseActivity {
     private Context mContext;
     private int ADDBANK=20001;
     private int BANKLIST=22222;
+    private CustomProgressDialog progressDialog;
 
 
     @Override
@@ -50,6 +52,11 @@ public class BankListActivity extends BaseActivity {
         SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
         ButterKnife.bind(this);
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
         InitData();
         InitUI();
     }
@@ -80,6 +87,10 @@ public class BankListActivity extends BaseActivity {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        if (progressDialog != null){
+                            progressDialog.dismiss();
+                            progressDialog = null;
+                        }
                         MyBankBean myBankBean = new GsonBuilder().create().fromJson(response.body(), MyBankBean.class);
                         if (myBankBean.getCode()==1){
                             bankList = myBankBean.getData();

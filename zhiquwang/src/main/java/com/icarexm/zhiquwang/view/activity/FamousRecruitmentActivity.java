@@ -29,6 +29,7 @@ import com.icarexm.zhiquwang.adapter.FRAdapter;
 import com.icarexm.zhiquwang.bean.HomeBannerBean;
 import com.icarexm.zhiquwang.bean.HomeDataBean;
 import com.icarexm.zhiquwang.contract.FamousRecruitmentContract;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.NoScrollListView;
 import com.icarexm.zhiquwang.presenter.FamousRecruitmentPresenter;
 import com.icarexm.zhiquwang.utils.MxyUtils;
@@ -112,6 +113,7 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
     private List<HomeBannerBean.DataBean.OptionListBean.AgeBean> ageList=new ArrayList<>();
     private List<HomeBannerBean.DataBean.OptionListBean.EnvironmentBean> environment=new ArrayList<>();
     private List<HomeBannerBean.DataBean.OptionListBean.VocationBean> vocation=new ArrayList<>();
+    private CustomProgressDialog progressDialog;
 
 
     @Override
@@ -127,6 +129,11 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
         city_name = intent.getStringExtra("city_name");
         ButterKnife.bind(this);
         InitUI();
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
         InitData();
         tv_title.setText(zone_name);
         famousRecruitmentPresenter = new FamousRecruitmentPresenter(this);
@@ -169,7 +176,9 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
         frAdapter.setOnItemClickListener(new BaseRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, Object item, int position) {
-                startActivity(new Intent(mContext, RecruitDetailActivity.class));
+                Intent intent = new Intent(mContext, RecruitDetailActivity.class);
+                intent.putExtra("job_id",homeDataList.get(position).getJob_id()+"");
+                startActivity(intent);
             }
         });
         frAdapter.notifyDataSetChanged();
@@ -452,6 +461,10 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
     }
 
     public  void UpdateUI(int code,String msg, HomeDataBean.DataBeanX data){
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
       if (code==1){
           homeDataList = data.getData();
           frAdapter.setListAll(homeDataList);

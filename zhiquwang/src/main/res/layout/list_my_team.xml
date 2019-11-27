@@ -12,6 +12,7 @@
         android:src="@mipmap/ic_avatar"/>
 
     <TextView
+        android:id="@+id/list_my_team_tv_name"
         android:layout_marginLeft="@dimen/dp_6"
         android:layout_toRightOf="@+id/list_my_team_img_avatar"
         android:layout_marginTop="@dimen/dp_29"

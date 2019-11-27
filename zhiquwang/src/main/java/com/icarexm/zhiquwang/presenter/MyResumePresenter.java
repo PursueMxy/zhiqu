@@ -1,6 +1,7 @@
 package com.icarexm.zhiquwang.presenter;
 
 import com.google.gson.GsonBuilder;
+import com.icarexm.zhiquwang.bean.PublicCodeBean;
 import com.icarexm.zhiquwang.bean.ResumeBean;
 import com.icarexm.zhiquwang.contract.MyResumeContract;
 import com.icarexm.zhiquwang.model.MyResumeModel;
@@ -36,6 +37,8 @@ public class MyResumePresenter implements MyResumeContract.Presenter {
 
     //保存个人信息返回
     public void SetAddResume(String content){
+        PublicCodeBean publicCodeBean = new GsonBuilder().create().fromJson(content, PublicCodeBean.class);
+        mView.UpdateUI(publicCodeBean.getCode(),publicCodeBean.getMsg());
 
     }
 

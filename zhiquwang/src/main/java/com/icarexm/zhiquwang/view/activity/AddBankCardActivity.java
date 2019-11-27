@@ -6,14 +6,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
+import com.icarexm.zhiquwang.bean.PublicCodeBean;
 import com.icarexm.zhiquwang.contract.AddBankCardContract;
 import com.icarexm.zhiquwang.presenter.AddBankCardPresenter;
+import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.Response;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,7 +32,7 @@ public class AddBankCardActivity extends BaseActivity implements AddBankCardCont
      @BindView(R.id.add_bank_card_edt_bank_user)
      EditText edt_bank_user;
     @BindView(R.id.add_bank_card_edt_bank_name)
-    EditText edt_bank_name;
+    TextView edt_bank_name;
     @BindView(R.id.add_bank_card_edt_bank_num)
     EditText edt_bank_num;
     private AddBankCardPresenter addBankCardPresenter;
@@ -42,8 +51,46 @@ public class AddBankCardActivity extends BaseActivity implements AddBankCardCont
         SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
         ButterKnife.bind(this);
+        InitUI();
         addBankCardPresenter = new AddBankCardPresenter(this);
 
+    }
+
+    private void InitUI() {
+        edt_bank_num.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.toString().length()>12) {
+                    GetBank(charSequence.toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+    }
+
+    public void GetBank(String bankNum){
+        OkGo.<String>post(RequstUrl.URL.getBank)
+                .params("card",bankNum)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        PublicCodeBean publicCodeBean = new GsonBuilder().create().fromJson(response.body(), PublicCodeBean.class);
+                        if (publicCodeBean.getCode()==1){
+                            edt_bank_name.setText(publicCodeBean.getMsg());
+                        }else {
+                            edt_bank_name.setText("");
+                        }
+                    }
+                });
     }
 
     @Override

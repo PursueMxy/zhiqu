@@ -19,6 +19,7 @@ import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.NearbyStoreAdapter;
 import com.icarexm.zhiquwang.bean.NearbyStoreBean;
 import com.icarexm.zhiquwang.contract.NearbyStoreContract;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.NearbyStorePresenter;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.zhouyou.recyclerview.XRecyclerView;
@@ -44,6 +45,7 @@ public class NearbyStoreActivity extends BaseActivity implements NearbyStoreCont
     private int page=0;
     private NearbyStoreAdapter nearbyStoreAdapter;
     private String job_id;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,11 @@ public class NearbyStoreActivity extends BaseActivity implements NearbyStoreCont
         latitude = share.getString("latitude", "");
         longitude = share.getString("longitude", "");
         InitUI();
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
         nearbyStorePresenter = new NearbyStorePresenter(this);
         nearbyStorePresenter.GetNearbyStore(token,longitude,latitude,limit,page+"");
     }
@@ -127,6 +134,10 @@ public class NearbyStoreActivity extends BaseActivity implements NearbyStoreCont
     }
 
     public void UpdateUI(int code, String msg, NearbyStoreBean.DataBeanX data){
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
         if (code==1){
            list = data.getData();
            nearbyStoreAdapter.setListAll(list);

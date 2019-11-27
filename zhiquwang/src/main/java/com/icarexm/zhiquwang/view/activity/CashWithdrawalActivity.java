@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.MyBankBean;
 import com.icarexm.zhiquwang.contract.CashWithdrawalContract;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.CashWithdrawalPresenter;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 
@@ -50,6 +51,7 @@ public class CashWithdrawalActivity extends BaseActivity implements CashWithdraw
     private int bank_id=0;
     private String balance;
     private int BANKLIST=22222;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,11 @@ public class CashWithdrawalActivity extends BaseActivity implements CashWithdraw
         token = share.getString("token", "");
         mContext = getApplicationContext();
         ButterKnife.bind(this);
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
         cashWithdrawalPresenter = new CashWithdrawalPresenter(this);
         cashWithdrawalPresenter.GetWithdrawal(token);
         tv_withdrawal.setText("(最少提现"+withdrawal+"元)");
@@ -113,6 +120,10 @@ public class CashWithdrawalActivity extends BaseActivity implements CashWithdraw
     }
 
     public void BankList(int code, String msg, List<MyBankBean.DataBean> data){
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
         if (code==1){
             banklist=data;
             if (banklist.size()>0){
@@ -139,6 +150,10 @@ public class CashWithdrawalActivity extends BaseActivity implements CashWithdraw
             finish();
         }else {
             ToastUtils.showToast(mContext,msg);
+        }
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
         }
     }
 

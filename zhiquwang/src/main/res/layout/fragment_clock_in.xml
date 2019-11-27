@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".view.fragment.ClockInFragment">
 <RelativeLayout
+    android:visibility="gone"
     android:id="@+id/fm_clock_in_rl_entry"
     android:background="@color/white"
     android:layout_width="match_parent"
@@ -140,6 +141,7 @@
                     />
 
                 <TextView
+                    android:id="@+id/fm_clock_in_tv_address"
                     android:layout_gravity="center"
                     android:drawablePadding="@dimen/dp_3"
                     android:drawableLeft="@mipmap/ic_location_green"
@@ -263,7 +265,6 @@
 </RelativeLayout>
 <RelativeLayout
     android:id="@+id/fm_clock_in_rl_no_entry"
-    android:visibility="gone"
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">

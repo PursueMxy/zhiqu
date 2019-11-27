@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.PublicResultBean;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.lzy.okgo.OkGo;
@@ -31,6 +32,7 @@ public class UserAgreementActivity extends BaseActivity {
     TextView tv_content;
     private Context mContext;
     private int AGREMEEN_CODE=1001;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,11 @@ public class UserAgreementActivity extends BaseActivity {
         setContentView(R.layout.activity_user_agreement);
         mContext = getApplicationContext();
         ButterKnife.bind(this);
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
         InitData();
     }
 
@@ -46,6 +53,10 @@ public class UserAgreementActivity extends BaseActivity {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        if (progressDialog != null){
+                            progressDialog.dismiss();
+                            progressDialog = null;
+                        }
                         PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
                         if (resultBean.getCode()==1){
                             tv_content.setText( Html.fromHtml(resultBean.getData()));

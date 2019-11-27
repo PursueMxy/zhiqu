@@ -10,6 +10,8 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
@@ -28,6 +30,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.GsonBuilder;
+import com.icarexm.zhiquwang.MyApplication;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.IndicatorAdapter;
 import com.icarexm.zhiquwang.adapter.OnItemClickListener;
@@ -38,6 +41,7 @@ import com.icarexm.zhiquwang.bean.JobDetailBean;
 import com.icarexm.zhiquwang.bean.PublicResultBean;
 import com.icarexm.zhiquwang.contract.RecruitDetailContract;
 import com.icarexm.zhiquwang.custview.BottomDialog;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.CustomVideoView;
 import com.icarexm.zhiquwang.custview.LabelsView;
 import com.icarexm.zhiquwang.presenter.RecruitDetailPresenter;
@@ -45,14 +49,22 @@ import com.icarexm.zhiquwang.utils.AppContUtils;
 import com.icarexm.zhiquwang.utils.MxyUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
+import com.icarexm.zhiquwang.utils.WxUtil;
 import com.icarexm.zhiquwang.wxapi.WXEntryActivity;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
+import com.tencent.mm.opensdk.modelbase.BaseReq;
+import com.tencent.mm.opensdk.modelbase.BaseResp;
+import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXAppExtendObject;
+import com.tencent.mm.opensdk.modelmsg.WXImageObject;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
 import com.tencent.mm.opensdk.modelmsg.WXTextObject;
+import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import java.util.ArrayList;
@@ -62,7 +74,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class RecruitDetailActivity extends BaseActivity implements RecruitDetailContract.View {
+public class RecruitDetailActivity extends BaseActivity implements RecruitDetailContract.View{
 
     private Context mContext;
     @BindView(R.id.recruit_dtl_viewPage)
@@ -125,8 +137,8 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
     private int have_video=1;
     private List<HomeDataBean.DataBeanX.DataBean> homeDataList=new ArrayList<>();
     private MyAdapter myAdapter;
-    private IWXAPI iwxapi;
-    private int mTargetScene = SendMessageToWX.Req.WXSceneSession;
+    private String mobile;
+    private CustomProgressDialog progressDialog;
 
 
     @Override
@@ -139,19 +151,17 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
         SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
         ButterKnife.bind(this);
-        InitWeixin();
         InitUI();
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
         recruitDetailPresenter = new RecruitDetailPresenter(this);
         recruitDetailPresenter.GetJobDetail(token,job_id);
         recruitDetailPresenter.GetHomeData(token,limit+"",page+"",zone_id,area_id,salary_id,age_id,vocation_id,environment_id,job_id);
     }
 
-    private void InitWeixin() {
-        final IWXAPI api = WXAPIFactory.createWXAPI(getApplicationContext(), null,true);
-        // 将该app注册到微信
-        api.registerApp(AppContUtils.WX_APP_ID);
-        iwxapi = WXEntryActivity.InitWeiXin(this, AppContUtils.WX_APP_ID);
-    }
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -240,7 +250,6 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
         list_tuijian.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Log.e("点开了","哈哈哈");
                 finish();
                 Intent intent = new Intent(mContext, RecruitDetailActivity.class);
                 intent.putExtra("job_id",homeDataList.get(position).getJob_id()+"");
@@ -262,23 +271,14 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
         inflate.findViewById(R.id.dialog_wechat_share_tv_friend).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String text="测试分享功能";
-                //初始化一个 WXTextObject 对象，填写分享的文本内容
-                WXTextObject textObj = new WXTextObject();
-                textObj.text = text;
+                WXEntryActivity.ShareWeixin(mContext,MyApplication.iwxapi,"",0);
 
-//用 WXTextObject 对象初始化一个 WXMediaMessage 对象
-                WXMediaMessage msg = new WXMediaMessage();
-                msg.mediaObject = textObj;
-                msg.description = text;
-
-                SendMessageToWX.Req req = new SendMessageToWX.Req();
-                req.transaction = buildTransaction("text");
-                req.message = msg;
-                req.scene = mTargetScene;
-           //调用api接口，发送数据到微信
-                iwxapi.sendReq(req);
-
+            }
+        });
+        inflate.findViewById(R.id.dialog_wechat_share_tv_monments).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                WXEntryActivity.ShareWeixin(mContext,MyApplication.iwxapi,"",1);
             }
         });
         bottomDialog.setContentView(inflate);
@@ -324,9 +324,6 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
             }
         });
 
-    }
-    private String buildTransaction(final String type) {
-        return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
     }
 
     private void imperdectDialog(int code,String msg){
@@ -392,6 +389,7 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
     public void callPhoneDialog(){
         dialog_callphone = getLayoutInflater().inflate(R.layout.dialog_callphone, null);
         tv_phone_number = dialog_callphone.findViewById(R.id.dialog_callphone_tv_number);
+        tv_phone_number.setText(mobile);
         dialog_callphone.findViewById(R.id.dialog_callphone_tv_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -401,7 +399,6 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
         dialog_callphone.findViewById(R.id.dialog_callphone_tv_call).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String mobile = tv_phone_number.getText().toString();
                 Intent intentcall = new Intent();
                 //设置拨打电话的动作
                 intentcall.setAction(Intent.ACTION_CALL);
@@ -433,6 +430,10 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
 
    //返回数据跟新UI
     public void UpdateUI(int code, String msg, JobDetailBean.DataBean dataBean){
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
         if (code==1){
             img_arr = dataBean.getImg_arr();
             have_video = dataBean.getHave_video();
@@ -461,11 +462,13 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
             tv_other_ask.setText(dataBean.getNeed_other());
             tv_workingContent.setText(dataBean.getWork_describe());
             tv_introduce.setText(dataBean.getIntroduce());
+            mobile = dataBean.getMobile();
         }else if (code ==10001){
             ToastUtils.showToast(mContext,msg);
             startActivity(new Intent(mContext,LoginActivity.class));
             finish();
         }
+
     }
 
 
@@ -479,6 +482,7 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
             finish();
         }
     }
+
 
     public class MyAdapter extends  BaseAdapter{
         @Override
@@ -518,4 +522,7 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
             return itemView;
         }
     }
+
+
+
 }

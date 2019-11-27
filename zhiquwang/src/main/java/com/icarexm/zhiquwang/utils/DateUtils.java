@@ -60,6 +60,17 @@ public class DateUtils {
         return    ts;
     }
 
+    /*
+     * 将时间转换为时间戳
+     */
+    public static long dateYearMoth(String s) throws ParseException {
+        String res;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月");
+        Date date = simpleDateFormat.parse(s);
+        long ts = date.getTime()/1000;
+        return    ts;
+    }
+
 
     public static String getCurrentTime() {
         SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss",

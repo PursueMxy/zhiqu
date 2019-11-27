@@ -23,6 +23,7 @@ import com.icarexm.zhiquwang.bean.BasePayBean;
 import com.icarexm.zhiquwang.bean.LiteSubsidyBean;
 import com.icarexm.zhiquwang.bean.SubsidyBean;
 import com.icarexm.zhiquwang.contract.BasePayContract;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.NoScrollListView;
 import com.icarexm.zhiquwang.presenter.BasePayPresenter;
 import com.icarexm.zhiquwang.utils.ToastUtils;
@@ -53,6 +54,7 @@ public class BasePayActivity extends BaseActivity implements BasePayContract.Vie
     private Context mContext;
     private List<SubsidyBean> addSubsidyList=new ArrayList<>();
     private List<LiteSubsidyBean> all=new ArrayList<>();
+    private CustomProgressDialog progressDialog;
 
 
     @Override
@@ -66,6 +68,11 @@ public class BasePayActivity extends BaseActivity implements BasePayContract.Vie
         Intent intent = getIntent();
         Base_Type = intent.getStringExtra("Base_Type");
         InitUI();
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
         basePayPresenter = new BasePayPresenter(this);
         basePayPresenter.GetOvertimeInfo(token,Base_Type);
     }
@@ -134,6 +141,10 @@ public class BasePayActivity extends BaseActivity implements BasePayContract.Vie
             startActivity(new Intent(mContext,LoginActivity.class));
             finish();
         }
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
     }
 
     public void UpdateUI(int code,String msg){
@@ -143,6 +154,10 @@ public class BasePayActivity extends BaseActivity implements BasePayContract.Vie
             ToastUtils.showToast(mContext,msg);
             startActivity(new Intent(mContext,LoginActivity.class));
             finish();
+        }
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
         }
     }
 

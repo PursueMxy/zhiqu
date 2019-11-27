@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.contract.BusinessCooperationContract;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.BusinessCooperationPresenter;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 
@@ -33,6 +34,7 @@ public class BusinessCooperationActivity extends BaseActivity implements Busines
     private BusinessCooperationPresenter businessCooperationPresenter;
     private String token;
     private Context mContext;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,11 @@ public class BusinessCooperationActivity extends BaseActivity implements Busines
         SharedPreferences share  =getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
         ButterKnife.bind(this);
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
         businessCooperationPresenter = new BusinessCooperationPresenter(this);
         businessCooperationPresenter.GetCooperation(token);
     }
@@ -89,6 +96,10 @@ public class BusinessCooperationActivity extends BaseActivity implements Busines
     }
 
     public void UpdateUI(int code,String msg,String mobile){
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
         if (code==1) {
             tv_mobile.setText(mobile);
         }else if (code ==10001){
@@ -98,6 +109,10 @@ public class BusinessCooperationActivity extends BaseActivity implements Busines
         }
     }
     public void UpdateUI(int code,String msg){
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
         if (code==1){
             ToastUtils.showToast(mContext,msg);
             finish();

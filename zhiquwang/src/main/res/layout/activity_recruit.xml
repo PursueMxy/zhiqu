@@ -1,9 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.activity.RecruitActivity">
+   <RelativeLayout
+       android:background="@color/ff00b6ce"
+       android:layout_width="match_parent"
+       android:layout_height="@dimen/dp_80">
+      <ImageView
+          android:id="@+id/recruit_img_back"
+          android:layout_marginLeft="@dimen/dp_15"
+          android:layout_marginBottom="@dimen/dp_18"
+          android:layout_alignParentBottom="true"
+          android:src="@mipmap/ic_left_white"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"/>
+       <RelativeLayout
+           android:layout_marginBottom="@dimen/dp_10"
+           android:layout_alignParentBottom="true"
+           android:layout_marginRight="@dimen/dp_14"
+           android:layout_marginLeft="@dimen/dp_38"
+           android:background="@drawable/bg_white_20"
+           android:layout_width="match_parent"
+           android:layout_height="@dimen/dp_31">
+           <EditText
+               android:id="@+id/recruit_edt_content"
+               android:textSize="@dimen/sp_13"
+               android:paddingLeft="@dimen/dp_20"
+               android:hint="请输入要搜索的内容"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:background="@null"/>
+       </RelativeLayout>
+   </RelativeLayout>
+    <com.zhouyou.recyclerview.XRecyclerView
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_marginTop="@dimen/dp_81"
+        android:layout_below="@+id/famous_recruitment_radioGroup"
+        android:layout_marginRight="@dimen/dp_15"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:id="@+id/recruit_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+</RelativeLayout>

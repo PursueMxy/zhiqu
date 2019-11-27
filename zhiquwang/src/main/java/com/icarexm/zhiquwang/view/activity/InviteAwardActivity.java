@@ -15,6 +15,7 @@ import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.CommissionAdapter;
 import com.icarexm.zhiquwang.bean.SeeFundBean;
 import com.icarexm.zhiquwang.contract.InviteAwardContract;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.InviteAwardPresenter;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.zhouyou.recyclerview.XRecyclerView;
@@ -36,6 +37,7 @@ public class InviteAwardActivity extends BaseActivity implements InviteAwardCont
     private CommissionAdapter commissionAdapter;
     private InviteAwardPresenter inviteAwardPresenter;
     private String token;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,11 @@ public class InviteAwardActivity extends BaseActivity implements InviteAwardCont
         token = share.getString("token", "");
         mContext = getApplicationContext();
         ButterKnife.bind(this);
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
         InitUI();
         inviteAwardPresenter = new InviteAwardPresenter(this);
         inviteAwardPresenter.GetSeeFund(token,"4");
@@ -92,6 +99,10 @@ public class InviteAwardActivity extends BaseActivity implements InviteAwardCont
     }
 
     public void Update(int code, String msg, SeeFundBean.DataBeanX data){
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
         if (code==1) {
             SeeFundBean.DataBeanX.ListBean list = data.getList();
             dataList = list.getData();

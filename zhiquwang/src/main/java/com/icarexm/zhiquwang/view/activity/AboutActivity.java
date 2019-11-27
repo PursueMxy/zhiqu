@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.PublicResultBean;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.utils.MxyUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.lzy.okgo.OkGo;
@@ -33,6 +34,7 @@ public class AboutActivity extends BaseActivity {
     TextView tv_content;
     private Context mContext;
     private String appVersionName;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,11 @@ public class AboutActivity extends BaseActivity {
         ButterKnife.bind(this);
         appVersionName = MxyUtils.getAppVersionName(mContext);
         tv_versionName.setText(appVersionName);
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
         InitData();
     }
 
@@ -50,6 +57,10 @@ public class AboutActivity extends BaseActivity {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        if (progressDialog != null){
+                            progressDialog.dismiss();
+                            progressDialog = null;
+                        }
                         PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
                         if (resultBean.getCode()==1){
                             tv_content.setText( Html.fromHtml(resultBean.getData()));
@@ -75,5 +86,4 @@ public class AboutActivity extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
-
 }

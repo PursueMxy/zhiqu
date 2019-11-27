@@ -15,6 +15,7 @@ import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.CommissionAdapter;
 import com.icarexm.zhiquwang.bean.SeeFundBean;
 import com.icarexm.zhiquwang.contract.EntryAwardContract;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.EntryAwardPresenter;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.zhouyou.recyclerview.XRecyclerView;
@@ -36,6 +37,7 @@ public class EntryAwardActivity extends BaseActivity implements EntryAwardContra
     private String token;
     private EntryAwardPresenter EntryAwardPresenter;
     private CommissionAdapter commissionAdapter;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,11 @@ public class EntryAwardActivity extends BaseActivity implements EntryAwardContra
         token = share.getString("token", "");
         ButterKnife.bind(this);
         InitUI();
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
         EntryAwardPresenter = new EntryAwardPresenter(this);
         EntryAwardPresenter.GetSeeFund(token,"2");
     }
@@ -105,6 +112,10 @@ public class EntryAwardActivity extends BaseActivity implements EntryAwardContra
             ToastUtils.showToast(mContext,msg);
             startActivity(new Intent(mContext,LoginActivity.class));
             finish();
+        }
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
         }
     }
 }

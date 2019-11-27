@@ -21,6 +21,7 @@ import com.icarexm.zhiquwang.bean.CityNameBean;
 import com.icarexm.zhiquwang.bean.RegionBean;
 import com.icarexm.zhiquwang.contract.MyToJoinContract;
 import com.icarexm.zhiquwang.custview.BottomDialog;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.mywheel.MyWheelView;
 import com.icarexm.zhiquwang.presenter.MyToJoinPresenter;
 import com.icarexm.zhiquwang.utils.RequstUrl;
@@ -62,6 +63,7 @@ public class MyToJoinActivity extends BaseActivity implements MyToJoinContract.V
     private List<CityNameBean.DataBean> city_list=new ArrayList<>();
     private MyWheelView groupwva_two;
     private List<AreaBean.DataBean> area_list=new ArrayList<>();
+    private CustomProgressDialog progressDialog;
 
 
     @Override
@@ -73,6 +75,11 @@ public class MyToJoinActivity extends BaseActivity implements MyToJoinContract.V
         SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
         InitUI();
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
         myToJoinPresenter = new MyToJoinPresenter(this);
         myToJoinPresenter.GetallianceInfo(token);
     }
@@ -178,6 +185,10 @@ public class MyToJoinActivity extends BaseActivity implements MyToJoinContract.V
     }
 
     public void UpdateUI(int code , String msg, int type, AllianceInfoBean.DataBean data){
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
         if (type==2){
             if (code==1){
                 myToJoinPresenter.GetallianceInfo(token);

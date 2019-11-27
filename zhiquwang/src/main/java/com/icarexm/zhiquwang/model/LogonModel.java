@@ -37,4 +37,22 @@ public class LogonModel implements LogonContract.Model {
                     }
                 });
     }
+
+    /**
+     * 绑定手机号
+     */
+    public void postBindMobile(LogonPresenter LogonPresenter,String mobile,String code,String password,String repassword,String openid){
+        OkGo.<String>post(RequstUrl.URL.BindMobile)
+                .params("mobile",mobile)
+                .params("code",code)
+                .params("password",password)
+                .params("repassword",repassword)
+                .params("openid",openid)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+
+                    }
+                });
+    }
 }

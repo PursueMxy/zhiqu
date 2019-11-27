@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Path;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -76,7 +77,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.login_tv_create_account:
-                startActivity(new Intent(mContext,LogonActivity.class));
+                Intent intent1 = new Intent(mContext, LogonActivity.class);
+                intent1.putExtra("type","logon");
+                startActivity(intent1);
                 break;
             case R.id.login_tv_no_password:
                 startActivity(new Intent(mContext,ResetPasswordActivity.class));
@@ -152,9 +155,12 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     }
 
     //微信
-    public void WechatLoginUpdateUI(int code,String msg){
-        if (code==10001){
-            startActivity(new Intent(mContext,LogonActivity.class));
+    public void WechatLoginUpdateUI(int code, String msg, String openid){
+        if (code==10004){
+            Intent intent = new Intent(mContext, LogonActivity.class);
+            intent.putExtra("type","wechat");
+            intent.putExtra("openid",openid);
+            startActivity(intent);
             finish();
         }else if (code==1){
             startActivity(new Intent(mContext,HomeActivity.class));

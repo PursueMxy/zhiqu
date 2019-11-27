@@ -28,8 +28,12 @@ public class SetReminderPresenter implements SetReminderContract.Presenter {
      * 提醒返回
      */
     public void SetclockRemindedInfo(String content){
-        ClockRemindedInfoBean clockRemindedInfoBean = new GsonBuilder().create().fromJson(content, ClockRemindedInfoBean.class);
+        try {
+            ClockRemindedInfoBean clockRemindedInfoBean = new GsonBuilder().create().fromJson(content, ClockRemindedInfoBean.class);
         mView.UpdateUI(clockRemindedInfoBean.getCode(),clockRemindedInfoBean.getMsg(),clockRemindedInfoBean.getData());
+        }catch (Exception e){
+            mView.UpdateUI(0,"数据为空",null);
+        }
     }
 
 

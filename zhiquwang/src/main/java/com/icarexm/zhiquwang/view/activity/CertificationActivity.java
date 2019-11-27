@@ -25,6 +25,7 @@ import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.CertificationBean;
 import com.icarexm.zhiquwang.bean.UploadImgBean;
 import com.icarexm.zhiquwang.contract.CertificationContract;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.CertificationPresenter;
 import com.icarexm.zhiquwang.utils.GifSizeFilter;
 import com.icarexm.zhiquwang.utils.RequstUrl;
@@ -76,6 +77,7 @@ public class CertificationActivity extends BaseActivity implements Certification
     private String frondurl="";
     private String reverseurl="";
     private Context mContext;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +87,11 @@ public class CertificationActivity extends BaseActivity implements Certification
         mContext = getApplicationContext();
         SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
         certificationPresenter = new CertificationPresenter(this);
         certificationPresenter.GetCertification(token);
     }
@@ -218,6 +225,10 @@ public class CertificationActivity extends BaseActivity implements Certification
     }
 
     public void UpdateUI(int code, String msg, CertificationBean.DataBean dataBean){
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
         if (code==1){
             int audit = dataBean.getAudit();
             if (audit==0){
@@ -267,11 +278,17 @@ public class CertificationActivity extends BaseActivity implements Certification
             startActivity(new Intent(mContext,LoginActivity.class));
             finish();
         }
+        ToastUtils.showToast(mContext,msg);
     }
 
     public void UpdateUI(int code,String msg){
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
      if (code==1){
        finish();
+         ToastUtils.showToast(mContext,msg);
      }else if (code ==10001){
          ToastUtils.showToast(mContext,msg);
          startActivity(new Intent(mContext,LoginActivity.class));

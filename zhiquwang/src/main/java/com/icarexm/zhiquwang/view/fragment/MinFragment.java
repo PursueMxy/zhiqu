@@ -25,13 +25,16 @@ import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.BaseInforBean;
 import com.icarexm.zhiquwang.bean.MineBean;
 import com.icarexm.zhiquwang.custview.CircleImageView;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.ShadowDrawable;
 import com.icarexm.zhiquwang.utils.RequstUrl;
+import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.icarexm.zhiquwang.view.activity.BaseInformationActivity;
 import com.icarexm.zhiquwang.view.activity.BusinessCooperationActivity;
 import com.icarexm.zhiquwang.view.activity.CertificationActivity;
 import com.icarexm.zhiquwang.view.activity.DistributionTeamActivity;
 import com.icarexm.zhiquwang.view.activity.EditPersonalActivity;
+import com.icarexm.zhiquwang.view.activity.LoginActivity;
 import com.icarexm.zhiquwang.view.activity.MessageActivity;
 import com.icarexm.zhiquwang.view.activity.MyJobSearchActivity;
 import com.icarexm.zhiquwang.view.activity.MyResumeActivity;
@@ -92,6 +95,7 @@ public class MinFragment extends Fragment implements View.OnClickListener {
     private SharedPreferences share;
     private AMapLocationClient mLocationClient;
     private String district;
+    private CustomProgressDialog progressDialog;
 
     public MinFragment() {
         // Required empty public constructor
@@ -161,11 +165,19 @@ public class MinFragment extends Fragment implements View.OnClickListener {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        if (progressDialog != null){
+                            progressDialog.dismiss();
+                            progressDialog = null;
+                        }
                         MineBean mineBean = new GsonBuilder().create().fromJson(response.body(), MineBean.class);
                         if (mineBean.getCode()==1){
                             MineBean.DataBean data = mineBean.getData();
                             tv_nickname.setText(data.getUsername());
                             Glide.with(mContext).load(RequstUrl.URL.HOST+data.getAvatar()).into(img_avatar);
+                        }else if (mineBean.getCode() ==10001){
+                            ToastUtils.showToast(mContext,mineBean.getMsg());
+                            startActivity(new Intent(mContext, LoginActivity.class));
+                            getActivity().finish();
                         }
                     }
                 });
@@ -221,5 +233,14 @@ public class MinFragment extends Fragment implements View.OnClickListener {
                 startActivity(new Intent(mContext, MessageActivity.class));
                 break;
         }
+    }
+
+    public void UpdateUI(){
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(mContext);
+        }
+        progressDialog.show();
+        InitData();
     }
 }

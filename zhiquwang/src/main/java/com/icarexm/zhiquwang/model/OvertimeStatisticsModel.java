@@ -11,10 +11,11 @@ public class OvertimeStatisticsModel implements OvertimeStatisticsContract.Model
     /**
      * 获取加班详情
      */
-    public void  PostRecords(OvertimeStatisticsPresenter overtimeStatisticsPresenter,String token,String type){
+    public void  PostRecords(OvertimeStatisticsPresenter overtimeStatisticsPresenter,String token,String type,String month){
         OkGo.<String>post(RequstUrl.URL.Records)
                 .params("token",token)
                 .params("type",type)
+                .params("month",month)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {

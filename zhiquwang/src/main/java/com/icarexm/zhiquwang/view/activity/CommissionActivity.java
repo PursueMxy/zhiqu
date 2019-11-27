@@ -2,6 +2,7 @@ package com.icarexm.zhiquwang.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -12,6 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.CommissionAdapter;
 import com.icarexm.zhiquwang.bean.SeeFundBean;
+import com.icarexm.zhiquwang.contract.CommissionContract;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
+import com.icarexm.zhiquwang.presenter.CommissionPresenter;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.zhouyou.recyclerview.XRecyclerView;
 
@@ -22,7 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CommissionActivity extends BaseActivity {
+public class CommissionActivity extends BaseActivity implements CommissionContract.View {
 
      @BindView(R.id.commission_recyclerView)
     XRecyclerView mRecyclerView;
@@ -31,14 +35,26 @@ public class CommissionActivity extends BaseActivity {
     private List<SeeFundBean.DataBeanX.ListBean.DataBean> dataList=new ArrayList<>();
     private Context mContext;
     private CommissionAdapter commissionAdapter;
+    private CommissionPresenter commissionPresenter;
+    private String token;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_commission);
         mContext=getApplicationContext();
+        SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        token = share.getString("token", "");
         ButterKnife.bind(this);
         InitUI();
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
+        commissionPresenter = new CommissionPresenter(this);
+        commissionPresenter.GetSeeFund(token,"2");
     }
     @OnClick({R.id.commission_img_back})
     public void onViewClick(View view){
@@ -83,6 +99,10 @@ public class CommissionActivity extends BaseActivity {
     }
 
     public void Update(int code, String msg, SeeFundBean.DataBeanX data){
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
         if (code==1) {
             SeeFundBean.DataBeanX.ListBean list = data.getList();
             dataList = list.getData();
@@ -95,5 +115,10 @@ public class CommissionActivity extends BaseActivity {
             startActivity(new Intent(mContext,LoginActivity.class));
             finish();
         }
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }

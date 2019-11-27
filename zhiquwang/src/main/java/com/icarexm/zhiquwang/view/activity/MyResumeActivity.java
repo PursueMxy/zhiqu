@@ -25,6 +25,7 @@ import com.icarexm.zhiquwang.adapter.TodayHeatAdapter;
 import com.icarexm.zhiquwang.bean.AddResumeBean;
 import com.icarexm.zhiquwang.bean.ResumeBean;
 import com.icarexm.zhiquwang.contract.MyResumeContract;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.MyResumePresenter;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
@@ -63,9 +64,8 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
     private String city;
     private String education;
     private String mobile;
-    private String address;
-    private String birth_date;
     private String age;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +76,11 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
         token = share.getString("token", "");
         ButterKnife.bind(this);
         InitUI();
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
         myResumePresenter = new MyResumePresenter(this);
         myResumePresenter.GetMineInfo(token);
     }
@@ -127,7 +132,7 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
                 break;
             case R.id.my_resume_btn_confirm:
                 String personal_introduce = edt_personal_introduce.getText().toString();
-                myResumePresenter.GetAddResume(token,avatar,real_name,sex,birth_date,address,education,personal_introduce,experience);
+                myResumePresenter.GetAddResume(token,avatar,real_name,sex,birth,city,education,personal_introduce,experience);
                 break;
         }
     }
@@ -169,10 +174,12 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
                 });
             }else  if (requestCode==BASEINFOCODE&&resultCode==BASEINFOCODE){
                 sex = data.getStringExtra("sex");
-                address = data.getStringExtra("address");
-                birth_date = data.getStringExtra("birth_date");
+                city = data.getStringExtra("address");
+                birth = data.getStringExtra("birth_date");
                 education = data.getStringExtra("education");
+                avatar=data.getStringExtra("avatar");
                 tv_education.setText(age+education);
+                Glide.with(mContext).load(RequstUrl.URL.HOST+avatar).into(img_acatar);
             }
     }
 
@@ -182,9 +189,13 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
     }
 
     public void  UpdateUI(int code,String msg, ResumeBean.DataBean data){
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
         if (code==1){
          tv_name.setText(data.getUser_name());
-         tv_education.setText(data.getEducation());
+          tv_education.setText(data.getEducation());
           Glide.with(mContext).load(RequstUrl.URL.HOST+data.getAvatar()).into(img_acatar);
           avatar = data.getAvatar();
           real_name = data.getUser_name();
@@ -195,7 +206,9 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
           age = data.getAge();
           mobile = data.getMobile();
           tv_education.setText(age+"·"+education);
+            edt_personal_introduce.setText(data.getPersonal_introduce());
           addResumeList = data.getExperience();
+          experience = new GsonBuilder().create().toJson(addResumeList);
           myResumeAdapter = new MyResumeAdapter(mContext,addResumeList);
           mRecyclerView.setAdapter(myResumeAdapter);
           myResumeAdapter.setOnItemClickListener(new OnItemClickListener() {
@@ -219,5 +232,10 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
             startActivity(new Intent(mContext,LoginActivity.class));
             finish();
         }
+    }
+
+
+    public void UpdateUI(int code,String msg){
+        ToastUtils.showToast(mContext,msg);
     }
 }

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.WalletBean;
 import com.icarexm.zhiquwang.contract.MyWalletContract;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.MyWalletPresenter;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 
@@ -28,6 +29,7 @@ public class MyWalletActivity extends BaseActivity implements MyWalletContract.V
     private String token;
     private String withdrawal;
     private String balance;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,11 @@ public class MyWalletActivity extends BaseActivity implements MyWalletContract.V
         SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
         ButterKnife.bind(this);
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
         myWalletPresenter = new MyWalletPresenter(this);
         myWalletPresenter.GetMyWallet(token);
 
@@ -77,6 +84,10 @@ public class MyWalletActivity extends BaseActivity implements MyWalletContract.V
     }
 
     public void UpdateUI(int code, String msg, WalletBean.DataBean data){
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
         if (code==1) {
             tv_price.setText(data.getBalance() + "元");
             withdrawal = data.getWithdrawal();

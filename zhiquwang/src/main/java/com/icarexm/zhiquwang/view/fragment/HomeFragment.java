@@ -42,13 +42,17 @@ import com.icarexm.zhiquwang.adapter.HomeFmAdapter;
 import com.icarexm.zhiquwang.adapter.TodayHeatAdapter;
 import com.icarexm.zhiquwang.bean.HomeBannerBean;
 import com.icarexm.zhiquwang.bean.HomeDataBean;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.GlideImageLoader;
 import com.icarexm.zhiquwang.custview.NoScrollListView;
 import com.icarexm.zhiquwang.utils.MxyUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
+import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.icarexm.zhiquwang.view.activity.FamousRecruitmentActivity;
 import com.icarexm.zhiquwang.view.activity.HomeActivity;
+import com.icarexm.zhiquwang.view.activity.LoginActivity;
 import com.icarexm.zhiquwang.view.activity.MessageActivity;
+import com.icarexm.zhiquwang.view.activity.RecruitActivity;
 import com.icarexm.zhiquwang.view.activity.RecruitDetailActivity;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
@@ -161,11 +165,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private boolean IsAge=true;
     private boolean IsVocation=true;
     private boolean IsEiroment=true;
+    private boolean IsUpdate=false;
+    private CustomProgressDialog progressDialog;
 
 
     public HomeFragment() {
         // Required empty public constructor
     }
+
 
 
     @Override
@@ -183,7 +190,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         token = share.getString("token", "");
         InitUI(inflate);
         startLocation();
-        InitData();
         return inflate;
     }
 
@@ -196,8 +202,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onSuccess(Response<String> response) {
                         try {
-                            HomeActivity homeActivity = (HomeActivity) getActivity();
-                            homeActivity.onCancel();
+                            if (!IsUpdate) {
+                                HomeActivity homeActivity = (HomeActivity) getActivity();
+                                homeActivity.onCancel();
+                            }
+                            if (progressDialog != null){
+                                progressDialog.dismiss();
+                                progressDialog = null;
+                            }
                         }catch (Exception e){
 
                         }
@@ -208,7 +220,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                                 banner_list = data.getBanner_list();
                                 urls.clear();
                                 for (int a = 0; a< banner_list.size(); a++){
-                                    urls.add(RequstUrl.URL.HOST+banner_list.get(a).getBanner_url());
+                                    urls.add(banner_list.get(a).getBanner_url());
                                 }
                                 bannerLayout.setViewUrls(urls);
                                 zone_list = data.getZone_list();
@@ -225,6 +237,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                                 environment = option_list.getEnvironment();
                                 environmentAdapter.notifyDataSetChanged();
                             }
+                        }else if (homeBannerBean.getCode() ==10001){
+                            ToastUtils.showToast(mContext,homeBannerBean.getMsg());
+                            startActivity(new Intent(mContext, LoginActivity.class));
+                            getActivity().finish();
                         }
                     }
                 });
@@ -326,6 +342,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         });
         inflate.findViewById(R.id.fm_home_img_message).setOnClickListener(this);
+        inflate.findViewById(R.id.fm_home_rl_search).setOnClickListener(this);
         SltGridAdapter();
         SltAdapter();
         recyclerViewAT();
@@ -636,6 +653,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             case R.id.fm_home_img_message:
                 startActivity(new Intent(mContext, MessageActivity.class));
                 break;
+            case R.id.fm_home_rl_search:
+                startActivity(new Intent(mContext, RecruitActivity.class));
+                break;
         }
     }
 
@@ -660,7 +680,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
            View inflate = getLayoutInflater().inflate(R.layout.home_griditem, null);
            ImageView grid_img= inflate.findViewById(R.id.grid_img);
            TextView guid_text = inflate.findViewById(R.id.guid_text);
-           Glide.with(getContext()).load(zone_list.get(i).getZone_icon()).into(grid_img);
+           Glide.with(getContext()).load(RequstUrl.URL.HOST+zone_list.get(i).getZone_icon()).into(grid_img);
            guid_text.setText(zone_list.get(i).getZone_name());
            return inflate;
        }
@@ -789,5 +809,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             tv_city.setText(environment.get(i).getEnvironment_value());
             return inflate;
         }
+    }
+
+
+    public void UpdateUI(){
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(mContext);
+        }
+        progressDialog.show();
+        InitData();
     }
 }

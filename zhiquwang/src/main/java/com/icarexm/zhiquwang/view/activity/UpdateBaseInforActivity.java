@@ -1,9 +1,12 @@
 package com.icarexm.zhiquwang.view.activity;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -13,17 +16,30 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.RegionBean;
+import com.icarexm.zhiquwang.bean.UploadImgBean;
 import com.icarexm.zhiquwang.custview.BottomDialog;
 import com.icarexm.zhiquwang.custview.CircleImageView;
 import com.icarexm.zhiquwang.custview.mywheel.MyWheelView;
+import com.icarexm.zhiquwang.utils.GifSizeFilter;
+import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.Response;
+import com.zhihu.matisse.Matisse;
+import com.zhihu.matisse.MimeType;
+import com.zhihu.matisse.engine.impl.GlideEngine;
+import com.zhihu.matisse.filter.Filter;
+import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.channels.NonReadableChannelException;
@@ -57,7 +73,7 @@ public class UpdateBaseInforActivity extends BaseActivity {
     private static final String[] BIRTH_MONTH=new String[]{"1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"};
     private List<String> YearList=new ArrayList<>();
     private int StartYear=1900;
-    private int StopYear=2020;
+    private int StopYear=2050;
     private String SltYear="1990年";
     private String SltMonth="0月";
     private String[] SEX_LIST=new String[]{"男","女"};
@@ -78,6 +94,7 @@ public class UpdateBaseInforActivity extends BaseActivity {
     private String birth;
     private String education;
     private String mobile;
+    private static final int REQUEST_CODE=1001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +118,7 @@ public class UpdateBaseInforActivity extends BaseActivity {
         tv_address.setText(city);
         tv_nickname.setText(real_name);
         tv_mobile.setText(mobile);
-        Glide.with(mContext).load(avatar).into(img_avatar);
+        Glide.with(mContext).load(RequstUrl.URL.HOST+avatar).into(img_avatar);
     }
 
     private void InitAddress() {
@@ -178,7 +195,9 @@ public class UpdateBaseInforActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.update_base_infor_img_back,R.id.update_base_infor_rl_education,R.id.update_base_rl_time,R.id.update_base_rl_sex,R.id.update_base_rl_address,R.id.update_base_btn_confirm})
+    @OnClick({R.id.update_base_infor_img_back,R.id.update_base_infor_rl_education,R.id.update_base_rl_time,
+            R.id.update_base_rl_sex,R.id.update_base_rl_address,R.id.update_base_btn_confirm,
+        R.id.base_information_img_avatar})
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.update_base_infor_img_back:
@@ -196,6 +215,24 @@ public class UpdateBaseInforActivity extends BaseActivity {
             case R.id.update_base_rl_address:
                AddressDialog();
                 break;
+            case R.id.base_information_img_avatar:
+                Matisse.from(this)
+                        .choose(MimeType.ofImage(), false)
+                        .countable(true)
+                        .capture(true)
+                        .captureStrategy(new CaptureStrategy(true, "com.zhkj.syyj.fileprovider", "test"))
+                        .maxSelectable(1)
+                        .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
+                        .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.dp_110))
+                        .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+                        .thumbnailScale(0.85f)
+                        .imageEngine(new GlideEngine())
+                        .showSingleMediaType(true)
+                        .originalEnable(true)
+                        .maxOriginalSize(10)
+                        .autoHideToolbarOnSingleTap(true)
+                        .forResult(REQUEST_CODE);
+                break;
             case R.id.update_base_btn_confirm:
                 String sex= tv_sex.getText().toString();
                 String address = tv_address.getText().toString();
@@ -210,6 +247,7 @@ public class UpdateBaseInforActivity extends BaseActivity {
                                intent.putExtra("address",address);
                                intent.putExtra("birth_date",birth_date);
                                intent.putExtra("education",education);
+                               intent.putExtra("avatar",avatar);
                                setResult(BASEINFOCODE,intent);
                                finish();
                            }else {
@@ -404,5 +442,33 @@ public class UpdateBaseInforActivity extends BaseActivity {
             finish();
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == -1) {
+            switch (requestCode) {
+                case REQUEST_CODE:
+                    List<Uri> uris = Matisse.obtainResult(data);
+                    if (uris.size()>0) {
+                        Glide.with(this).load(uris.get(0)).into(img_avatar);
+                        List<String> strings = Matisse.obtainPathResult(data);
+                        File file = new File(strings.get(0));//实例化数据库文件
+                        OkGo.<String>post(RequstUrl.URL.UploadImg)
+                                .params("img",file)
+                                .execute(new StringCallback() {
+                                    @Override
+                                    public void onSuccess(Response<String> response) {
+                                        UploadImgBean uploadImgBean = new GsonBuilder().create().fromJson(response.body(), UploadImgBean.class);
+                                        UploadImgBean.DataBean DataBean= uploadImgBean.getData();
+                                        avatar = DataBean.getUrl();
+                                    }
+                                });
+                    }
+                    break;
+                default:
+            }
+        }
     }
 }

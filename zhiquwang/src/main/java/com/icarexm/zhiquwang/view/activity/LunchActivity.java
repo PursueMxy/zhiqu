@@ -17,16 +17,13 @@ public class LunchActivity extends AppCompatActivity {
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-//            if (!token.equals("")) {
-//                Intent intent = new Intent(mContext, LoginActivity.class);
-//                startActivity(intent);
-//            }else {
-//                Intent intent = new Intent(mContext, GuidePageActivity.class);
-//                startActivity(intent);
-//            }
-            Intent intent = new Intent(mContext, LoginActivity.class);
-            startActivity(intent);
-            finish();
+            if (!token.equals("")) {
+                Intent intent = new Intent(mContext, LoginActivity.class);
+                startActivity(intent);
+            }else {
+                Intent intent = new Intent(mContext, GuidePageActivity.class);
+                startActivity(intent);
+            }
         }
     };
     private String token;
@@ -38,6 +35,6 @@ public class LunchActivity extends AppCompatActivity {
         mContext = getApplicationContext();
         SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
-        handler.postDelayed(runnable,3000);
+        handler.postDelayed(runnable,1000);
     }
 }

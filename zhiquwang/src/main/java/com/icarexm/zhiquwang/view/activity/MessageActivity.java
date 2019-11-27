@@ -17,6 +17,7 @@ import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.MessageAdapter;
 import com.icarexm.zhiquwang.bean.MessageBean;
 import com.icarexm.zhiquwang.contract.MessageContract;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.MessagePresenter;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.zhouyou.recyclerview.XRecyclerView;
@@ -38,6 +39,7 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
     private int page=0;
     private List<MessageBean.DataBeanX.DataBean> dataBeanList=new ArrayList<>();
     private MessageAdapter messageAdapter;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,11 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
         SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
         ButterKnife.bind(this);
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
         InitUI();
         messagePresenter = new MessagePresenter(this);
         messagePresenter.getMessage(token,limit,page+"");
@@ -110,6 +117,10 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
     }
 
     public void UpdateUI(int code ,String msg, MessageBean.DataBeanX data){
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
         if (code==1){
             dataBeanList = data.getData();
             messageAdapter.setListAll(dataBeanList);

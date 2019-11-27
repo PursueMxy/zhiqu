@@ -113,7 +113,7 @@
                 android:textSize="@dimen/sp_14"
                 />
 
-            <EditText
+            <TextView
                 android:id="@+id/add_bank_card_edt_bank_name"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/dp_77"
@@ -129,12 +129,12 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/dp_40"
         >
         <Button
             android:id="@+id/add_bank_card_btn_confirm"
             android:layout_marginRight="@dimen/dp_40"
             android:layout_marginLeft="@dimen/dp_40"
-            android:layout_marginBottom="@dimen/dp_40"
             android:layout_alignParentBottom="true"
             android:text="确定"
             android:textColor="@color/white"

@@ -19,7 +19,7 @@
         android:id="@+id/dialog_callphone_tv_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0591-88888888"
+        android:text=""
         android:textColor="@color/ff4e4d4d"
         android:textSize="@dimen/sp_14"
         />

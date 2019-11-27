@@ -46,6 +46,7 @@
         android:drawableRight="@mipmap/ic_bottom_white"
         />
     <RelativeLayout
+        android:id="@+id/fm_home_rl_search"
         android:layout_marginRight="@dimen/dp_45"
         android:layout_marginTop="@dimen/dp_32"
         android:layout_marginLeft="@dimen/dp_82"

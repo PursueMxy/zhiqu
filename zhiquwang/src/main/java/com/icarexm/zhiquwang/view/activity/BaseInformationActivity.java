@@ -22,6 +22,7 @@ import com.icarexm.zhiquwang.bean.BaseInforBean;
 import com.icarexm.zhiquwang.bean.UploadImgBean;
 import com.icarexm.zhiquwang.contract.BaseInformationContract;
 import com.icarexm.zhiquwang.custview.CircleImageView;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.BaseInformationPresenter;
 import com.icarexm.zhiquwang.utils.GifSizeFilter;
 import com.icarexm.zhiquwang.utils.RequstUrl;
@@ -58,6 +59,7 @@ public class BaseInformationActivity extends BaseActivity implements BaseInforma
     private Context mContext;
     private static final int REQUEST_CODE=1001;
     private String url="";
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +69,11 @@ public class BaseInformationActivity extends BaseActivity implements BaseInforma
         token = share.getString("token", "");
         mContext = getApplicationContext();
         ButterKnife.bind(this);
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
         baseInformationPresenter = new BaseInformationPresenter(this);
         baseInformationPresenter.GetBaseInfor(token);
     }
@@ -148,6 +155,10 @@ public class BaseInformationActivity extends BaseActivity implements BaseInforma
     }
 
     public void UpdateUI(int code, String msg, BaseInforBean.DataBean data){
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
         if (code==1){
             tv_is_auth.setText(data.getIs_auth());
             tv_mobile.setText(data.getMobile());
@@ -162,6 +173,10 @@ public class BaseInformationActivity extends BaseActivity implements BaseInforma
     }
 
     public void UpdateUI(int code,String msg){
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
         if (code==1){
              finish();
         }else if (code ==10001){

@@ -8,6 +8,7 @@ public interface MyResumeContract {
 
     interface View {
         void  UpdateUI(int code,String msg, ResumeBean.DataBean data);
+        void UpdateUI(int code,String msg);
     }
 
     interface Presenter {

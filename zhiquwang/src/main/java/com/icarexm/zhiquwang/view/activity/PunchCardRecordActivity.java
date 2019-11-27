@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.RepairInfoBean;
 import com.icarexm.zhiquwang.contract.PunchCardRecordContract;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.calender.AdapterDate;
 import com.icarexm.zhiquwang.custview.calender.AdapterWeek;
 import com.icarexm.zhiquwang.custview.calender.DateUtil;
@@ -63,6 +64,7 @@ public class PunchCardRecordActivity extends BaseActivity implements PunchCardRe
     private String todayDate;
     private String week;
     private String todayHour;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,11 @@ public class PunchCardRecordActivity extends BaseActivity implements PunchCardRe
         week = DateUtils.getWeek(todayDate);
         todayHour = DateUtils.getTodayHour();
         InitUI();
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
         punchCardRecordPresenter = new PunchCardRecordPresenter(this);
         punchCardRecordPresenter.GetRepairInfo(token);
 
@@ -170,17 +177,18 @@ public class PunchCardRecordActivity extends BaseActivity implements PunchCardRe
             viewHolder.rlItem = view.findViewById(R.id.rlItem);
             viewHolder.img_to_card_week = view.findViewById(R.id.item_to_card_week);
             viewHolder.tv.setText(days.get(i) + "");
-            viewHolder.img_to_card_week.setVisibility(View.GONE);
             if (days.get(i) == 0) {
                 viewHolder.rlItem.setVisibility(View.GONE);
             }else {
                 Integer integer = days.get(i);
                 if (monthList.size()+1>integer&&monthList.size()>1) {
                     if (monthList.get(integer-1).getIs_play() == 1) {
-                        viewHolder.img_to_card_week.setVisibility(View.VISIBLE);
+                        viewHolder.img_to_card_week.setImageDrawable(getResources().getDrawable(R.drawable.bg_green_4));
                     } else {
-                        viewHolder.img_to_card_week.setVisibility(View.GONE);
+                        viewHolder.img_to_card_week.setImageDrawable(getResources().getDrawable(R.drawable.bg_white_4));
                     }
+                }else {
+                      viewHolder.img_to_card_week.setImageDrawable(getResources().getDrawable(R.drawable.bg_white_4));
                 }
             }
             if (status.get(i)) {
@@ -234,6 +242,10 @@ public class PunchCardRecordActivity extends BaseActivity implements PunchCardRe
     }
 
     public void UpdateUI(int code, String msg, RepairInfoBean.DataBean data){
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
         if (code==1){
             monthList.clear();
             monthList.addAll(data.getMonth());

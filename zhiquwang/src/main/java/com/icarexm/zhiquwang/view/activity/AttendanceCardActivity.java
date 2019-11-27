@@ -25,6 +25,7 @@ import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.RepairInfoBean;
 import com.icarexm.zhiquwang.contract.AttendanceCardContract;
 import com.icarexm.zhiquwang.custview.BottomDialog;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.calender.AdapterWeek;
 import com.icarexm.zhiquwang.custview.calender.DateUtil;
 import com.icarexm.zhiquwang.custview.calender.InnerGridView;
@@ -83,6 +84,7 @@ public class AttendanceCardActivity extends BaseActivity implements AttendanceCa
     private long start_time;
     private long stop_time;
     private int SltDay=0;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +99,11 @@ public class AttendanceCardActivity extends BaseActivity implements AttendanceCa
         mContext = getApplicationContext();
         initData();
         InitUI();
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
         attendanceCardPresenter = new AttendanceCardPresenter(this);
         attendanceCardPresenter.GetRepairInfo(token);
     }
@@ -235,17 +242,18 @@ public class AttendanceCardActivity extends BaseActivity implements AttendanceCa
             viewHolder.rlItem = view.findViewById(R.id.rlItem);
             viewHolder.img_to_card_week = view.findViewById(R.id.item_to_card_week);
             viewHolder.tv.setText(days.get(i) + "");
-            viewHolder.img_to_card_week.setVisibility(View.GONE);
             if (days.get(i) == 0) {
                 viewHolder.rlItem.setVisibility(View.GONE);
             }else {
                 Integer integer = days.get(i);
                 if (monthList.size()+1>integer&&monthList.size()>1) {
                     if (monthList.get(integer-1).getIs_play() == 1) {
-                        viewHolder.img_to_card_week.setVisibility(View.VISIBLE);
+                        viewHolder.img_to_card_week.setImageDrawable(getResources().getDrawable(R.drawable.bg_green_4));
                     } else {
-                        viewHolder.img_to_card_week.setVisibility(View.GONE);
+                        viewHolder.img_to_card_week.setImageDrawable(getResources().getDrawable(R.drawable.bg_white_4));
                     }
+                }else {
+                    viewHolder.img_to_card_week.setImageDrawable(getResources().getDrawable(R.drawable.bg_white_4));
                 }
             }
             if (status.get(i)) {
@@ -315,6 +323,10 @@ public class AttendanceCardActivity extends BaseActivity implements AttendanceCa
             finish();
         }else {
             ToastUtils.showToast(mContext,msg);
+        }
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
         }
     }
 
@@ -410,5 +422,9 @@ public class AttendanceCardActivity extends BaseActivity implements AttendanceCa
          startActivity(new Intent(mContext,LoginActivity.class));
          finish();
      }
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
     }
 }

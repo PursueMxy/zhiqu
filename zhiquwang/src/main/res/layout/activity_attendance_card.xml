@@ -27,11 +27,15 @@
             />
 
     </RelativeLayout>
-    <LinearLayout
-        android:orientation="vertical"
-        android:background="@color/white"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
     <TextView
         android:id="@+id/attendance_card_tv_time"
         android:layout_marginTop="@dimen/dp_12"
@@ -57,29 +61,35 @@
         android:textColor="@color/ff00b6ce"
         android:textSize="@dimen/sp_14"
         />
-        <com.icarexm.zhiquwang.custview.calender.InnerGridView
-            android:layout_marginTop="@dimen/dp_20"
-            android:layout_marginLeft="@dimen/dp_15"
-            android:layout_marginRight="@dimen/dp_15"
-            android:id="@+id/attendance_card_gvWeek"
+        <RelativeLayout
+            android:background="@color/white"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:numColumns="7">
-        </com.icarexm.zhiquwang.custview.calender.InnerGridView>
-        <com.icarexm.zhiquwang.custview.calender.InnerGridView
-            android:layout_marginLeft="@dimen/dp_15"
-            android:layout_marginRight="@dimen/dp_15"
-            android:layout_marginBottom="@dimen/dp_20"
-            android:id="@+id/attendance_card_gvDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="none"
-            android:numColumns="7">
-        </com.icarexm.zhiquwang.custview.calender.InnerGridView>
-    </LinearLayout>
+            android:layout_height="wrap_content">
+            <com.icarexm.zhiquwang.custview.calender.InnerGridView
+                android:layout_marginTop="@dimen/dp_20"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:layout_marginRight="@dimen/dp_15"
+                android:id="@+id/attendance_card_gvWeek"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:numColumns="7">
+            </com.icarexm.zhiquwang.custview.calender.InnerGridView>
+
+            <com.icarexm.zhiquwang.custview.calender.InnerGridView
+                android:layout_marginTop="@dimen/dp_20"
+                android:layout_below="@+id/overtime_approval_gvWeek"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:layout_marginRight="@dimen/dp_15"
+                android:layout_marginBottom="@dimen/dp_36"
+                android:id="@+id/attendance_card_gvDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:numColumns="7">
+            </com.icarexm.zhiquwang.custview.calender.InnerGridView>
+        </RelativeLayout>
 
     <LinearLayout
-        android:visibility="gone"
         android:id="@+id/attendance_card_ll"
         android:orientation="vertical"
         android:layout_marginLeft="@dimen/dp_15"
@@ -198,11 +208,12 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:layout_marginBottom="@dimen/dp_40"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <Button
                 android:id="@+id/attendance_card_btn_confirm"
-                android:layout_marginBottom="@dimen/dp_40"
+                android:layout_marginTop="@dimen/dp_40"
                 android:layout_marginLeft="@dimen/dp_40"
                 android:layout_marginRight="@dimen/dp_40"
                 android:layout_alignParentBottom="true"
@@ -214,4 +225,6 @@
                 android:layout_height="@dimen/dp_44"/>
         </RelativeLayout>
     </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

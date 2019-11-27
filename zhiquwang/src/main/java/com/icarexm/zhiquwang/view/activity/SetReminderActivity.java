@@ -23,6 +23,7 @@ import com.icarexm.zhiquwang.bean.LiteSubsidyBean;
 import com.icarexm.zhiquwang.bean.LiteWeekBean;
 import com.icarexm.zhiquwang.contract.SetReminderContract;
 import com.icarexm.zhiquwang.custview.BottomDialog;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.NoScrollListView;
 import com.icarexm.zhiquwang.custview.mywheel.MyWheelView;
 import com.icarexm.zhiquwang.presenter.SetReminderPresenter;
@@ -61,6 +62,7 @@ public class SetReminderActivity extends BaseActivity implements SetReminderCont
     private String Min="00";
     private String token;
     private SetReminderPresenter setReminderPresenter;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,21 +75,30 @@ public class SetReminderActivity extends BaseActivity implements SetReminderCont
         initData();
         InitUI();
         InitData();
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
         setReminderPresenter = new SetReminderPresenter(this);
         setReminderPresenter.GetclockRemindedInfo(token);
     }
 
     private void InitData() {
-        LitePal.deleteAll(LiteWeekBean.class);
-        for (int a=0;a<7;a++){
-            LiteWeekBean liteWeekBean = new LiteWeekBean();
-            liteWeekBean.setSlt_code(0);
-            liteWeekBean.setWeek_code(a);
-            liteWeekBean.setWeek_name(weekday[a]);
-            liteWeekBean.save();
+        try {
+            LitePal.deleteAll(LiteWeekBean.class);
+            for (int a = 0; a < 7; a++) {
+                LiteWeekBean liteWeekBean = new LiteWeekBean();
+                liteWeekBean.setSlt_code(0);
+                liteWeekBean.setWeek_code(a);
+                liteWeekBean.setWeek_name(weekday[a]);
+                liteWeekBean.save();
+            }
+            liteWeekBeanList = LitePal.findAll(LiteWeekBean.class);
+            myAdapter.notifyDataSetChanged();
+        }catch (Exception e){
+
         }
-        liteWeekBeanList = LitePal.findAll(LiteWeekBean.class);
-        myAdapter.notifyDataSetChanged();
     }
 
     private void initData() {
@@ -274,6 +285,10 @@ public class SetReminderActivity extends BaseActivity implements SetReminderCont
 
     //页面刷新
     public void UpdateUI(int code,String msg, ClockRemindedInfoBean.DataBean data){
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
         if (code==1){
             String repetition = data.getRepetition();
             String[] split = repetition.split(",");

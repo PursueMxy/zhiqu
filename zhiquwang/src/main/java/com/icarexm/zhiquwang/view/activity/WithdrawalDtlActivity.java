@@ -16,6 +16,7 @@ import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.CommissionAdapter;
 import com.icarexm.zhiquwang.bean.SeeFundBean;
 import com.icarexm.zhiquwang.contract.WithdrawalDtlContract;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.WithdrawalDtlPresenter;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.zhouyou.recyclerview.XRecyclerView;
@@ -37,6 +38,7 @@ public class WithdrawalDtlActivity extends BaseActivity implements WithdrawalDtl
     private String token;
     private List<SeeFundBean.DataBeanX.ListBean.DataBean> dataList=new ArrayList<>();
     private CommissionAdapter commissionAdapter;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,11 @@ public class WithdrawalDtlActivity extends BaseActivity implements WithdrawalDtl
         mContext = getApplicationContext();
         ButterKnife.bind(this);
         InitUI();
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
         withdrawalDtlPresenter = new WithdrawalDtlPresenter(this);
         withdrawalDtlPresenter.GetSeeFund(token,"1");
 
@@ -99,6 +106,10 @@ public class WithdrawalDtlActivity extends BaseActivity implements WithdrawalDtl
     }
 
     public void Update(int code, String msg, SeeFundBean.DataBeanX data){
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
         if (code==1) {
             SeeFundBean.DataBeanX.ListBean list = data.getList();
             dataList = list.getData();

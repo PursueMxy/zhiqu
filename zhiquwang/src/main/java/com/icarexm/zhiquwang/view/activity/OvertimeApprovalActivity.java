@@ -23,6 +23,7 @@ import com.icarexm.zhiquwang.bean.OvertimeApproverBean;
 import com.icarexm.zhiquwang.bean.RepairInfoBean;
 import com.icarexm.zhiquwang.contract.OvertimeApprovalContract;
 import com.icarexm.zhiquwang.custview.BottomDialog;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.calender.AdapterWeek;
 import com.icarexm.zhiquwang.custview.calender.DateUtil;
 import com.icarexm.zhiquwang.custview.calender.InnerGridView;
@@ -82,6 +83,7 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
     private List<String> Festival_List=new ArrayList<>();
     private int classes_id;
     private Integer SltDay;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +100,11 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
         TypeOfWork=intent.getStringExtra("TypeOfWork");
         InitHours();
         InitUI();
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
         todays=Integer.parseInt(DateUtil.getToday());
         SltDay=todays;
         overtimeApprovalPresenter = new OvertimeApprovalPresenter(this);
@@ -282,6 +289,10 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
     }
 
     public void UpdateUI(int code,String msg){
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
         if (code ==10001){
             ToastUtils.showToast(mContext,msg);
             startActivity(new Intent(mContext,LoginActivity.class));
@@ -406,16 +417,27 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
     }
 
     public void UpdateUI(int code, String msg, OvertimeApproverBean.DataBean data){
-        List<OvertimeApproverBean.DataBean.MonthBean> month = data.getMonth();
-        festival_list = data.getFestival();
-        for (int a=0;a<festival_list.size();a++){
-            Festival_List.add(festival_list.get(a).getFestival_name());
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
         }
-        classes_list = data.getClasses();
-        for (int b=0;b<classes_list.size();b++){
-            CLASSES_LIST.add( classes_list.get(b).getClasses_name());
+        if (code==1) {
+            List<OvertimeApproverBean.DataBean.MonthBean> month = data.getMonth();
+            festival_list = data.getFestival();
+            for (int a = 0; a < festival_list.size(); a++) {
+                Festival_List.add(festival_list.get(a).getFestival_name());
+            }
+            classes_list = data.getClasses();
+            for (int b = 0; b < classes_list.size(); b++) {
+                CLASSES_LIST.add(classes_list.get(b).getClasses_name());
+            }
+            monthList = month;
+            adapterDate.notifyDataSetChanged();
+        }if (code ==10001){
+            ToastUtils.showToast(mContext,msg);
+            startActivity(new Intent(mContext,LoginActivity.class));
+            finish();
         }
-        monthList=month;
-        adapterDate.notifyDataSetChanged();
+        ToastUtils.showToast(mContext,msg);
     }
 }

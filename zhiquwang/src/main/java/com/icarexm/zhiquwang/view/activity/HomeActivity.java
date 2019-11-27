@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 
 import com.amap.api.location.AMapLocation;
@@ -45,6 +46,10 @@ public class HomeActivity extends BaseActivity {
     private List<Fragment> mFragmentList=new ArrayList<>();
     private Context mContext;
     private CustomProgressDialog progressDialog = null;//加载页
+    private HomeFragment homeFragment;
+    private RecordOvertimeFragment recordOvertimeFragment;
+    private ClockInFragment clockInFragment;
+    private MinFragment minFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,23 +90,28 @@ public class HomeActivity extends BaseActivity {
         }catch (Exception e){
             currentItems=0;
         }
+//        //加载页添加
+//        if (progressDialog == null){
+//            progressDialog = CustomProgressDialog.createDialog(this);
+//        }
+//        progressDialog.show();
         home_bottombarly.setCurrentItem(currentItems);
     }
 
     private void AddFragment() {
-        HomeFragment homeFragment = new HomeFragment();
+        homeFragment = new HomeFragment();
         Bundle bundle = new Bundle();
         homeFragment.setArguments(bundle);
         mFragmentList.add(homeFragment);
-        RecordOvertimeFragment recordOvertimeFragment=new RecordOvertimeFragment();
+        recordOvertimeFragment = new RecordOvertimeFragment();
         Bundle bundle1 = new Bundle();
         recordOvertimeFragment.setArguments(bundle1);
         mFragmentList.add(recordOvertimeFragment);
-        ClockInFragment clockInFragment = new ClockInFragment();
+        clockInFragment = new ClockInFragment();
         Bundle bundle2 = new Bundle();
         clockInFragment.setArguments(bundle2);
         mFragmentList.add(clockInFragment);
-        MinFragment minFragment = new MinFragment();
+        minFragment = new MinFragment();
         Bundle bundle3 = new Bundle();
         minFragment.setArguments(bundle3);
         mFragmentList.add(minFragment);
@@ -109,14 +119,26 @@ public class HomeActivity extends BaseActivity {
 
     private void InitUI() {
         home_bottombarly.setSmoothScroll(true);
-        mVpContent.setAdapter(new MyAdapter(getSupportFragmentManager()));
+        MyAdapter myAdapter = new MyAdapter(getSupportFragmentManager());
+        mVpContent.setAdapter(myAdapter);
         home_bottombarly.setViewPager(mVpContent);
         home_bottombarly.setCurrentItem(currentItems);
         home_bottombarly.setOnItemSelectedListener(new BottomBarLayout.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(BottomBarItem bottomBarItem, int i, int i1) {
+            public void onItemSelected(BottomBarItem bottomBarItem, int i, int currentPosition) {
+               if (currentPosition==0) {
+                   homeFragment.UpdateUI();
+               }else if (currentPosition==1){
+                   recordOvertimeFragment.UpdateUI();
+               }else if (currentPosition==2){
+                   clockInFragment.UpdateUI();
+               }else if (currentPosition==2){
+                   minFragment.UpdateUI();
+               }
             }
         });
+
+
     }
 
     class MyAdapter extends FragmentStatePagerAdapter {

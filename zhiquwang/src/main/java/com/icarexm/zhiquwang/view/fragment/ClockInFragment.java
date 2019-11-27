@@ -28,11 +28,14 @@ import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.PlayInfoBean;
 import com.icarexm.zhiquwang.bean.PublicCodeBean;
 import com.icarexm.zhiquwang.bean.PublicResultBean;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.calender.DateUtil;
 import com.icarexm.zhiquwang.utils.DateUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
+import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.icarexm.zhiquwang.view.activity.AttendanceCardActivity;
 import com.icarexm.zhiquwang.view.activity.HomeActivity;
+import com.icarexm.zhiquwang.view.activity.LoginActivity;
 import com.icarexm.zhiquwang.view.activity.PunchCardRecordActivity;
 import com.icarexm.zhiquwang.view.activity.SetReminderActivity;
 import com.lzy.okgo.OkGo;
@@ -43,8 +46,6 @@ import com.lzy.okgo.model.Response;
  * A simple {@link Fragment} subclass.
  */
 public class ClockInFragment extends Fragment implements View.OnClickListener {
-
-
     private Context mContext;
     private String token;
     private RelativeLayout rl_entry;
@@ -84,6 +85,7 @@ public class ClockInFragment extends Fragment implements View.OnClickListener {
                     //城市信息
                     cityName = aMapLocation.getCity();
                     SharedPreferences.Editor editor = share.edit();
+                    editor.putString("cityName",cityName);
                     editor.putString("latitude",latitude+"");
                     editor.putString("longitude",longitude+"");
                     editor.commit();//提交
@@ -98,6 +100,8 @@ public class ClockInFragment extends Fragment implements View.OnClickListener {
     private RelativeLayout rl_clockin;
     private RelativeLayout rl_clockOut;
     private View driver;
+    private TextView tv_address;
+    private CustomProgressDialog progressDialog;
 
     public ClockInFragment() {
         // Required empty public constructor
@@ -132,12 +136,17 @@ public class ClockInFragment extends Fragment implements View.OnClickListener {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        if (progressDialog != null){
+                            progressDialog.dismiss();
+                            progressDialog = null;
+                        }
                         PlayInfoBean playInfoBean = new GsonBuilder().create().fromJson(response.body(), PlayInfoBean.class);
                         if (playInfoBean.getCode()==1){
                             PlayInfoBean.DataBean data = playInfoBean.getData();
                             rl_no_entry.setVisibility(View.GONE);
                             tv_set_reminder.setVisibility(View.VISIBLE);
                             rl_entry.setVisibility(View.VISIBLE);
+                            tv_address.setText(data.getAddress()+"");
                             if (data.getIs_auth()==2){
                                 tv_certification.setVisibility(View.GONE);
                                 int start_status = data.getStart_status();
@@ -165,6 +174,10 @@ public class ClockInFragment extends Fragment implements View.OnClickListener {
                             rl_entry.setVisibility(View.GONE);
                             tv_set_reminder.setVisibility(View.GONE);
                             rl_no_entry.setVisibility(View.VISIBLE);
+                        }else if (playInfoBean.getCode() ==10001){
+                            ToastUtils.showToast(mContext,playInfoBean.getMsg());
+                            startActivity(new Intent(mContext, LoginActivity.class));
+                            getActivity().finish();
                         }
                     }
                 });
@@ -180,6 +193,7 @@ public class ClockInFragment extends Fragment implements View.OnClickListener {
         tv_start_time = inflate.findViewById(R.id.clock_in_tv_start_time);
         tv_end_time = inflate.findViewById(R.id.clock_in_tv_end_time);
         driver = inflate.findViewById(R.id.fm_clockin_driver);
+        tv_address = inflate.findViewById(R.id.fm_clock_in_tv_address);
         inflate.findViewById(R.id.fm_clock_in_no_entry).setOnClickListener(this);
         inflate.findViewById(R.id.fm_clock_in_rl_attendance).setOnClickListener(this);
         inflate.findViewById(R.id.fm_clock_in_punch_card_record).setOnClickListener(this);
@@ -257,6 +271,7 @@ public class ClockInFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onSuccess(Response<String> response) {
                         PublicCodeBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicCodeBean.class);
+                        ToastUtils.showToast(mContext,resultBean.getMsg());
                         if (resultBean.getCode()==1){
                             InitData();
                         }
@@ -301,4 +316,15 @@ public class ClockInFragment extends Fragment implements View.OnClickListener {
         //启动定位
         mLocationClient.startLocation();
     }
+
+    public void UpdateUI(){
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(mContext);
+        }
+        progressDialog.show();
+        InitData();
+    }
+
+
 }

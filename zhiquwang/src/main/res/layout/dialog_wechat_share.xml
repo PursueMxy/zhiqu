@@ -22,6 +22,7 @@
         android:gravity="center"
         />
     <TextView
+        android:id="@+id/dialog_wechat_share_tv_monments"
         android:drawableTop="@mipmap/ic_chat_monments"
         android:layout_weight="1"
         android:gravity="center"

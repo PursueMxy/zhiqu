@@ -3,7 +3,7 @@ package com.icarexm.zhiquwang.utils;
 public class RequstUrl {
     public static class URL {
         //请求头
-        public static String HOST = "http://zqw.lippngu.top";
+        public static String HOST = "https://zqw.kuaishanghd.com";
 
         //登录接口
         public static String Login=HOST+"/api/login";
@@ -160,6 +160,15 @@ public class RequstUrl {
 
         //q区域
         public static String getArea=HOST+"/api/getArea";
+
+        //银行卡信息
+        public static String getBank=HOST+"/api/getBank";
+
+        //微信登录绑定手机号
+        public static String BindMobile=HOST+"/api/bindMobile";
+
+        //查询手机号是否注册
+        public static  String is_exists=HOST+"/api/is_exists";
 
     }
 }

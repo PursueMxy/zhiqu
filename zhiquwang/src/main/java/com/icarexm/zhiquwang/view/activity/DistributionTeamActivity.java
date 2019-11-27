@@ -13,6 +13,7 @@ import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.TeamBean;
 import com.icarexm.zhiquwang.contract.DistributionTeamContract;
 import com.icarexm.zhiquwang.custview.CircleImageView;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.DistributionTeamPresenter;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
@@ -32,6 +33,7 @@ public class DistributionTeamActivity extends BaseActivity implements Distributi
     private Context mContext;
     private String token;
     private DistributionTeamPresenter distributionTeamPresenter;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,11 @@ public class DistributionTeamActivity extends BaseActivity implements Distributi
         token = share.getString("token", "");
         mContext = getApplicationContext();
         ButterKnife.bind(this);
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
         distributionTeamPresenter = new DistributionTeamPresenter(this);
         distributionTeamPresenter.GetTeam(token);
     }
@@ -80,6 +87,10 @@ public class DistributionTeamActivity extends BaseActivity implements Distributi
     }
 
     public void UpdateUI(int code,String msg, TeamBean.DataBean data){
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
         if (code==1) {
             tv_money.setText(data.getTotal_commission());
             tv_nickname.setText(data.getUser_name());

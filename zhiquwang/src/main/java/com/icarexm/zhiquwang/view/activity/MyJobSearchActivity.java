@@ -16,6 +16,7 @@ import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.MyJobSearchAdapter;
 import com.icarexm.zhiquwang.bean.JobSearchBean;
 import com.icarexm.zhiquwang.contract.MyJobSearchContract;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.MyJobSearchPresenter;
 import com.icarexm.zhiquwang.utils.MxyUtils;
 import com.icarexm.zhiquwang.utils.ToastUtils;
@@ -39,6 +40,7 @@ public class MyJobSearchActivity extends BaseActivity implements MyJobSearchCont
     private int page=0;
     private List<JobSearchBean.DataBeanX.DataBean> dataList=new ArrayList<>();
     private MyJobSearchAdapter myJobSearchAdapter;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,11 @@ public class MyJobSearchActivity extends BaseActivity implements MyJobSearchCont
         token = share.getString("token", "");
         ButterKnife.bind(this);
         InitUI();
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
         myJobSearchPresenter = new MyJobSearchPresenter(this);
         myJobSearchPresenter.GetMyJob(token,limit,page+"");
     }
@@ -111,6 +118,10 @@ public class MyJobSearchActivity extends BaseActivity implements MyJobSearchCont
     }
 
     public void UpdateUI(int code, String msg, JobSearchBean.DataBeanX data){
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
         if (code==1){
             dataList = data.getData();
             myJobSearchAdapter.setListAll(dataList);

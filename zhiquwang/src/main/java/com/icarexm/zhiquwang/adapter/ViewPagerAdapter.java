@@ -19,6 +19,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.bumptech.glide.Glide;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.custview.CustomVideoView;
+import com.icarexm.zhiquwang.utils.RequstUrl;
 
 import java.util.List;
 

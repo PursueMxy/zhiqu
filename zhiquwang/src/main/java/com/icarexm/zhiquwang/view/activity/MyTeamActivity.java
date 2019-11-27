@@ -14,8 +14,11 @@ import android.view.View;
 
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.MyTeamAdapter;
+import com.icarexm.zhiquwang.bean.MyTeanBean;
 import com.icarexm.zhiquwang.contract.MyTeamContract;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.MyTeamPresenter;
+import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.zhouyou.recyclerview.XRecyclerView;
 
 import java.util.ArrayList;
@@ -29,12 +32,14 @@ public class MyTeamActivity extends BaseActivity implements MyTeamContract.View 
 
     @BindView(R.id.my_team_recyclerView)
     XRecyclerView mRecyclerView;
-    private List<String> list=new ArrayList<>();
     private Context mContext;
     private MyTeamPresenter myTeamPresenter;
     private String token;
     private String limit="20";
     private int page=0;
+    private CustomProgressDialog progressDialog;
+    private List<MyTeanBean.DataBeanX.DataBean> dataBeanList=new ArrayList<>();
+    private MyTeamAdapter myTeamAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +50,11 @@ public class MyTeamActivity extends BaseActivity implements MyTeamContract.View 
         token = share.getString("token", "");
         ButterKnife.bind(this);
         InitUI();
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
         myTeamPresenter = new MyTeamPresenter(this);
         myTeamPresenter.GetMyTeam(token,limit,page+"");
     }
@@ -52,7 +62,7 @@ public class MyTeamActivity extends BaseActivity implements MyTeamContract.View 
     private void InitUI() {
         mRecyclerView.setNestedScrollingEnabled(false);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(mContext);
-        MyTeamAdapter myTeamAdapter = new MyTeamAdapter(mContext);
+        myTeamAdapter = new MyTeamAdapter(mContext);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setFootViewText("拼命加载中","已经全部");
         mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
@@ -71,7 +81,7 @@ public class MyTeamActivity extends BaseActivity implements MyTeamContract.View 
             }
         });
         mRecyclerView.setAdapter(myTeamAdapter);
-        myTeamAdapter.setListAll(list);
+        myTeamAdapter.setListAll(dataBeanList);
     }
 
     @OnClick({R.id.my_team_img_back})
@@ -93,6 +103,20 @@ public class MyTeamActivity extends BaseActivity implements MyTeamContract.View 
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
+    public void  UpdateUI(int code,String msg, MyTeanBean.DataBeanX data){
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+        ToastUtils.showToast(mContext,msg);
+        if (code==1){
+            dataBeanList = data.getData();
+            myTeamAdapter.setListAll(dataBeanList);
+            myTeamAdapter.notifyDataSetChanged();
+        }
 
     }
 }

@@ -20,7 +20,7 @@ public class MyTeamModel implements MyTeamContract.Model {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-
+                     myTeamPresenter.SetMyTeam(response.body());
                     }
                 });
     }

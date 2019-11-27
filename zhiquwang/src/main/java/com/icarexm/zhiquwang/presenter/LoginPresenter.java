@@ -3,6 +3,7 @@ package com.icarexm.zhiquwang.presenter;
 import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.bean.PublicCodeBean;
 import com.icarexm.zhiquwang.bean.PublicResultBean;
+import com.icarexm.zhiquwang.bean.WechatBean;
 import com.icarexm.zhiquwang.contract.LoginContract;
 import com.icarexm.zhiquwang.model.LoginModel;
 
@@ -34,7 +35,11 @@ public class LoginPresenter implements LoginContract.Presenter {
 
     //微信登陆返回
     public void SetWechatLogin(String content){
-        PublicCodeBean publicCodeBean = new GsonBuilder().create().fromJson(content, PublicCodeBean.class);
-        mView.WechatLoginUpdateUI(publicCodeBean.getCode(),publicCodeBean.getMsg());
+        WechatBean wechatBean = new GsonBuilder().create().fromJson(content, WechatBean.class);
+        if (wechatBean.getCode()==10004) {
+            mView.WechatLoginUpdateUI(wechatBean.getCode(),wechatBean.getMsg(), wechatBean.getData().getOpenid());
+        }else {
+            mView.WechatLoginUpdateUI(wechatBean.getCode(), wechatBean.getMsg(), "");
+        }
     }
 }

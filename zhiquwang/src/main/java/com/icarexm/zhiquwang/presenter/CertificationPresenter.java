@@ -35,5 +35,6 @@ public class CertificationPresenter implements CertificationContract.Presenter {
     public void SetdoAutoNym(String conten){
         PublicResultBean resultBean = new GsonBuilder().create().fromJson(conten, PublicResultBean.class);
 
+         mView.UpdateUI(resultBean.getCode(),resultBean.getMsg());
     }
 }

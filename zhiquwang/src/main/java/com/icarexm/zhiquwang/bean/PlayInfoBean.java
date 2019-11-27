@@ -43,7 +43,6 @@ public class PlayInfoBean {
          * end_time :
          * end_status : 1
          * is_auth : 2
-         * address : null
          */
 
         private String start_time;

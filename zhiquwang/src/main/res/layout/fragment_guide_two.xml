@@ -3,6 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/ic_logo"
+    android:background="@mipmap/ic_guide_two"
     tools:context=".view.fragment.GuideTwoFragment">
 </FrameLayout>

@@ -4,10 +4,11 @@ import java.util.List;
 
 public class JobDetailBean {
 
+
     /**
      * code : 1
      * msg : 获取成功
-     * data : {"job_id":1,"job_name":"第一个发布职位","have_video":2,"label_arr":[{"label_name":"猜不透的结局"},{"label_name":"皇家特聘"}],"label_price":"返现//*","salary_hour":"25.00","salary_other":"1、没有休息日\r\n2、每天十六个小时工作时长\r\n3、调试","need_sex":"女","age_explain":"男24-30 女25-30","education":"本科","work_year":10,"need_other":"1、其他需求第一点\r\n2、其他需求第二点\r\n3、其他需求第三点\r\n","work_describe":"1、工作描述第一点\r\n2、工作描述第二点\r\n3、工作描述第三点","longitude":"118.110220","latitude":"24.490474","address":"福建省厦门市思明区筼筜街道仙岳路163古石雕大观园","enterprise_name":"冤大头一号","introduce":"在乎科技成立于2015年，总部位于厦门，专注于移动互联网应用解决方案领域，以互联网技术驱动为核心，为客户提供专业高效的产品与技术服务，助力企业的互联网+转型，通过信息化提升企业运作效率与竞争力；我们崇尚互联网产品思维，坚信技术创造更美好的未来，不断的去发现和创造更符合用户需求的产品，致力于成为行业领先的移动互联网应用方案服务商","img_arr":["http://192.168.1.22:8080/uploads/20191108/9b80fb829010bcedd1c857ba8ab6757d.mp4","http://192.168.1.22:8080/uploads/20191108/d1959ebc21bf16f918252cff0985bf24.png","http://192.168.1.22:8080/uploads/20191101/09a2c49ee61c519ae213b5bf1598bf24.png","http://192.168.1.22:8080/uploads/20191108/7a3dd7ea314c6279e4fd77ed95bc99e1.jpg"],"salary":"500.00-500.00","age":"18-35"}
+     * data : {"job_zone":2,"job_id":2,"job_name":"第二个","have_video":1,"label_arr":[{"label_name":"猜不透的结局"},{"label_name":"皇家特聘"}],"label_price":"返费10元","salary_hour":"架构","salary_structure":"架构","salary_other":"1322","need_sex":"女","age_explain":"123","education":"本科","work_year":10,"need_other":"123","work_describe":"123","longitude":"118.119101","latitude":"24.475836","address":"思北银行","enterprise_name":"冤大头一号","introduce":"在乎科技成立于2015年，总部位于厦门，专注于移动互联网应用解决方案领域，以互联网技术驱动为核心，为客户提供专业高效的产品与技术服务，助力企业的互联网+转型，通过信息化提升企业运作效率与竞争力；我们崇尚互联网产品思维，坚信技术创造更美好的未来，不断的去发现和创造更符合用户需求的产品，致力于成为行业领先的移动互联网应用方案服务商","img_arr":["https://zqw.kuaishanghd.com/uploads/20191126/7abe4ecac98d26de55ab3185016ba752.jpg"],"salary":"500.00-500.00","age":"18-35","mobile":"13333333333"}
      */
 
     private int code;
@@ -40,40 +41,39 @@ public class JobDetailBean {
 
     public static class DataBean {
         /**
-         * job_id : 1
-         * job_name : 第一个发布职位
-         * have_video : 2
+         * job_zone : 2
+         * job_id : 2
+         * job_name : 第二个
+         * have_video : 1
          * label_arr : [{"label_name":"猜不透的结局"},{"label_name":"皇家特聘"}]
-         * label_price : 返现//*
-         * salary_hour : 25.00
-         * salary_other : 1、没有休息日
-         2、每天十六个小时工作时长
-         3、调试
+         * label_price : 返费10元
+         * salary_hour : 架构
+         * salary_structure : 架构
+         * salary_other : 1322
          * need_sex : 女
-         * age_explain : 男24-30 女25-30
+         * age_explain : 123
          * education : 本科
          * work_year : 10
-         * need_other : 1、其他需求第一点
-         2、其他需求第二点
-         3、其他需求第三点
-         * work_describe : 1、工作描述第一点
-         2、工作描述第二点
-         3、工作描述第三点
-         * longitude : 118.110220
-         * latitude : 24.490474
-         * address : 福建省厦门市思明区筼筜街道仙岳路163古石雕大观园
+         * need_other : 123
+         * work_describe : 123
+         * longitude : 118.119101
+         * latitude : 24.475836
+         * address : 思北银行
          * enterprise_name : 冤大头一号
          * introduce : 在乎科技成立于2015年，总部位于厦门，专注于移动互联网应用解决方案领域，以互联网技术驱动为核心，为客户提供专业高效的产品与技术服务，助力企业的互联网+转型，通过信息化提升企业运作效率与竞争力；我们崇尚互联网产品思维，坚信技术创造更美好的未来，不断的去发现和创造更符合用户需求的产品，致力于成为行业领先的移动互联网应用方案服务商
-         * img_arr : ["http://192.168.1.22:8080/uploads/20191108/9b80fb829010bcedd1c857ba8ab6757d.mp4","http://192.168.1.22:8080/uploads/20191108/d1959ebc21bf16f918252cff0985bf24.png","http://192.168.1.22:8080/uploads/20191101/09a2c49ee61c519ae213b5bf1598bf24.png","http://192.168.1.22:8080/uploads/20191108/7a3dd7ea314c6279e4fd77ed95bc99e1.jpg"]
+         * img_arr : ["https://zqw.kuaishanghd.com/uploads/20191126/7abe4ecac98d26de55ab3185016ba752.jpg"]
          * salary : 500.00-500.00
          * age : 18-35
+         * mobile : 13333333333
          */
 
+        private int job_zone;
         private int job_id;
         private String job_name;
         private int have_video;
         private String label_price;
         private String salary_hour;
+        private String salary_structure;
         private String salary_other;
         private String need_sex;
         private String age_explain;
@@ -88,8 +88,17 @@ public class JobDetailBean {
         private String introduce;
         private String salary;
         private String age;
+        private String mobile;
         private List<LabelArrBean> label_arr;
         private List<String> img_arr;
+
+        public int getJob_zone() {
+            return job_zone;
+        }
+
+        public void setJob_zone(int job_zone) {
+            this.job_zone = job_zone;
+        }
 
         public int getJob_id() {
             return job_id;
@@ -129,6 +138,14 @@ public class JobDetailBean {
 
         public void setSalary_hour(String salary_hour) {
             this.salary_hour = salary_hour;
+        }
+
+        public String getSalary_structure() {
+            return salary_structure;
+        }
+
+        public void setSalary_structure(String salary_structure) {
+            this.salary_structure = salary_structure;
         }
 
         public String getSalary_other() {
@@ -241,6 +258,14 @@ public class JobDetailBean {
 
         public void setAge(String age) {
             this.age = age;
+        }
+
+        public String getMobile() {
+            return mobile;
+        }
+
+        public void setMobile(String mobile) {
+            this.mobile = mobile;
         }
 
         public List<LabelArrBean> getLabel_arr() {
