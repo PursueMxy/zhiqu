@@ -343,8 +343,6 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
 
     //加班类型
     private void FestivalDialog(){
-        festival_id = festival_list.get(0).getFestival_id();
-        tv_festival.setText(festival_list.get(0).getFestival_name());
         final BottomDialog SexDialog = new BottomDialog(this, R.style.ActionSheetDialogStyle);
         View Sexinflate = LayoutInflater.from(mContext).inflate(R.layout.dialog_bottom_education, null);
         TextView tv_title =Sexinflate.findViewById(R.id.dialog_bottom_education_tv_title);
@@ -385,7 +383,7 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
         final BottomDialog SexDialog = new BottomDialog(this, R.style.ActionSheetDialogStyle);
         View Sexinflate = LayoutInflater.from(mContext).inflate(R.layout.dialog_bottom_education, null);
         TextView tv_title =Sexinflate.findViewById(R.id.dialog_bottom_education_tv_title);
-        tv_title.setText("班次");
+        tv_title.setText("时长");
         MyWheelView age_groupwva = Sexinflate.findViewById(R.id.dialog_bottom_wheel);
         age_groupwva.setItems(Hours_List,0);
         age_groupwva.setOnItemSelectedListener(new MyWheelView.OnItemSelectedListener() {

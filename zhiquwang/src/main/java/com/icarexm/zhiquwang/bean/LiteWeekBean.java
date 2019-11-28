@@ -1,10 +1,12 @@
 package com.icarexm.zhiquwang.bean;
 
+import org.litepal.annotation.Column;
 import org.litepal.crud.LitePalSupport;
 
 public class LiteWeekBean extends LitePalSupport {
-    private String week_name;
+    @Column(unique = true, defaultValue = "unknown")
     private int week_code;
+    private String week_name;
     private int slt_code;
 
     public int getWeek_code() {
@@ -31,5 +33,12 @@ public class LiteWeekBean extends LitePalSupport {
         this.slt_code= slt_code;
     }
 
+    public LiteWeekBean() {
+    }
 
+    public LiteWeekBean(int week_code, String week_name, int slt_code) {
+        this.week_code = week_code;
+        this.week_name = week_name;
+        this.slt_code = slt_code;
+    }
 }

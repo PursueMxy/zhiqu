@@ -21,6 +21,7 @@ import com.icarexm.zhiquwang.presenter.MyJobSearchPresenter;
 import com.icarexm.zhiquwang.utils.MxyUtils;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.zhouyou.recyclerview.XRecyclerView;
+import com.zhouyou.recyclerview.adapter.BaseRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +92,14 @@ public class MyJobSearchActivity extends BaseActivity implements MyJobSearchCont
                         , 0
                         , 0
                         , MxyUtils.dpToPx(mContext, MxyUtils.getDimens(mContext, R.dimen.dp_10)));
+            }
+        });
+        myJobSearchAdapter.setOnItemClickListener(new BaseRecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, Object item, int position) {
+                Intent intent = new Intent(mContext, RecruitDetailActivity.class);
+                intent.putExtra("job_id",dataList.get(position).getJob_id()+"");
+                startActivity(intent);
             }
         });
     }

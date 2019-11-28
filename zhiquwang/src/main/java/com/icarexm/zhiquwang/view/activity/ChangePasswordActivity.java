@@ -86,17 +86,16 @@ public class ChangePasswordActivity extends BaseActivity implements ChangePasswo
     }
 
     public void UpdateUI(int code,String msg){
+        ToastUtils.showToast(mContext,msg);
         if (code==1){
             SharedPreferences.Editor editor = share.edit();
             editor.putString("password",newpassword);
             editor.commit();//提交
-            finish();
-        }else if (code ==10001){
-            ToastUtils.showToast(mContext,msg);
             startActivity(new Intent(mContext,LoginActivity.class));
             finish();
-        }else {
-            ToastUtils.showToast(mContext,msg);
+        }else if (code ==10001){
+            startActivity(new Intent(mContext,LoginActivity.class));
+            finish();
         }
     }
 }

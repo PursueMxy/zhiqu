@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -386,6 +387,7 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
     }
 
     private void SltAdapter() {
+        Drawable drawable=getResources().getDrawable(R.drawable.bg_green);
         cityAdapter = new CityAdapter();
         list_city.setAdapter(cityAdapter);
         list_city.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -396,6 +398,7 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
                 IsArea=true;
             }
         });
+        list_city.setSelector(drawable);
         salaryAdapter = new SalaryAdapter();
         list_salary.setAdapter(salaryAdapter);
         list_salary.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -406,6 +409,7 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
                 IsSalary=true;
             }
         });
+        list_salary.setSelector(drawable);
         ageAdapter = new AgeAdapter();
         list_age.setAdapter(ageAdapter);
         list_age.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -416,6 +420,7 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
                 IsAge=true;
             }
         });
+        list_age.setSelector(drawable);
         vocationAdapter = new VocationAdapter();
         list_vocation.setAdapter(vocationAdapter);
         list_vocation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -426,6 +431,7 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
                 IsVocation=true;
             }
         });
+        list_vocation.setSelector(drawable);
         environmentAdapter = new EnvironmentAdapter();
         list_environment.setAdapter(environmentAdapter);
         list_environment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -436,6 +442,7 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
                 IsEironment=true;
             }
         });
+        list_environment.setSelector(drawable);
     }
 
     @OnClick({R.id.famous_recruitment_img_back})

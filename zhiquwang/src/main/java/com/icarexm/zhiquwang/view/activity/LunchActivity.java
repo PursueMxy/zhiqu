@@ -10,7 +10,7 @@ import android.os.Handler;
 
 import com.icarexm.zhiquwang.R;
 
-public class LunchActivity extends AppCompatActivity {
+public class LunchActivity extends BaseActivity {
     private Context mContext;
     Handler handler = new Handler();
 
@@ -20,9 +20,11 @@ public class LunchActivity extends AppCompatActivity {
             if (!token.equals("")) {
                 Intent intent = new Intent(mContext, LoginActivity.class);
                 startActivity(intent);
+                finish();
             }else {
                 Intent intent = new Intent(mContext, GuidePageActivity.class);
                 startActivity(intent);
+                finish();
             }
         }
     };

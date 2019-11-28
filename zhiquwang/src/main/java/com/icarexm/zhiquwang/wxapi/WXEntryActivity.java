@@ -7,12 +7,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.utils.AppContUtils;
+import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.icarexm.zhiquwang.utils.WxUtil;
 import com.icarexm.zhiquwang.view.activity.LoginActivity;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
@@ -35,7 +37,6 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wxentry);
-        Intent intent = getIntent();
         mContext = getApplicationContext();
         wxapi = WXAPIFactory.createWXAPI(this, AppContUtils.WX_APP_ID, false);
         wxapi.registerApp(AppContUtils.WX_APP_ID);
@@ -66,7 +67,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         if (type==0) {
             //初始化一个WXWebpageObject，填写url
             WXWebpageObject webpage = new WXWebpageObject();
-            webpage.webpageUrl = "http://www.icarexm.com/app.html";
+            webpage.webpageUrl = url;
 
             //用 WXWebpageObject 对象初始化一个 WXMediaMessage 对象
             WXMediaMessage msg = new WXMediaMessage(webpage);
@@ -85,7 +86,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         }else  if (type==1){
             //初始化一个WXWebpageObject，填写url
             WXWebpageObject webpage = new WXWebpageObject();
-            webpage.webpageUrl = "http://www.icarexm.com/app.html";
+            webpage.webpageUrl =url;
             //用 WXWebpageObject 对象初始化一个 WXMediaMessage 对象
             WXMediaMessage msg = new WXMediaMessage(webpage);
             msg.title = "求职就用职趣网！";
@@ -104,6 +105,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
     @Override
     public void onReq(BaseReq baseReq) {
+        Log.e("微信6分享","jsdfhdjfh");
         switch (baseReq.getType()) {
             case ConstantsAPI.COMMAND_GETMESSAGE_FROM_WX:
                 break;
@@ -121,11 +123,16 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
             // 发送成功
             case BaseResp.ErrCode.ERR_OK:
                 // 获取code
-                String code = ((SendAuth.Resp) resp).code;
-               Intent intent = new Intent(mContext, LoginActivity.class);
-               intent.putExtra("type","wechat");
-               intent.putExtra("code",code);
-               startActivity(intent);
+                try {
+                    String code = ((SendAuth.Resp) resp).code;
+                    Intent intent = new Intent(mContext, LoginActivity.class);
+                    intent.putExtra("type","wechat");
+                    intent.putExtra("code",code);
+                    startActivity(intent);
+                }catch (Exception e){
+                    ToastUtils.showToast(mContext,"分享成功");
+                    finish();
+                }
                 break;
             case BaseResp.ErrCode.ERR_AUTH_DENIED:
                 Intent intent1 = new Intent(mContext, LoginActivity.class);

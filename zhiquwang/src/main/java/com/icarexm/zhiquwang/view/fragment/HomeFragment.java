@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -253,7 +254,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 .params("limit",limit)
                 .params("page",page)
                 .params("zone_id",zone_id)
-                .params("area_id",age_id)
+                .params("area_id",area_id)
                 .params("salary_id",salary_id)
                 .params("age_id",age_id)
                 .params("vocation_id",vocation_id)
@@ -365,17 +366,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void SltAdapter() {
+        Drawable drawable=getResources().getDrawable(R.drawable.bg_green);
         cityAdapter = new CityAdapter();
         list_city.setAdapter(cityAdapter);
         list_city.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                age_id=area_list.get(i).getArea_id()+"";
+                area_id=area_list.get(i).getArea_id()+"";
                 rl_city.setVisibility(View.GONE);
                 IsArea=true;
                 InitHomeData();
             }
         });
+        list_city.setSelector(drawable);
         salaryAdapter = new SalaryAdapter();
         list_salary.setAdapter(salaryAdapter);
         list_salary.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -387,6 +390,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 InitHomeData();
             }
         });
+        list_salary.setSelector(drawable);
         ageAdapter = new AgeAdapter();
         list_age.setAdapter(ageAdapter);
         list_age.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -398,6 +402,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 InitHomeData();
             }
         });
+        list_age.setSelector(drawable);
         vocationAdapter = new VocationAdapter();
         list_vocation.setAdapter(vocationAdapter);
         list_vocation.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -409,6 +414,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 InitHomeData();
             }
         });
+        list_vocation.setSelector(drawable);
         environmentAdapter = new EnvironmentAdapter();
         list_environment.setAdapter(environmentAdapter);
         list_environment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -420,6 +426,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 InitHomeData();
             }
         });
+        list_environment.setSelector(drawable);
     }
 
     private void recyclerViewAT() {
@@ -817,7 +824,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         if (progressDialog == null){
             progressDialog = CustomProgressDialog.createDialog(mContext);
         }
+        area_id="";
+        age_id="";
+        salary_id="";
+        vocation_id="";
+        environment_id="";
         progressDialog.show();
+        SltAdapter();
         InitData();
     }
 }

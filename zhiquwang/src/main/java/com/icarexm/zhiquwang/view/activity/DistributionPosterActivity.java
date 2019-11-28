@@ -1,27 +1,39 @@
 package com.icarexm.zhiquwang.view.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 
+import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
+import com.icarexm.zhiquwang.bean.InviteQrBean;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 
+import org.sufficientlysecure.htmltextview.HtmlHttpImageGetter;
+import org.sufficientlysecure.htmltextview.HtmlTextView;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class DistributionPosterActivity extends BaseActivity {
 
+    @BindView(R.id.distribution_poster_webview)
+    WebView webview;
     private String token;
     private Context mContext;
+    private String webUrl="file:///android_asset/EmptyView.html";
 
+    @SuppressLint("JavascriptInterface")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +43,14 @@ public class DistributionPosterActivity extends BaseActivity {
         mContext = getApplicationContext();
         ButterKnife.bind(this);
         InitData();
+        webview.loadUrl(webUrl);
+        //设置可自由缩放网页、JS生效
+        WebSettings webSettings = webview.getSettings();
+        webview.setOnTouchListener((v, event) -> (event.getAction() == MotionEvent.ACTION_MOVE));
+        //1. 设置于JS交互的权限
+        webSettings.setJavaScriptEnabled(true);
+        //2. 将Java对象映射到JS对象
+        webview.addJavascriptInterface(DistributionPosterActivity.this, "jsObject");
     }
 
     private void InitData() {
@@ -39,7 +59,12 @@ public class DistributionPosterActivity extends BaseActivity {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-
+                        InviteQrBean inviteQrBean = new GsonBuilder().create().fromJson(response.body(), InviteQrBean.class);
+                        if (inviteQrBean.getCode()==1){
+                            InviteQrBean.DataBean data = inviteQrBean.getData();
+                            String qr_code = data.getQr_code();
+                            webview.loadUrl("javascript:callJS('"+qr_code+"')");
+                        }
                     }
                 });
     }

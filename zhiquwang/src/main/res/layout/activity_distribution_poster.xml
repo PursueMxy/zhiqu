@@ -5,13 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.activity.DistributionPosterActivity">
-   <ImageView
-       android:scaleType="fitXY"
-       android:id="@+id/distribution_poster_img"
-       android:src="@mipmap/ic_poster"
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       />
+    <RelativeLayout
+        android:background="@drawable/ic_poster"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <WebView
+            android:id="@+id/distribution_poster_webview"
+            android:layout_width="@dimen/dp_112"
+            android:layout_height="@dimen/dp_112"
+            android:scrollbars="none" />
+        </RelativeLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_65">
@@ -21,7 +27,7 @@
             android:layout_centerHorizontal="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="佣金订单"
+            android:text="分享海报"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_17"
             />

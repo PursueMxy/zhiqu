@@ -29,6 +29,7 @@
                android:id="@+id/recruit_edt_content"
                android:textSize="@dimen/sp_13"
                android:paddingLeft="@dimen/dp_20"
+               android:lines="1"
                android:hint="请输入要搜索的内容"
                android:layout_width="match_parent"
                android:layout_height="match_parent"

@@ -170,5 +170,8 @@ public class RequstUrl {
         //查询手机号是否注册
         public static  String is_exists=HOST+"/api/is_exists";
 
+        //邀请地址
+        public static  String inviteUrl=HOST+"/api/inviteUrl";
+
     }
 }

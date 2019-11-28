@@ -62,6 +62,9 @@ public class AttendanceCardActivity extends BaseActivity implements AttendanceCa
      TextView tv_time;
      @BindView(R.id.attendance_card_ll)
      LinearLayout ll_attendance_card;
+     @BindView(R.id.attendance_card_tv_repair_num)
+     TextView tv_repair_num;
+
     private List<Integer> days = new ArrayList<>();
     //日历数据
     private List<Boolean> status = new ArrayList<>();
@@ -328,6 +331,7 @@ public class AttendanceCardActivity extends BaseActivity implements AttendanceCa
             progressDialog.dismiss();
             progressDialog = null;
         }
+        tv_repair_num.setText("本月补卡剩余"+ data.getRepair_num() +"次");
     }
 
     //班次

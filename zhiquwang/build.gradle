@@ -12,7 +12,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             // 设置支持的SO库架构
-            abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+            abiFilters 'armeabi' , 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
         }
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_8
@@ -21,7 +21,7 @@ android {
 
         manifestPlaceholders = [
                 JPUSH_PKGNAME: "com.icarexm.zhiquwang",
-                JPUSH_APPKEY : "b2cca66fbf5829eb96699896", //JPush 上注册的包名对应的 Appkey.
+                JPUSH_APPKEY : "bb59c28466c26a4d43ac56d7", //JPush 上注册的包名对应的 Appkey.
                 JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
         ]
     }
@@ -85,4 +85,7 @@ dependencies {
 
     implementation 'cn.jiguang.sdk:jpush:3.4.0'  // 此处以JPush 3.4.0 版本为例。
     implementation 'cn.jiguang.sdk:jcore:2.2.2'  // 此处以JCore 2.2.2 版本为例。
+
+    implementation 'org.sufficientlysecure:html-textview:3.8'
+
 }

@@ -43,7 +43,7 @@
         android:layout_height="@dimen/dp_50">
         <RadioButton
             android:id="@+id/famous_recruitment_radiobutton_area"
-            android:textColor="@color/ff00b6ce"
+            android:textColor="@color/ff4e4d4d"
             android:textSize="@dimen/sp_15"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_50"

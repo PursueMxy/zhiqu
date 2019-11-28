@@ -41,13 +41,6 @@ public class IndicatorAdapter extends RecyclerView.Adapter<IndicatorAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        if (position==0){
-            if (Have_video==2){
-                holder.indicator_img.setVisibility(View.GONE);
-            }else {
-                holder.indicator_img.setVisibility(View.VISIBLE);
-            }
-        }
         if (position==mCurrentItem){
                 holder.indicator_img.setImageResource(R.drawable.ic_indicator_dot);
 

@@ -63,6 +63,7 @@ public class SetReminderActivity extends BaseActivity implements SetReminderCont
     private String token;
     private SetReminderPresenter setReminderPresenter;
     private CustomProgressDialog progressDialog;
+    private List<LiteWeekBean> liteWeekBeans=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,14 +134,14 @@ public class SetReminderActivity extends BaseActivity implements SetReminderCont
             case R.id.set_reminder_btn_week_confirm:
                 WeekName="";
                 WeekCode="";
-                List<LiteWeekBean> LiteWeekBean = LitePal.where("slt_code = 1").find(LiteWeekBean.class);
-                for (int a=0;a<LiteWeekBean.size();a++){
+                liteWeekBeans = LitePal.where("slt_code=1").find(LiteWeekBean.class);
+                for (int a = 0; a< liteWeekBeans.size(); a++){
                     if (a==0){
-                        WeekName=LiteWeekBean.get(a).getWeek_name();
-                        WeekCode=""+LiteWeekBean.get(a).getWeek_code();
+                        WeekName= liteWeekBeans.get(a).getWeek_name();
+                        WeekCode=""+ liteWeekBeans.get(a).getWeek_code();
                     }else {
-                        WeekName=WeekName+","+LiteWeekBean.get(a).getWeek_name();
-                        WeekCode=WeekCode+","+LiteWeekBean.get(a).getWeek_code();
+                        WeekName=WeekName+","+ liteWeekBeans.get(a).getWeek_name();
+                        WeekCode=WeekCode+","+ liteWeekBeans.get(a).getWeek_code();
                     }
                 }
                 tv_week_name.setText(WeekName);
@@ -206,16 +207,18 @@ public class SetReminderActivity extends BaseActivity implements SetReminderCont
             }
             remind_cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if (b) {
-                        LiteWeekBean liteWeekBean = new LiteWeekBean();
+                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                    LiteWeekBean liteWeekBean = new LiteWeekBean();
+                    if (isChecked) {
                         liteWeekBean.setSlt_code(1);
-                        liteWeekBean.updateAll("week_name= ?", liteWeekBeanList.get(i).getWeek_name());
+                        liteWeekBean.updateAll("week_code="+ i);
                     }else {
-                        LiteWeekBean liteWeekBean = new LiteWeekBean();
-                        liteWeekBean.setSlt_code(0);
-                        liteWeekBean.updateAll("week_name= ?", liteWeekBeanList.get(i).getWeek_name());
+                        liteWeekBean.setSlt_code(2);
+                        liteWeekBean.updateAll("week_code="+ i);
                     }
+                    liteWeekBeans = LitePal.where("slt_code=1").find(LiteWeekBean.class);
+                    Log.e("jkdnfjsd", liteWeekBeans.size()+"jdfhjsf");
+
                 }
             });
             return inflate;

@@ -61,7 +61,7 @@ public class OvertimeStatisticsActivity extends BaseActivity implements Overtime
     private CustomProgressDialog progressDialog;
     private int StartYear=2019;
     private int StopYear=2050;
-    private String SltYear="1990年";
+    private String SltYear="2019年";
     private String SltMonth="0月";
     private String[] SltNull=new String[]{"请先选择上级"};
     private static final String[] BIRTH_MONTH=new String[]{"1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"};
@@ -165,7 +165,7 @@ public class OvertimeStatisticsActivity extends BaseActivity implements Overtime
         final BottomDialog age_groupDialog = new BottomDialog(this, R.style.ActionSheetDialogStyle);
         View  BirthDateInflate = LayoutInflater.from(mContext).inflate(R.layout.dialog_bottom_birth_date, null);
         MyWheelView groupwva_one = BirthDateInflate.findViewById(R.id.dialog_bottom_wheel_one);
-        groupwva_one.setItems(YearList,92);
+        groupwva_one.setItems(YearList,0);
         MyWheelView groupwva_two = BirthDateInflate.findViewById(R.id.dialog_bottom_wheel_two);
         groupwva_two.setItems(Arrays.asList(SltNull),0);
         groupwva_one.setOnItemSelectedListener(new MyWheelView.OnItemSelectedListener() {

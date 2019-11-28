@@ -47,15 +47,17 @@
         />
 
     <TextView
+        android:layout_toLeftOf="@+id/list_nearby_tv_sing_up"
+        android:layout_marginRight="@dimen/dp_5"
         android:id="@+id/list_nearby_tv_address"
         android:drawablePadding="@dimen/dp_5"
         android:drawableLeft="@mipmap/ic_location_green"
         android:layout_marginTop="@dimen/dp_7"
         android:layout_alignLeft="@+id/list_nearby_tv_storeName"
         android:layout_below="@+id/list_nearby_tv_time"
-        android:layout_width="180dp"
-        android:layout_height="16dp"
-        android:text="福建省厦门市思明区连扳国贸大厦"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
         android:textColor="#ff4e4d4d"
         android:textSize="12sp"
         />
@@ -77,9 +79,9 @@
     <TextView
         android:id="@+id/list_nearby_tv_sing_up"
         android:gravity="center"
+        android:layout_above="@+id/list_nearby_driver"
         android:background="@drawable/bg_green_4"
         android:layout_marginRight="@dimen/dp_15"
-        android:layout_marginTop="@dimen/dp_91"
         android:layout_alignParentRight="true"
         android:layout_width="@dimen/dp_58"
         android:layout_height="@dimen/dp_22"
@@ -89,7 +91,8 @@
         />
 
    <View
-       android:layout_below="@+id/list_nearby_img_arr"
+       android:id="@+id/list_nearby_driver"
+       android:layout_below="@+id/list_nearby_tv_mobile"
        android:layout_marginTop="@dimen/dp_15"
        android:layout_marginLeft="@dimen/dp_15"
        android:layout_marginRight="@dimen/dp_15"

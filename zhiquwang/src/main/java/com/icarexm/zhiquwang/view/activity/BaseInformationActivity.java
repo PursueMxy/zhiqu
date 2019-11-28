@@ -178,7 +178,9 @@ public class BaseInformationActivity extends BaseActivity implements BaseInforma
             progressDialog = null;
         }
         if (code==1){
-             finish();
+            Intent intent = new Intent(mContext, HomeActivity.class);
+            intent.putExtra("currentItems","3");
+            startActivity(intent);
         }else if (code ==10001){
             ToastUtils.showToast(mContext,msg);
             startActivity(new Intent(mContext,LoginActivity.class));

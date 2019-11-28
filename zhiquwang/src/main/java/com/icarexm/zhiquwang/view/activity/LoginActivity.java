@@ -26,6 +26,7 @@ import com.icarexm.zhiquwang.wxapi.WXEntryActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jpush.android.api.JPushInterface;
 
 public class LoginActivity extends BaseActivity implements LoginContract.View {
     @BindView(R.id.login_edt_mobile)
@@ -165,6 +166,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         }else if (code==1){
             startActivity(new Intent(mContext,HomeActivity.class));
         }
+        ToastUtils.showToast(mContext,msg);
     }
 }
 

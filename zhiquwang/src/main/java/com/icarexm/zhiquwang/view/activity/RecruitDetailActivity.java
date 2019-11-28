@@ -37,6 +37,7 @@ import com.icarexm.zhiquwang.adapter.OnItemClickListener;
 import com.icarexm.zhiquwang.adapter.RecruitAdapter;
 import com.icarexm.zhiquwang.adapter.ViewPagerAdapter;
 import com.icarexm.zhiquwang.bean.HomeDataBean;
+import com.icarexm.zhiquwang.bean.InviteUrlBean;
 import com.icarexm.zhiquwang.bean.JobDetailBean;
 import com.icarexm.zhiquwang.bean.PublicResultBean;
 import com.icarexm.zhiquwang.contract.RecruitDetailContract;
@@ -67,6 +68,7 @@ import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,12 +111,12 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
     TextView tv_other_ask;
     @BindView(R.id.recruit_dtl_tv_workingContent)
     TextView tv_workingContent;
-    @BindView(R.id.recruit_dtl_commuteDt)
-    TextView tv_commuteDt;
     @BindView(R.id.recruit_dtl_tv_introduce)
     TextView tv_introduce;
     @BindView(R.id.recruit_dtl_listview)
     ListView list_tuijian;
+    @BindView(R.id.recruit_dtl_tv_title)
+    TextView tv_title;
     private int CurrentItem=0;
     private int DELAYMILLIS=10000;
     private ViewPagerAdapter viewPagerAdapter;
@@ -139,6 +141,11 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
     private MyAdapter myAdapter;
     private String mobile;
     private CustomProgressDialog progressDialog;
+    private String latitude;
+    private String longitude;
+    private String address;
+    private String enterprise_name;
+    private String inviteUrl;
 
 
     @Override
@@ -157,9 +164,24 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
             progressDialog = CustomProgressDialog.createDialog(this);
         }
         progressDialog.show();
+        InitDataUrl();
         recruitDetailPresenter = new RecruitDetailPresenter(this);
         recruitDetailPresenter.GetJobDetail(token,job_id);
         recruitDetailPresenter.GetHomeData(token,limit+"",page+"",zone_id,area_id,salary_id,age_id,vocation_id,environment_id,job_id);
+    }
+
+    private void InitDataUrl() {
+    OkGo.<String>post(RequstUrl.URL.inviteUrl)
+            .params("token",token)
+            .execute(new StringCallback() {
+                @Override
+                public void onSuccess(Response<String> response) {
+                    InviteUrlBean inviteUrlBean = new GsonBuilder().create().fromJson(response.body(), InviteUrlBean.class);
+                    if(inviteUrlBean.getCode()==1){
+                        inviteUrl = inviteUrlBean.getData().getUrl();
+                    }
+                }
+            });
     }
 
 
@@ -171,7 +193,7 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
     }
 
     @OnClick({R.id.recruit_dtl_tv_wechat,R.id.recruit_dtl_tv_nearby_store,R.id.recruit_dtl_tv_callPhone,R.id.recruit_dtl_btn_one_key_enroll
-    ,R.id.recruit_dtl_img_back})
+    ,R.id.recruit_dtl_img_back,R.id.recruit_dtl_tv_address,R.id.recruit_dtl_img_invite_url})
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.recruit_dtl_tv_wechat:
@@ -184,6 +206,9 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
                 break;
             case R.id.recruit_dtl_tv_callPhone:
                 callPhoneDialog();
+                break;
+            case R.id.recruit_dtl_img_invite_url:
+                WechatDialog();
                 break;
             case R.id.recruit_dtl_btn_one_key_enroll:
                 OkGo.<String>post(RequstUrl.URL.applicationInfo)
@@ -212,6 +237,9 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
                 break;
             case R.id.recruit_dtl_img_back:
                 finish();
+                break;
+            case R.id.recruit_dtl_tv_address:
+                startNaviGao();
                 break;
         }
     }
@@ -271,14 +299,14 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
         inflate.findViewById(R.id.dialog_wechat_share_tv_friend).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                WXEntryActivity.ShareWeixin(mContext,MyApplication.iwxapi,"",0);
+                WXEntryActivity.ShareWeixin(mContext,MyApplication.iwxapi,inviteUrl,0);
 
             }
         });
         inflate.findViewById(R.id.dialog_wechat_share_tv_monments).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                WXEntryActivity.ShareWeixin(mContext,MyApplication.iwxapi,"",1);
+                WXEntryActivity.ShareWeixin(mContext,MyApplication.iwxapi,inviteUrl,1);
             }
         });
         bottomDialog.setContentView(inflate);
@@ -435,6 +463,10 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
             progressDialog = null;
         }
         if (code==1){
+            latitude = dataBean.getLatitude();
+            longitude = dataBean.getLongitude();
+            address = dataBean.getAddress();
+            enterprise_name = dataBean.getEnterprise_name();
             img_arr = dataBean.getImg_arr();
             have_video = dataBean.getHave_video();
             viewPagerAdapter = new ViewPagerAdapter(this, img_arr, recruit_dtl_viewPage, have_video);
@@ -448,6 +480,7 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
                 label.add(label_arr.get(a).getLabel_name());
             }
             labelsView.setLabels(label);
+            tv_title.setText(dataBean.getJob_name());
             tv_job_name.setText(dataBean.getJob_name());
             tv_salary.setText(dataBean.getSalary()+"/月("+dataBean.getSalary_hour()+"/小时)");
             tv_company.setText(dataBean.getEnterprise_name());
@@ -455,7 +488,7 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
             tv_label_price.setText(dataBean.getLabel_price());
             tv_zhSalary.setText("综合工资："+dataBean.getSalary()+"/月");
             tv_hourSalary.setText("小时工资："+dataBean.getSalary_hour()+"/日");
-            tv_other_benefits.setText("其它福利 ："+dataBean.getSalary_other());
+            tv_other_benefits.setText(dataBean.getSalary_other());
             tv_age.setText("性别年龄："+dataBean.getAge_explain());
             tv_education.setText("学      历："+dataBean.getEducation());
             tv_workingLife.setText("工作年限："+dataBean.getWork_year());
@@ -523,6 +556,32 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
         }
     }
 
-
+    //调用地图导航
+    public void startNaviGao() {
+        if (MxyUtils.isAvilible(mContext, "com.autonavi.minimap")) {
+            try {
+                //sourceApplication
+                Intent intent = Intent.getIntent("androidamap://navi?sourceApplication="+enterprise_name+"&poiname="+address+"&lat=" + latitude + "&lon=" + longitude + "&dev=0");
+                startActivity(intent);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+                ToastUtils.showToast(mContext,"您尚未安装百度地图或地图版本过低");
+            }
+        } else if (MxyUtils.isAvilible(this, "com.baidu.BaiduMap")) {//传入指定应用包名
+            try {
+                Intent intent = Intent.getIntent("intent://map/direction?" +
+                        "destination=latlng:" + latitude + "," + longitude + "|name:"+address+
+                        "&mode=driving&" +     //导航路线方式
+                        "&src=appname#Intent;scheme=bdapp;package=com.baidu.BaiduMap;end");
+                startActivity(intent); //启动调用
+            } catch (URISyntaxException e) {
+                Log.e("intent", e.getMessage());
+                ToastUtils.showToast(mContext,"您尚未安装百度地图或地图版本过低");
+            }
+        }
+        else {
+            ToastUtils.showToast(mContext,"您尚未安装地图或地图版本过低");
+        }
+    }
 
 }

@@ -80,6 +80,10 @@ public class RecordOvertimeFragment extends Fragment implements View.OnClickList
     }
 
     private void InitData() {
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(mContext);
+        }
+        progressDialog.show();
         OkGo.<String>post(RequstUrl.URL.Overtime)
                 .params("token",token)
                 .params("type",TypeOfWork)
@@ -187,11 +191,6 @@ public class RecordOvertimeFragment extends Fragment implements View.OnClickList
     }
 
     public void UpdateUI(){
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(mContext);
-        }
-        progressDialog.show();
         InitData();
     }
 

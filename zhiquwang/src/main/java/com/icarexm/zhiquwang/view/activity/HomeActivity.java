@@ -90,11 +90,15 @@ public class HomeActivity extends BaseActivity {
         }catch (Exception e){
             currentItems=0;
         }
-//        //加载页添加
-//        if (progressDialog == null){
-//            progressDialog = CustomProgressDialog.createDialog(this);
-//        }
-//        progressDialog.show();
+        if (currentItems==0) {
+            homeFragment.UpdateUI();
+        }else if (currentItems==1){
+            recordOvertimeFragment.UpdateUI();
+        }else if (currentItems==2){
+            clockInFragment.UpdateUI();
+        }else if (currentItems==3){
+            minFragment.UpdateUI();
+        }
         home_bottombarly.setCurrentItem(currentItems);
     }
 
@@ -132,7 +136,7 @@ public class HomeActivity extends BaseActivity {
                    recordOvertimeFragment.UpdateUI();
                }else if (currentPosition==2){
                    clockInFragment.UpdateUI();
-               }else if (currentPosition==2){
+               }else if (currentPosition==3){
                    minFragment.UpdateUI();
                }
             }
