@@ -5,18 +5,92 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+   <LinearLayout
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+       android:orientation="vertical"
+       android:padding="8dip">
 
-   <ImageView
-       android:id="@+id/compadd_img"
-       android:layout_centerInParent="true"
-       android:src="@mipmap/zhinanz"
-       android:layout_width="@dimen/dp_120"
-       android:layout_height="@dimen/dp_120"/>
+      <TextView
+          android:id="@+id/tv_regId"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dip" />
 
-   <TextView
-       android:id="@+id/main_tv_jiaodu"
-       android:textSize="@dimen/sp_25"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"/>
+      <TextView
+          android:id="@+id/tv_appkey"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dip" />
 
+      <TextView
+          android:id="@+id/tv_package"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dip" />
+
+      <TextView
+          android:id="@+id/tv_imei"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dip" />
+
+      <TextView
+          android:id="@+id/tv_device_id"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dip" />
+
+      <TextView
+          android:id="@+id/tv_version"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dip" />
+
+      <Button
+          android:id="@+id/init"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dip"
+          android:text="initPush" />
+
+      <Button
+          android:id="@+id/stopPush"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dip"
+          android:text="stopPush" />
+
+      <Button
+          android:id="@+id/resumePush"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dip"
+          android:text="resumePush" />
+
+      <Button
+          android:id="@+id/getRegistrationId"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dip"
+          android:text="get_Registration_Id" />
+
+      <EditText
+          android:id="@+id/msg_rec"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dip"
+          android:visibility="invisible" />
+
+
+
+   </LinearLayout>
+
+   <Button
+       android:id="@+id/setting"
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+       android:layout_alignParentBottom="true"
+
+       android:text="高级功能" />
 </RelativeLayout>

@@ -37,7 +37,7 @@ public class HomeFmAdapter extends HelperRecyclerViewAdapter<HomeDataBean.DataBe
         TextView tv_salary = viewHolder.getView(R.id.list_home_fm_tv_salary);
         tv_salary.setText(item.getSalary()+"/月("+item.getSalary_hour()+"/小时)");
         TextView tv_age= viewHolder.getView(R.id.list_home_fm_tv_age);
-        tv_age.setText(item.getAge());
+        tv_age.setText(item.getAge()+"岁");
         TextView tv_address = viewHolder.getView(R.id.list_home_fm_tv_address);
         tv_address.setText(item.getAddress());
         TextView tv_label_price= viewHolder.getView(R.id.list_home_fm_tv_label_price);

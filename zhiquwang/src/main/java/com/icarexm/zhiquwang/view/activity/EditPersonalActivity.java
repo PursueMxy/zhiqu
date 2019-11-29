@@ -17,6 +17,8 @@ import android.widget.EditText;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.GsonBuilder;
+import com.hjq.permissions.OnPermission;
+import com.hjq.permissions.XXPermissions;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.PublicResultBean;
 import com.icarexm.zhiquwang.bean.UploadImgBean;
@@ -60,6 +62,20 @@ public class EditPersonalActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_personal);
+        //权限申请
+        XXPermissions.with(this)
+                .request(new OnPermission() {
+
+                    @Override
+                    public void hasPermission(List<String> granted, boolean isAll) {
+
+                    }
+
+                    @Override
+                    public void noPermission(List<String> denied, boolean quick) {
+
+                    }
+                });
         SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
         mContext = getApplicationContext();
@@ -76,21 +92,20 @@ public class EditPersonalActivity extends BaseActivity {
                 if (!nickname.equals("")) {
                     if (!url.equals("")) {
                         OkGo.<String>post(RequstUrl.URL.setUsername)
-                                .params("token", token)
-                                .params("username", nickname)
+                                .params("token",token)
+                                .params("username",nickname)
                                 .params("avatar",url)
                                 .execute(new StringCallback() {
                                     @Override
                                     public void onSuccess(Response<String> response) {
                                         PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
+                                        ToastUtils.showToast(mContext,resultBean.getMsg());
                                         if (resultBean.getCode()==1){
                                          startActivity(new Intent(mContext,HomeActivity.class));
                                         }else if (resultBean.getCode() ==10001){
                                             ToastUtils.showToast(mContext,resultBean.getMsg());
                                             startActivity(new Intent(mContext,LoginActivity.class));
                                             finish();
-                                        }else {
-                                            ToastUtils.showToast(mContext,resultBean.getMsg());
                                         }
                                     }
                                 });
@@ -102,22 +117,40 @@ public class EditPersonalActivity extends BaseActivity {
                 }
                 break;
             case R.id.edt_personal_img_avatar:
-                Matisse.from(this)
-                        .choose(MimeType.ofImage(), false)
-                        .countable(true)
-                        .capture(true)
-                        .captureStrategy(new CaptureStrategy(true, "com.zhkj.syyj.fileprovider", "test"))
-                        .maxSelectable(1)
-                        .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
-                        .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.dp_110))
-                        .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-                        .thumbnailScale(0.85f)
-                        .imageEngine(new GlideEngine())
-                        .showSingleMediaType(true)
-                        .originalEnable(true)
-                        .maxOriginalSize(10)
-                        .autoHideToolbarOnSingleTap(true)
-                        .forResult(REQUEST_CODE);
+                try {
+                    Matisse.from(this)
+                            .choose(MimeType.ofImage(), false)
+                            .countable(true)
+                            .capture(true)
+                            .captureStrategy(new CaptureStrategy(true, "com.zhkj.syyj.fileprovider", "test"))
+                            .maxSelectable(1)
+                            .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
+                            .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.dp_110))
+                            .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+                            .thumbnailScale(0.85f)
+                            .imageEngine(new GlideEngine())
+                            .showSingleMediaType(true)
+                            .originalEnable(true)
+                            .maxOriginalSize(10)
+                            .autoHideToolbarOnSingleTap(true)
+                            .forResult(REQUEST_CODE);
+                }catch (Exception e){
+                    //权限申请
+                    ToastUtils.showToast(mContext,"请允许权限");
+                    XXPermissions.with(this)
+                            .request(new OnPermission() {
+
+                                @Override
+                                public void hasPermission(List<String> granted, boolean isAll) {
+
+                                }
+
+                                @Override
+                                public void noPermission(List<String> denied, boolean quick) {
+
+                                }
+                            });
+                }
                 break;
         }
     }

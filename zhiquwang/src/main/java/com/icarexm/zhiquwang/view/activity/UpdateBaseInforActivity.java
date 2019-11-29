@@ -20,6 +20,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.hjq.permissions.OnPermission;
+import com.hjq.permissions.XXPermissions;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.RegionBean;
 import com.icarexm.zhiquwang.bean.UploadImgBean;
@@ -110,6 +112,20 @@ public class UpdateBaseInforActivity extends BaseActivity {
         education = intent.getStringExtra("education");
         mobile = intent.getStringExtra("mobile");
         ButterKnife.bind(this);
+        //权限申请
+        XXPermissions.with(this)
+                .request(new OnPermission() {
+
+                    @Override
+                    public void hasPermission(List<String> granted, boolean isAll) {
+
+                    }
+
+                    @Override
+                    public void noPermission(List<String> denied, boolean quick) {
+
+                    }
+                });
         InitYear();
         InitAddress();
         tv_education.setText(education);
@@ -216,6 +232,7 @@ public class UpdateBaseInforActivity extends BaseActivity {
                AddressDialog();
                 break;
             case R.id.base_information_img_avatar:
+                try{
                 Matisse.from(this)
                         .choose(MimeType.ofImage(), false)
                         .countable(true)
@@ -231,7 +248,23 @@ public class UpdateBaseInforActivity extends BaseActivity {
                         .originalEnable(true)
                         .maxOriginalSize(10)
                         .autoHideToolbarOnSingleTap(true)
-                        .forResult(REQUEST_CODE);
+                        .forResult(REQUEST_CODE); }catch (Exception e){
+                    //权限申请
+                    ToastUtils.showToast(mContext,"请允许权限");
+                    XXPermissions.with(this)
+                            .request(new OnPermission() {
+
+                                @Override
+                                public void hasPermission(List<String> granted, boolean isAll) {
+
+                                }
+
+                                @Override
+                                public void noPermission(List<String> denied, boolean quick) {
+
+                                }
+                            });
+                }
                 break;
             case R.id.update_base_btn_confirm:
                 String sex= tv_sex.getText().toString();

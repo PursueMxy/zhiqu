@@ -17,6 +17,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.hjq.permissions.OnPermission;
+import com.hjq.permissions.XXPermissions;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.BaseInforBean;
 import com.icarexm.zhiquwang.bean.UploadImgBean;
@@ -68,6 +70,20 @@ public class BaseInformationActivity extends BaseActivity implements BaseInforma
         SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
         mContext = getApplicationContext();
+        //权限申请
+        XXPermissions.with(this)
+                .request(new OnPermission() {
+
+                    @Override
+                    public void hasPermission(List<String> granted, boolean isAll) {
+
+                    }
+
+                    @Override
+                    public void noPermission(List<String> denied, boolean quick) {
+
+                    }
+                });
         ButterKnife.bind(this);
         //加载页添加
         if (progressDialog == null){
@@ -92,6 +108,7 @@ public class BaseInformationActivity extends BaseActivity implements BaseInforma
                 }
                 break;
             case R.id.base_information_img_avatar:
+                try {
                 Matisse.from(this)
                         .choose(MimeType.ofImage(), false)
                         .countable(true)
@@ -107,7 +124,24 @@ public class BaseInformationActivity extends BaseActivity implements BaseInforma
                         .originalEnable(true)
                         .maxOriginalSize(10)
                         .autoHideToolbarOnSingleTap(true)
-                        .forResult(REQUEST_CODE);
+                        .forResult(REQUEST_CODE); }catch (Exception e){
+                    //权限申请
+                    ToastUtils.showToast(mContext,"请允许权限");
+                    XXPermissions.with(this)
+                            .request(new OnPermission() {
+
+                                @Override
+                                public void hasPermission(List<String> granted, boolean isAll) {
+
+                                }
+
+                                @Override
+                                public void noPermission(List<String> denied, boolean quick) {
+
+                                }
+                            }
+                            );
+                }
                 break;
 
         }

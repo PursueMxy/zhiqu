@@ -48,7 +48,8 @@ public class MyWalletActivity extends BaseActivity implements MyWalletContract.V
         myWalletPresenter.GetMyWallet(token);
 
     }
-    @OnClick({R.id.my_wallet_btn_cashwithdrawal,R.id.my_wallet_rl_entry_award,R.id.my_wallet_rl_withdrawal_dtl,R.id.my_wallet_rl_invite_award})
+    @OnClick({R.id.my_wallet_btn_cashwithdrawal,R.id.my_wallet_rl_entry_award,R.id.my_wallet_rl_withdrawal_dtl,
+            R.id.my_wallet_rl_invite_award,R.id.my_wallet_img_back})
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.my_wallet_btn_cashwithdrawal:
@@ -66,6 +67,9 @@ public class MyWalletActivity extends BaseActivity implements MyWalletContract.V
                 break;
             case R.id.my_wallet_rl_invite_award:
                 startActivity(new Intent(mContext,InviteAwardActivity.class));
+                break;
+            case R.id.my_wallet_img_back:
+                finish();
                 break;
         }
     }

@@ -95,7 +95,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public AMapLocationClient mLocationClient = null;
     private double start_latitude;
     private double start_longitude;
-    private String cityName;
+    private String cityName="厦门市";
     private List<HomeBannerBean.DataBean.OptionListBean.AreaListBean> area_list=new ArrayList<>();
     //声明定位回调监听器
     public AMapLocationListener mLocationListener = new AMapLocationListener() {
@@ -195,6 +195,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         share = mContext.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
         InitUI(inflate);
+        InitData();
         startLocation();
         return inflate;
     }

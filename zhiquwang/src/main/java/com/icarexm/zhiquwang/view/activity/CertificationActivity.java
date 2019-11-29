@@ -21,6 +21,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.GsonBuilder;
+import com.hjq.permissions.OnPermission;
+import com.hjq.permissions.XXPermissions;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.CertificationBean;
 import com.icarexm.zhiquwang.bean.UploadImgBean;
@@ -85,6 +87,20 @@ public class CertificationActivity extends BaseActivity implements Certification
         setContentView(R.layout.activity_certification);
         ButterKnife.bind(this);
         mContext = getApplicationContext();
+        //权限申请
+        XXPermissions.with(this)
+                .request(new OnPermission() {
+
+                    @Override
+                    public void hasPermission(List<String> granted, boolean isAll) {
+
+                    }
+
+                    @Override
+                    public void noPermission(List<String> denied, boolean quick) {
+
+                    }
+                });
         SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
         //加载页添加
@@ -126,6 +142,7 @@ public class CertificationActivity extends BaseActivity implements Certification
                 }
                 break;
             case R.id.certification_img_card_frond:
+                try {
                 Matisse.from(this)
                         .choose(MimeType.ofImage(), false)
                         .countable(true)
@@ -142,8 +159,26 @@ public class CertificationActivity extends BaseActivity implements Certification
                         .maxOriginalSize(10)
                         .autoHideToolbarOnSingleTap(true)
                         .forResult(FRONT_CODE);
+                }catch (Exception e){
+                    //权限申请
+                    ToastUtils.showToast(mContext,"请允许权限");
+                    XXPermissions.with(this)
+                            .request(new OnPermission() {
+
+                                @Override
+                                public void hasPermission(List<String> granted, boolean isAll) {
+
+                                }
+
+                                @Override
+                                public void noPermission(List<String> denied, boolean quick) {
+
+                                }
+                            });
+                }
                 break;
             case R.id.certification_img_card_reverse:
+                try {
                 Matisse.from(this)
                         .choose(MimeType.ofImage(), false)
                         .countable(true)
@@ -160,6 +195,23 @@ public class CertificationActivity extends BaseActivity implements Certification
                         .maxOriginalSize(10)
                         .autoHideToolbarOnSingleTap(true)
                         .forResult(REVERSE_CODE);
+                }catch (Exception e){
+                    //权限申请
+                    ToastUtils.showToast(mContext,"请允许权限");
+                    XXPermissions.with(this)
+                            .request(new OnPermission() {
+
+                                @Override
+                                public void hasPermission(List<String> granted, boolean isAll) {
+
+                                }
+
+                                @Override
+                                public void noPermission(List<String> denied, boolean quick) {
+
+                                }
+                            });
+                }
                 break;
             case R.id.certification_img_dlt_front:
                 break;

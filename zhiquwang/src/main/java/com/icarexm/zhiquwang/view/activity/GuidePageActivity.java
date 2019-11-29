@@ -40,7 +40,7 @@ public class GuidePageActivity extends BaseActivity implements ViewPager.OnPageC
         String bootpage = share.getString("bootpage", "");
         try {
             if (bootpage.equals("true")){
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
