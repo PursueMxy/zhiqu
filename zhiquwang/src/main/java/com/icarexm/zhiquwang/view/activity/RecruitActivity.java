@@ -17,7 +17,9 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
@@ -88,6 +90,17 @@ public class RecruitActivity extends BaseActivity {
             @Override
             public void afterTextChanged(Editable editable) {
 
+            }
+        });
+        edt_content.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    Log.i("---","搜索操作执行");
+                    String sequence= edt_content.getText().toString();
+                    SearchData(sequence);
+                }
+                return false;
             }
         });
         mRecyclerView.setNestedScrollingEnabled(false);

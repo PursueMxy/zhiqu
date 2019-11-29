@@ -83,6 +83,7 @@ public class InviteAwardActivity extends BaseActivity implements InviteAwardCont
         mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
+                inviteAwardPresenter.GetSeeFund(token,"4");
                 //加载更多
                 mRecyclerView.loadMoreComplete();//加载动画完成
                 mRecyclerView.refreshComplete();//刷新动画完成

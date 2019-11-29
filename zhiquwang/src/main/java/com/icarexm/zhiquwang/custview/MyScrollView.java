@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ScrollView;
 
-public class MyScrollView extends ScrollView {
+public class MyScrollView extends ScrollView implements Pullable {
     private OnScrollListener onScrollListener;
 
     public MyScrollView(Context context) {
@@ -40,6 +40,7 @@ public class MyScrollView extends ScrollView {
         this.onScrollListener = onScrollListener;
     }
 
+
     /**
      *
      * 滚动的回调接口
@@ -54,6 +55,22 @@ public class MyScrollView extends ScrollView {
          *              、
          */
         void onScroll(int scrollY);
+    }
+
+    @Override
+    public boolean canPullDown() {
+        if (getScrollY() == 0)
+            return true;
+        else
+            return false;
+    }
+
+    @Override
+    public boolean canPullUp() {
+        if (getScrollY() >= (getChildAt(0).getHeight() - getMeasuredHeight()))
+            return true;
+        else
+            return false;
     }
 
 }

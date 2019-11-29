@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Path;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -20,13 +21,17 @@ import com.icarexm.zhiquwang.MyApplication;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.contract.LoginContract;
 import com.icarexm.zhiquwang.presenter.LoginPresenter;
+import com.icarexm.zhiquwang.utils.ExampleUtil;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.icarexm.zhiquwang.wxapi.WXEntryActivity;
+
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 
 public class LoginActivity extends BaseActivity implements LoginContract.View {
     @BindView(R.id.login_edt_mobile)
@@ -52,6 +57,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        JPushInterface.resumePush(getApplicationContext());
         Intent intent = getIntent();
         share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
@@ -130,7 +136,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
 
     //登录数据返回
-    public void Update(int code,String msg,String data){
+    public void Update(int code,String msg,String data,int other){
         if (code==1){
             startActivity(new Intent(mContext,HomeActivity.class));
             SharedPreferences.Editor editor = share.edit();
@@ -138,6 +144,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
             editor.putString("password",password);
             editor.putString("token",data);
             editor.commit();//提交
+            // 调用 JPush 接口来设置别名。
+            setAlias(other);
         }else if (code==10002){
             startActivity(new Intent(mContext,EditPersonalActivity.class));
             SharedPreferences.Editor editor = share.edit();
@@ -145,6 +153,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
             editor.putString("password",password);
             editor.putString("token",data);
             editor.commit();//提交
+            setAlias(other);
         }else if (code ==10001){
             ToastUtils.showToast(mContext,msg);
             startActivity(new Intent(mContext,LoginActivity.class));
@@ -168,5 +177,54 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         }
         ToastUtils.showToast(mContext,msg);
     }
+    /**
+     * Jpush设置
+     */
+    /*
+     * 绑定别名
+     */
+    private static final int GET_MEG_SUG=0;
+    private String TAG="LoginActivity";
+    private static final int MSG_SET_ALIAS=1001;
+    private void setAlias(int userid) {
+        String alias = String.valueOf("alias_"+userid);
+        // 调用JPush API设置Alias
+        mHandler1.sendMessage(mHandler1.obtainMessage(MSG_SET_ALIAS, alias));
+        Log.d(TAG, "设置Jpush推送的别名alias=" + alias);
+    }
+
+
+    private final Handler mHandler1 = new Handler() {//专门用了一个Handler对象处理别名的注册问题
+        @Override
+        public void handleMessage(android.os.Message msg) {
+            super.handleMessage(msg);
+            Log.d(TAG, "设置激光推送的别名-mHandler1");
+            JPushInterface.setAliasAndTags(getApplicationContext(),
+                    (String) msg.obj, null, mAliasCallback);
+        }
+    };
+
+    private final TagAliasCallback mAliasCallback = new TagAliasCallback() {
+        @Override
+        public void gotResult(int code, String alias, Set<String> tags) {
+            String logs;
+            switch (code) {
+                case 0:
+                    logs = "Set tag and alias success极光推送别名设置成功";
+                    Log.i(TAG, logs);
+                    break;
+                case 6002:
+                    logs = "Failed to set alias and tags due to timeout. Try again after 60s.极光推送别名设置失败，60秒后重试";
+                    Log.i(TAG, logs);
+                    mHandler1.sendMessageDelayed(mHandler1.obtainMessage(MSG_SET_ALIAS, alias), 1000 * 60);
+                    break;
+                default:
+                    logs = "极光推送设置失败，Failed with errorCode = " + code;
+                    Log.e(TAG, logs);
+                    break;
+            }
+        }
+    };
+
 }
 

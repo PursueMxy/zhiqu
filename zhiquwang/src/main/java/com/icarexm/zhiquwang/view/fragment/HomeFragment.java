@@ -45,6 +45,7 @@ import com.icarexm.zhiquwang.bean.HomeBannerBean;
 import com.icarexm.zhiquwang.bean.HomeDataBean;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.GlideImageLoader;
+import com.icarexm.zhiquwang.custview.MyScrollView;
 import com.icarexm.zhiquwang.custview.NoScrollListView;
 import com.icarexm.zhiquwang.utils.MxyUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
@@ -168,6 +169,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private boolean IsEiroment=true;
     private boolean IsUpdate=false;
     private CustomProgressDialog progressDialog;
+    private Drawable drawable;
+    private MyScrollView scrollview;
 
 
     public HomeFragment() {
@@ -186,6 +189,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
         mContext = getContext();
+        Resources resources = mContext.getResources();
+        drawable = resources.getDrawable(R.drawable.bg_green);
         View inflate = inflater.inflate(R.layout.fragment_home, container, false);
         share = mContext.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
@@ -313,6 +318,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void InitUI(View inflate) {
+        scrollview = inflate.findViewById(R.id.fm_home_scrollview);
         radioGroup = inflate.findViewById(R.id.fm_home_radioGroup);
         radiobutton_area = inflate.findViewById(R.id.fm_home_radiobutton_area);
         radiobutton_salary = inflate.findViewById(R.id.fm_home_radiobutton_salary);
@@ -348,6 +354,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         SltAdapter();
         recyclerViewAT();
         radiobuttonClick();
+        scrollview.setOnScrollListener(new MyScrollView.OnScrollListener() {
+            @Override
+            public void onScroll(int scrollY) {
+                if (scrollview.canPullDown()){
+                    InitData();
+                }else if (scrollview.canPullUp()){
+                    Log.e("底部滑动","hdfh");
+                }
+            }
+        });
     }
 
     private void SltGridAdapter() {
@@ -366,7 +382,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void SltAdapter() {
-        Drawable drawable=getResources().getDrawable(R.drawable.bg_green);
         cityAdapter = new CityAdapter();
         list_city.setAdapter(cityAdapter);
         list_city.setOnItemClickListener(new AdapterView.OnItemClickListener() {

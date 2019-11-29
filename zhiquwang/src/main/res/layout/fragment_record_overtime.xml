@@ -311,7 +311,7 @@
                 android:layout_marginTop="@dimen/dp_74"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="10h"
+                android:text="0.0h"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_22"
                 />

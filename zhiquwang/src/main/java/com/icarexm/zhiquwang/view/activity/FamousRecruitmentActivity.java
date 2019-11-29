@@ -179,6 +179,7 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
             public void onItemClick(View view, Object item, int position) {
                 Intent intent = new Intent(mContext, RecruitDetailActivity.class);
                 intent.putExtra("job_id",homeDataList.get(position).getJob_id()+"");
+                intent.putExtra("zone_name",zone_name);
                 startActivity(intent);
             }
         });

@@ -6,13 +6,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.fragment.HomeFragment">
     <com.icarexm.zhiquwang.custview.MyScrollView
+        android:id="@+id/fm_home_scrollview"
+        android:scrollbars="none"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-<RelativeLayout
+     <RelativeLayout
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">

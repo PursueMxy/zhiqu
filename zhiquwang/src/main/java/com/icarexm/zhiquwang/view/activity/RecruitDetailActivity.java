@@ -146,6 +146,7 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
     private String address;
     private String enterprise_name;
     private String inviteUrl;
+    private String zone_name="";
 
 
     @Override
@@ -155,6 +156,7 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
         mContext = getApplicationContext();
         Intent intent = getIntent();
         job_id = intent.getStringExtra("job_id");
+        zone_name = intent.getStringExtra("zone_name");
         SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
         ButterKnife.bind(this);
@@ -487,7 +489,6 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
             tv_address.setText(dataBean.getAddress());
             tv_label_price.setText(dataBean.getLabel_price());
             tv_zhSalary.setText("综合工资："+dataBean.getSalary()+"/月");
-            tv_hourSalary.setText("小时工资："+dataBean.getSalary_hour()+"/日");
             tv_other_benefits.setText(dataBean.getSalary_other());
             tv_age.setText("性别年龄："+dataBean.getAge_explain());
             tv_education.setText("学      历："+dataBean.getEducation());
@@ -496,6 +497,17 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
             tv_workingContent.setText(dataBean.getWork_describe());
             tv_introduce.setText(dataBean.getIntroduce());
             mobile = dataBean.getMobile();
+            try {
+                if (zone_name.equals("") || zone_name == null) {
+                    tv_hourSalary.setText("工资架构：" + dataBean.getSalary_hour() );
+                } else if (zone_name.equals("高价小时工")) {
+                    tv_hourSalary.setText("小时工资：" + dataBean.getSalary_hour() );
+                } else {
+                    tv_hourSalary.setText("工资架构：" + dataBean.getSalary_hour());
+            }
+            }catch (Exception e){
+                tv_hourSalary.setText("工资架构：" + dataBean.getSalary_hour());
+            }
         }else if (code ==10001){
             ToastUtils.showToast(mContext,msg);
             startActivity(new Intent(mContext,LoginActivity.class));

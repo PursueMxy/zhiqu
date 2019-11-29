@@ -82,6 +82,7 @@ public class EntryAwardActivity extends BaseActivity implements EntryAwardContra
         mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
+                EntryAwardPresenter.GetSeeFund(token,"2");
                 //加载更多
                 mRecyclerView.loadMoreComplete();//加载动画完成
                 mRecyclerView.refreshComplete();//刷新动画完成

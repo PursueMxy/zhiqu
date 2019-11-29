@@ -173,5 +173,8 @@ public class RequstUrl {
         //邀请地址
         public static  String inviteUrl=HOST+"/api/inviteUrl";
 
+        //关于我们
+        public static String getContact=HOST+"/api/getContact";
+
     }
 }

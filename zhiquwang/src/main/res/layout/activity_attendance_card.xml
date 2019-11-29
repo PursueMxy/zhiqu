@@ -78,7 +78,7 @@
 
             <com.icarexm.zhiquwang.custview.calender.InnerGridView
                 android:layout_marginTop="@dimen/dp_20"
-                android:layout_below="@+id/overtime_approval_gvWeek"
+                android:layout_below="@+id/attendance_card_gvWeek"
                 android:layout_marginLeft="@dimen/dp_15"
                 android:layout_marginRight="@dimen/dp_15"
                 android:layout_marginBottom="@dimen/dp_36"
