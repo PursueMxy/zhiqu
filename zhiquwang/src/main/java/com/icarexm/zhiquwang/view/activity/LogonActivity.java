@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -59,6 +60,8 @@ public class LogonActivity extends BaseActivity implements LogonContract.View {
     private String type;
     private String openid="";
     private boolean isInput=false;
+    private SharedPreferences share;
+    private String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +70,8 @@ public class LogonActivity extends BaseActivity implements LogonContract.View {
         mContext = getApplicationContext();
         Intent intent = getIntent();
         type = intent.getStringExtra("type");
+        share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+        password = share.getString("password", "");
         ButterKnife.bind(this);
         if (type.equals("wechat")){
             openid = intent.getStringExtra("openid");
@@ -144,17 +149,17 @@ public class LogonActivity extends BaseActivity implements LogonContract.View {
             case R.id.logon_btn_start:
                 mobile = edt_mobile.getText().toString();
                 String code= edt_code.getText().toString();
-                String password = edt_password.getText().toString();
+                password = edt_password.getText().toString();
                 String repassword = edt_repassword.getText().toString();
                 if (type.equals("wechat")){
                     if (!mobile.equals("")&& mobile.length()==11){
                         if(!code.equals("")){
                             if (isInput){
-                                logonPresenter.GetBindMobile(mobile,code,password,repassword,openid);
+                                logonPresenter.GetBindMobile(mobile,code, password,repassword,openid);
                             }else {
                                 if (!password.equals("")) {
                                     if (repassword.equals(password)) {
-                                        logonPresenter.GetBindMobile(mobile,code,password,repassword,openid);
+                                        logonPresenter.GetBindMobile(mobile,code, password,repassword,openid);
                                     } else {
                                         ToastUtils.showToast(mContext, "两次密码输入不一致");
                                     }
@@ -173,7 +178,7 @@ public class LogonActivity extends BaseActivity implements LogonContract.View {
                         if(!code.equals("")){
                             if (!password.equals("")){
                                 if (repassword.equals(password)){
-                                    logonPresenter.GetRegister(mobile,code,password,repassword);
+                                    logonPresenter.GetRegister(mobile,code, password,repassword);
                                 }else {
                                     ToastUtils.showToast(mContext,"两次密码输入不一致");
                                 }
@@ -242,6 +247,19 @@ public class LogonActivity extends BaseActivity implements LogonContract.View {
             startActivity(new Intent(mContext,LoginActivity.class));
         } else{
             ToastUtils.showToast(mContext,msg);
+        }
+    }
+
+    @Override
+    public void UpdateUI(int code, String msg, String data) {
+        ToastUtils.showToast(mContext,msg);
+        if (code==1){
+            SharedPreferences.Editor editor = share.edit();
+            editor.putString("mobile",mobile);
+            editor.putString("password",password);
+            editor.putString("token",data);
+            editor.commit();//提交
+            startActivity(new Intent(mContext,HomeActivity.class));
         }
     }
 }

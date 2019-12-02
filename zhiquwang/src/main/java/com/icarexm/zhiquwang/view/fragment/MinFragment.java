@@ -105,21 +105,17 @@ public class MinFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mContext = getContext();
         share = mContext.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // 透明状态栏
-            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            // 透明导航栏
-            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
+        mContext = getContext();
         View inflate = inflater.inflate(R.layout.fragment_min, container, false);
         InitUI(inflate);
         InitData();
         startLocation();
         return inflate;
     }
+
+
 
     private void startLocation() {
         //初始化定位
@@ -160,6 +156,11 @@ public class MinFragment extends Fragment implements View.OnClickListener {
     }
 
     private void InitData() {
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(mContext);
+        }
+        progressDialog.show();
         OkGo.<String>post(RequstUrl.URL.mine)
                 .params("token",token)
                 .execute(new StringCallback() {
@@ -236,11 +237,6 @@ public class MinFragment extends Fragment implements View.OnClickListener {
     }
 
     public void UpdateUI(){
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(mContext);
-        }
-        progressDialog.show();
         InitData();
     }
 }

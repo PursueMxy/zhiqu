@@ -182,12 +182,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // 透明状态栏
-            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            // 透明导航栏
-            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
         mContext = getContext();
         Resources resources = mContext.getResources();
         drawable = resources.getDrawable(R.drawable.bg_green);
@@ -245,8 +239,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                                 environmentAdapter.notifyDataSetChanged();
                             }
                         }else if (homeBannerBean.getCode() ==10001){
-                            ToastUtils.showToast(mContext,homeBannerBean.getMsg());
-                            startActivity(new Intent(mContext, LoginActivity.class));
+//                            ToastUtils.showToast(mContext,homeBannerBean.getMsg());
+                            getActivity().startActivity(new Intent(mContext, LoginActivity.class));
                             getActivity().finish();
                         }
                     }

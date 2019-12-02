@@ -91,6 +91,7 @@
             />
 
         <TextView
+            android:id="@+id/contact_us_address"
             android:drawablePadding="@dimen/dp_5"
             android:drawableLeft="@mipmap/ic_location_gary"
             android:layout_marginLeft="@dimen/dp_12"

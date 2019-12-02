@@ -341,7 +341,7 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
                                 public void onSuccess(Response<String> response) {
                                     PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
                                     if (resultBean.getCode() == 1) {
-                                        mContext.startActivity(new Intent(mContext, RecruitDetailActivity.class));
+                                      startActivity(new Intent(mContext, RecruitDetailActivity.class));
                                     }
                                     ToastUtils.showToast(mContext, resultBean.getMsg());
 
@@ -381,7 +381,7 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
                                     public void onSuccess(Response<String> response) {
                                         PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
                                         if (resultBean.getCode() == 1) {
-                                            mContext.startActivity(new Intent(mContext, RecruitDetailActivity.class));
+                                          startActivity(new Intent(mContext, RecruitDetailActivity.class));
                                         }else if (resultBean.getCode() ==10001){
                                             ToastUtils.showToast(mContext,resultBean.getMsg());
                                             startActivity(new Intent(mContext,LoginActivity.class));

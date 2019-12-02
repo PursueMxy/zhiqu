@@ -51,6 +51,8 @@ public class RecordOvertimeFragment extends Fragment implements View.OnClickList
     private TextView tv_hour;
     private TextView tv_salary;
     private CustomProgressDialog progressDialog;
+    private TextView tv_set_basepay;
+    private TextView two_tv_set_basepay;
 
     public RecordOvertimeFragment() {
         // Required empty public constructor
@@ -61,12 +63,6 @@ public class RecordOvertimeFragment extends Fragment implements View.OnClickList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mContext = getContext();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            // 透明状态栏
-            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            // 透明导航栏
-            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
         share = mContext.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
         TypeOfWork = share.getString("TypeOfWork", "");
@@ -100,9 +96,15 @@ public class RecordOvertimeFragment extends Fragment implements View.OnClickList
                                     tv_salary.setText(overTimeBean.getData().getPrice()+"");
                                     tv_hour.setText(overTimeBean.getData().getHours()+"H");
                                     tv_price.setText(overTimeBean.getData().getOver_price()+"");
+                                    if (!overTimeBean.getData().getBase_pay().equals("")){
+                                        tv_set_basepay.setText(overTimeBean.getData().getBase_pay());
+                                    }
                                 }else if (TypeOfWork.equals("2")){
                                     two_tv_dt.setText(overTimeBean.getData().getHours()+"H");
                                     two_tv_salary.setText(overTimeBean.getData().getPrice()+"");
+                                    if (!overTimeBean.getData().getBase_pay().equals("")){
+                                        two_tv_set_basepay.setText(overTimeBean.getData().getBase_pay());
+                                    }
                                 }
                             }else if (overTimeBean.getCode() ==10001){
                                 ToastUtils.showToast(mContext,overTimeBean.getMsg());
@@ -121,6 +123,8 @@ public class RecordOvertimeFragment extends Fragment implements View.OnClickList
         tv_salary = inflate.findViewById(R.id.fm_record_overtime_tv_salary);
         tv_hour = inflate.findViewById(R.id.fm_record_overtime_tv_hour);
         tv_price = inflate.findViewById(R.id.fm_record_overtime_tv_price);
+        tv_set_basepay = inflate.findViewById(R.id.fm_record_overtime_tv_set_basepay);
+        two_tv_set_basepay = inflate.findViewById(R.id.fm_record_overtime_two_tv_set_basepay);
         inflate.findViewById(R.id.fm_record_overtime_tv_title).setOnClickListener(this);
         inflate.findViewById(R.id.fm_record_overtime_two_tv_title).setOnClickListener(this);
         inflate.findViewById(R.id.fm_record_overtime_tv_set_basepay).setOnClickListener(this);

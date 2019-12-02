@@ -51,7 +51,7 @@ public class LogonModel implements LogonContract.Model {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                    LogonPresenter.SetRegister(response.body());
+                    LogonPresenter.SetBindMobile(response.body());
                     }
                 });
     }

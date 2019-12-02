@@ -36,11 +36,15 @@ public class LoginPresenter implements LoginContract.Presenter {
 
     //微信登陆返回
     public void SetWechatLogin(String content){
-        WechatBean wechatBean = new GsonBuilder().create().fromJson(content, WechatBean.class);
-        if (wechatBean.getCode()==10004) {
+        PublicCodeBean publicCodeBean = new GsonBuilder().create().fromJson(content, PublicCodeBean.class);
+        if (publicCodeBean.getCode()==1){
+            LoginBean result = new GsonBuilder().create().fromJson(content, LoginBean.class);
+            mView.Update(result.getCode(),result.getMsg(),result.getData(),result.getOther());
+        }else if (publicCodeBean.getCode()==10004){
+            WechatBean wechatBean = new GsonBuilder().create().fromJson(content, WechatBean.class);
             mView.WechatLoginUpdateUI(wechatBean.getCode(),wechatBean.getMsg(), wechatBean.getData().getOpenid());
         }else {
-            mView.WechatLoginUpdateUI(wechatBean.getCode(), wechatBean.getMsg(), "");
+            mView.WechatLoginUpdateUI(publicCodeBean.getCode(), publicCodeBean.getMsg(), "");
         }
     }
 }

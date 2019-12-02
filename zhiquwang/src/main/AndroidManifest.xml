@@ -36,7 +36,7 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.VIBRATE" />
-
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -93,7 +93,7 @@
         <activity android:name=".view.activity.MessageActivity" />
         <activity android:name=".view.activity.FamousRecruitmentActivity" />
         <activity android:name=".view.activity.NearbyStoreActivity" />
-        <activity android:name=".view.activity.RecruitDetailActivity" />
+        <activity android:name=".view.activity.RecruitDetailActivity"  android:launchMode="singleTask"/>
         <activity android:name=".view.activity.RecruitActivity" />
         <activity android:name=".view.activity.HomeActivity"  android:launchMode="singleTask" />
         <activity android:name=".view.activity.EditPersonalActivity" />
@@ -113,7 +113,6 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:taskAffinity="net.sourceforge.simcpux" />
-
         <service android:name="com.amap.api.location.APSService" />
 
         <provider

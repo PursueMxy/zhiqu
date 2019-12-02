@@ -6,7 +6,7 @@ public class OverTimeBean {
     /**
      * code : 1
      * msg : 获取成功
-     * data : {"hours":1.5,"over_price":12.91,"price":1122.9099999999999}
+     * data : {"hours":0,"over_price":0,"price":1110,"base_pay":"1000.00"}
      */
 
     private int code;
@@ -39,37 +39,47 @@ public class OverTimeBean {
 
     public static class DataBean {
         /**
-         * hours : 1.5
-         * over_price : 12.91
-         * price : 1122.9099999999999
+         * hours : 0
+         * over_price : 0
+         * price : 1110
+         * base_pay : 1000.00
          */
 
-        private double hours;
-        private double over_price;
-        private double price;
+        private int hours;
+        private int over_price;
+        private int price;
+        private String base_pay;
 
-        public double getHours() {
+        public int getHours() {
             return hours;
         }
 
-        public void setHours(double hours) {
+        public void setHours(int hours) {
             this.hours = hours;
         }
 
-        public double getOver_price() {
+        public int getOver_price() {
             return over_price;
         }
 
-        public void setOver_price(double over_price) {
+        public void setOver_price(int over_price) {
             this.over_price = over_price;
         }
 
-        public double getPrice() {
+        public int getPrice() {
             return price;
         }
 
-        public void setPrice(double price) {
+        public void setPrice(int price) {
             this.price = price;
+        }
+
+        public String getBase_pay() {
+            return base_pay;
+        }
+
+        public void setBase_pay(String base_pay) {
+            this.base_pay = base_pay;
         }
     }
 }

@@ -4,8 +4,17 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/white</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorAc</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">false</item>
+            //隐藏状态栏
+        <item name="windowActionBar">false</item>
+            //隐藏标题栏
+        <item name="windowNoTitle">true</item>
+            //状态栏透明色<!--API最少19-->
+        <item name="android:windowTranslucentStatus">true</item>
+<!--        <item name="android:windowContentOverlay">@null</item>-->
     </style>
     <!--CheckBox框框样式-->
     <style name="MyCheckBox" parent="@android:style/Widget.CompoundButton.CheckBox">

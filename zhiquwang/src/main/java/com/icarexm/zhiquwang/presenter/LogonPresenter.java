@@ -31,6 +31,12 @@ public class LogonPresenter implements LogonContract.Presenter {
        LogonModel.postBindMobile(this,mobile,code,password,repassword,openid);
     }
 
+    //绑定手机号返回
+    public void SetBindMobile(String content){
+        PublicResultBean resultBean = new GsonBuilder().create().fromJson(content, PublicResultBean.class);
+        mView.UpdateUI(resultBean.getCode(),resultBean.getMsg(),resultBean.getData());
+    }
+
     //注册数据返回
     public void SetRegister(String content){
         PublicResultBean resultBean = new GsonBuilder().create().fromJson(content, PublicResultBean.class);

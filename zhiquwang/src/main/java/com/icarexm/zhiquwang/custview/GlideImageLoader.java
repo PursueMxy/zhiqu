@@ -9,6 +9,10 @@ import com.yyydjk.library.BannerLayout;
 public class GlideImageLoader implements BannerLayout.ImageLoader {
     @Override
     public void displayImage(Context context, String path, ImageView imageView) {
-        Glide.with(context).load(path).centerCrop().into(imageView);
+        try {
+            Glide.with(context).load(path).centerCrop().into(imageView);
+        }catch (Exception e){
+
+        }
     }
 }

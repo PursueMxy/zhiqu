@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Path;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,13 +19,21 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.icarexm.zhiquwang.MainActivity;
 import com.icarexm.zhiquwang.MyApplication;
 import com.icarexm.zhiquwang.R;
+import com.icarexm.zhiquwang.bean.VersionBean;
 import com.icarexm.zhiquwang.contract.LoginContract;
 import com.icarexm.zhiquwang.presenter.LoginPresenter;
+import com.icarexm.zhiquwang.utils.AppDownloadManager;
 import com.icarexm.zhiquwang.utils.ExampleUtil;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.icarexm.zhiquwang.wxapi.WXEntryActivity;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.Response;
 
 import java.util.Set;
 
@@ -52,6 +62,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     private SharedPreferences share;
     private String token;
     private String type="";
+    private int versionCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +87,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
                 loginPresenter.GetWechatLogin(code);
             }
         }catch (Exception e){}
+        versionCode = getVersionCode();
     }
 
 
@@ -225,6 +237,69 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
             }
         }
     };
+
+
+    private void InitApkVersion() {
+        OkGo.<String>get("")
+                .execute(new StringCallback() {
+
+
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        String body = response.body();
+                        GsonBuilder builder = new GsonBuilder();
+                        Gson gson = builder.create();
+                        final VersionBean version = gson.fromJson(body,
+                                VersionBean.class);
+                        if (Integer.parseInt(version.getCode())> versionCode) {
+                            new AppDownloadManager(LoginActivity.this).downloadApk("http://wx.cshshop.cn/Led/app-release.apk", "版本更新", "版本更新");
+                        }
+                    }
+                });
+    }
+    /**
+     * 返回版本号
+     * @return
+     * 非0则代表获取成功
+     */
+    private int getVersionCode() {
+        // 1,包管理者对象packageManaer
+        PackageManager pm = getPackageManager();
+        //2,从包的管理者对象中，获取指定包名的基本信息（版本名称，版本号），用getPackageInfo,传0代表获取基本信息
+        try {
+            PackageInfo packageInfo = pm.getPackageInfo(getPackageName(), 0);
+
+            return packageInfo.versionCode;//private String getVersionName()
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * 获取版本名称;清单文件中
+     * @return 应用版本名称 返回null代表异常
+     *
+     */
+    private String getVersionName() {
+        // 1,包管理者对象packageManaer
+        PackageManager pm = getPackageManager();
+        //2,从包的管理者对象中，获取指定包名的基本信息（版本名称，版本号），用getPackageInfo,传0代表获取基本信息
+        try {
+            PackageInfo packageInfo = pm.getPackageInfo(getPackageName(), 0);
+            /**3,获取版本名称为清单文件SplashActivity1.Manifest里的 android:versionCode="1"
+             *android:versionName="1.0",此方法有了返回值，将此方法返回值类型void改为String
+             */
+            return packageInfo.versionName;//private String getVersionName()
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }
 
