@@ -169,7 +169,6 @@ public class ClockInFragment extends Fragment implements View.OnClickListener {
                             tv_set_reminder.setVisibility(View.GONE);
                             rl_no_entry.setVisibility(View.VISIBLE);
                         }else if (playInfoBean.getCode() ==10001){
-                            ToastUtils.showToast(mContext,playInfoBean.getMsg());
                             startActivity(new Intent(mContext, LoginActivity.class));
                             getActivity().finish();
                         }

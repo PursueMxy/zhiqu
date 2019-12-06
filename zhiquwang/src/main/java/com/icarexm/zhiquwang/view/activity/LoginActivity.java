@@ -1,9 +1,11 @@
 package com.icarexm.zhiquwang.view.activity;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -21,6 +23,8 @@ import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.hjq.permissions.OnPermission;
+import com.hjq.permissions.XXPermissions;
 import com.icarexm.zhiquwang.MainActivity;
 import com.icarexm.zhiquwang.MyApplication;
 import com.icarexm.zhiquwang.R;
@@ -29,12 +33,14 @@ import com.icarexm.zhiquwang.contract.LoginContract;
 import com.icarexm.zhiquwang.presenter.LoginPresenter;
 import com.icarexm.zhiquwang.utils.AppDownloadManager;
 import com.icarexm.zhiquwang.utils.ExampleUtil;
+import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.icarexm.zhiquwang.wxapi.WXEntryActivity;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 
+import java.util.List;
 import java.util.Set;
 
 import butterknife.BindView;
@@ -63,6 +69,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     private String token;
     private String type="";
     private int versionCode;
+    private String version_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +86,20 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         ButterKnife.bind(this);
         edt_mobile.setText(mobile);
         edt_password.setText(password);
+        //权限申请
+        XXPermissions.with(this)
+                .request(new OnPermission() {
+
+                    @Override
+                    public void hasPermission(List<String> granted, boolean isAll) {
+
+                    }
+
+                    @Override
+                    public void noPermission(List<String> denied, boolean quick) {
+
+                    }
+                });
         try {
             type = intent.getStringExtra("type");
             if (type.equals("wechat")) {
@@ -88,6 +109,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
             }
         }catch (Exception e){}
         versionCode = getVersionCode();
+        InitApkVersion();
     }
 
 
@@ -143,6 +165,45 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
+
+    //显示对话框操作
+    protected void showUpdateDialog() {
+        // TODO Auto-generated method stub
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        //设置左上角图标
+        builder.setIcon(R.mipmap.ic_logo);
+        builder.setTitle("版本更新");
+        //设置描述内容
+        builder.setMessage("");
+        builder.setPositiveButton("立即更新", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 下载apk，apk的链接地址，downloadUrl
+                new AppDownloadManager(LoginActivity.this).downloadApk("http://zqw.kuaishanghd.com/android/zqw.apk", "版本更新"+version_name, "部分功能优化");
+            }
+
+        });
+        //消极按钮
+        builder.setNegativeButton("稍后再说 ", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 取消对话框，进入主界面
+                dialog.dismiss();
+            }
+        });
+        //点击取消事件监听
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                // 即使用户点击取消，也要进入应用程序主界面
+                dialog.dismiss();
+            }
+        });
+        builder.show();
 
     }
 
@@ -240,7 +301,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
 
     private void InitApkVersion() {
-        OkGo.<String>get("")
+        OkGo.<String>post(RequstUrl.URL.CheckAndroid)
+                .params("code",versionCode)
                 .execute(new StringCallback() {
 
 
@@ -249,10 +311,12 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
                         String body = response.body();
                         GsonBuilder builder = new GsonBuilder();
                         Gson gson = builder.create();
-                        final VersionBean version = gson.fromJson(body,
-                                VersionBean.class);
-                        if (Integer.parseInt(version.getCode())> versionCode) {
-                            new AppDownloadManager(LoginActivity.this).downloadApk("http://wx.cshshop.cn/Led/app-release.apk", "版本更新", "版本更新");
+                        final VersionBean version = gson.fromJson(body, VersionBean.class);
+                        if (version.getCode()==1) {
+                            VersionBean.DataBean data = version.getData();
+                            version_name = data.getName();
+//                            new AppDownloadManager(LoginActivity.this).downloadApk("http://zqw.kuaishanghd.com/android/zqw.apk", "版本更新"+version_name, "部分功能优化");
+                            showUpdateDialog();
                         }
                     }
                 });

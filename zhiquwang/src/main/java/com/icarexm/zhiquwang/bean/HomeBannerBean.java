@@ -4,10 +4,11 @@ import java.util.List;
 
 public class HomeBannerBean {
 
+
     /**
      * code : 1
      * msg : 获取成功
-     * data : {"banner_list":[{"banner_id":2,"banner_name":"首页轮播图2","banner_url":"http://192.168.1.22:8080/uploads/20191101/09a2c49ee61c519ae213b5bf1598bf24.png","skip_url":""},{"banner_id":1,"banner_name":"首页轮播图1","banner_url":"http://192.168.1.22:8080/uploads/20191101/09a2c49ee61c519ae213b5bf1598bf24.png","skip_url":""}],"zone_list":[{"zone_id":1,"zone_name":"名企招聘","zone_icon":"http://192.168.1.22:8080http://192.168.1.22:8080/uploads/20191030/0f4a32254661ba8ba73594cb11c674b8.png"},{"zone_id":2,"zone_name":"高返费专区","zone_icon":"http://192.168.1.22:8080http://192.168.1.22:8080/uploads/20191030/834915c56be831bc58aab03f96feab28.png"},{"zone_id":4,"zone_name":"高价小时工","zone_icon":"http://192.168.1.22:8080http://192.168.1.22:8080/uploads/20191030/e4d78670f38b8029d0ccf82143ace3b7.png"},{"zone_id":5,"zone_name":"高级蓝领","zone_icon":"http://192.168.1.22:8080http://192.168.1.22:8080/uploads/20191030/1f1bc13f252778eef4408cb99bda896b.png"}],"option_list":{"area_list":[{"area_id":350203,"area_name":"思明区"},{"area_id":350205,"area_name":"海沧区"},{"area_id":350206,"area_name":"湖里区"},{"area_id":350211,"area_name":"集美区"},{"area_id":350212,"area_name":"同安区"},{"area_id":350213,"area_name":"翔安区"}],"salary":[{"salary_id":8,"salary_value":"5000-8000"},{"salary_id":4,"salary_value":"0-3000"}],"age":[{"age_id":9,"age_value":"38-54"},{"age_id":5,"age_value":"20-35"}],"vocation":[{"vocation_id":6,"vocation_value":"计算机"}],"environment":[{"environment_id":7,"environment_value":"超大海景办公室"}]}}
+     * data : {"banner_list":[{"banner_id":2,"banner_name":"首页轮播图2","banner_url":"https://zqw.kuaishanghd.com/uploads/20191101/09a2c49ee61c519ae213b5bf1598bf24.png","skip_url":""},{"banner_id":1,"banner_name":"首页轮播图1","banner_url":"https://zqw.kuaishanghd.com/uploads/20191101/09a2c49ee61c519ae213b5bf1598bf24.png","skip_url":""}],"zone_list":[{"zone_id":1,"zone_name":"名企招聘","zone_icon":"/uploads/20191030/0f4a32254661ba8ba73594cb11c674b8.png"},{"zone_id":2,"zone_name":"高返费专区","zone_icon":"/uploads/20191030/834915c56be831bc58aab03f96feab28.png"},{"zone_id":4,"zone_name":"高价小时工","zone_icon":"/uploads/20191030/e4d78670f38b8029d0ccf82143ace3b7.png"},{"zone_id":5,"zone_name":"高级蓝领","zone_icon":"/uploads/20191030/1f1bc13f252778eef4408cb99bda896b.png"}],"is_open":1,"option_list":{"area_list":[{"area_id":350203,"area_name":"思明区"},{"area_id":350205,"area_name":"海沧区"},{"area_id":350206,"area_name":"湖里区"},{"area_id":350211,"area_name":"集美区"},{"area_id":350212,"area_name":"同安区"},{"area_id":350213,"area_name":"翔安区"}],"salary":[{"salary_id":10,"salary_value":"1000-3000"},{"salary_id":8,"salary_value":"5000-8000"},{"salary_id":4,"salary_value":"0-3000"}],"age":[{"age_id":16,"age_value":"0-20"},{"age_id":15,"age_value":"40-80"},{"age_id":9,"age_value":"38-54"},{"age_id":5,"age_value":"20-35"}],"vocation":[{"vocation_id":14,"vocation_value":"建造业"},{"vocation_id":13,"vocation_value":"服务业"},{"vocation_id":12,"vocation_value":"工地作业"},{"vocation_id":6,"vocation_value":"计算机"}],"environment":[{"environment_id":11,"environment_value":"厂房"},{"environment_id":7,"environment_value":"超大海景办公室"}]}}
      */
 
     private int code;
@@ -40,14 +41,24 @@ public class HomeBannerBean {
 
     public static class DataBean {
         /**
-         * banner_list : [{"banner_id":2,"banner_name":"首页轮播图2","banner_url":"http://192.168.1.22:8080/uploads/20191101/09a2c49ee61c519ae213b5bf1598bf24.png","skip_url":""},{"banner_id":1,"banner_name":"首页轮播图1","banner_url":"http://192.168.1.22:8080/uploads/20191101/09a2c49ee61c519ae213b5bf1598bf24.png","skip_url":""}]
-         * zone_list : [{"zone_id":1,"zone_name":"名企招聘","zone_icon":"http://192.168.1.22:8080http://192.168.1.22:8080/uploads/20191030/0f4a32254661ba8ba73594cb11c674b8.png"},{"zone_id":2,"zone_name":"高返费专区","zone_icon":"http://192.168.1.22:8080http://192.168.1.22:8080/uploads/20191030/834915c56be831bc58aab03f96feab28.png"},{"zone_id":4,"zone_name":"高价小时工","zone_icon":"http://192.168.1.22:8080http://192.168.1.22:8080/uploads/20191030/e4d78670f38b8029d0ccf82143ace3b7.png"},{"zone_id":5,"zone_name":"高级蓝领","zone_icon":"http://192.168.1.22:8080http://192.168.1.22:8080/uploads/20191030/1f1bc13f252778eef4408cb99bda896b.png"}]
-         * option_list : {"area_list":[{"area_id":350203,"area_name":"思明区"},{"area_id":350205,"area_name":"海沧区"},{"area_id":350206,"area_name":"湖里区"},{"area_id":350211,"area_name":"集美区"},{"area_id":350212,"area_name":"同安区"},{"area_id":350213,"area_name":"翔安区"}],"salary":[{"salary_id":8,"salary_value":"5000-8000"},{"salary_id":4,"salary_value":"0-3000"}],"age":[{"age_id":9,"age_value":"38-54"},{"age_id":5,"age_value":"20-35"}],"vocation":[{"vocation_id":6,"vocation_value":"计算机"}],"environment":[{"environment_id":7,"environment_value":"超大海景办公室"}]}
+         * banner_list : [{"banner_id":2,"banner_name":"首页轮播图2","banner_url":"https://zqw.kuaishanghd.com/uploads/20191101/09a2c49ee61c519ae213b5bf1598bf24.png","skip_url":""},{"banner_id":1,"banner_name":"首页轮播图1","banner_url":"https://zqw.kuaishanghd.com/uploads/20191101/09a2c49ee61c519ae213b5bf1598bf24.png","skip_url":""}]
+         * zone_list : [{"zone_id":1,"zone_name":"名企招聘","zone_icon":"/uploads/20191030/0f4a32254661ba8ba73594cb11c674b8.png"},{"zone_id":2,"zone_name":"高返费专区","zone_icon":"/uploads/20191030/834915c56be831bc58aab03f96feab28.png"},{"zone_id":4,"zone_name":"高价小时工","zone_icon":"/uploads/20191030/e4d78670f38b8029d0ccf82143ace3b7.png"},{"zone_id":5,"zone_name":"高级蓝领","zone_icon":"/uploads/20191030/1f1bc13f252778eef4408cb99bda896b.png"}]
+         * is_open : 1
+         * option_list : {"area_list":[{"area_id":350203,"area_name":"思明区"},{"area_id":350205,"area_name":"海沧区"},{"area_id":350206,"area_name":"湖里区"},{"area_id":350211,"area_name":"集美区"},{"area_id":350212,"area_name":"同安区"},{"area_id":350213,"area_name":"翔安区"}],"salary":[{"salary_id":10,"salary_value":"1000-3000"},{"salary_id":8,"salary_value":"5000-8000"},{"salary_id":4,"salary_value":"0-3000"}],"age":[{"age_id":16,"age_value":"0-20"},{"age_id":15,"age_value":"40-80"},{"age_id":9,"age_value":"38-54"},{"age_id":5,"age_value":"20-35"}],"vocation":[{"vocation_id":14,"vocation_value":"建造业"},{"vocation_id":13,"vocation_value":"服务业"},{"vocation_id":12,"vocation_value":"工地作业"},{"vocation_id":6,"vocation_value":"计算机"}],"environment":[{"environment_id":11,"environment_value":"厂房"},{"environment_id":7,"environment_value":"超大海景办公室"}]}
          */
 
+        private int is_open;
         private OptionListBean option_list;
         private List<BannerListBean> banner_list;
         private List<ZoneListBean> zone_list;
+
+        public int getIs_open() {
+            return is_open;
+        }
+
+        public void setIs_open(int is_open) {
+            this.is_open = is_open;
+        }
 
         public OptionListBean getOption_list() {
             return option_list;
@@ -144,12 +155,17 @@ public class HomeBannerBean {
                 public void setArea_name(String area_name) {
                     this.area_name = area_name;
                 }
+
+                public AreaListBean(int area_id, String area_name) {
+                    this.area_id = area_id;
+                    this.area_name = area_name;
+                }
             }
 
             public static class SalaryBean {
                 /**
-                 * salary_id : 8
-                 * salary_value : 5000-8000
+                 * salary_id : 10
+                 * salary_value : 1000-3000
                  */
 
                 private int salary_id;
@@ -170,12 +186,17 @@ public class HomeBannerBean {
                 public void setSalary_value(String salary_value) {
                     this.salary_value = salary_value;
                 }
+
+                public SalaryBean(int salary_id, String salary_value) {
+                    this.salary_id = salary_id;
+                    this.salary_value = salary_value;
+                }
             }
 
             public static class AgeBean {
                 /**
-                 * age_id : 9
-                 * age_value : 38-54
+                 * age_id : 16
+                 * age_value : 0-20
                  */
 
                 private int age_id;
@@ -196,12 +217,17 @@ public class HomeBannerBean {
                 public void setAge_value(String age_value) {
                     this.age_value = age_value;
                 }
+
+                public AgeBean(int age_id, String age_value) {
+                    this.age_id = age_id;
+                    this.age_value = age_value;
+                }
             }
 
             public static class VocationBean {
                 /**
-                 * vocation_id : 6
-                 * vocation_value : 计算机
+                 * vocation_id : 14
+                 * vocation_value : 建造业
                  */
 
                 private int vocation_id;
@@ -222,12 +248,17 @@ public class HomeBannerBean {
                 public void setVocation_value(String vocation_value) {
                     this.vocation_value = vocation_value;
                 }
+
+                public VocationBean(int vocation_id, String vocation_value) {
+                    this.vocation_id = vocation_id;
+                    this.vocation_value = vocation_value;
+                }
             }
 
             public static class EnvironmentBean {
                 /**
-                 * environment_id : 7
-                 * environment_value : 超大海景办公室
+                 * environment_id : 11
+                 * environment_value : 厂房
                  */
 
                 private int environment_id;
@@ -248,6 +279,11 @@ public class HomeBannerBean {
                 public void setEnvironment_value(String environment_value) {
                     this.environment_value = environment_value;
                 }
+
+                public EnvironmentBean(int environment_id, String environment_value) {
+                    this.environment_id = environment_id;
+                    this.environment_value = environment_value;
+                }
             }
         }
 
@@ -255,7 +291,7 @@ public class HomeBannerBean {
             /**
              * banner_id : 2
              * banner_name : 首页轮播图2
-             * banner_url : http://192.168.1.22:8080/uploads/20191101/09a2c49ee61c519ae213b5bf1598bf24.png
+             * banner_url : https://zqw.kuaishanghd.com/uploads/20191101/09a2c49ee61c519ae213b5bf1598bf24.png
              * skip_url :
              */
 
@@ -301,7 +337,7 @@ public class HomeBannerBean {
             /**
              * zone_id : 1
              * zone_name : 名企招聘
-             * zone_icon : http://192.168.1.22:8080http://192.168.1.22:8080/uploads/20191030/0f4a32254661ba8ba73594cb11c674b8.png
+             * zone_icon : /uploads/20191030/0f4a32254661ba8ba73594cb11c674b8.png
              */
 
             private int zone_id;

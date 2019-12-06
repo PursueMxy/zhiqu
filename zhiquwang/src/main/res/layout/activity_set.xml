@@ -111,7 +111,7 @@
         android:layout_marginLeft="@dimen/dp_15"
         android:layout_marginRight="@dimen/dp_15"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_218">
+        android:layout_height="wrap_content">
         <RelativeLayout
             android:id="@+id/set_rl_contact_us"
             android:layout_width="match_parent"
@@ -230,6 +230,47 @@
                 android:textColor="@color/ffb5b5b5"
                 android:textSize="@dimen/sp_14"
                 />
+        </RelativeLayout>
+
+        <View
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_1"
+            android:background="@color/fff2f2f2"/>
+
+        <RelativeLayout
+            android:id="@+id/set_rl_check_update"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_54">
+            <TextView
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="检查更新"
+                android:textColor="@color/ff4e4d4d"
+                android:textSize="@dimen/sp_14"/>
+
+            <TextView
+                android:id="@+id/set_tv_versionName"
+                android:layout_marginRight="@dimen/dp_30"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0.0M"
+                android:textColor="@color/ffb5b5b5"
+                android:textSize="@dimen/sp_14"
+                />
+
+            <ImageView
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dp_15"
+                android:src="@mipmap/ic_right_gray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </RelativeLayout>
     </LinearLayout>
 

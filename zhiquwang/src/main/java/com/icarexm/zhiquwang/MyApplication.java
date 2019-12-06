@@ -25,7 +25,7 @@ public class MyApplication extends Application {
         JPushInterface.init(this);
         LitePal.initialize(this);
         Density.setDensity(this, 360);//375为UI提供设计图的宽度
-        CrashReport.initCrashReport(getApplicationContext(),"27985782b5", true);
+        CrashReport.initCrashReport(getApplicationContext(),"27985782b5", false);
     }
 
     private void InitWeixin() {

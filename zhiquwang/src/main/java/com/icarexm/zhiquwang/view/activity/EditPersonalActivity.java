@@ -122,7 +122,7 @@ public class EditPersonalActivity extends BaseActivity {
                             .choose(MimeType.ofImage(), false)
                             .countable(true)
                             .capture(true)
-                            .captureStrategy(new CaptureStrategy(true, "com.zhkj.syyj.fileprovider", "test"))
+                            .captureStrategy(new CaptureStrategy(true, "com.icarexm.zhiquwang.fileprovider", "test"))
                             .maxSelectable(1)
                             .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
                             .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.dp_110))

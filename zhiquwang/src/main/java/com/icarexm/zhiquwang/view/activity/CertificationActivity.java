@@ -311,6 +311,8 @@ public class CertificationActivity extends BaseActivity implements Certification
                 CertificationBean.DataBean.InfoBean info = dataBean.getInfo();
                 edt_car_number.setText(info.getCard_num());
                 edt_username.setText(info.getReal_name());
+                frondurl=info.getCard_front();
+                reverseurl=info.getCard_reverse();
                 Glide.with(mContext).load(RequstUrl.URL.HOST+info.getCard_front()).into(img_card_frond);
                 Glide.with(mContext).load(RequstUrl.URL.HOST+info.getCard_reverse()).into(img_card_reverse);
             }else if (audit==3){

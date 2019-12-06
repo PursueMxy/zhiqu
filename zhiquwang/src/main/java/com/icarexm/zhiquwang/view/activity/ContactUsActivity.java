@@ -75,6 +75,7 @@ public class ContactUsActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.contact_us_address:
+                startNaviGao();
                 break;
         }
     }

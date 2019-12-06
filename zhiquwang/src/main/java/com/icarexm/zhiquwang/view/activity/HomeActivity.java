@@ -74,11 +74,6 @@ public class HomeActivity extends BaseActivity {
         ButterKnife.bind(this);
         AddFragment();
         InitUI();
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
     }
 
     @Override
@@ -161,14 +156,4 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
-    public void  onCancel(){
-        try {
-            if (progressDialog != null){
-                progressDialog.dismiss();
-                progressDialog = null;
-            }
-        }catch (Exception e){
-
-        }
-    }
 }

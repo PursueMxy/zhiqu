@@ -55,6 +55,7 @@ public class BasePayActivity extends BaseActivity implements BasePayContract.Vie
     private List<SubsidyBean> addSubsidyList=new ArrayList<>();
     private List<LiteSubsidyBean> all=new ArrayList<>();
     private CustomProgressDialog progressDialog;
+    private String pay="";
 
 
     @Override
@@ -95,14 +96,17 @@ public class BasePayActivity extends BaseActivity implements BasePayContract.Vie
                 finish();
                 break;
             case R.id.base_pay_btn_confirm:
-                String pay = edt_pay.getText().toString();
+                pay = edt_pay.getText().toString();
+                all.clear();
+                addSubsidyList.clear();
                 all = LitePal.findAll(LiteSubsidyBean.class);
                 for (int a=0;a< all.size();a++){
-                    addSubsidyList.add(new SubsidyBean(all.get(a).getSubsidy_id(),all.get(a).getSubsidy_name(),all.get(a).getPrice()));
-                }
+                 addSubsidyList.add(new SubsidyBean(all.get(a).getSubsidy_id(),all.get(a).getSubsidy_name(),Integer.parseInt(all.get(a).getPrice())));
+                 }
                 String Subsidy = new GsonBuilder().create().toJson(addSubsidyList);
                 if (!pay.equals("")){
-                    basePayPresenter.GetsetOvertime(token,Base_Type,pay,Subsidy);
+                    basePayPresenter.GetsetOvertime(token,Base_Type, pay,Subsidy);
+                  Log.e("dddd",addSubsidyList.size()+"底薪能为空"+Subsidy+"和"+all.size());
                 }else {
                     ToastUtils.showToast(mContext,"底薪不能为空");
                 }
@@ -124,16 +128,21 @@ public class BasePayActivity extends BaseActivity implements BasePayContract.Vie
     }
 
     public void UpdateUI(int code, String msg, BasePayBean.DataBean data){
+        if (progressDialog != null){
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
         if (code==1){
             subsidy_list = data.getSubsidy();
             LitePal.deleteAll(LiteSubsidyBean.class);
             for (int a=0;a<subsidy_list.size();a++){
                 LiteSubsidyBean liteSubsidyBean = new LiteSubsidyBean();
                 liteSubsidyBean.setSubsidy_id(subsidy_list.get(a).getSubsidy_id());
-                liteSubsidyBean.setPrice(subsidy_list.get(a).getPrice());
+                liteSubsidyBean.setPrice(subsidy_list.get(a).getPrice()+"");
                 liteSubsidyBean.setSubsidy_name(subsidy_list.get(a).getSubsidy_name());
                 liteSubsidyBean.save();
             }
+            edt_pay.setText(data.getBase_pay()+"");
             all = LitePal.findAll(LiteSubsidyBean.class);
             myAdapter.notifyDataSetChanged();
         }else if (code ==10001){
@@ -141,23 +150,18 @@ public class BasePayActivity extends BaseActivity implements BasePayContract.Vie
             startActivity(new Intent(mContext,LoginActivity.class));
             finish();
         }
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
     }
 
     public void UpdateUI(int code,String msg){
         if (code==1){
             finish();
+            Intent intent = new Intent(mContext, HomeActivity.class);
+            intent.putExtra("currentItems","1");
+            startActivity(intent);
         }else if (code ==10001){
             ToastUtils.showToast(mContext,msg);
             startActivity(new Intent(mContext,LoginActivity.class));
             finish();
-        }
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
         }
     }
 
@@ -189,6 +193,11 @@ public class BasePayActivity extends BaseActivity implements BasePayContract.Vie
                 holder = (ViewHolder) convertView.getTag();
             }
             holder.tv_name.setText(all.get(position).getSubsidy_name());
+            if (all.get(position).getPrice().equals("0")){
+                holder.editText.setText("");
+            }else {
+                holder.editText.setText(all.get(position).getPrice() + "");
+            }
             return convertView;
         }
 
@@ -219,12 +228,23 @@ public class BasePayActivity extends BaseActivity implements BasePayContract.Vie
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 int position = (int) mHolder.editText.getTag();//取tag值
-                String subsidy_name = all.get(position).getSubsidy_name();
+                int subsidy_id = all.get(position).getSubsidy_id();
                 LiteSubsidyBean liteSubsidyBean = new LiteSubsidyBean();
-                int Price = Integer.parseInt(s.toString());
-                liteSubsidyBean.setPrice(Price);
-                liteSubsidyBean.updateAll("subsidy_name = ?",subsidy_name);
-
+                String s1 = "";
+                try {
+                 s1 = s.toString();
+                 if (s1.equals("")){
+                     s1="";
+                 }else {
+                     s1=s1;
+                 }
+                }catch (Exception e){
+                    s1 = "";
+                }
+                if (!s1.equals("")) {
+                    liteSubsidyBean.setPrice(s1+"");
+                    liteSubsidyBean.updateAll("Subsidy_id= "+subsidy_id);
+                }
             }
 
             @Override

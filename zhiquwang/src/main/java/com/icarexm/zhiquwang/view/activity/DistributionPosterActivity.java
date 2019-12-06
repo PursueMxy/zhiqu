@@ -13,6 +13,7 @@ import android.webkit.WebView;
 import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.InviteQrBean;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
@@ -32,6 +33,7 @@ public class DistributionPosterActivity extends BaseActivity {
     private String token;
     private Context mContext;
     private String webUrl="file:///android_asset/EmptyView.html";
+    private CustomProgressDialog progressDialog;
 
     @SuppressLint("JavascriptInterface")
     @Override
@@ -54,11 +56,20 @@ public class DistributionPosterActivity extends BaseActivity {
     }
 
     private void InitData() {
+        //加载页添加
+        if (progressDialog == null){
+            progressDialog = CustomProgressDialog.createDialog(this);
+        }
+        progressDialog.show();
         OkGo.<String>post(RequstUrl.URL.inviteQr)
                 .params("token",token)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        if (progressDialog != null){
+                            progressDialog.dismiss();
+                            progressDialog = null;
+                        }
                         InviteQrBean inviteQrBean = new GsonBuilder().create().fromJson(response.body(), InviteQrBean.class);
                         if (inviteQrBean.getCode()==1){
                             InviteQrBean.DataBean data = inviteQrBean.getData();

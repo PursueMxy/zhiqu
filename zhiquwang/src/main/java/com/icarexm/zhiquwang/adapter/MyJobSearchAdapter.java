@@ -25,7 +25,6 @@ public class MyJobSearchAdapter extends HelperRecyclerViewAdapter<JobSearchBean.
 
     @Override
     protected void HelperBindData(HelperRecyclerViewHolder viewHolder, final int position,JobSearchBean.DataBeanX.DataBean item) {
-        viewHolder.getView(R.id.list_home_fm_rl).setVisibility(View.GONE);
         LabelsView labels= viewHolder.getView(R.id.labels);
         List<JobSearchBean.DataBeanX.DataBean.LabelArrBean> label_arr = item.getLabel_arr();
         //LabelsView可以设置任何类型的数据，而不仅仅是String。

@@ -45,7 +45,7 @@ public class AndroidOPermissionActivity extends AppCompatActivity {
                         finish();
                     }
                 } else {
-                    //startInstallPermissionSettingActivity();
+                    startInstallPermissionSettingActivity();
                     showDialog();
                 }
                 break;

@@ -4,10 +4,12 @@
     android:layout_height="wrap_content"
     android:background="@drawable/bg_white_8">
     <TextView
+        android:layout_toLeftOf="@+id/list_home_fm_tv_label_price"
+        android:layout_marginRight="@dimen/dp_5"
         android:id="@+id/list_home_fm_tv_position"
         android:layout_marginTop="@dimen/dp_10"
         android:layout_marginLeft="@dimen/dp_10"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="高级平面设计师"
         android:textColor="@color/ff00b6ce"
@@ -25,55 +27,57 @@
         android:textColor="@color/ff4e4d4d"
         android:textSize="@dimen/sp_12"
         />
-
-    <TextView
-        android:layout_marginTop="@dimen/dp_7"
-        android:layout_marginLeft="@dimen/dp_10"
+    <RelativeLayout
+        android:id="@+id/list_home_fm_rl_age"
         android:layout_below="@+id/list_home_fm_tv_salary"
-        android:id="@+id/list_home_fm_tv_age"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="20-25岁"
-        android:textColor="@color/ff4e4d4d"
-        android:textSize="@dimen/sp_12"
-        />
-    <com.icarexm.zhiquwang.custview.LabelsView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_marginTop="@dimen/dp_6"
-        android:layout_marginLeft="@dimen/dp_10"
-        android:layout_marginRight="@dimen/dp_10"
-        android:layout_below="@+id/list_home_fm_tv_salary"
-        android:layout_toRightOf="@+id/list_home_fm_tv_age"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-          android:id="@+id/labels"
-          app:labelBackground="@drawable/label_bg"
-          app:labelTextColor="@color/ffa5a5a5"
-          app:labelTextSize="@dimen/sp_11"
-          app:labelTextPaddingBottom="@dimen/dp_1"
-          app:labelTextPaddingLeft="@dimen/dp_6"
-          app:labelTextPaddingRight="@dimen/dp_6"
-          app:labelTextPaddingTop="@dimen/dp_1"
-          app:wordMargin="@dimen/dp_10"
-          app:selectType="NONE"
-           app:maxLines="0"
-          app:minSelect="1"
-          app:isIndicator="true">
-
-      </com.icarexm.zhiquwang.custview.LabelsView>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_marginTop="@dimen/dp_7"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:id="@+id/list_home_fm_tv_age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20-25岁"
+            android:textColor="@color/ff4e4d4d"
+            android:textSize="@dimen/sp_12"
+            />
+        <com.icarexm.zhiquwang.custview.LabelsView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_marginTop="@dimen/dp_6"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_toRightOf="@+id/list_home_fm_tv_age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/labels"
+            app:labelBackground="@drawable/label_bg"
+            app:labelTextColor="@color/ffa5a5a5"
+            app:labelTextSize="@dimen/sp_11"
+            app:labelTextPaddingBottom="@dimen/dp_1"
+            app:labelTextPaddingLeft="@dimen/dp_6"
+            app:labelTextPaddingRight="@dimen/dp_6"
+            app:labelTextPaddingTop="@dimen/dp_1"
+            app:wordMargin="@dimen/dp_10"
+            app:selectType="NONE"
+            app:maxLines="0"
+            app:minSelect="1"
+            app:isIndicator="true">
+        </com.icarexm.zhiquwang.custview.LabelsView>
+    </RelativeLayout>
 
     <View
         android:layout_marginLeft="@dimen/dp_10"
         android:layout_marginRight="@dimen/dp_10"
         android:layout_marginTop="@dimen/dp_12"
-        android:layout_below="@+id/labels"
+        android:layout_below="@+id/list_home_fm_rl_age"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_1"
         android:background="@color/fff2f2f2"/>
 
     <TextView
         android:layout_marginBottom="@dimen/dp_10"
-        android:layout_below="@+id/labels"
+        android:layout_below="@+id/list_home_fm_rl_age"
         android:id="@+id/list_home_fm_tv_address"
         android:layout_marginTop="@dimen/sp_22"
         android:layout_marginLeft="@dimen/dp_10"
@@ -86,22 +90,17 @@
         android:textSize="12sp"
         />
 
-    <RelativeLayout
-        android:id="@+id/list_home_fm_rl"
-        android:layout_marginTop="@dimen/dp_10"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/ic_bg_red"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
         <TextView
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/bg_draw"
             android:id="@+id/list_home_fm_tv_label_price"
-            android:layout_centerVertical="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="在职满30天立返￥5"
+            android:gravity="center|left"
+            android:layout_width="@dimen/dp_130"
+            android:layout_height="@dimen/dp_33"
+            android:text=""
             android:textColor="@color/white"
             android:textSize="@dimen/sp_11"
-            android:lines="1"
+            android:lines="2"
             />
-    </RelativeLayout>
 </RelativeLayout>

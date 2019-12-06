@@ -41,6 +41,8 @@ import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.HomeFmAdapter;
 import com.icarexm.zhiquwang.adapter.TodayHeatAdapter;
+import com.icarexm.zhiquwang.bean.AreaBean;
+import com.icarexm.zhiquwang.bean.CityNameBean;
 import com.icarexm.zhiquwang.bean.HomeBannerBean;
 import com.icarexm.zhiquwang.bean.HomeDataBean;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
@@ -117,11 +119,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     cityName = aMapLocation.getCity();
                     tv_cityname.setText(cityName);
                     InitData();
-                    SharedPreferences.Editor editor = share.edit();
-                    editor.putString("cityName",cityName);
-                    editor.putString("latitude",start_latitude+"");
-                    editor.putString("longitude",start_longitude+"");
-                    editor.commit();//提交
                 }
             }
         }
@@ -134,7 +131,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private List<HomeBannerBean.DataBean.BannerListBean> banner_list=new ArrayList<>();
     private List<HomeBannerBean.DataBean.ZoneListBean> zone_list=new ArrayList<>();
     private NoScrollListView list_city;
-    private CityAdapter cityAdapter;
     private RelativeLayout rl_city;
     private RelativeLayout rl_salary;
     private NoScrollListView list_salary;
@@ -171,13 +167,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private CustomProgressDialog progressDialog;
     private Drawable drawable;
     private MyScrollView scrollview;
-
+    private RelativeLayout top_rl_city;
+    private NoScrollListView top_list_city;
+    private List<CityNameBean.DataBean> citydataList=new ArrayList<>();
+    private AreaAdapter areaAdapter;
+    private CityAdapter cityAdapter;
+    private  boolean IsCity=false;
 
     public HomeFragment() {
         // Required empty public constructor
     }
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -202,18 +201,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        try {
-                            if (!IsUpdate) {
-                                HomeActivity homeActivity = (HomeActivity) getActivity();
-                                homeActivity.onCancel();
-                            }
                             if (progressDialog != null){
                                 progressDialog.dismiss();
                                 progressDialog = null;
                             }
-                        }catch (Exception e){
-
-                        }
                         HomeBannerBean homeBannerBean = new GsonBuilder().create().fromJson(response.body(), HomeBannerBean.class);
                         if (homeBannerBean.getCode()==1){
                             HomeBannerBean.DataBean data = homeBannerBean.getData();
@@ -228,20 +219,48 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                                 gridAdapter.notifyDataSetChanged();
                                 HomeBannerBean.DataBean.OptionListBean option_list = data.getOption_list();
                                 area_list = option_list.getArea_list();
-                                cityAdapter.notifyDataSetChanged();
+                                area_list.add(0,new HomeBannerBean.DataBean.OptionListBean.AreaListBean(999999,"全部"));
+                                areaAdapter.notifyDataSetChanged();
                                 salary = option_list.getSalary();
+                                salary.add(0,new HomeBannerBean.DataBean.OptionListBean.SalaryBean(999999,"全部"));
                                 salaryAdapter.notifyDataSetChanged();
                                 ageList = option_list.getAge();
+                                ageList.add(0,new HomeBannerBean.DataBean.OptionListBean.AgeBean(999999,"全部"));
                                 ageAdapter.notifyDataSetChanged();
                                 vocation = option_list.getVocation();
+                                vocation.add(0,new HomeBannerBean.DataBean.OptionListBean.VocationBean(999999,"全部"));
                                 vocationAdapter.notifyDataSetChanged();
                                 environment = option_list.getEnvironment();
+                                environment.add(0,new HomeBannerBean.DataBean.OptionListBean.EnvironmentBean(999999,"全部"));
                                 environmentAdapter.notifyDataSetChanged();
+                                if (data.getIs_open()==1){
+                                }else if (data.getIs_open()==2){
+                                cityName="厦门市";
+                                tv_cityname.setText(cityName);
+                                ToastUtils.showToast(mContext,"该城市未开放，跳转到默认城市");
+                                }
+                            SharedPreferences.Editor editor = share.edit();
+                            editor.putString("cityName",cityName);
+                            editor.putString("latitude",start_latitude+"");
+                            editor.putString("longitude",start_longitude+"");
+                            editor.commit();//提交
                             }
                         }else if (homeBannerBean.getCode() ==10001){
-//                            ToastUtils.showToast(mContext,homeBannerBean.getMsg());
                             getActivity().startActivity(new Intent(mContext, LoginActivity.class));
                             getActivity().finish();
+                        }
+
+                    }
+                });
+        OkGo.<String>post(RequstUrl.URL.getCity)
+                .params("token",token)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        CityNameBean cityNameBean = new GsonBuilder().create().fromJson(response.body(), CityNameBean.class);
+                        if (cityNameBean.getCode()==1){
+                            citydataList = cityNameBean.getData();
+                            cityAdapter.notifyDataSetChanged();
                         }
                     }
                 });
@@ -324,6 +343,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         mRecyclerView = inflate.findViewById(R.id.fm_home_content_xRecyclerView);
         rl_city = inflate.findViewById(R.id.fm_home_rl_city);
         list_city = inflate.findViewById(R.id.fm_home_list_city);
+        top_rl_city = inflate.findViewById(R.id.fm_home_rl_top_city);
+        top_list_city = inflate.findViewById(R.id.fm_home_list_top_city);
         rl_salary = inflate.findViewById(R.id.fm_home_rl_salary);
         list_salary = inflate.findViewById(R.id.fm_home_list_salary);
         rl_age = inflate.findViewById(R.id.fm_home_rl_age);
@@ -334,6 +355,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         list_environment = inflate.findViewById(R.id.fm_home_list_environment);
         home_gridview = inflate.findViewById(R.id.fm_home_gridview);
         tv_cityname = inflate.findViewById(R.id.fm_home_tv_cityname);
+        tv_cityname.setOnClickListener(this);
         bannerLayout= inflate.findViewById(R.id.fm_home_banner);
         bannerLayout.setAutoPlay(true);
         bannerLayout.setImageLoader(new GlideImageLoader());
@@ -377,12 +399,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void SltAdapter() {
-        cityAdapter = new CityAdapter();
-        list_city.setAdapter(cityAdapter);
+        areaAdapter = new AreaAdapter();
+        list_city.setAdapter(areaAdapter);
         list_city.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 area_id=area_list.get(i).getArea_id()+"";
+                if (area_id.equals("999999")){
+                    area_id="";
+                }
                 rl_city.setVisibility(View.GONE);
                 IsArea=true;
                 InitHomeData();
@@ -395,6 +420,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 salary_id=salary.get(i).getSalary_id()+"";
+                if (salary_id.equals("999999")){
+                    salary_id="";
+                }
                 rl_salary.setVisibility(View.GONE);
                 IsSalary=true;
                 InitHomeData();
@@ -407,6 +435,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 age_id=ageList.get(i).getAge_id()+"";
+                if (age_id.equals("999999")){
+                    age_id="";
+                }
                 rl_age.setVisibility(View.GONE);
                 IsAge=true;
                 InitHomeData();
@@ -419,6 +450,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 vocation_id=vocation.get(i).getVocation_id()+"";
+                if (vocation_id.equals("999999")){
+                    vocation_id="";
+                }
                 rl_vocation.setVisibility(View.GONE);
                 IsVocation=true;
                 InitHomeData();
@@ -431,13 +465,28 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 environment_id=environment.get(i).getEnvironment_id()+"";
+                if (environment_id.equals("999999")){
+                    environment_id="";
+                }
                 rl_environment.setVisibility(View.GONE);
                 IsEiroment=true;
                 InitHomeData();
             }
         });
         list_environment.setSelector(drawable);
+        cityAdapter = new CityAdapter();
+        top_list_city.setAdapter(cityAdapter);
+        top_list_city.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                top_rl_city.setVisibility(View.GONE);
+                cityName = citydataList.get(i).getArea_name();
+                tv_cityname.setText(cityName);
+                InitData();
+            }
+        });
     }
+
 
     private void recyclerViewAT() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
@@ -673,6 +722,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             case R.id.fm_home_rl_search:
                 startActivity(new Intent(mContext, RecruitActivity.class));
                 break;
+            case R.id.fm_home_tv_cityname:
+                if (!IsCity){
+                    top_rl_city.setVisibility(View.VISIBLE);
+                    IsCity=!IsCity;
+                }else {
+                    top_rl_city.setVisibility(View.GONE);
+                    IsCity=!IsCity;
+                }
+                break;
         }
     }
 
@@ -703,7 +761,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
        }
    }
 
-    public class CityAdapter extends  BaseAdapter{
+    public class AreaAdapter extends  BaseAdapter{
        @Override
        public int getCount() {
            return area_list.size();
@@ -748,7 +806,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         public View getView(int i, View view, ViewGroup viewGroup) {
             View inflate = getLayoutInflater().inflate(R.layout.home_list_item, null);
             TextView tv_city= inflate.findViewById(R.id.home_list_item_tv_content);
-            tv_city.setText(salary.get(i).getSalary_value()+"元");
+            tv_city.setText(salary.get(i).getSalary_value());
             return inflate;
         }
     }
@@ -828,6 +886,31 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    public class CityAdapter extends  BaseAdapter{
+        @Override
+        public int getCount() {
+            return citydataList.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            View inflate = getLayoutInflater().inflate(R.layout.home_list_item, null);
+            TextView tv_city= inflate.findViewById(R.id.home_list_item_tv_content);
+            tv_city.setText(citydataList.get(i).getArea_name());
+            return inflate;
+        }
+    }
+
 
     public void UpdateUI(){
         //加载页添加
@@ -843,4 +926,5 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         SltAdapter();
         InitData();
     }
+
 }

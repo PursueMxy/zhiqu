@@ -82,7 +82,6 @@ public class RecruitAdapter extends RecyclerView.Adapter<RecruitAdapter.ViewHold
             tv_salary = itemView.findViewById(R.id.list_home_fm_tv_salary);
             tv_age = itemView.findViewById(R.id.list_home_fm_tv_age);
             tv_address = itemView.findViewById(R.id.list_home_fm_tv_address);
-            itemView.findViewById(R.id.list_home_fm_rl).setVisibility(View.GONE);
         }
     }
 

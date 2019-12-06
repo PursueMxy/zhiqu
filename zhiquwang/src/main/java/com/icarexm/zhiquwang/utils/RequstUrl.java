@@ -176,5 +176,8 @@ public class RequstUrl {
         //关于我们
         public static String getContact=HOST+"/api/getContact";
 
+        //版本升级
+        public static String CheckAndroid=HOST+"/api/checkAndroid";
+
     }
 }

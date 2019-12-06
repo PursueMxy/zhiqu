@@ -478,8 +478,12 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
             indicatorAdapter.notifyDataSetChanged();
             List<JobDetailBean.DataBean.LabelArrBean> label_arr = dataBean.getLabel_arr();
             ArrayList<String> label = new ArrayList<>();
-            for (int a=0;a<label_arr.size();a++){
-                label.add(label_arr.get(a).getLabel_name());
+            try {
+                for (int a=0;a<label_arr.size();a++){
+                    label.add(label_arr.get(a).getLabel_name());
+                }
+            }catch (Exception e){
+
             }
             labelsView.setLabels(label);
             tv_title.setText(dataBean.getJob_name());
@@ -553,8 +557,8 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
            TextView tv_salary = itemView.findViewById(R.id.list_home_fm_tv_salary);
            TextView tv_age = itemView.findViewById(R.id.list_home_fm_tv_age);
            TextView tv_address = itemView.findViewById(R.id.list_home_fm_tv_address);
-            itemView.findViewById(R.id.list_home_fm_rl).setVisibility(View.GONE);
             List<HomeDataBean.DataBeanX.DataBean.LabelArrBean> label_arr = homeDataList.get(position).getLabel_arr();
+            TextView tv_label_price=  itemView.findViewById(R.id.list_home_fm_tv_label_price);
             ArrayList<String> label = new ArrayList<>();
             for (int a=0;a<label_arr.size();a++){
                 label.add(label_arr.get(a).getLabel_name());
@@ -564,6 +568,7 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
             tv_salary.setText(homeDataList.get(position).getSalary()+"/月"+homeDataList.get(position).getSalary_hour()+"/时");
             tv_age.setText(homeDataList.get(position).getAge());
             tv_address.setText(homeDataList.get(position).getAddress());
+            tv_label_price.setText(homeDataList.get(position).getLabel_price());
             return itemView;
         }
     }

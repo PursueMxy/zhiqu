@@ -12,6 +12,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -372,14 +373,19 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
                             if (data!=null){
                                 HomeBannerBean.DataBean.OptionListBean option_list = data.getOption_list();
                                 area_list = option_list.getArea_list();
+                                area_list.add(0,new HomeBannerBean.DataBean.OptionListBean.AreaListBean(999999,"全部"));
                                 cityAdapter.notifyDataSetChanged();
                                 salary = option_list.getSalary();
+                                salary.add(0,new HomeBannerBean.DataBean.OptionListBean.SalaryBean(999999,"全部"));
                                 salaryAdapter.notifyDataSetChanged();
                                 ageList = option_list.getAge();
+                                ageList.add(0,new HomeBannerBean.DataBean.OptionListBean.AgeBean(999999,"全部"));
                                 ageAdapter.notifyDataSetChanged();
                                 vocation = option_list.getVocation();
+                                vocation.add(0,new HomeBannerBean.DataBean.OptionListBean.VocationBean(999999,"全部"));
                                 vocationAdapter.notifyDataSetChanged();
                                 environment = option_list.getEnvironment();
+                                environment.add(0,new HomeBannerBean.DataBean.OptionListBean.EnvironmentBean(999999,"全部"));
                                 environmentAdapter.notifyDataSetChanged();
                             }
                         }
@@ -395,8 +401,12 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 area_id=area_list.get(i).getArea_id()+"";
+                if (area_id.equals("999999")){
+                    area_id="";
+                }
                 rl_city.setVisibility(View.GONE);
                 IsArea=true;
+                famousRecruitmentPresenter.GetHomeData(token,limit+"",page+"",zone_id,area_id,salary_id,age_id,vocation_id,environment_id,job_id);
             }
         });
         list_city.setSelector(drawable);
@@ -406,8 +416,12 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 salary_id= salary.get(i).getSalary_id()+"";
+                if (salary_id.equals("999999")){
+                    salary_id="";
+                }
                 rl_salary.setVisibility(View.GONE);
                 IsSalary=true;
+                famousRecruitmentPresenter.GetHomeData(token,limit+"",page+"",zone_id,area_id,salary_id,age_id,vocation_id,environment_id,job_id);
             }
         });
         list_salary.setSelector(drawable);
@@ -417,8 +431,12 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 age_id= ageList.get(i).getAge_id()+"";
+                if (age_id.equals("999999")){
+                    age_id="";
+                }
                 rl_age.setVisibility(View.GONE);
                 IsAge=true;
+                famousRecruitmentPresenter.GetHomeData(token,limit+"",page+"",zone_id,area_id,salary_id,age_id,vocation_id,environment_id,job_id);
             }
         });
         list_age.setSelector(drawable);
@@ -428,8 +446,12 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 vocation_id= vocation.get(i).getVocation_id()+"";
+                if (vocation_id.equals("999999")){
+                    vocation_id="";
+                }
                 rl_vocation.setVisibility(View.GONE);
                 IsVocation=true;
+                famousRecruitmentPresenter.GetHomeData(token,limit+"",page+"",zone_id,area_id,salary_id,age_id,vocation_id,environment_id,job_id);
             }
         });
         list_vocation.setSelector(drawable);
@@ -439,8 +461,12 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 environment_id= environment.get(i).getEnvironment_id()+"";
+                if (environment_id.equals("999999")){
+                    environment_id="";
+                }
                 rl_environment.setVisibility(View.GONE);
                 IsEironment=true;
+                famousRecruitmentPresenter.GetHomeData(token,limit+"",page+"",zone_id,area_id,salary_id,age_id,vocation_id,environment_id,job_id);
             }
         });
         list_environment.setSelector(drawable);
@@ -529,7 +555,7 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
         public View getView(int i, View view, ViewGroup viewGroup) {
             View inflate = getLayoutInflater().inflate(R.layout.home_list_item, null);
             TextView tv_city= inflate.findViewById(R.id.home_list_item_tv_content);
-            tv_city.setText(salary.get(i).getSalary_value()+"元");
+            tv_city.setText(salary.get(i).getSalary_value());
             return inflate;
         }
     }

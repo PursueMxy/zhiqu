@@ -106,10 +106,10 @@ public class StatisticsAdapter extends BaseExpandableListAdapter {
         } else {
             childViewHolder = (ChildViewHolder) convertView.getTag();
         }
-        StatisticsBean.DataBean.TotalInfoBean totalInfoBean = data.get(groupPosition);
-        childViewHolder.item_tv_name.setText(totalInfoBean.getClasses_name());
-        childViewHolder.tv_holidays.setText("共"+totalInfoBean.getHours()+"小时");
-        childViewHolder.tv_holidays_price.setText("¥ "+totalInfoBean.getPrice()+"");
+        List<StatisticsBean.DataBean.TotalInfoBean.InfoBean> info = data.get(groupPosition).getInfo();
+        childViewHolder.item_tv_name.setText(info.get(childPosition).getFestival_name());
+        childViewHolder.tv_holidays.setText("共"+info.get(childPosition).getHours()+"小时");
+        childViewHolder.tv_holidays_price.setText("¥ "+info.get(childPosition).getPrice()+"");
         return convertView;
     }
 

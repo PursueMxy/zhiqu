@@ -76,10 +76,14 @@ public class RecordOvertimeFragment extends Fragment implements View.OnClickList
     }
 
     private void InitData() {
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(mContext);
+        try {
+            if (progressDialog == null){
+                progressDialog = CustomProgressDialog.createDialog(mContext);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+            progressDialog = null;
         }
-        progressDialog.show();
         OkGo.<String>post(RequstUrl.URL.Overtime)
                 .params("token",token)
                 .params("type",TypeOfWork)
@@ -97,18 +101,17 @@ public class RecordOvertimeFragment extends Fragment implements View.OnClickList
                                     tv_hour.setText(overTimeBean.getData().getHours()+"H");
                                     tv_price.setText(overTimeBean.getData().getOver_price()+"");
                                     if (!overTimeBean.getData().getBase_pay().equals("")){
-                                        tv_set_basepay.setText(overTimeBean.getData().getBase_pay());
+                                        tv_set_basepay.setText("基本工资:\n"+overTimeBean.getData().getBase_pay());
                                     }
                                 }else if (TypeOfWork.equals("2")){
                                     two_tv_dt.setText(overTimeBean.getData().getHours()+"H");
                                     two_tv_salary.setText(overTimeBean.getData().getPrice()+"");
                                     if (!overTimeBean.getData().getBase_pay().equals("")){
-                                        two_tv_set_basepay.setText(overTimeBean.getData().getBase_pay());
+                                        two_tv_set_basepay.setText("小时工资:\n"+overTimeBean.getData().getBase_pay());
                                     }
                                 }
                             }else if (overTimeBean.getCode() ==10001){
-                                ToastUtils.showToast(mContext,overTimeBean.getMsg());
-                                startActivity(new Intent(mContext, LoginActivity.class));
+                                startActivity(new Intent( getActivity(), LoginActivity.class));
                                 getActivity().finish();
                             }
                     }
@@ -156,30 +159,31 @@ public class RecordOvertimeFragment extends Fragment implements View.OnClickList
                 startActivity(intent5);
                 break;
             case R.id.fm_record_overtime_overtime_statistics:
-                Intent intent1 = new Intent(mContext, OvertimeApprovalActivity.class);
-                intent1.putExtra("TypeOfWork",TypeOfWork);
-                startActivity(intent1);
-                break;
-            case R.id.fm_record_overtime_overtime_approval:
                 Intent intent = new Intent(mContext, OvertimeStatisticsActivity.class);
                 intent.putExtra("TypeOfWork",TypeOfWork);
                 startActivity(intent);
                 break;
-            case R.id.fm_record_overtime_overtime_two_tv_approval:
-                Intent intent3 = new Intent(mContext, OvertimeStatisticsActivity.class);
-                intent3.putExtra("TypeOfWork",TypeOfWork);
-                startActivity(intent3);
+            case R.id.fm_record_overtime_overtime_approval:
+                Intent intent1 = new Intent(mContext, OvertimeApprovalActivity.class);
+                intent1.putExtra("TypeOfWork",TypeOfWork);
+                startActivity(intent1);
                 break;
-            case R.id.fm_record_overtime_overtime_two_tv_statistics:
+            case R.id.fm_record_overtime_overtime_two_tv_approval:
                 Intent intent2 = new Intent(mContext, OvertimeApprovalActivity.class);
                 intent2.putExtra("TypeOfWork",TypeOfWork);
                 startActivity(intent2);
+                break;
+            case R.id.fm_record_overtime_overtime_two_tv_statistics:
+                Intent intent3 = new Intent(mContext, OvertimeStatisticsActivity.class);
+                intent3.putExtra("TypeOfWork",TypeOfWork);
+                startActivity(intent3);
                 break;
             case R.id.fm_record_overtime_two_tv_title:
                 TypeOfWork="1";
                 rl_typeTwo.setVisibility(View.GONE);
                 rl_typeOne.setVisibility(View.VISIBLE);
                 SharedPreferences.Editor editor = share.edit();
+                editor.putString("TypeOfWork",TypeOfWork);
                 editor.commit();//提交
                 InitData();
                 break;
@@ -188,6 +192,7 @@ public class RecordOvertimeFragment extends Fragment implements View.OnClickList
                 rl_typeOne.setVisibility(View.GONE);
                 rl_typeTwo.setVisibility(View.VISIBLE);
                 SharedPreferences.Editor editor1 = share.edit();
+                editor1.putString("TypeOfWork",TypeOfWork);
                 editor1.commit();//提交
                 InitData();
                 break;

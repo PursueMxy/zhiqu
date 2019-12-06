@@ -45,32 +45,32 @@ public class OverTimeBean {
          * base_pay : 1000.00
          */
 
-        private int hours;
-        private int over_price;
-        private int price;
+        private double hours;
+        private double over_price;
+        private double price;
         private String base_pay;
 
-        public int getHours() {
+        public double getHours() {
             return hours;
         }
 
-        public void setHours(int hours) {
+        public void setHours(double hours) {
             this.hours = hours;
         }
 
-        public int getOver_price() {
+        public double getOver_price() {
             return over_price;
         }
 
-        public void setOver_price(int over_price) {
+        public void setOver_price(double over_price) {
             this.over_price = over_price;
         }
 
-        public int getPrice() {
+        public double getPrice() {
             return price;
         }
 
-        public void setPrice(int price) {
+        public void setPrice(double price) {
             this.price = price;
         }
 

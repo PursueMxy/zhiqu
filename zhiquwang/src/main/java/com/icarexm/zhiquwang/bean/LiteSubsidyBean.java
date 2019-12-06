@@ -7,7 +7,7 @@ public class LiteSubsidyBean extends LitePalSupport {
     @Column(unique = true, defaultValue = "unknown")
     private int subsidy_id;
     private String subsidy_name;
-    private int price;
+    private String price;
 
     public int getSubsidy_id() {
         return subsidy_id;
@@ -25,18 +25,18 @@ public class LiteSubsidyBean extends LitePalSupport {
         this.subsidy_name = subsidy_name;
     }
 
-    public int getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
    public LiteSubsidyBean(){
 
     }
-    public LiteSubsidyBean(int subsidy_id, String subsidy_name, int price) {
+    public LiteSubsidyBean(int subsidy_id, String subsidy_name, String price) {
         this.subsidy_id = subsidy_id;
         this.subsidy_name = subsidy_name;
         this.price = price;

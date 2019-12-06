@@ -261,7 +261,8 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
                         String classes_id = monthList.get(integer-1).getClasses_id();
                         String festival_id = monthList.get(integer-1).getFestival_id();
                         overtime_hours = monthList.get(integer-1).getHours();
-                        UpdateUI( festival_id,classes_id,overtime_hours);
+                        Log.e("点击了",classes_id+"和"+overtime_hours);
+                        UpdateUI( classes_id,festival_id,overtime_hours);
 
                     }else {
                         ToastUtils.showToast(mContext,"超出当前时间");
@@ -282,21 +283,25 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
         }
     }
 
-    public void UpdateUI(String classes_id,String festival_id,String hours){
+    public void UpdateUI(String classesName,String festivalName,String hours){
         tv_hours.setText(hours+"小时");
-        tv_classes.setText(classes_id);
-        tv_festival.setText(festival_id);
+        overtime_hours=hours;
+        tv_classes.setText(classesName);
+        tv_festival.setText(festivalName);
+        classes_id= sltClasses(classesName);
+        festival_id=sltFestival(festivalName);
     }
 
     public void UpdateUI(int code,String msg){
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
-        if (code ==10001){
+        if (code==1){
+            Intent intent = new Intent(mContext, HomeActivity.class);
+            intent.putExtra("currentItems","1");
+            startActivity(intent);
+        } else if (code ==10001){
             ToastUtils.showToast(mContext,msg);
             startActivity(new Intent(mContext,LoginActivity.class));
             finish();
+
         }else {
             ToastUtils.showToast(mContext, msg);
         }
@@ -305,7 +310,7 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
     //班次
     private void ClassesDialog() {
         classes_id = classes_list.get(0).getClasses_id();
-        tv_classes.setText(classes_list.get(0).getClasses_name());
+        CLASSES = classes_list.get(0).getClasses_name();
         final BottomDialog SexDialog = new BottomDialog(this, R.style.ActionSheetDialogStyle);
         View Sexinflate = LayoutInflater.from(mContext).inflate(R.layout.dialog_bottom_education, null);
         TextView tv_title =Sexinflate.findViewById(R.id.dialog_bottom_education_tv_title);
@@ -343,6 +348,8 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
 
     //加班类型
     private void FestivalDialog(){
+        Festival =festival_list.get(0).getFestival_name();
+        festival_id = festival_list.get(0).getFestival_id();
         final BottomDialog SexDialog = new BottomDialog(this, R.style.ActionSheetDialogStyle);
         View Sexinflate = LayoutInflater.from(mContext).inflate(R.layout.dialog_bottom_education, null);
         TextView tv_title =Sexinflate.findViewById(R.id.dialog_bottom_education_tv_title);
@@ -380,6 +387,7 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
 
     //加班时长
     private void HoursDialog() {
+        overtime_hours = Hours_List.get(0);
         final BottomDialog SexDialog = new BottomDialog(this, R.style.ActionSheetDialogStyle);
         View Sexinflate = LayoutInflater.from(mContext).inflate(R.layout.dialog_bottom_education, null);
         TextView tv_title =Sexinflate.findViewById(R.id.dialog_bottom_education_tv_title);
@@ -422,20 +430,43 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
         if (code==1) {
             List<OvertimeApproverBean.DataBean.MonthBean> month = data.getMonth();
             festival_list = data.getFestival();
+            Festival_List.clear();
             for (int a = 0; a < festival_list.size(); a++) {
                 Festival_List.add(festival_list.get(a).getFestival_name());
             }
             classes_list = data.getClasses();
+            CLASSES_LIST.clear();
             for (int b = 0; b < classes_list.size(); b++) {
                 CLASSES_LIST.add(classes_list.get(b).getClasses_name());
             }
             monthList = month;
             adapterDate.notifyDataSetChanged();
+            String classes_id = monthList.get(SltDay-1).getClasses_id();
+            overtime_hours = monthList.get(SltDay-1).getHours();
+            String festival_id = monthList.get(SltDay-1).getFestival_id();
+            UpdateUI(classes_id,festival_id,overtime_hours);
         }if (code ==10001){
             ToastUtils.showToast(mContext,msg);
             startActivity(new Intent(mContext,LoginActivity.class));
             finish();
         }
         ToastUtils.showToast(mContext,msg);
+    }
+
+    public int sltFestival(String FestivalName){
+         for (int a=0;a<classes_list.size();a++){
+             if (festival_list.get(a).getFestival_name().equals(FestivalName)){
+                 return festival_list.get(a).getFestival_id();
+             }
+         }
+        return 0;
+    }
+    public int sltClasses(String ClassesName){
+        for (int a=0;a<classes_list.size();a++){
+            if (classes_list.get(a).getClasses_name().equals(ClassesName)){
+                return classes_list.get(a).getClasses_id();
+            }
+        }
+        return 0;
     }
 }

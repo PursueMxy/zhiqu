@@ -16,7 +16,7 @@ public class FamousRecruitmentModel implements FamousRecruitmentContract.Model {
                 .params("limit",limit)
                 .params("page",page)
                 .params("zone_id",zone_id)
-                .params("area_id",age_id)
+                .params("area_id",area_id)
                 .params("salary_id",salary_id)
                 .params("age_id",age_id)
                 .params("vocation_id",vocation_id)

@@ -217,7 +217,6 @@ public class SetReminderActivity extends BaseActivity implements SetReminderCont
                         liteWeekBean.updateAll("week_code="+ i);
                     }
                     liteWeekBeans = LitePal.where("slt_code=1").find(LiteWeekBean.class);
-                    Log.e("jkdnfjsd", liteWeekBeans.size()+"jdfhjsf");
 
                 }
             });

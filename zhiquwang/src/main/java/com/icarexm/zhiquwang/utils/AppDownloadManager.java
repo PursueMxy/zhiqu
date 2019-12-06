@@ -72,7 +72,7 @@ public class AppDownloadManager {
         //在手机SD卡上创建一个download文件夹
         // nEnvironment.getExternalStoragePublicDirectory(Evironment.DIRECTORY_DOWNLOADS).mkdir() ;
         //指定下载到SD卡的/download/my/目录下
-        // request.setDestinationInExternalPublicDir("/codoon/","codoon_health.apk");
+//         request.setDestinationInExternalPublicDir("/codoon/","zhiquwang.apk");
 
         request.setMimeType("application/vnd.android.package-archive");
         //
@@ -172,12 +172,7 @@ public class AppDownloadManager {
                             ToastUtils.showToast(context, "授权失败，无法安装应用");
                         }
                     };
-
                     AndroidOPermissionActivity.sListener = listener;
-                    Intent intent1 = new Intent(context, AndroidOPermissionActivity.class);
-                    context.startActivity(intent1);
-
-
                 } else {
                     installApk(context, intent);
                 }
@@ -211,8 +206,8 @@ public class AppDownloadManager {
                 uri = Uri.fromFile(apkFile);
             } else { // Android 7.0 以上
                 uri = FileProvider.getUriForFile(context,
-                        "com.fzzhkj.spgg.provider",
-                        new File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "app_name.apk"));
+                        "com.icarexm.zhiquwang.fileprovider",
+                        new File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "zhiquwang.apk"));
                 intentInstall.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             }
             String command = "pm install -r " + uri.getPath();

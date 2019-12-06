@@ -46,6 +46,7 @@
         android:textSize="@dimen/sp_14"
         android:drawableRight="@mipmap/ic_bottom_white"
         />
+
     <RelativeLayout
         android:id="@+id/fm_home_rl_search"
         android:layout_marginRight="@dimen/dp_45"
@@ -280,7 +281,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </RelativeLayout>
+
    </RelativeLayout>
         </RelativeLayout>
     </com.icarexm.zhiquwang.custview.MyScrollView>
+    <RelativeLayout
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/dp_60"
+        android:id="@+id/fm_home_rl_top_city"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_width="@dimen/dp_85"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_white_4">
+        <com.icarexm.zhiquwang.custview.NoScrollListView
+            android:layout_centerHorizontal="true"
+            android:id="@+id/fm_home_list_top_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
 </FrameLayout>

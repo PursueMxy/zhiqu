@@ -4,66 +4,82 @@ public class VersionBean {
 
 
     /**
-     * id : 1
-     * version : 1.0.0
-     * dateline : 1559156460
-     * title : 测试版本
-     * cate : 0
      * code : 1
+     * msg : 您需要更新版本哦~
+     * data : {"id":1,"code":1,"name":"1.01","create_time":"2019-12-02 18:05:46"}
      */
 
-    private String id;
-    private String version;
-    private String dateline;
-    private String title;
-    private String cate;
-    private String code;
+    private int code;
+    private String msg;
+    private DataBean data;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
-    public String getDateline() {
-        return dateline;
-    }
-
-    public void setDateline(String dateline) {
-        this.dateline = dateline;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getCate() {
-        return cate;
-    }
-
-    public void setCate(String cate) {
-        this.cate = cate;
-    }
-
-    public String getCode() {
+    public int getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public DataBean getData() {
+        return data;
+    }
+
+    public void setData(DataBean data) {
+        this.data = data;
+    }
+
+    public static class DataBean {
+        /**
+         * id : 1
+         * code : 1
+         * name : 1.01
+         * create_time : 2019-12-02 18:05:46
+         */
+
+        private int id;
+        private int code;
+        private String name;
+        private String create_time;
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public void setCode(int code) {
+            this.code = code;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getCreate_time() {
+            return create_time;
+        }
+
+        public void setCreate_time(String create_time) {
+            this.create_time = create_time;
+        }
     }
 }
