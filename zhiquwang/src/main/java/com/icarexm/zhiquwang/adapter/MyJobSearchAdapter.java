@@ -41,5 +41,6 @@ public class MyJobSearchAdapter extends HelperRecyclerViewAdapter<JobSearchBean.
         tv_age.setText(item.getAge());
         TextView tv_address = viewHolder.getView(R.id.list_home_fm_tv_address);
         tv_address.setText(item.getAddress());
+        viewHolder.getView(R.id.list_home_fm_tv_label_price).setVisibility(View.GONE);
     }
 }

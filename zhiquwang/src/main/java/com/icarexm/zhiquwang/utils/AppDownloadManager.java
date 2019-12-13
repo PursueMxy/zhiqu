@@ -22,6 +22,8 @@ import com.icarexm.zhiquwang.view.activity.AndroidOPermissionActivity;
 import java.io.File;
 import java.lang.ref.WeakReference;
 
+import cn.jpush.android.helper.Logger;
+
 /**
  * Created by 微软中国 on 2018/5/23.
  */
@@ -40,13 +42,6 @@ public class AppDownloadManager {
         mDownloadManager = (DownloadManager) weakReference.get().getSystemService(Context.DOWNLOAD_SERVICE);
         mDownLoadChangeObserver = new DownloadChangeObserver(new Handler());
         mDownloadReceiver = new DownloadReceiver();
-        // 注册广播，监听APK是否下载完成
-        weakReference.get().registerReceiver(mDownloadReceiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-
-    }
-
-    public AppDownloadManager() {
-
     }
 
     public void setUpdateListener(OnUpdateListener mUpdateListener) {
@@ -55,7 +50,7 @@ public class AppDownloadManager {
 
     public void downloadApk(String apkUrl, String title, String desc) {
         // fix bug : 装不了新版本，在下载之前应该删除已有文件
-        File apkFile = new File(weakReference.get().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "zhiquwang.apk");
+        File apkFile = new File(weakReference.get().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "app_name.apk");
 
         if (apkFile != null && apkFile.exists()) {
             apkFile.delete();
@@ -68,11 +63,11 @@ public class AppDownloadManager {
         request.setDescription(desc);
         // 完成后显示通知栏
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setDestinationInExternalFilesDir(weakReference.get(), Environment.DIRECTORY_DOWNLOADS, "zhiquwang.apk");
+        request.setDestinationInExternalFilesDir(weakReference.get(), Environment.DIRECTORY_DOWNLOADS, "app_name.apk");
         //在手机SD卡上创建一个download文件夹
-        // nEnvironment.getExternalStoragePublicDirectory(Evironment.DIRECTORY_DOWNLOADS).mkdir() ;
+        // Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).mkdir() ;
         //指定下载到SD卡的/download/my/目录下
-//         request.setDestinationInExternalPublicDir("/codoon/","zhiquwang.apk");
+        // request.setDestinationInExternalPublicDir("/codoon/","codoon_health.apk");
 
         request.setMimeType("application/vnd.android.package-archive");
         //
@@ -98,7 +93,7 @@ public class AppDownloadManager {
     }
 
     /**
-     * 对应{@link Activity} ()}
+     * 对应 ()}
      */
     public void onPause() {
         weakReference.get().getContentResolver().unregisterContentObserver(mDownLoadChangeObserver);
@@ -157,6 +152,7 @@ public class AppDownloadManager {
             boolean haveInstallPermission;
             // 兼容Android 8.0
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
                 //先获取是否有安装未知来源应用的权限
                 haveInstallPermission = context.getPackageManager().canRequestPackageInstalls();
                 if (!haveInstallPermission) {//没有权限
@@ -172,7 +168,12 @@ public class AppDownloadManager {
                             ToastUtils.showToast(context, "授权失败，无法安装应用");
                         }
                     };
+
                     AndroidOPermissionActivity.sListener = listener;
+                    Intent intent1 = new Intent(context, AndroidOPermissionActivity.class);
+                    context.startActivity(intent1);
+
+
                 } else {
                     installApk(context, intent);
                 }
@@ -190,11 +191,9 @@ public class AppDownloadManager {
      */
     private void installApk(Context context, Intent intent) {
         long completeDownLoadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
-
+        Logger.e(TAG, "收到广播");
         Uri uri;
         Intent intentInstall = new Intent();
-        intent.setAction(Intent.ACTION_DEFAULT);
-        intent.addCategory(Intent.CATEGORY_DEFAULT);
         intentInstall.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intentInstall.setAction(Intent.ACTION_VIEW);
 
@@ -205,21 +204,18 @@ public class AppDownloadManager {
                 File apkFile = queryDownloadedApk(context, completeDownLoadId);
                 uri = Uri.fromFile(apkFile);
             } else { // Android 7.0 以上
-                uri = FileProvider.getUriForFile(context,
-                        "com.icarexm.zhiquwang.fileprovider",
-                        new File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "zhiquwang.apk"));
+                uri = FileProvider.getUriForFile(context, "com.icarexm.zhiquwang.fileprovider",
+                        new File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "app_name.apk"));
                 intentInstall.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             }
-            String command = "pm install -r " + uri.getPath();
-            int i = RootCmd.RootCmdSilent(command);
-            if (i!=-1) {
+
+            // 安装应用
+            Logger.e("zhouwei", "下载完成了");
+
             intentInstall.setDataAndType(uri, "application/vnd.android.package-archive");
             context.startActivity(intentInstall);
-            }
         }
     }
-
-
 
     //通过downLoadId查询下载的apk，解决6.0以后安装的问题
     public static File queryDownloadedApk(Context context, long downloadId) {
@@ -253,5 +249,6 @@ public class AppDownloadManager {
 
         void permissionFail();
     }
+
 
 }

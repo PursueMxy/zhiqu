@@ -30,21 +30,22 @@
     </RelativeLayout>
 
     <ScrollView
+        android:layout_above="@+id/logon_btn_agree"
         android:scrollbars="none"
         android:layout_marginTop="@dimen/dp_109"
         android:layout_marginLeft="@dimen/dp_15"
         android:layout_marginRight="@dimen/dp_15"
+        android:background="@drawable/bg_white_8"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <RelativeLayout
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
             <RelativeLayout
-                android:layout_marginBottom="@dimen/dp_42"
                 android:id="@+id/user_agreement_rl"
-                android:background="@drawable/bg_white_8"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_674">
+                android:layout_height="match_parent">
                 <TextView
                     android:id="@+id/user_agreement_tv_content"
                     android:lineSpacingExtra="@dimen/dp_10"
@@ -52,23 +53,23 @@
                     android:layout_marginLeft="@dimen/dp_20"
                     android:layout_marginRight="@dimen/dp_20"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:text=""
                     android:textColor="@color/ff4e4d4d"
                     android:textSize="@dimen/sp_14"
                     />
             </RelativeLayout>
-
-            <Button
-                android:id="@+id/logon_btn_agree"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_45"
-                android:layout_marginLeft="@dimen/dp_40"
-                android:layout_marginTop="@dimen/dp_651"
-                android:layout_marginRight="@dimen/dp_40"
-                android:background="@drawable/btn_login"
-                android:text="我同意用户协议"
-                android:textColor="@color/white" />
-        </RelativeLayout>
+        </LinearLayout>
     </ScrollView>
+    <Button
+        android:id="@+id/logon_btn_agree"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45"
+        android:layout_marginLeft="@dimen/dp_40"
+       android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dp_40"
+        android:layout_marginRight="@dimen/dp_40"
+        android:background="@drawable/btn_login"
+        android:text="我同意用户协议"
+        android:textColor="@color/white" />
 </RelativeLayout>

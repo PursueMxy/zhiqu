@@ -112,7 +112,7 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
     }
 
     private void InitHours() {
-        for (int a=0;a<31;a++){
+        for (int a=1;a<31;a++){
             Hours_List.add(a*0.5+"");
         }
     }

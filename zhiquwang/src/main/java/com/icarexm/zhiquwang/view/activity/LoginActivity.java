@@ -70,6 +70,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     private String type="";
     private int versionCode;
     private String version_name;
+    private AppDownloadManager mDownloadManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,18 +101,15 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
                     }
                 });
-        try {
-            type = intent.getStringExtra("type");
-            if (type.equals("wechat")) {
-                String code = intent.getStringExtra("code");
-                Log.e("微信code", code);
-                loginPresenter.GetWechatLogin(code);
-            }
-        }catch (Exception e){}
+        mDownloadManager = new AppDownloadManager(LoginActivity.this);
         versionCode = getVersionCode();
         InitApkVersion();
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+    }
 
     @OnClick({R.id.login_tv_create_account,R.id.login_tv_no_password,R.id.login_btn_start,R.id.login_tv_user_agreement
     ,R.id.login_img_avatar,R.id.login_img_wechat})
@@ -177,12 +175,12 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         builder.setIcon(R.mipmap.ic_logo);
         builder.setTitle("版本更新");
         //设置描述内容
-        builder.setMessage("");
+        builder.setMessage("部分功能优化");
         builder.setPositiveButton("立即更新", new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // 下载apk，apk的链接地址，downloadUrl
-                new AppDownloadManager(LoginActivity.this).downloadApk("http://zqw.kuaishanghd.com/android/zqw.apk", "版本更新"+version_name, "部分功能优化");
+                mDownloadManager.downloadApk("http://zqw.kuaishanghd.com/android/zqw.apk", "版本更新"+version_name, "部分功能优化");
             }
 
         });
@@ -315,7 +313,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
                         if (version.getCode()==1) {
                             VersionBean.DataBean data = version.getData();
                             version_name = data.getName();
-//                            new AppDownloadManager(LoginActivity.this).downloadApk("http://zqw.kuaishanghd.com/android/zqw.apk", "版本更新"+version_name, "部分功能优化");
                             showUpdateDialog();
                         }
                     }
@@ -363,6 +360,22 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mDownloadManager != null) {
+            mDownloadManager.resume();
+        }
+    }
+     @Override
+    public void onPause() {
+        super.onPause();
+        if (mDownloadManager != null) {
+            mDownloadManager.onPause();
+        }
+
     }
 
 }

@@ -167,9 +167,10 @@
                     android:id="@+id/my_resume_edt_personal_introduce"
                     android:layout_marginLeft="@dimen/dp_15"
                     android:layout_below="@+id/my_resume_rl_grjj"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:hint="请输入个人简介"
+                    android:gravity="top|left"
                     android:background="@null"
                     android:textColor="#ffb5b5b5"
                     android:textSize="14sp"/>

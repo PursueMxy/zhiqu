@@ -21,6 +21,7 @@ import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.BasePayBean;
 import com.icarexm.zhiquwang.bean.LiteSubsidyBean;
+import com.icarexm.zhiquwang.bean.LiteWeekBean;
 import com.icarexm.zhiquwang.bean.SubsidyBean;
 import com.icarexm.zhiquwang.contract.BasePayContract;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
@@ -101,12 +102,12 @@ public class BasePayActivity extends BaseActivity implements BasePayContract.Vie
                 addSubsidyList.clear();
                 all = LitePal.findAll(LiteSubsidyBean.class);
                 for (int a=0;a< all.size();a++){
+                    Log.e("生活会sdfd",all.get(a).getPrice()+"和"+all.get(a).getSubsidy_name()+"加"+all.get(a).getSubsidy_id());
                  addSubsidyList.add(new SubsidyBean(all.get(a).getSubsidy_id(),all.get(a).getSubsidy_name(),Integer.parseInt(all.get(a).getPrice())));
                  }
                 String Subsidy = new GsonBuilder().create().toJson(addSubsidyList);
                 if (!pay.equals("")){
                     basePayPresenter.GetsetOvertime(token,Base_Type, pay,Subsidy);
-                  Log.e("dddd",addSubsidyList.size()+"底薪能为空"+Subsidy+"和"+all.size());
                 }else {
                     ToastUtils.showToast(mContext,"底薪不能为空");
                 }
@@ -143,6 +144,7 @@ public class BasePayActivity extends BaseActivity implements BasePayContract.Vie
                 liteSubsidyBean.save();
             }
             edt_pay.setText(data.getBase_pay()+"");
+            all.clear();
             all = LitePal.findAll(LiteSubsidyBean.class);
             myAdapter.notifyDataSetChanged();
         }else if (code ==10001){
@@ -181,77 +183,47 @@ public class BasePayActivity extends BaseActivity implements BasePayContract.Vie
             return 0;
         }
 
-        @SuppressLint("ViewHolder")
         @Override
         public View getView(int position, View convertView, ViewGroup viewGroup) {
-            ViewHolder holder;
-            if (null == convertView){
-                convertView = getLayoutInflater().inflate(R.layout.list_base_pay,null);
-                holder =new ViewHolder(convertView,position);
-                convertView.setTag(holder);
-            }else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-            holder.tv_name.setText(all.get(position).getSubsidy_name());
+            View inflate = getLayoutInflater().inflate(R.layout.list_base_pay, null);
+            TextView  tv_name = (TextView) inflate.findViewById(R.id.list_base_pay_subsidy_name);
+            EditText editText= (EditText) inflate.findViewById(R.id.list_base_pay_edt_subsidy_id);
+            TextView tv_id = inflate.findViewById(R.id.list_base_pay_tv_id);
+            tv_id.setText(all.get(position).getSubsidy_id()+"");
+            tv_name.setText(all.get(position).getSubsidy_name()+"");
+            editText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    Log.e("修改数据d",charSequence.toString()+"和");
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    int i = Integer.parseInt(tv_id.getText().toString());
+                    String s = editText.getText().toString();
+                    if (s.equals("")||s==null){
+                        s="0";
+                    }
+                    LiteSubsidyBean liteSubsidyBean = new LiteSubsidyBean();
+                    liteSubsidyBean.setPrice(s+"");
+                    liteSubsidyBean.updateAll("subsidy_id= "+i);
+                    Log.e("修改数据",s+"和"+i);
+                    all.clear();
+                    all = LitePal.findAll(LiteSubsidyBean.class);
+                }
+            });
             if (all.get(position).getPrice().equals("0")){
-                holder.editText.setText("");
+               editText.setText("");
             }else {
-                holder.editText.setText(all.get(position).getPrice() + "");
+               editText.setText(all.get(position).getPrice() + "");
             }
-            return convertView;
+
+            return inflate;
         }
 
-        class ViewHolder{
-            TextView tv_name;
-            EditText editText;
-            public ViewHolder(View view,int pisition){
-                tv_name = (TextView) view.findViewById(R.id.list_base_pay_subsidy_name);
-                editText= (EditText) view.findViewById(R.id.list_base_pay_edt_subsidy_id);
-                editText.setTag(pisition);//存tag值
-                editText.addTextChangedListener(new TextSwitcher(this));
-            }
-        }
-
-
-        class TextSwitcher implements TextWatcher {
-            private ViewHolder mHolder;
-
-            public TextSwitcher(ViewHolder mHolder) {
-                this.mHolder = mHolder;
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                int position = (int) mHolder.editText.getTag();//取tag值
-                int subsidy_id = all.get(position).getSubsidy_id();
-                LiteSubsidyBean liteSubsidyBean = new LiteSubsidyBean();
-                String s1 = "";
-                try {
-                 s1 = s.toString();
-                 if (s1.equals("")){
-                     s1="";
-                 }else {
-                     s1=s1;
-                 }
-                }catch (Exception e){
-                    s1 = "";
-                }
-                if (!s1.equals("")) {
-                    liteSubsidyBean.setPrice(s1+"");
-                    liteSubsidyBean.updateAll("Subsidy_id= "+subsidy_id);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-
-        }
     }
 }
