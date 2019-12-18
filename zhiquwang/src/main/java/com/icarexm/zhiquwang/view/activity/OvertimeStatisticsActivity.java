@@ -30,6 +30,7 @@ import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.NoScrollListView;
 import com.icarexm.zhiquwang.custview.mywheel.MyWheelView;
 import com.icarexm.zhiquwang.presenter.OvertimeStatisticsPresenter;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.DateUtils;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 
@@ -81,10 +82,7 @@ public class OvertimeStatisticsActivity extends BaseActivity implements Overtime
         tv_time.setText(monthDate);
         InitYear();
         //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
+        LoadingDialogShow();
         initExpandableListView();
         overtimeStatisticsPresenter = new OvertimeStatisticsPresenter(this);
         overtimeStatisticsPresenter.GetRecords(token, typeOfWork,"");
@@ -137,10 +135,14 @@ public class OvertimeStatisticsActivity extends BaseActivity implements Overtime
     public void onViewClick(View view) {
         switch (view.getId()) {
             case R.id.overtime_sss_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.overtime_sss_img_back)) {
+                    finish();
+                }
                 break;
             case R.id.overtime_statistics_time:
+                if (!ButtonUtils.isFastDoubleClick(R.id.overtime_statistics_time)) {
                     BirthDateDialog();
+                }
                     break;
         }
     }
@@ -214,10 +216,7 @@ public class OvertimeStatisticsActivity extends BaseActivity implements Overtime
     }
 
     public void UpdateUI(int code, String message, StatisticsBean.DataBean data) {
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+       LoadingDialogClose();
         if (code == 1) {
             total_info = data.getTotal_info();
             initExpandableListViewData(total_info);
@@ -230,5 +229,31 @@ public class OvertimeStatisticsActivity extends BaseActivity implements Overtime
         }else {
             ToastUtils.showToast(mContext, message);
         }
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

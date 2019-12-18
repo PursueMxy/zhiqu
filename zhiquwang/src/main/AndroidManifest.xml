@@ -54,11 +54,6 @@
             android:value="a3943e611480b87c48027607be918ad4" />
 
         <activity android:name=".view.activity.LunchActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".view.activity.OvertimeApprovalActivity"
             android:windowSoftInputMode="adjustPan"/>
@@ -147,14 +142,21 @@
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask" />
         <activity android:name=".view.activity.LoginActivity"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan"
+            android:launchMode="singleTask"/>
         <activity android:name=".view.activity.GuidePageActivity"
             android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".MainActivity"
             android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".wxapi.WXEntryActivity"
+            android:permission="com.tencent.mm.plugin.permission.SEND"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:launchMode="singleTask"

@@ -23,6 +23,8 @@ import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.PublicResultBean;
 import com.icarexm.zhiquwang.bean.UploadImgBean;
 import com.icarexm.zhiquwang.custview.CircleImageView;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.GifSizeFilter;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
@@ -56,6 +58,7 @@ public class EditPersonalActivity extends BaseActivity {
     private String url;
     private String token;
     private Context mContext;
+    private CustomProgressDialog progressDialog;
 
 
     @Override
@@ -81,75 +84,81 @@ public class EditPersonalActivity extends BaseActivity {
         mContext = getApplicationContext();
         ButterKnife.bind(this);
     }
-    @OnClick({R.id.edit_personal_img_back,R.id.logon_btn_agree,R.id.edt_personal_img_avatar})
+    @OnClick({R.id.edit_personal_img_back,R.id.edit_personal_btn_agree,R.id.edt_personal_img_avatar})
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.edit_personal_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.edit_personal_img_back)) {
+                    finish();
+                }
                 break;
-            case R.id.logon_btn_agree:
-                String nickname= edt_nickname.getText().toString();
-                if (!nickname.equals("")) {
-                    if (!url.equals("")) {
-                        OkGo.<String>post(RequstUrl.URL.setUsername)
-                                .params("token",token)
-                                .params("username",nickname)
-                                .params("avatar",url)
-                                .execute(new StringCallback() {
-                                    @Override
-                                    public void onSuccess(Response<String> response) {
-                                        PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
-                                        ToastUtils.showToast(mContext,resultBean.getMsg());
-                                        if (resultBean.getCode()==1){
-                                         startActivity(new Intent(mContext,HomeActivity.class));
-                                        }else if (resultBean.getCode() ==10001){
-                                            ToastUtils.showToast(mContext,resultBean.getMsg());
-                                            startActivity(new Intent(mContext,LoginActivity.class));
-                                            finish();
+            case R.id.edit_personal_btn_agree:
+                if (!ButtonUtils.isFastDoubleClick(R.id.edit_personal_btn_agree)) {
+                    String nickname = edt_nickname.getText().toString();
+                    if (!nickname.equals("")) {
+                        if (!url.equals("")) {
+                            OkGo.<String>post(RequstUrl.URL.setUsername)
+                                    .params("token", token)
+                                    .params("username", nickname)
+                                    .params("avatar", url)
+                                    .execute(new StringCallback() {
+                                        @Override
+                                        public void onSuccess(Response<String> response) {
+                                            PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
+                                            ToastUtils.showToast(mContext, resultBean.getMsg());
+                                            if (resultBean.getCode() == 1) {
+                                                startActivity(new Intent(mContext, HomeActivity.class));
+                                            } else if (resultBean.getCode() == 10001) {
+                                                ToastUtils.showToast(mContext, resultBean.getMsg());
+                                                startActivity(new Intent(mContext, LoginActivity.class));
+                                                finish();
+                                            }
                                         }
-                                    }
-                                });
-                    }else {
-                        ToastUtils.showToast(mContext,"头像不能为空");
+                                    });
+                        } else {
+                            ToastUtils.showToast(mContext, "头像不能为空");
+                        }
+                    } else {
+                        ToastUtils.showToast(mContext, "昵称不能为空");
                     }
-                }else {
-                    ToastUtils.showToast(mContext,"昵称不能为空");
                 }
                 break;
             case R.id.edt_personal_img_avatar:
-                try {
-                    Matisse.from(this)
-                            .choose(MimeType.ofImage(), false)
-                            .countable(true)
-                            .capture(true)
-                            .captureStrategy(new CaptureStrategy(true, "com.icarexm.zhiquwang.fileprovider", "test"))
-                            .maxSelectable(1)
-                            .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
-                            .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.dp_110))
-                            .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-                            .thumbnailScale(0.85f)
-                            .imageEngine(new GlideEngine())
-                            .showSingleMediaType(true)
-                            .originalEnable(true)
-                            .maxOriginalSize(10)
-                            .autoHideToolbarOnSingleTap(true)
-                            .forResult(REQUEST_CODE);
-                }catch (Exception e){
-                    //权限申请
-                    ToastUtils.showToast(mContext,"请允许权限");
-                    XXPermissions.with(this)
-                            .request(new OnPermission() {
+                if (!ButtonUtils.isFastDoubleClick(R.id.edit_personal_tv_avatar)) {
+                    try {
+                        Matisse.from(this)
+                                .choose(MimeType.ofImage(), false)
+                                .countable(true)
+                                .capture(true)
+                                .captureStrategy(new CaptureStrategy(true, "com.icarexm.zhiquwang.fileprovider", "test"))
+                                .maxSelectable(1)
+                                .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
+                                .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.dp_110))
+                                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+                                .thumbnailScale(0.85f)
+                                .imageEngine(new GlideEngine())
+                                .showSingleMediaType(true)
+                                .originalEnable(true)
+                                .maxOriginalSize(10)
+                                .autoHideToolbarOnSingleTap(true)
+                                .forResult(REQUEST_CODE);
+                    } catch (Exception e) {
+                        //权限申请
+                        ToastUtils.showToast(mContext, "请允许权限");
+                        XXPermissions.with(this)
+                                .request(new OnPermission() {
 
-                                @Override
-                                public void hasPermission(List<String> granted, boolean isAll) {
+                                    @Override
+                                    public void hasPermission(List<String> granted, boolean isAll) {
 
-                                }
+                                    }
 
-                                @Override
-                                public void noPermission(List<String> denied, boolean quick) {
+                                    @Override
+                                    public void noPermission(List<String> denied, boolean quick) {
 
-                                }
-                            });
+                                    }
+                                });
+                    }
                 }
                 break;
         }
@@ -188,5 +197,31 @@ public class EditPersonalActivity extends BaseActivity {
                 default:
             }
         }
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

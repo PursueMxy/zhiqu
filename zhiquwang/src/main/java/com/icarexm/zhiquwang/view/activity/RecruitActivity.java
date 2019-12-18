@@ -26,6 +26,7 @@ import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.FRAdapter;
 import com.icarexm.zhiquwang.bean.HomeDataBean;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.MxyUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.lzy.okgo.OkGo;
@@ -66,11 +67,6 @@ public class RecruitActivity extends BaseActivity {
         token = share.getString("token", "");
         ButterKnife.bind(this);
         InitUI();
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
         SearchData(sequence);
     }
 
@@ -114,7 +110,6 @@ public class RecruitActivity extends BaseActivity {
                 //加载更多
                 page=0;
                 SearchData(sequence);
-                mRecyclerView.loadMoreComplete();//加载动画完成
                 mRecyclerView.refreshComplete();//刷新动画完成
             }
 
@@ -124,7 +119,7 @@ public class RecruitActivity extends BaseActivity {
                 SearchData(sequence);
                 //加载更多
                 mRecyclerView.loadMoreComplete();//加载动画完成
-                mRecyclerView.refreshComplete();//刷新动画完成
+                mRecyclerView.setNoMore(true);
             }
         });
         frAdapter.setListAll(homeDataLists);
@@ -151,6 +146,7 @@ public class RecruitActivity extends BaseActivity {
     }
 
     private void SearchData(String content) {
+        LoadingDialogShow();
         OkGo.<String>post(RequstUrl.URL.HomeData)
                 .params("token",token)
                 .params("limit",limit)
@@ -166,11 +162,7 @@ public class RecruitActivity extends BaseActivity {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-
-                        if (progressDialog != null){
-                            progressDialog.dismiss();
-                            progressDialog = null;
-                        }
+                       LoadingDialogClose();
                         HomeDataBean homeDataBean = new GsonBuilder().create().fromJson(response.body(), HomeDataBean.class);
                         if (homeDataBean.getCode()==1){
                             HomeDataBean.DataBeanX data = homeDataBean.getData();
@@ -197,7 +189,9 @@ public class RecruitActivity extends BaseActivity {
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.recruit_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.recruit_img_back)) {
+                    finish();
+                }
                 break;
 
         }
@@ -210,5 +204,29 @@ public class RecruitActivity extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
 
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
+    }
 }

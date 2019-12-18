@@ -47,6 +47,7 @@ import com.icarexm.zhiquwang.custview.CustomVideoView;
 import com.icarexm.zhiquwang.custview.LabelsView;
 import com.icarexm.zhiquwang.presenter.RecruitDetailPresenter;
 import com.icarexm.zhiquwang.utils.AppContUtils;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.MxyUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
@@ -161,11 +162,7 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
         token = share.getString("token", "");
         ButterKnife.bind(this);
         InitUI();
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
+        LoadingDialogShow();
         InitDataUrl();
         recruitDetailPresenter = new RecruitDetailPresenter(this);
         recruitDetailPresenter.GetJobDetail(token,job_id);
@@ -199,49 +196,64 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.recruit_dtl_tv_wechat:
-                WechatDialog();
+                if (!ButtonUtils.isFastDoubleClick(R.id.recruit_dtl_tv_wechat)) {
+                    WechatDialog();
+                }
                 break;
             case R.id.recruit_dtl_tv_nearby_store:
-                Intent intent = new Intent(mContext, NearbyStoreActivity.class);
-                intent.putExtra("job_id",job_id);
-                startActivity(intent);
+                if (!ButtonUtils.isFastDoubleClick(R.id.recruit_dtl_tv_nearby_store)) {
+                    Intent intent = new Intent(mContext, NearbyStoreActivity.class);
+                    intent.putExtra("job_id", job_id);
+                    startActivity(intent);
+                }
                 break;
             case R.id.recruit_dtl_tv_callPhone:
-                callPhoneDialog();
+                if (!ButtonUtils.isFastDoubleClick(R.id.recruit_dtl_tv_callPhone)) {
+                    callPhoneDialog();
+                }
                 break;
             case R.id.recruit_dtl_img_invite_url:
-                WechatDialog();
+                if (!ButtonUtils.isFastDoubleClick(R.id.recruit_dtl_img_invite_url)) {
+                    WechatDialog();
+                }
                 break;
             case R.id.recruit_dtl_btn_one_key_enroll:
-                OkGo.<String>post(RequstUrl.URL.applicationInfo)
-                        .params("token",token)
-                        .params("job_id",job_id)
-                        .execute(new StringCallback() {
-                            private int code;
-                            private String msg;
-                            @Override
-                            public void onSuccess(Response<String> response) {
-                                PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
-                                msg = resultBean.getMsg();
-                                code = resultBean.getCode();
-                                if (resultBean.getCode()==1){
-                                    enrollDialog(code,msg);
-                                }else if (resultBean.getCode()==10003){
-                                    enrollDialog(code,msg);
-                                }else if (resultBean.getCode()==20001){
-                                    imperdectDialog(code,msg);
-                                }else {
-                                    ToastUtils.showToast(mContext,msg);
-                                }
-                            }
+                if (!ButtonUtils.isFastDoubleClick(R.id.recruit_dtl_btn_one_key_enroll)) {
+                    OkGo.<String>post(RequstUrl.URL.applicationInfo)
+                            .params("token", token)
+                            .params("job_id", job_id)
+                            .execute(new StringCallback() {
+                                private int code;
+                                private String msg;
 
-                        });
+                                @Override
+                                public void onSuccess(Response<String> response) {
+                                    PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
+                                    msg = resultBean.getMsg();
+                                    code = resultBean.getCode();
+                                    if (resultBean.getCode() == 1) {
+                                        enrollDialog(code, msg);
+                                    } else if (resultBean.getCode() == 10003) {
+                                        enrollDialog(code, msg);
+                                    } else if (resultBean.getCode() == 20001) {
+                                        imperdectDialog(code, msg);
+                                    } else {
+                                        ToastUtils.showToast(mContext, msg);
+                                    }
+                                }
+
+                            });
+                }
                 break;
             case R.id.recruit_dtl_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.recruit_dtl_img_back)) {
+                    finish();
+                }
                 break;
             case R.id.recruit_dtl_tv_address:
-                startNaviGao();
+                if (!ButtonUtils.isFastDoubleClick(R.id.recruit_dtl_tv_address)) {
+                    startNaviGao();
+                }
                 break;
         }
     }
@@ -348,13 +360,18 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
                                 }
                             });
                     alertDialog.dismiss();
-                }else if (code==20001){
+                }else if (code==10003){
+                 startActivity(new Intent(mContext,MyResumeActivity.class));
+                 finish();
+                } else if (code==20001){
                     alertDialog.dismiss();
                 }
             }
         });
 
     }
+
+
 
     private void imperdectDialog(int code,String msg){
         AlertDialog.Builder builder = new AlertDialog.Builder(RecruitDetailActivity.this);
@@ -460,10 +477,7 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
 
    //返回数据跟新UI
     public void UpdateUI(int code, String msg, JobDetailBean.DataBean dataBean){
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+        LoadingDialogClose();
         if (code==1){
             latitude = dataBean.getLatitude();
             longitude = dataBean.getLongitude();
@@ -600,5 +614,29 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
             ToastUtils.showToast(mContext,"您尚未安装地图或地图版本过低");
         }
     }
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
 
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
+    }
 }

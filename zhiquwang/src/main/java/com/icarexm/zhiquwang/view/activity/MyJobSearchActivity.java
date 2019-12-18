@@ -18,6 +18,7 @@ import com.icarexm.zhiquwang.bean.JobSearchBean;
 import com.icarexm.zhiquwang.contract.MyJobSearchContract;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.MyJobSearchPresenter;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.MxyUtils;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.zhouyou.recyclerview.XRecyclerView;
@@ -52,11 +53,7 @@ public class MyJobSearchActivity extends BaseActivity implements MyJobSearchCont
         token = share.getString("token", "");
         ButterKnife.bind(this);
         InitUI();
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
+       LoadingDialogShow();
         myJobSearchPresenter = new MyJobSearchPresenter(this);
         myJobSearchPresenter.GetMyJob(token,limit,page+"");
     }
@@ -71,7 +68,6 @@ public class MyJobSearchActivity extends BaseActivity implements MyJobSearchCont
             @Override
             public void onRefresh() {
                 //加载更多
-                mRecyclerView.loadMoreComplete();//加载动画完成
                 mRecyclerView.refreshComplete();//刷新动画完成
             }
 
@@ -79,7 +75,7 @@ public class MyJobSearchActivity extends BaseActivity implements MyJobSearchCont
             public void onLoadMore() {
                 //加载更多
                 mRecyclerView.loadMoreComplete();//加载动画完成
-                mRecyclerView.refreshComplete();//刷新动画完成
+                mRecyclerView.setNoMore(true);
             }
         });
         mRecyclerView.setAdapter(myJobSearchAdapter);
@@ -108,7 +104,9 @@ public class MyJobSearchActivity extends BaseActivity implements MyJobSearchCont
     public void  onViewClick(View view){
         switch (view.getId()){
             case R.id.myjobsearch_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.myjobsearch_img_back)) {
+                    finish();
+                }
                 break;
         }
     }
@@ -127,10 +125,7 @@ public class MyJobSearchActivity extends BaseActivity implements MyJobSearchCont
     }
 
     public void UpdateUI(int code, String msg, JobSearchBean.DataBeanX data){
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+       LoadingDialogClose();
         if (code==1){
             dataList = data.getData();
             myJobSearchAdapter.setListAll(dataList);
@@ -140,5 +135,31 @@ public class MyJobSearchActivity extends BaseActivity implements MyJobSearchCont
             startActivity(new Intent(mContext,LoginActivity.class));
             finish();
         }
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

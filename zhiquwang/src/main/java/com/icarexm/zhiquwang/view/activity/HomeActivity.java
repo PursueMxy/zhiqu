@@ -156,4 +156,30 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
+    }
+
 }

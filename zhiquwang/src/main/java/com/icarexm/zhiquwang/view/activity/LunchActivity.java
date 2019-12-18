@@ -10,7 +10,7 @@ import android.os.Handler;
 
 import com.icarexm.zhiquwang.R;
 
-public class LunchActivity extends BaseActivity {
+public class LunchActivity extends AppCompatActivity {
     private Context mContext;
     Handler handler = new Handler();
 
@@ -38,5 +38,11 @@ public class LunchActivity extends BaseActivity {
         SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
         handler.postDelayed(runnable,1000);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacks(runnable);
     }
 }

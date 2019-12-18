@@ -34,6 +34,7 @@ import com.icarexm.zhiquwang.contract.FamousRecruitmentContract;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.NoScrollListView;
 import com.icarexm.zhiquwang.presenter.FamousRecruitmentPresenter;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.MxyUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
@@ -130,15 +131,11 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
         zone_name = intent.getStringExtra("zone_name");
         city_name = intent.getStringExtra("city_name");
         ButterKnife.bind(this);
+        famousRecruitmentPresenter = new FamousRecruitmentPresenter(this);
         InitUI();
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
+        LoadingDialogShow();
         InitData();
         tv_title.setText(zone_name);
-        famousRecruitmentPresenter = new FamousRecruitmentPresenter(this);
         famousRecruitmentPresenter.GetHomeData(token,limit+"",page+"",zone_id,area_id,salary_id,age_id,vocation_id,environment_id,job_id);
     }
 
@@ -152,7 +149,6 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
             @Override
             public void onRefresh() {
                 //加载更多
-                mRecyclerView.loadMoreComplete();//加载动画完成
                 mRecyclerView.refreshComplete();//刷新动画完成
             }
 
@@ -160,7 +156,7 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
             public void onLoadMore() {
                 //加载更多
                 mRecyclerView.loadMoreComplete();//加载动画完成
-                mRecyclerView.refreshComplete();//刷新动画完成
+                mRecyclerView.setNoMore(true);
             }
         });
         frAdapter.setListAll(homeDataList);
@@ -476,7 +472,9 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
     public void  onViewClick(View view){
         switch (view.getId()){
             case R.id.famous_recruitment_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.famous_recruitment_img_back)) {
+                    finish();
+                }
                 break;
         }
     }
@@ -495,10 +493,7 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
     }
 
     public  void UpdateUI(int code,String msg, HomeDataBean.DataBeanX data){
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+       LoadingDialogClose();
       if (code==1){
           homeDataList = data.getData();
           frAdapter.setListAll(homeDataList);
@@ -634,6 +629,30 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
             return inflate;
         }
     }
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
 
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
+    }
 
 }

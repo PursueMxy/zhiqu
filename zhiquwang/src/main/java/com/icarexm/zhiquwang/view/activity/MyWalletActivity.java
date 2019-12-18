@@ -15,6 +15,7 @@ import com.icarexm.zhiquwang.bean.WalletBean;
 import com.icarexm.zhiquwang.contract.MyWalletContract;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.MyWalletPresenter;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 
 import butterknife.BindView;
@@ -39,11 +40,7 @@ public class MyWalletActivity extends BaseActivity implements MyWalletContract.V
         SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
         ButterKnife.bind(this);
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
+        LoadingDialogShow();
         myWalletPresenter = new MyWalletPresenter(this);
         myWalletPresenter.GetMyWallet(token);
 
@@ -53,23 +50,33 @@ public class MyWalletActivity extends BaseActivity implements MyWalletContract.V
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.my_wallet_btn_cashwithdrawal:
-                Intent intent1 = new Intent(mContext, CashWithdrawalActivity.class);
-                intent1.putExtra("withdrawal",withdrawal);
-                intent1.putExtra("balance",balance);
-                startActivity(intent1);
+                if (!ButtonUtils.isFastDoubleClick(R.id.my_wallet_btn_cashwithdrawal)) {
+                    Intent intent1 = new Intent(mContext, CashWithdrawalActivity.class);
+                    intent1.putExtra("withdrawal", withdrawal);
+                    intent1.putExtra("balance", balance);
+                    startActivity(intent1);
+                }
                 break;
             case R.id.my_wallet_rl_entry_award:
-                startActivity(new Intent(mContext,EntryAwardActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.my_wallet_rl_entry_award)) {
+                    startActivity(new Intent(mContext, EntryAwardActivity.class));
+                }
                 break;
             case R.id.my_wallet_rl_withdrawal_dtl:
-                Intent intent = new Intent(mContext, WithdrawalDtlActivity.class);
-                startActivity(intent);
+                if (!ButtonUtils.isFastDoubleClick(R.id.my_wallet_rl_withdrawal_dtl)) {
+                    Intent intent = new Intent(mContext, WithdrawalDtlActivity.class);
+                    startActivity(intent);
+                }
                 break;
             case R.id.my_wallet_rl_invite_award:
-                startActivity(new Intent(mContext,InviteAwardActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.my_wallet_rl_invite_award)) {
+                    startActivity(new Intent(mContext, InviteAwardActivity.class));
+                }
                 break;
             case R.id.my_wallet_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.my_wallet_img_back)) {
+                    finish();
+                }
                 break;
         }
     }
@@ -88,10 +95,7 @@ public class MyWalletActivity extends BaseActivity implements MyWalletContract.V
     }
 
     public void UpdateUI(int code, String msg, WalletBean.DataBean data){
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+        LoadingDialogClose();
         if (code==1) {
             tv_price.setText(data.getBalance() + "元");
             withdrawal = data.getWithdrawal();
@@ -101,5 +105,31 @@ public class MyWalletActivity extends BaseActivity implements MyWalletContract.V
             startActivity(new Intent(mContext,LoginActivity.class));
             finish();
         }
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

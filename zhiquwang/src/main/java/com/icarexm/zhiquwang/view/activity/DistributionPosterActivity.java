@@ -2,6 +2,7 @@ package com.icarexm.zhiquwang.view.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -14,6 +15,7 @@ import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.InviteQrBean;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
@@ -34,6 +36,7 @@ public class DistributionPosterActivity extends BaseActivity {
     private Context mContext;
     private String webUrl="file:///android_asset/EmptyView.html";
     private CustomProgressDialog progressDialog;
+    private String qr_code="";
 
     @SuppressLint("JavascriptInterface")
     @Override
@@ -44,37 +47,37 @@ public class DistributionPosterActivity extends BaseActivity {
         token = share.getString("token", "");
         mContext = getApplicationContext();
         ButterKnife.bind(this);
-        InitData();
-        webview.loadUrl(webUrl);
         //设置可自由缩放网页、JS生效
-        WebSettings webSettings = webview.getSettings();
         webview.setOnTouchListener((v, event) -> (event.getAction() == MotionEvent.ACTION_MOVE));
+        WebSettings webSettings = webview.getSettings();
+        webview.loadUrl(webUrl);
         //1. 设置于JS交互的权限
         webSettings.setJavaScriptEnabled(true);
         //2. 将Java对象映射到JS对象
         webview.addJavascriptInterface(DistributionPosterActivity.this, "jsObject");
+        webview.loadUrl("javascript:callJS('"+ qr_code +"')");
+        InitData();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        InitData();
     }
 
     private void InitData() {
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
+        LoadingDialogShow();
         OkGo.<String>post(RequstUrl.URL.inviteQr)
                 .params("token",token)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        if (progressDialog != null){
-                            progressDialog.dismiss();
-                            progressDialog = null;
-                        }
+                        LoadingDialogClose();
                         InviteQrBean inviteQrBean = new GsonBuilder().create().fromJson(response.body(), InviteQrBean.class);
                         if (inviteQrBean.getCode()==1){
                             InviteQrBean.DataBean data = inviteQrBean.getData();
-                            String qr_code = data.getQr_code();
-                            webview.loadUrl("javascript:callJS('"+qr_code+"')");
+                            qr_code = data.getQr_code();
+                            webview.loadUrl("javascript:callJS('"+ qr_code +"')");
                         }
                     }
                 });
@@ -84,7 +87,9 @@ public class DistributionPosterActivity extends BaseActivity {
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.distribution_poster_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.distribution_poster_img_back)) {
+                    finish();
+                }
                 break;
         }
     }
@@ -95,5 +100,31 @@ public class DistributionPosterActivity extends BaseActivity {
             finish();
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

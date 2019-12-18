@@ -15,6 +15,7 @@ import com.icarexm.zhiquwang.contract.DistributionTeamContract;
 import com.icarexm.zhiquwang.custview.CircleImageView;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.DistributionTeamPresenter;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 
@@ -43,11 +44,7 @@ public class DistributionTeamActivity extends BaseActivity implements Distributi
         token = share.getString("token", "");
         mContext = getApplicationContext();
         ButterKnife.bind(this);
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
+       LoadingDialogShow();
         distributionTeamPresenter = new DistributionTeamPresenter(this);
         distributionTeamPresenter.GetTeam(token);
     }
@@ -56,19 +53,29 @@ public class DistributionTeamActivity extends BaseActivity implements Distributi
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.distribution_team_rl_team:
-                startActivity(new Intent(mContext,MyTeamActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.distribution_team_rl_team)) {
+                    startActivity(new Intent(mContext, MyTeamActivity.class));
+                }
                 break;
             case R.id.distribution_team_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.distribution_team_img_back)) {
+                    finish();
+                }
                 break;
             case R.id.distribution_team_rl_commission:
-                startActivity(new Intent(mContext,CommissionActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.distribution_team_rl_commission)) {
+                    startActivity(new Intent(mContext, CommissionActivity.class));
+                }
                 break;
             case R.id.distribution_team_rl_poster:
-                startActivity(new Intent(mContext,DistributionPosterActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.distribution_team_rl_poster)) {
+                    startActivity(new Intent(mContext, DistributionPosterActivity.class));
+                }
                 break;
             case R.id.distribution_team_img_message:
-                startActivity(new Intent(mContext,MessageActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.distribution_team_img_message)) {
+                    startActivity(new Intent(mContext, MessageActivity.class));
+                }
                 break;
         }
     }
@@ -87,10 +94,7 @@ public class DistributionTeamActivity extends BaseActivity implements Distributi
     }
 
     public void UpdateUI(int code,String msg, TeamBean.DataBean data){
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+       LoadingDialogClose();
         if (code==1) {
             tv_money.setText(data.getTotal_commission());
             tv_nickname.setText(data.getUser_name());
@@ -100,5 +104,31 @@ public class DistributionTeamActivity extends BaseActivity implements Distributi
             startActivity(new Intent(mContext,LoginActivity.class));
             finish();
         }
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

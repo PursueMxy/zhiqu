@@ -49,6 +49,7 @@ import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.GlideImageLoader;
 import com.icarexm.zhiquwang.custview.MyScrollView;
 import com.icarexm.zhiquwang.custview.NoScrollListView;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.MxyUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
@@ -194,6 +195,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void InitData() {
+        LoadingDialogShow();
         InitHomeData();
         OkGo.<String>post(RequstUrl.URL.Home)
                 .params("city",cityName)
@@ -201,10 +203,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                            if (progressDialog != null){
-                                progressDialog.dismiss();
-                                progressDialog = null;
-                            }
+                            LoadingDialogClose();
                         HomeBannerBean homeBannerBean = new GsonBuilder().create().fromJson(response.body(), HomeBannerBean.class);
                         if (homeBannerBean.getCode()==1){
                             HomeBannerBean.DataBean data = homeBannerBean.getData();
@@ -246,8 +245,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                             editor.commit();//提交
                             }
                         }else if (homeBannerBean.getCode() ==10001){
-                            getActivity().startActivity(new Intent(mContext, LoginActivity.class));
-                            getActivity().finish();
+                            try {
+                                startActivity(new Intent(mContext, LoginActivity.class));
+                                getActivity().finish();
+                            }catch (Exception e){
+
+                            }
                         }
 
                     }
@@ -261,6 +264,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         if (cityNameBean.getCode()==1){
                             citydataList = cityNameBean.getData();
                             cityAdapter.notifyDataSetChanged();
+                        }else if (cityNameBean.getCode() ==10001){
+                            try {
+                                startActivity(new Intent(mContext, LoginActivity.class));
+                                getActivity().finish();
+                            }catch (Exception e){
+
+                            }
                         }
                     }
                 });
@@ -288,6 +298,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                             homeDataList = data.getData();
                             homeFmAdapter.setListAll(homeDataList);
                             homeFmAdapter.notifyDataSetChanged();
+                        }else if (homeDataBean.getCode() ==10001){
+                            try {
+                                startActivity(new Intent(mContext, LoginActivity.class));
+                                getActivity().finish();
+                            }catch (Exception e){
+
+                            }
                         }
                     }
                 });
@@ -377,7 +394,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 if (scrollview.canPullDown()){
                     InitData();
                 }else if (scrollview.canPullUp()){
-                    Log.e("底部滑动","hdfh");
                 }
             }
         });
@@ -503,7 +519,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onRefresh() {
                 //加载更多
-                mRecyclerView.loadMoreComplete();//加载动画完成
                 mRecyclerView.refreshComplete();//刷新动画完成
             }
 
@@ -511,7 +526,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             public void onLoadMore() {
                 //加载更多
                 mRecyclerView.loadMoreComplete();//加载动画完成
-                mRecyclerView.refreshComplete();//刷新动画完成
+                mRecyclerView.setNoMore(true);//数据加载完成
             }
         });
         mRecyclerView.setAdapter(homeFmAdapter);
@@ -717,18 +732,24 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.fm_home_img_message:
-                startActivity(new Intent(mContext, MessageActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_home_img_message)) {
+                    startActivity(new Intent(mContext, MessageActivity.class));
+                }
                 break;
             case R.id.fm_home_rl_search:
-                startActivity(new Intent(mContext, RecruitActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_home_rl_search)) {
+                    startActivity(new Intent(mContext, RecruitActivity.class));
+                }
                 break;
             case R.id.fm_home_tv_cityname:
-                if (!IsCity){
-                    top_rl_city.setVisibility(View.VISIBLE);
-                    IsCity=!IsCity;
-                }else {
-                    top_rl_city.setVisibility(View.GONE);
-                    IsCity=!IsCity;
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_home_tv_cityname)) {
+                    if (!IsCity) {
+                        top_rl_city.setVisibility(View.VISIBLE);
+                        IsCity = !IsCity;
+                    } else {
+                        top_rl_city.setVisibility(View.GONE);
+                        IsCity = !IsCity;
+                    }
                 }
                 break;
         }
@@ -913,18 +934,38 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
 
     public void UpdateUI(){
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(mContext);
-        }
         area_id="";
         age_id="";
         salary_id="";
         vocation_id="";
         environment_id="";
-        progressDialog.show();
+        LoadingDialogShow();
         SltAdapter();
         InitData();
     }
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
 
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(mContext);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
+    }
 }

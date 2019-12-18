@@ -30,6 +30,7 @@ import com.icarexm.zhiquwang.custview.calender.InnerGridView;
 import com.icarexm.zhiquwang.custview.calender.OnSignedSuccess;
 import com.icarexm.zhiquwang.custview.mywheel.MyWheelView;
 import com.icarexm.zhiquwang.presenter.OvertimeApprovalPresenter;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.DateUtils;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 
@@ -100,11 +101,7 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
         TypeOfWork=intent.getStringExtra("TypeOfWork");
         InitHours();
         InitUI();
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
+        LoadingDialogShow();
         todays=Integer.parseInt(DateUtil.getToday());
         SltDay=todays;
         overtimeApprovalPresenter = new OvertimeApprovalPresenter(this);
@@ -135,20 +132,30 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.overtime_approval_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.overtime_apply_img_back)) {
+                    finish();
+                }
                 break;
             case R.id.overtime_approval_rl_classes:
-                ClassesDialog();
+                if (!ButtonUtils.isFastDoubleClick(R.id.overtime_approval_rl_classes)) {
+                    ClassesDialog();
+                }
                 break;
             case R.id.overtime_approval_rl_festival:
-                FestivalDialog();
+                if (!ButtonUtils.isFastDoubleClick(R.id.overtime_approval_rl_festival)) {
+                    FestivalDialog();
+                }
                 break;
             case R.id.overtime_approval_rl_hours:
-                HoursDialog();
+                if (!ButtonUtils.isFastDoubleClick(R.id.overtime_approval_rl_hours)) {
+                    HoursDialog();
+                }
                 break;
             case R.id.overtime_approval_btn_confirms:
-                overtimeApprovalPresenter.GetdoRecords(token,TypeOfWork, classes_id+"",festival_id+"",overtime_hours,SltDay+"");
-                break;
+                if (!ButtonUtils.isFastDoubleClick(R.id.overtime_approval_btn_confirms)) {
+                    overtimeApprovalPresenter.GetdoRecords(token, TypeOfWork, classes_id + "", festival_id + "", overtime_hours, SltDay + "");
+
+                } break;
 
         }
     }
@@ -423,10 +430,7 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
     }
 
     public void UpdateUI(int code, String msg, OvertimeApproverBean.DataBean data){
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+        LoadingDialogClose();
         if (code==1) {
             List<OvertimeApproverBean.DataBean.MonthBean> month = data.getMonth();
             festival_list = data.getFestival();
@@ -468,5 +472,31 @@ public class OvertimeApprovalActivity extends BaseActivity implements OvertimeAp
             }
         }
         return 0;
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

@@ -14,6 +14,8 @@ import android.widget.TextView;
 import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.ContactUsBean;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.MxyUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
@@ -39,6 +41,7 @@ public class ContactUsActivity extends BaseActivity {
     private String longitude;
     private Context mContext;
     private String address;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,10 +75,14 @@ public class ContactUsActivity extends BaseActivity {
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.contact_us_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.contact_us_img_back)) {
+                    finish();
+                }
                 break;
             case R.id.contact_us_address:
-                startNaviGao();
+                if (!ButtonUtils.isFastDoubleClick(R.id.contact_us_address)) {
+                    startNaviGao();
+                }
                 break;
         }
     }
@@ -114,5 +121,31 @@ public class ContactUsActivity extends BaseActivity {
         else {
             ToastUtils.showToast(mContext,"您尚未安装地图或地图版本过低");
         }
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

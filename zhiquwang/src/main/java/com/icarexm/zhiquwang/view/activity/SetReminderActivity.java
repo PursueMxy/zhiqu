@@ -27,6 +27,7 @@ import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.NoScrollListView;
 import com.icarexm.zhiquwang.custview.mywheel.MyWheelView;
 import com.icarexm.zhiquwang.presenter.SetReminderPresenter;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 
 import org.litepal.LitePal;
@@ -76,11 +77,7 @@ public class SetReminderActivity extends BaseActivity implements SetReminderCont
         initData();
         InitUI();
         InitData();
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
+       LoadingDialogShow();
         setReminderPresenter = new SetReminderPresenter(this);
         setReminderPresenter.GetclockRemindedInfo(token);
     }
@@ -129,37 +126,49 @@ public class SetReminderActivity extends BaseActivity implements SetReminderCont
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.set_reminder_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.set_reminder_img_back)) {
+                    finish();
+                }
                 break;
             case R.id.set_reminder_btn_week_confirm:
-                WeekName="";
-                WeekCode="";
-                liteWeekBeans = LitePal.where("slt_code=1").find(LiteWeekBean.class);
-                for (int a = 0; a< liteWeekBeans.size(); a++){
-                    if (a==0){
-                        WeekName= liteWeekBeans.get(a).getWeek_name();
-                        WeekCode=""+ liteWeekBeans.get(a).getWeek_code();
-                    }else {
-                        WeekName=WeekName+","+ liteWeekBeans.get(a).getWeek_name();
-                        WeekCode=WeekCode+","+ liteWeekBeans.get(a).getWeek_code();
+                if (!ButtonUtils.isFastDoubleClick(R.id.set_reminder_btn_week_confirm)) {
+                    WeekName = "";
+                    WeekCode = "";
+                    liteWeekBeans = LitePal.where("slt_code=1").find(LiteWeekBean.class);
+                    for (int a = 0; a < liteWeekBeans.size(); a++) {
+                        if (a == 0) {
+                            WeekName = liteWeekBeans.get(a).getWeek_name();
+                            WeekCode = "" + liteWeekBeans.get(a).getWeek_code();
+                        } else {
+                            WeekName = WeekName + "," + liteWeekBeans.get(a).getWeek_name();
+                            WeekCode = WeekCode + "," + liteWeekBeans.get(a).getWeek_code();
+                        }
                     }
+                    tv_week_name.setText(WeekName);
+                    rl_dialog.setVisibility(View.GONE);
                 }
-                tv_week_name.setText(WeekName);
-                rl_dialog.setVisibility(View.GONE);
                 break;
             case R.id.set_reminder_rl_sltweek:
-                rl_dialog.setVisibility(View.VISIBLE);
+                if (!ButtonUtils.isFastDoubleClick(R.id.set_reminder_rl_sltweek)) {
+                    rl_dialog.setVisibility(View.VISIBLE);
+                }
                 break;
             case R.id.set_reminder_rl_start_time:
-                BirthDateDialog(0);
+                if (!ButtonUtils.isFastDoubleClick(R.id.set_reminder_rl_start_time)) {
+                    BirthDateDialog(0);
+                }
                 break;
             case R.id.set_reminder_rl_stop_time:
-                BirthDateDialog(1);
+                if (!ButtonUtils.isFastDoubleClick(R.id.set_reminder_rl_stop_time)) {
+                    BirthDateDialog(1);
+                }
                 break;
             case R.id.set_reminder_btn_save:
-                String startTime= tv_start_time.getText().toString();
-                String stopTimes = tv_stop_time.getText().toString();
-                setReminderPresenter.GetClockReminded(token,startTime,stopTimes,WeekCode);
+                if (!ButtonUtils.isFastDoubleClick(R.id.set_reminder_btn_save)) {
+                    String startTime = tv_start_time.getText().toString();
+                    String stopTimes = tv_stop_time.getText().toString();
+                    setReminderPresenter.GetClockReminded(token, startTime, stopTimes, WeekCode);
+                }
                 break;
 
         }
@@ -287,10 +296,7 @@ public class SetReminderActivity extends BaseActivity implements SetReminderCont
 
     //页面刷新
     public void UpdateUI(int code,String msg, ClockRemindedInfoBean.DataBean data){
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+     LoadingDialogClose();
         if (code==1){
             String repetition = data.getRepetition();
             String[] split = repetition.split(",");
@@ -320,4 +326,31 @@ public class SetReminderActivity extends BaseActivity implements SetReminderCont
             finish();
         }
     }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
+    }
+
 }

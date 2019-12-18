@@ -21,10 +21,11 @@
             android:textSize="@dimen/sp_17"
             />
         <ImageView
+            android:padding="@dimen/dp_10"
             android:id="@+id/update_base_infor_img_back"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/dp_11"
-            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginBottom="@dimen/dp_1"
+            android:layout_marginLeft="@dimen/dp_5"
             android:layout_width="wrap_content"
             android:src="@mipmap/ic_left_black"
             android:layout_height="wrap_content"/>
@@ -34,14 +35,14 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_130">
         <com.icarexm.zhiquwang.custview.CircleImageView
-            android:id="@+id/base_information_img_avatar"
+            android:id="@+id/update_base_img_avatar"
             android:layout_centerInParent="true"
             android:src="@mipmap/ic_avatar"
             android:layout_width="@dimen/dp_72"
             android:layout_height="@dimen/dp_72"/>
         <ImageView
-            android:layout_alignRight="@+id/base_information_img_avatar"
-            android:layout_alignBottom="@+id/base_information_img_avatar"
+            android:layout_alignRight="@+id/update_base_img_avatar"
+            android:layout_alignBottom="@+id/update_base_img_avatar"
             android:src="@mipmap/ic_edit_green"
             android:layout_width="@dimen/dp_21"
             android:layout_height="@dimen/dp_21"

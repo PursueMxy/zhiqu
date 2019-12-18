@@ -17,6 +17,7 @@ import com.icarexm.zhiquwang.bean.SeeFundBean;
 import com.icarexm.zhiquwang.contract.InviteAwardContract;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.InviteAwardPresenter;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.zhouyou.recyclerview.XRecyclerView;
 
@@ -47,11 +48,7 @@ public class InviteAwardActivity extends BaseActivity implements InviteAwardCont
         token = share.getString("token", "");
         mContext = getApplicationContext();
         ButterKnife.bind(this);
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
+        LoadingDialogShow();
         InitUI();
         inviteAwardPresenter = new InviteAwardPresenter(this);
         inviteAwardPresenter.GetSeeFund(token,"4");
@@ -61,7 +58,9 @@ public class InviteAwardActivity extends BaseActivity implements InviteAwardCont
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.invite_award_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.invite_award_img_back)) {
+                    finish();
+                }
                 break;
         }
     }
@@ -85,14 +84,13 @@ public class InviteAwardActivity extends BaseActivity implements InviteAwardCont
             public void onRefresh() {
                 inviteAwardPresenter.GetSeeFund(token,"4");
                 //加载更多
-                mRecyclerView.loadMoreComplete();//加载动画完成
                 mRecyclerView.refreshComplete();//刷新动画完成
             }
             @Override
             public void onLoadMore() {
                 //加载更多
                 mRecyclerView.loadMoreComplete();//加载动画完成
-                mRecyclerView.refreshComplete();//刷新动画完成
+                mRecyclerView.setNoMore(true);
             }
         });
         mRecyclerView.setAdapter(commissionAdapter);
@@ -100,10 +98,7 @@ public class InviteAwardActivity extends BaseActivity implements InviteAwardCont
     }
 
     public void Update(int code, String msg, SeeFundBean.DataBeanX data){
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+       LoadingDialogClose();
         if (code==1) {
             SeeFundBean.DataBeanX.ListBean list = data.getList();
             dataList = list.getData();
@@ -120,6 +115,32 @@ public class InviteAwardActivity extends BaseActivity implements InviteAwardCont
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
 
     }
 }

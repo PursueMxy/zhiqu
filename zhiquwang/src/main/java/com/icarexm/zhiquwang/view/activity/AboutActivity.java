@@ -16,6 +16,7 @@ import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.PublicResultBean;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.MxyUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.lzy.okgo.OkGo;
@@ -44,23 +45,16 @@ public class AboutActivity extends BaseActivity {
         ButterKnife.bind(this);
         appVersionName = MxyUtils.getAppVersionName(mContext);
         tv_versionName.setText(appVersionName);
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
         InitData();
     }
 
     private void InitData() {
+        LoadingDialogShow();
         OkGo.<String>post(RequstUrl.URL.About)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        if (progressDialog != null){
-                            progressDialog.dismiss();
-                            progressDialog = null;
-                        }
+                        LoadingDialogClose();
                         PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
                         if (resultBean.getCode()==1){
                             tv_content.setText( Html.fromHtml(resultBean.getData()));
@@ -73,7 +67,9 @@ public class AboutActivity extends BaseActivity {
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.about_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.about_img_back)) {
+                    finish();
+                }
                 break;
 
         }
@@ -86,4 +82,31 @@ public class AboutActivity extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+       try {
+
+           if (progressDialog == null) {
+               progressDialog = CustomProgressDialog.createDialog(this);
+           }
+           progressDialog.show();
+       }catch (Exception e){
+
+       }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
+    }
+
 }

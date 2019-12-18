@@ -19,6 +19,7 @@ import com.icarexm.zhiquwang.bean.MyBankBean;
 import com.icarexm.zhiquwang.contract.CashWithdrawalContract;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.CashWithdrawalPresenter;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 
 import java.util.ArrayList;
@@ -64,11 +65,7 @@ public class CashWithdrawalActivity extends BaseActivity implements CashWithdraw
         token = share.getString("token", "");
         mContext = getApplicationContext();
         ButterKnife.bind(this);
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
+        LoadingDialogShow();
         cashWithdrawalPresenter = new CashWithdrawalPresenter(this);
         cashWithdrawalPresenter.GetWithdrawal(token);
         tv_withdrawal.setText("(最少提现"+withdrawal+"元)");
@@ -77,31 +74,39 @@ public class CashWithdrawalActivity extends BaseActivity implements CashWithdraw
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.cash_withdrawal_tv_add_bank_card:
-                Intent intent = new Intent(mContext, AddBankCardActivity.class);
-                intent.putExtra("type","10001");
-                startActivity(intent);
+                if (!ButtonUtils.isFastDoubleClick(R.id.cash_withdrawal_tv_add_bank_card)) {
+                    Intent intent = new Intent(mContext, AddBankCardActivity.class);
+                    intent.putExtra("type", "10001");
+                    startActivity(intent);
+                }
                 break;
             case R.id.cash_withdrawal_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.cash_withdrawal_img_back)) {
+                    finish();
+                }
                 break;
             case R.id.cash_withdrawal_btn_cash:
-                String cash_money= edt_cash_money.getText().toString();
-                double money= Double.parseDouble(cash_money);
-                double withdrawal_money = Double.parseDouble(withdrawal);
-                double balance_money = Double.parseDouble(balance);
-                if (money>withdrawal_money||money==withdrawal_money){
-                   if (money<balance_money){
-                       cashWithdrawalPresenter.GetdoWithdrawal(token,cash_money,bank_id+"");
-                   }else {
-                       ToastUtils.showToast(mContext,"不能大于可提现金额");
-                   }
-                }else {
-                    ToastUtils.showToast(mContext,"不能小于最低提现金额");
+                if (!ButtonUtils.isFastDoubleClick(R.id.cash_withdrawal_btn_cash)) {
+                    String cash_money = edt_cash_money.getText().toString();
+                    double money = Double.parseDouble(cash_money);
+                    double withdrawal_money = Double.parseDouble(withdrawal);
+                    double balance_money = Double.parseDouble(balance);
+                    if (money > withdrawal_money || money == withdrawal_money) {
+                        if (money < balance_money) {
+                            cashWithdrawalPresenter.GetdoWithdrawal(token, cash_money, bank_id + "");
+                        } else {
+                            ToastUtils.showToast(mContext, "不能大于可提现金额");
+                        }
+                    } else {
+                        ToastUtils.showToast(mContext, "不能小于最低提现金额");
+                    }
                 }
                 break;
             case R.id.cash_withdrawal_rl_bank:
-                Intent intent1 = new Intent(mContext, BankListActivity.class);
-                startActivityForResult(intent1,BANKLIST);
+                if (!ButtonUtils.isFastDoubleClick(R.id.cash_withdrawal_rl_bank)) {
+                    Intent intent1 = new Intent(mContext, BankListActivity.class);
+                    startActivityForResult(intent1, BANKLIST);
+                }
                 break;
         }
     }
@@ -167,5 +172,31 @@ public class CashWithdrawalActivity extends BaseActivity implements CashWithdraw
             tv_bank_name.setText(bank_name);
             tv_bank_num.setText("账号："+bank_num );
         }
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

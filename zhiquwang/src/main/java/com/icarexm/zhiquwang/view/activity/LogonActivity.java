@@ -21,7 +21,9 @@ import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.PublicCodeBean;
 import com.icarexm.zhiquwang.contract.LogonContract;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.LogonPresenter;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.lzy.okgo.OkGo;
@@ -62,6 +64,7 @@ public class LogonActivity extends BaseActivity implements LogonContract.View {
     private boolean isInput=false;
     private SharedPreferences share;
     private String password;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,68 +147,74 @@ public class LogonActivity extends BaseActivity implements LogonContract.View {
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.logon_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.logon_img_back)) {
+                    finish();
+                }
                 break;
             case R.id.logon_btn_start:
-                mobile = edt_mobile.getText().toString();
-                String code= edt_code.getText().toString();
-                password = edt_password.getText().toString();
-                String repassword = edt_repassword.getText().toString();
-                if (type.equals("wechat")){
-                    if (!mobile.equals("")&& mobile.length()==11){
-                        if(!code.equals("")){
-                            if (isInput){
-                                logonPresenter.GetBindMobile(mobile,code, password,repassword,openid);
-                            }else {
+                if (!ButtonUtils.isFastDoubleClick(R.id.logon_btn_start)) {
+                    mobile = edt_mobile.getText().toString();
+                    String code = edt_code.getText().toString();
+                    password = edt_password.getText().toString();
+                    String repassword = edt_repassword.getText().toString();
+                    if (type.equals("wechat")) {
+                        if (!mobile.equals("") && mobile.length() == 11) {
+                            if (!code.equals("")) {
+                                if (isInput) {
+                                    logonPresenter.GetBindMobile(mobile, code, password, repassword, openid);
+                                } else {
+                                    if (!password.equals("")) {
+                                        if (repassword.equals(password)) {
+                                            logonPresenter.GetBindMobile(mobile, code, password, repassword, openid);
+                                        } else {
+                                            ToastUtils.showToast(mContext, "两次密码输入不一致");
+                                        }
+                                    } else {
+                                        ToastUtils.showToast(mContext, "密码不能为空");
+                                    }
+                                }
+                            } else {
+                                ToastUtils.showToast(mContext, "验证码不能为空");
+                            }
+                        } else {
+                            ToastUtils.showToast(mContext, "手机号码不能为空");
+                        }
+                    } else if (type.equals("logon")) {
+                        if (!mobile.equals("") && mobile.length() == 11) {
+                            if (!code.equals("")) {
                                 if (!password.equals("")) {
                                     if (repassword.equals(password)) {
-                                        logonPresenter.GetBindMobile(mobile,code, password,repassword,openid);
+                                        logonPresenter.GetRegister(mobile, code, password, repassword);
                                     } else {
                                         ToastUtils.showToast(mContext, "两次密码输入不一致");
                                     }
                                 } else {
                                     ToastUtils.showToast(mContext, "密码不能为空");
                                 }
+                            } else {
+                                ToastUtils.showToast(mContext, "验证码不能为空");
                             }
-                        }else {
-                            ToastUtils.showToast(mContext,"验证码不能为空");
+                        } else {
+                            ToastUtils.showToast(mContext, "手机号码不能为空");
                         }
-                    }else {
-                        ToastUtils.showToast(mContext,"手机号码不能为空");
-                    }
-                }else if (type.equals("logon")){
-                    if (!mobile.equals("")&& mobile.length()==11){
-                        if(!code.equals("")){
-                            if (!password.equals("")){
-                                if (repassword.equals(password)){
-                                    logonPresenter.GetRegister(mobile,code, password,repassword);
-                                }else {
-                                    ToastUtils.showToast(mContext,"两次密码输入不一致");
-                                }
-                            }else {
-                                ToastUtils.showToast(mContext,"密码不能为空");
-                            }
-                        }else {
-                            ToastUtils.showToast(mContext,"验证码不能为空");
-                        }
-                    }else {
-                        ToastUtils.showToast(mContext,"手机号码不能为空");
                     }
                 }
                 break;
             case R.id.logon_tv_mobileCode:
-                mobile = edt_mobile.getText().toString();
-                if (!mobile.equals("")&& mobile.length()==11){
-                    Timesecond =59;
-                    timeHandler.postDelayed(timeRunnable,1000);
-                    tv_mobileCode.setClickable(false);
-                    if (type.equals("wechat")) {
-                        logonPresenter.GetSendMsg(mobile, "3");
-                    }else if (type.equals("logon")){
-                        logonPresenter.GetSendMsg(mobile, "1");
+                if (!ButtonUtils.isFastDoubleClick(R.id.logon_tv_mobileCode)) {
+                    mobile = edt_mobile.getText().toString();
+                    if (!mobile.equals("") && mobile.length() == 11) {
+                        Timesecond = 59;
+                        timeHandler.postDelayed(timeRunnable, 1000);
+                        tv_mobileCode.setClickable(false);
+                        if (type.equals("wechat")) {
+                            logonPresenter.GetSendMsg(mobile, "3");
+                        } else if (type.equals("logon")) {
+                            logonPresenter.GetSendMsg(mobile, "1");
+                        }
+                    } else {
+                        ToastUtils.showToast(mContext, "手机号码不能为空");
                     }
-                }else {
-                    ToastUtils.showToast(mContext,"手机号码不能为空");
                 }
                 break;
         }
@@ -261,5 +270,31 @@ public class LogonActivity extends BaseActivity implements LogonContract.View {
             editor.commit();//提交
             startActivity(new Intent(mContext,HomeActivity.class));
         }
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

@@ -16,7 +16,9 @@ import android.widget.TextView;
 import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.contract.ResetPasswordContract;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.ResetPasswordPresenter;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 
 import butterknife.BindView;
@@ -42,6 +44,7 @@ public class ResetPasswordActivity extends BaseActivity implements ResetPassword
     private String mobile;
     private int Timesecond;
     private ResetPasswordPresenter resetPasswordPresenter;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,39 +60,45 @@ public class ResetPasswordActivity extends BaseActivity implements ResetPassword
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.reset_psw_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.reset_psw_img_back)) {
+                    finish();
+                }
                 break;
             case R.id.reset_psw_btn_start:
-                String code= edt_code.getText().toString();
-                String password = edt_password.getText().toString();
-                String repassword = edt_repassword.getText().toString();
-                if (!mobile.equals("")&& mobile.length()==11){
-                  if(!code.equals("")){
-                   if (!password.equals("")){
-                     if (repassword.equals(password)){
-                         resetPasswordPresenter.GetFindPass(mobile,code,password,repassword);
-                     }else {
-                         ToastUtils.showToast(mContext,"两次密码输入不一致");
-                     }
-                   }else {
-                       ToastUtils.showToast(mContext,"密码不能为空");
-                   }
-                  }else {
-                      ToastUtils.showToast(mContext,"验证码不能为空");
-                  }
-                }else {
-                    ToastUtils.showToast(mContext,"手机号码不能为空");
+                if (!ButtonUtils.isFastDoubleClick(R.id.reset_psw_btn_start)) {
+                    String code = edt_code.getText().toString();
+                    String password = edt_password.getText().toString();
+                    String repassword = edt_repassword.getText().toString();
+                    if (!mobile.equals("") && mobile.length() == 11) {
+                        if (!code.equals("")) {
+                            if (!password.equals("")) {
+                                if (repassword.equals(password)) {
+                                    resetPasswordPresenter.GetFindPass(mobile, code, password, repassword);
+                                } else {
+                                    ToastUtils.showToast(mContext, "两次密码输入不一致");
+                                }
+                            } else {
+                                ToastUtils.showToast(mContext, "密码不能为空");
+                            }
+                        } else {
+                            ToastUtils.showToast(mContext, "验证码不能为空");
+                        }
+                    } else {
+                        ToastUtils.showToast(mContext, "手机号码不能为空");
+                    }
                 }
                 break;
             case R.id.reset_psw_tv_mobileCode:
-                mobile = edt_mobile.getText().toString();
-                if (!mobile.equals("")&& mobile.length()==11){
-                    Timesecond =59;
-                    timeHandler.postDelayed(timeRunnable,1000);
-                    tv_mobileCode.setClickable(false);
-                    resetPasswordPresenter.GetSendMsg(mobile,"2");
-                }else {
-                    ToastUtils.showToast(mContext,"手机号码不能为空");
+                if (!ButtonUtils.isFastDoubleClick(R.id.reset_psw_tv_mobileCode)) {
+                    mobile = edt_mobile.getText().toString();
+                    if (!mobile.equals("") && mobile.length() == 11) {
+                        Timesecond = 59;
+                        timeHandler.postDelayed(timeRunnable, 1000);
+                        tv_mobileCode.setClickable(false);
+                        resetPasswordPresenter.GetSendMsg(mobile, "2");
+                    } else {
+                        ToastUtils.showToast(mContext, "手机号码不能为空");
+                    }
                 }
                 break;
         }
@@ -136,5 +145,31 @@ public class ResetPasswordActivity extends BaseActivity implements ResetPassword
          startActivity(new Intent(mContext,LoginActivity.class));
          finish();
      }
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

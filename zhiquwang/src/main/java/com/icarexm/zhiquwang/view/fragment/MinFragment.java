@@ -27,6 +27,7 @@ import com.icarexm.zhiquwang.bean.MineBean;
 import com.icarexm.zhiquwang.custview.CircleImageView;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.ShadowDrawable;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.icarexm.zhiquwang.view.activity.BaseInformationActivity;
@@ -87,28 +88,25 @@ public class MinFragment extends Fragment implements View.OnClickListener {
 
 
     private void InitData() {
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(mContext);
-        }
-        progressDialog.show();
+        LoadingDialogShow();
         OkGo.<String>post(RequstUrl.URL.mine)
                 .params("token",token)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        if (progressDialog != null){
-                            progressDialog.dismiss();
-                            progressDialog = null;
-                        }
+                        LoadingDialogClose();
                         MineBean mineBean = new GsonBuilder().create().fromJson(response.body(), MineBean.class);
                         if (mineBean.getCode()==1){
                             MineBean.DataBean data = mineBean.getData();
                             tv_nickname.setText(data.getUsername());
                             Glide.with(mContext).load(RequstUrl.URL.HOST+data.getAvatar()).into(img_avatar);
                         }else if (mineBean.getCode() ==10001){
-                            startActivity(new Intent(mContext, LoginActivity.class));
-                            getActivity().finish();
+                            try {
+                                startActivity(new Intent(mContext, LoginActivity.class));
+                                getActivity().finish();
+                            }catch (Exception e){
+
+                            }
                         }
                     }
                 });
@@ -135,39 +133,86 @@ public class MinFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.fm_min_rl_myjobsearch:
-                startActivity(new Intent(mContext, MyJobSearchActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_min_rl_myjobsearch)) {
+                    startActivity(new Intent(mContext, MyJobSearchActivity.class));
+                }
                 break;
             case R.id.fm_min_rl_myteam:
-                startActivity(new Intent(mContext, DistributionTeamActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_min_rl_myteam)) {
+                    startActivity(new Intent(mContext, DistributionTeamActivity.class));
+                }
                 break;
             case R.id.fm_min_img_edit:
-                startActivity(new Intent(mContext, BaseInformationActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_min_img_edit)) {
+                    startActivity(new Intent(mContext, BaseInformationActivity.class));
+                }
                 break;
             case R.id.fm_min_rl_waller:
-                startActivity(new Intent(mContext, MyWalletActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_min_rl_waller)) {
+                    startActivity(new Intent(mContext, MyWalletActivity.class));
+                }
                 break;
             case R.id.fm_min_rl_set:
-                startActivity(new Intent(mContext, SetActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_min_rl_set)) {
+                    startActivity(new Intent(mContext, SetActivity.class));
+                }
                 break;
             case R.id.fm_min_rl_resume:
-                startActivity(new Intent(mContext, MyResumeActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_min_rl_resume)) {
+                    startActivity(new Intent(mContext, MyResumeActivity.class));
+                }
                 break;
             case R.id.fm_min_rl_certification:
-                startActivity(new Intent(mContext, CertificationActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_min_rl_certification)) {
+                    startActivity(new Intent(mContext, CertificationActivity.class));
+                }
                 break;
             case R.id.fm_min_rl_to_join:
-                startActivity(new Intent(mContext, MyToJoinActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_min_rl_to_join)) {
+                    startActivity(new Intent(mContext, MyToJoinActivity.class));
+                }
                 break;
             case R.id.fm_min_rl_businessCooperation:
-                startActivity(new Intent(mContext, BusinessCooperationActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_min_rl_businessCooperation)) {
+                    startActivity(new Intent(mContext, BusinessCooperationActivity.class));
+                }
                 break;
             case R.id.fm_min_message:
-                startActivity(new Intent(mContext, MessageActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_min_message)) {
+                    startActivity(new Intent(mContext, MessageActivity.class));
+                }
                 break;
         }
     }
 
     public void UpdateUI(){
         InitData();
+    }
+
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(mContext);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

@@ -30,6 +30,7 @@ import com.icarexm.zhiquwang.bean.PublicCodeBean;
 import com.icarexm.zhiquwang.bean.PublicResultBean;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.calender.DateUtil;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.DateUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
@@ -125,15 +126,13 @@ public class ClockInFragment extends Fragment implements View.OnClickListener {
     }
 
     private void InitData() {
+        LoadingDialogShow();
         OkGo.<String>post(RequstUrl.URL.playInfo)
                 .params("token",token)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        if (progressDialog != null){
-                            progressDialog.dismiss();
-                            progressDialog = null;
-                        }
+                      LoadingDialogClose();
                         PlayInfoBean playInfoBean = new GsonBuilder().create().fromJson(response.body(), PlayInfoBean.class);
                         if (playInfoBean.getCode()==1){
                             PlayInfoBean.DataBean data = playInfoBean.getData();
@@ -169,8 +168,12 @@ public class ClockInFragment extends Fragment implements View.OnClickListener {
                             tv_set_reminder.setVisibility(View.GONE);
                             rl_no_entry.setVisibility(View.VISIBLE);
                         }else if (playInfoBean.getCode() ==10001){
-                            startActivity(new Intent(mContext, LoginActivity.class));
-                            getActivity().finish();
+                            try {
+                                startActivity(new Intent(mContext, LoginActivity.class));
+                                getActivity().finish();
+                            }catch (Exception e){
+
+                            }
                         }
                     }
                 });
@@ -216,27 +219,41 @@ public class ClockInFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.fm_clock_in_rl_attendance:
-                startActivity(new Intent(mContext, AttendanceCardActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_clock_in_rl_attendance)) {
+                    startActivity(new Intent(mContext, AttendanceCardActivity.class));
+                }
                 break;
             case R.id.fm_clock_in_punch_card_record:
-                startActivity(new Intent(mContext, PunchCardRecordActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_clock_in_punch_card_record)) {
+                    startActivity(new Intent(mContext, PunchCardRecordActivity.class));
+                }
                 break;
             case R.id.fm_clock_in_set_reminder:
-                startActivity(new Intent(mContext, SetReminderActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_clock_in_set_reminder)) {
+                    startActivity(new Intent(mContext, SetReminderActivity.class));
+                }
                 break;
             case R.id.fm_clock_in_no_entry:
-               startActivity(new Intent(mContext, HomeActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_clock_in_no_entry)) {
+                    startActivity(new Intent(mContext, HomeActivity.class));
+                }
                 break;
             case R.id.fm_clockin_rl_clockin:
-                ToPlay("1");
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_clockin_rl_clockin)) {
+                    ToPlay("1");
+                }
                 break;
             case R.id.fm_clockin_rl_clockOut:
-                ToPlay("2");
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_clockin_rl_clockOut)) {
+                    ToPlay("2");
+                }
                 break;
             case R.id.fm_clcokin_tv_start_recruit:
-                Intent intent = new Intent(mContext, HomeActivity.class);
-                intent.putExtra("currentItems","0");
-                startActivity(intent);
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_clcokin_tv_start_recruit)) {
+                    Intent intent = new Intent(mContext, HomeActivity.class);
+                    intent.putExtra("currentItems", "0");
+                    startActivity(intent);
+                }
                 break;
         }
     }
@@ -267,6 +284,13 @@ public class ClockInFragment extends Fragment implements View.OnClickListener {
                         ToastUtils.showToast(mContext,resultBean.getMsg());
                         if (resultBean.getCode()==1){
                             InitData();
+                        }else if (resultBean.getCode() ==10001){
+                            try {
+                                startActivity(new Intent(mContext, LoginActivity.class));
+                                getActivity().finish();
+                            }catch (Exception e){
+
+                            }
                         }
                     }
                 });
@@ -311,12 +335,33 @@ public class ClockInFragment extends Fragment implements View.OnClickListener {
     }
 
     public void UpdateUI(){
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(mContext);
-        }
-        progressDialog.show();
         InitData();
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(mContext);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 
 

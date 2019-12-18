@@ -17,6 +17,7 @@ import com.icarexm.zhiquwang.bean.SeeFundBean;
 import com.icarexm.zhiquwang.contract.EntryAwardContract;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.EntryAwardPresenter;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.zhouyou.recyclerview.XRecyclerView;
 
@@ -48,11 +49,7 @@ public class EntryAwardActivity extends BaseActivity implements EntryAwardContra
         token = share.getString("token", "");
         ButterKnife.bind(this);
         InitUI();
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
+        LoadingDialogShow();
         EntryAwardPresenter = new EntryAwardPresenter(this);
         EntryAwardPresenter.GetSeeFund(token,"2");
     }
@@ -61,7 +58,9 @@ public class EntryAwardActivity extends BaseActivity implements EntryAwardContra
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.entry_award_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.entry_award_img_back)) {
+                    finish();
+                }
                 break;
         }
     }
@@ -84,7 +83,6 @@ public class EntryAwardActivity extends BaseActivity implements EntryAwardContra
             public void onRefresh() {
                 EntryAwardPresenter.GetSeeFund(token,"2");
                 //加载更多
-                mRecyclerView.loadMoreComplete();//加载动画完成
                 mRecyclerView.refreshComplete();//刷新动画完成
             }
 
@@ -92,7 +90,7 @@ public class EntryAwardActivity extends BaseActivity implements EntryAwardContra
             public void onLoadMore() {
                 //加载更多
                 mRecyclerView.loadMoreComplete();//加载动画完成
-                mRecyclerView.refreshComplete();//刷新动画完成
+                mRecyclerView.setNoMore(true);
             }
         });
         mRecyclerView.setAdapter(commissionAdapter);
@@ -114,9 +112,32 @@ public class EntryAwardActivity extends BaseActivity implements EntryAwardContra
             startActivity(new Intent(mContext,LoginActivity.class));
             finish();
         }
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
+      LoadingDialogClose();
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
         }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

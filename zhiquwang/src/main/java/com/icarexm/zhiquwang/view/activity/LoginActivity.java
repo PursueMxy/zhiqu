@@ -30,8 +30,10 @@ import com.icarexm.zhiquwang.MyApplication;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.VersionBean;
 import com.icarexm.zhiquwang.contract.LoginContract;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.LoginPresenter;
 import com.icarexm.zhiquwang.utils.AppDownloadManager;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.ExampleUtil;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
@@ -71,13 +73,13 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     private int versionCode;
     private String version_name;
     private AppDownloadManager mDownloadManager;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         JPushInterface.resumePush(getApplicationContext());
-        Intent intent = getIntent();
         share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
         mobile = share.getString("mobile", "");
@@ -103,12 +105,33 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
                 });
         mDownloadManager = new AppDownloadManager(LoginActivity.this);
         versionCode = getVersionCode();
-        InitApkVersion();
+        try {
+           if (token!=null){
+               if (!token.equals("")) {
+                   startActivity(new Intent(mContext, HomeActivity.class));
+               }
+           }
+        }catch (Exception e){
+
+        }
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        SharedPreferences.Editor editor = share.edit();
+        editor.putString("token","");
+        editor.commit();//提交
+        token = share.getString("token", "");
+        try {
+            if (token!=null){
+                if (!token.equals("")) {
+                    startActivity(new Intent(mContext, HomeActivity.class));
+                }
+            }
+        }catch (Exception e){
+
+        }
     }
 
     @OnClick({R.id.login_tv_create_account,R.id.login_tv_no_password,R.id.login_btn_start,R.id.login_tv_user_agreement
@@ -116,39 +139,51 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.login_tv_create_account:
-                Intent intent1 = new Intent(mContext, LogonActivity.class);
-                intent1.putExtra("type","logon");
-                startActivity(intent1);
+                if (!ButtonUtils.isFastDoubleClick(R.id.login_tv_create_account)) {
+                    Intent intent1 = new Intent(mContext, LogonActivity.class);
+                    intent1.putExtra("type", "logon");
+                    startActivity(intent1);
+                }
                 break;
             case R.id.login_tv_no_password:
-                startActivity(new Intent(mContext,ResetPasswordActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.login_tv_no_password)) {
+                    startActivity(new Intent(mContext, ResetPasswordActivity.class));
+                }
                 break;
             case R.id.login_btn_start:
-                mobile = edt_mobile.getText().toString();
-                password = edt_password.getText().toString();
-                if (login_cb.isChecked()) {
-                    if (!mobile.equals("")) {
-                        if (!password.equals("")) {
-                            loginPresenter.GetLogin(mobile, password);
+                if (!ButtonUtils.isFastDoubleClick(R.id.login_btn_start)) {
+                    mobile = edt_mobile.getText().toString();
+                    password = edt_password.getText().toString();
+                    if (login_cb.isChecked()) {
+                        if (!mobile.equals("")) {
+                            if (!password.equals("")) {
+                                loginPresenter.GetLogin(mobile, password);
+                            } else {
+                                ToastUtils.showToast(mContext, "密码不能为空");
+                            }
                         } else {
-                            ToastUtils.showToast(mContext, "密码不能为空");
+                            ToastUtils.showToast(mContext, "手机号不能为空");
                         }
                     } else {
-                        ToastUtils.showToast(mContext, "手机号不能为空");
+                        ToastUtils.showToast(mContext, "请先同意用户协议");
                     }
-                }else {
-                    ToastUtils.showToast(mContext, "请先同意用户协议");
                 }
                 break;
             case R.id.login_tv_user_agreement:
-                Intent intent = new Intent(mContext, UserAgreementActivity.class);
-                startActivityForResult(intent,AGREMEEN_CODE);
+                if (!ButtonUtils.isFastDoubleClick(R.id.login_tv_user_agreement)) {
+                    Intent intent = new Intent(mContext, UserAgreementActivity.class);
+                    startActivityForResult(intent, AGREMEEN_CODE);
+                }
                 break;
             case R.id.login_img_avatar:
-                startActivity(new Intent(mContext,EditPersonalActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.login_img_avatar)) {
+                    startActivity(new Intent(mContext, EditPersonalActivity.class));
+                }
                 break;
             case R.id.login_img_wechat:
-                WXEntryActivity.loginWeixin(mContext, MyApplication.iwxapi);
+                if (!ButtonUtils.isFastDoubleClick(R.id.login_img_wechat)) {
+                    WXEntryActivity.loginWeixin(mContext, MyApplication.iwxapi);
+                }
                 break;
         }
     }
@@ -374,6 +409,32 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         super.onPause();
         if (mDownloadManager != null) {
             mDownloadManager.onPause();
+        }
+
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
         }
 
     }

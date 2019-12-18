@@ -19,6 +19,7 @@ import com.icarexm.zhiquwang.bean.MessageBean;
 import com.icarexm.zhiquwang.contract.MessageContract;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.MessagePresenter;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.zhouyou.recyclerview.XRecyclerView;
 
@@ -49,11 +50,7 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
         SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
         ButterKnife.bind(this);
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
+       LoadingDialogShow();
         InitUI();
         messagePresenter = new MessagePresenter(this);
         messagePresenter.getMessage(token,limit,page+"");
@@ -69,7 +66,6 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
             @Override
             public void onRefresh() {
                 //加载更多
-                mRecyclerView.loadMoreComplete();//加载动画完成
                 mRecyclerView.refreshComplete();//刷新动画完成
             }
 
@@ -77,7 +73,7 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
             public void onLoadMore() {
                 //加载更多
                 mRecyclerView.loadMoreComplete();//加载动画完成
-                mRecyclerView.refreshComplete();//刷新动画完成
+                mRecyclerView.setNoMore(true);
             }
         });
         mRecyclerView.setAdapter(messageAdapter);
@@ -98,7 +94,9 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.message_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.message_img_back)) {
+                    finish();
+                }
                 break;
         }
     }
@@ -117,10 +115,7 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
     }
 
     public void UpdateUI(int code ,String msg, MessageBean.DataBeanX data){
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+       LoadingDialogClose();
         if (code==1){
             dataBeanList = data.getData();
             messageAdapter.setListAll(dataBeanList);
@@ -130,5 +125,31 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
             startActivity(new Intent(mContext,LoginActivity.class));
             finish();
         }
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

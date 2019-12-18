@@ -27,6 +27,7 @@ import com.icarexm.zhiquwang.bean.ResumeBean;
 import com.icarexm.zhiquwang.contract.MyResumeContract;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.MyResumePresenter;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 
@@ -76,11 +77,7 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
         token = share.getString("token", "");
         ButterKnife.bind(this);
         InitUI();
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
+       LoadingDialogShow();
         myResumePresenter = new MyResumePresenter(this);
         myResumePresenter.GetMineInfo(token);
     }
@@ -112,28 +109,36 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.my_resume_img_edit:
-                Intent intent1 = new Intent(mContext, UpdateBaseInforActivity.class);
-                intent1.putExtra("avatar",avatar);
-                intent1.putExtra("city",city);
-                intent1.putExtra("real_name",real_name);
-                intent1.putExtra("sex",sex);
-                intent1.putExtra("birth",birth);
-                intent1.putExtra("education",education);
-                intent1.putExtra("mobile",mobile);
-                startActivityForResult(intent1,BASEINFOCODE);
+                if (!ButtonUtils.isFastDoubleClick(R.id.my_resume_img_edit)) {
+                    Intent intent1 = new Intent(mContext, UpdateBaseInforActivity.class);
+                    intent1.putExtra("avatar", avatar);
+                    intent1.putExtra("city", city);
+                    intent1.putExtra("real_name", real_name);
+                    intent1.putExtra("sex", sex);
+                    intent1.putExtra("birth", birth);
+                    intent1.putExtra("education", education);
+                    intent1.putExtra("mobile", mobile);
+                    startActivityForResult(intent1, BASEINFOCODE);
+                }
                 break;
             case R.id.my_resume_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.myjobsearch_img_back)) {
+                    finish();
+                }
                 break;
             case R.id.my_resume_add_workHistory:
-                Intent intent = new Intent(mContext, AddWorkHistoryActivity.class);
-                intent.putExtra("type","add");
-                startActivityForResult(intent,ADDWORKHISTORY);
+                if (!ButtonUtils.isFastDoubleClick(R.id.my_resume_add_workHistory)) {
+                    Intent intent = new Intent(mContext, AddWorkHistoryActivity.class);
+                    intent.putExtra("type", "add");
+                    startActivityForResult(intent, ADDWORKHISTORY);
+                }
                 break;
             case R.id.my_resume_btn_confirm:
-                String personal_introduce = edt_personal_introduce.getText().toString();
-                myResumePresenter.GetAddResume(token,avatar,real_name,sex,birth,city,education,personal_introduce,experience);
-                break;
+                if (!ButtonUtils.isFastDoubleClick(R.id.my_resume_btn_confirm)) {
+                    String personal_introduce = edt_personal_introduce.getText().toString();
+                    myResumePresenter.GetAddResume(token, avatar, real_name, sex, birth, city, education, personal_introduce, experience);
+                }
+                  break;
         }
     }
 
@@ -189,10 +194,7 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
     }
 
     public void  UpdateUI(int code,String msg, ResumeBean.DataBean data){
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+       LoadingDialogClose();
         if (code==1){
          tv_name.setText(data.getUser_name());
           tv_education.setText(data.getEducation());
@@ -225,6 +227,7 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
                     startActivityForResult(intent,ADDWORKHISTORY);
                 }
             });
+            ToastUtils.showToast(mContext,msg);
         }else if (code==20002){
             ToastUtils.showToast(mContext,msg);
         }else if (code ==10001){
@@ -237,5 +240,32 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
 
     public void UpdateUI(int code,String msg){
         ToastUtils.showToast(mContext,msg);
+    }
+
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

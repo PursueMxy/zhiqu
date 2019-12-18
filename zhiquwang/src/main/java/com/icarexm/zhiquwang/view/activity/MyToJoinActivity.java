@@ -24,6 +24,7 @@ import com.icarexm.zhiquwang.custview.BottomDialog;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.mywheel.MyWheelView;
 import com.icarexm.zhiquwang.presenter.MyToJoinPresenter;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.lzy.okgo.OkGo;
@@ -75,11 +76,7 @@ public class MyToJoinActivity extends BaseActivity implements MyToJoinContract.V
         SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
         InitUI();
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
+        LoadingDialogShow();
         myToJoinPresenter = new MyToJoinPresenter(this);
         myToJoinPresenter.GetallianceInfo(token);
     }
@@ -143,29 +140,35 @@ public class MyToJoinActivity extends BaseActivity implements MyToJoinContract.V
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.my_to_join_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.my_to_join_img_back)) {
+                    finish();
+                }
                 break;
             case R.id.my_to_join_btn_confirm:
-                String name = edt_name.getText().toString();
-                String mobile= edt_mobile.getText().toString();
-                String area = tv_area.getText().toString();
-                if (!name.equals("")){
-                 if (!mobile.equals("")){
-                   if (!area.equals("")){
-                       myToJoinPresenter.GetMyTojoin(token,name,mobile,area);
-                   }else {
-                       ToastUtils.showToast(mContext,"申请区域不能为空");
-                   }
-                 }else {
-                     ToastUtils.showToast(mContext,"申请人电话不能为空");
-                 }
-                }else {
-                    ToastUtils.showToast(mContext,"申请人不能为空");
+                if (!ButtonUtils.isFastDoubleClick(R.id.my_to_join_btn_confirm)) {
+                    String name = edt_name.getText().toString();
+                    String mobile = edt_mobile.getText().toString();
+                    String area = tv_area.getText().toString();
+                    if (!name.equals("")) {
+                        if (!mobile.equals("")) {
+                            if (!area.equals("")) {
+                                myToJoinPresenter.GetMyTojoin(token, name, mobile, area);
+                            } else {
+                                ToastUtils.showToast(mContext, "申请区域不能为空");
+                            }
+                        } else {
+                            ToastUtils.showToast(mContext, "申请人电话不能为空");
+                        }
+                    } else {
+                        ToastUtils.showToast(mContext, "申请人不能为空");
+                    }
                 }
                 break;
             case R.id.my_to_join_rl_address:
                 //获取可加盟城市
-                InitData();
+                if (!ButtonUtils.isFastDoubleClick(R.id.my_to_join_rl_address)) {
+                    InitData();
+                }
                 break;
 
         }
@@ -185,10 +188,7 @@ public class MyToJoinActivity extends BaseActivity implements MyToJoinContract.V
     }
 
     public void UpdateUI(int code , String msg, int type, AllianceInfoBean.DataBean data){
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+        LoadingDialogClose();
         if (type==2){
             if (code==1){
                 myToJoinPresenter.GetallianceInfo(token);
@@ -274,5 +274,32 @@ public class MyToJoinActivity extends BaseActivity implements MyToJoinContract.V
 
         age_groupDialog.setContentView(BirthDateInflate);
         age_groupDialog.show();
+    }
+
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

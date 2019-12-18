@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.icarexm.zhiquwang.R;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.view.activity.LoginActivity;
 
 /**
@@ -21,6 +22,8 @@ import com.icarexm.zhiquwang.view.activity.LoginActivity;
 public class GuideThreeFragment extends Fragment {
 
     private SharedPreferences share;
+    private CustomProgressDialog progressDialog;
+    private Context mContext;
 
     public static GuideThreeFragment newInstance() {
 
@@ -36,7 +39,7 @@ public class GuideThreeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Context mContext = getContext();
+        mContext = getContext();
         View inflate = inflater.inflate(R.layout.fragment_guide_three, container, false);
         share = mContext.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         inflate.findViewById(R.id.guide_three_btn_ok).setOnClickListener(new View.OnClickListener() {
@@ -52,6 +55,32 @@ public class GuideThreeFragment extends Fragment {
             }
         });
         return inflate;
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(mContext);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 
 }

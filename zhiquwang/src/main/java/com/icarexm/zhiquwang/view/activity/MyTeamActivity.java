@@ -18,6 +18,7 @@ import com.icarexm.zhiquwang.bean.MyTeanBean;
 import com.icarexm.zhiquwang.contract.MyTeamContract;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.MyTeamPresenter;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.zhouyou.recyclerview.XRecyclerView;
 
@@ -50,11 +51,7 @@ public class MyTeamActivity extends BaseActivity implements MyTeamContract.View 
         token = share.getString("token", "");
         ButterKnife.bind(this);
         InitUI();
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
+        LoadingDialogShow();
         myTeamPresenter = new MyTeamPresenter(this);
         myTeamPresenter.GetMyTeam(token,limit,page+"");
     }
@@ -69,7 +66,6 @@ public class MyTeamActivity extends BaseActivity implements MyTeamContract.View 
             @Override
             public void onRefresh() {
                 //加载更多
-                mRecyclerView.loadMoreComplete();//加载动画完成
                 mRecyclerView.refreshComplete();//刷新动画完成
             }
 
@@ -77,7 +73,7 @@ public class MyTeamActivity extends BaseActivity implements MyTeamContract.View 
             public void onLoadMore() {
                 //加载更多
                 mRecyclerView.loadMoreComplete();//加载动画完成
-                mRecyclerView.refreshComplete();//刷新动画完成
+                mRecyclerView.setNoMore(true);
             }
         });
         mRecyclerView.setAdapter(myTeamAdapter);
@@ -88,7 +84,9 @@ public class MyTeamActivity extends BaseActivity implements MyTeamContract.View 
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.my_team_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.my_team_img_back)) {
+                    finish();
+                }
                 break;
         }
     }
@@ -107,15 +105,38 @@ public class MyTeamActivity extends BaseActivity implements MyTeamContract.View 
     }
 
     public void  UpdateUI(int code,String msg, MyTeanBean.DataBeanX data){
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+      LoadingDialogClose();
         ToastUtils.showToast(mContext,msg);
         if (code==1){
             dataBeanList = data.getData();
             myTeamAdapter.setListAll(dataBeanList);
             myTeamAdapter.notifyDataSetChanged();
+        }
+
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
         }
 
     }

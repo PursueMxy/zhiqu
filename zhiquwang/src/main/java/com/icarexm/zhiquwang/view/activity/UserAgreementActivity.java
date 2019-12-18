@@ -16,6 +16,7 @@ import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.PublicResultBean;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.lzy.okgo.OkGo;
@@ -40,11 +41,7 @@ public class UserAgreementActivity extends BaseActivity {
         setContentView(R.layout.activity_user_agreement);
         mContext = getApplicationContext();
         ButterKnife.bind(this);
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
+      LoadingDialogShow();
         InitData();
     }
 
@@ -53,10 +50,7 @@ public class UserAgreementActivity extends BaseActivity {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        if (progressDialog != null){
-                            progressDialog.dismiss();
-                            progressDialog = null;
-                        }
+                      LoadingDialogClose();
                         PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
                         if (resultBean.getCode()==1){
                             tv_content.setText( Html.fromHtml(resultBean.getData()));
@@ -69,16 +63,20 @@ public class UserAgreementActivity extends BaseActivity {
                 });
     }
 
-    @OnClick({R.id.user_agreement_img_back,R.id.logon_btn_agree})
+    @OnClick({R.id.user_agreement_img_back,R.id.user_agreement_agree})
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.user_agreement_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.user_agreement_img_back)) {
+                    finish();
+                }
                 break;
-            case R.id.logon_btn_agree:
-                Intent intent = new Intent(mContext, LoginActivity.class);
-                setResult(AGREMEEN_CODE,intent);
-                finish();
+            case R.id.user_agreement_agree:
+                if (!ButtonUtils.isFastDoubleClick(R.id.user_agreement_agree)) {
+                    Intent intent = new Intent(mContext, LoginActivity.class);
+                    setResult(AGREMEEN_CODE, intent);
+                    finish();
+                }
                 break;
         }
     }
@@ -89,5 +87,31 @@ public class UserAgreementActivity extends BaseActivity {
             finish();
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

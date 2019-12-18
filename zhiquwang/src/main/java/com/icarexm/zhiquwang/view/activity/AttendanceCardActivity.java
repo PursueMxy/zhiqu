@@ -32,6 +32,7 @@ import com.icarexm.zhiquwang.custview.calender.InnerGridView;
 import com.icarexm.zhiquwang.custview.calender.OnSignedSuccess;
 import com.icarexm.zhiquwang.custview.mywheel.MyWheelView;
 import com.icarexm.zhiquwang.presenter.AttendanceCardPresenter;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.DateUtils;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 
@@ -102,11 +103,7 @@ public class AttendanceCardActivity extends BaseActivity implements AttendanceCa
         mContext = getApplicationContext();
         initData();
         InitUI();
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
+        LoadingDialogShow();
         attendanceCardPresenter = new AttendanceCardPresenter(this);
         attendanceCardPresenter.GetRepairInfo(token);
     }
@@ -140,35 +137,45 @@ public class AttendanceCardActivity extends BaseActivity implements AttendanceCa
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.attendance_card_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.attendance_card_img_back)) {
+                    finish();
+                }
                 break;
             case R.id.attendance_card_rl_classes:
-                ClassesDialog();
+                if (!ButtonUtils.isFastDoubleClick(R.id.attendance_card_rl_classes)) {
+                    ClassesDialog();
+                }
                 break;
             case R.id.attendance_card_rl_start:
-                BirthDateDialog(0);
+                if (!ButtonUtils.isFastDoubleClick(R.id.attendance_card_rl_start)) {
+                    BirthDateDialog(0);
+                }
                 break;
             case R.id.attendance_card_rl_stop:
-                BirthDateDialog(1);
+                if (!ButtonUtils.isFastDoubleClick(R.id.attendance_card_rl_stop)) {
+                    BirthDateDialog(1);
+                }
                 break;
             case R.id.attendance_card_btn_confirm:
-                String classes_name= tv_classes_name.getText().toString();
-                String startTime= tv_startTime.getText().toString();
-                String stopTime= tv_stopTime.getText().toString();
-                int day_shift=1;
-                try {
-                    start_time = DateUtils.dateToStamp1(todayDate + " " + startTime);
-                    stop_time = DateUtils.dateToStamp1(todayDate + " " + stopTime);
-                    Log.e("start_time",start_time+"");
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                if (!ButtonUtils.isFastDoubleClick(R.id.attendance_card_btn_confirm)) {
+                    String classes_name = tv_classes_name.getText().toString();
+                    String startTime = tv_startTime.getText().toString();
+                    String stopTime = tv_stopTime.getText().toString();
+                    int day_shift = 1;
+                    try {
+                        start_time = DateUtils.dateToStamp1(todayDate + " " + startTime);
+                        stop_time = DateUtils.dateToStamp1(todayDate + " " + stopTime);
+                        Log.e("start_time", start_time + "");
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    if (classes_name.equals("白班")) {
+                        day_shift = 1;
+                    } else {
+                        day_shift = 2;
+                    }
+                    attendanceCardPresenter.GetReissue(token, day_shift + "", start_time + "", stop_time + "", SltDay + "");
                 }
-                if (classes_name.equals("白班")){
-                    day_shift=1;
-                }else {
-                    day_shift=2;
-                }
-                attendanceCardPresenter.GetReissue(token,day_shift+"",start_time+"",stop_time+"",SltDay+"");
                 break;
 
         }
@@ -327,10 +334,7 @@ public class AttendanceCardActivity extends BaseActivity implements AttendanceCa
         }else {
             ToastUtils.showToast(mContext,msg);
         }
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+      LoadingDialogClose();
         tv_repair_num.setText("本月补卡剩余"+ data.getRepair_num() +"次");
     }
 
@@ -426,9 +430,32 @@ public class AttendanceCardActivity extends BaseActivity implements AttendanceCa
          startActivity(new Intent(mContext,LoginActivity.class));
          finish();
      }
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
+        LoadingDialogClose();
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
         }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

@@ -17,7 +17,9 @@ import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.PublicCodeBean;
 import com.icarexm.zhiquwang.contract.AddBankCardContract;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.AddBankCardPresenter;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.lzy.okgo.OkGo;
@@ -40,6 +42,7 @@ public class AddBankCardActivity extends BaseActivity implements AddBankCardCont
     private String token;
     private String type;
     private int ADDBANK=20001;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,24 +105,28 @@ public class AddBankCardActivity extends BaseActivity implements AddBankCardCont
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.add_bank_card_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.add_bank_card_img_back)) {
+                    finish();
+                }
                 break;
             case R.id.add_bank_card_btn_confirm:
-                String bank_name = edt_bank_name.getText().toString();
-                String bank_num= edt_bank_num.getText().toString();
-                String bank_user= edt_bank_user.getText().toString();
-                if (!bank_user.equals("")){
-                   if (!bank_num.equals("")){
-                        if (!bank_name.equals("")){
-                        addBankCardPresenter.GetAddCard(token,bank_user,bank_num,bank_name);
-                        }else {
-                            ToastUtils.showToast(mContext,"银行名称不能为空");
+                if (!ButtonUtils.isFastDoubleClick(R.id.add_bank_card_btn_confirm)) {
+                    String bank_name = edt_bank_name.getText().toString();
+                    String bank_num = edt_bank_num.getText().toString();
+                    String bank_user = edt_bank_user.getText().toString();
+                    if (!bank_user.equals("")) {
+                        if (!bank_num.equals("")) {
+                            if (!bank_name.equals("")) {
+                                addBankCardPresenter.GetAddCard(token, bank_user, bank_num, bank_name);
+                            } else {
+                                ToastUtils.showToast(mContext, "银行名称不能为空");
+                            }
+                        } else {
+                            ToastUtils.showToast(mContext, "卡号不能为空");
                         }
-                   }else {
-                       ToastUtils.showToast(mContext,"卡号不能为空");
-                   }
-                }else {
-                    ToastUtils.showToast(mContext,"持卡人不能为空");
+                    } else {
+                        ToastUtils.showToast(mContext, "持卡人不能为空");
+                    }
                 }
                 break;
         }
@@ -155,5 +162,31 @@ public class AddBankCardActivity extends BaseActivity implements AddBankCardCont
         else {
             ToastUtils.showToast(mContext,msg);
         }
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

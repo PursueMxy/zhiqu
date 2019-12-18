@@ -21,6 +21,7 @@ import com.icarexm.zhiquwang.bean.NearbyStoreBean;
 import com.icarexm.zhiquwang.contract.NearbyStoreContract;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.NearbyStorePresenter;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.zhouyou.recyclerview.XRecyclerView;
 import com.zhouyou.recyclerview.adapter.BaseRecyclerViewAdapter;
@@ -42,7 +43,7 @@ public class NearbyStoreActivity extends BaseActivity implements NearbyStoreCont
     private String longitude;
     private NearbyStorePresenter nearbyStorePresenter;
     private String 	limit="30";
-    private int page=0;
+    private int page=1;
     private NearbyStoreAdapter nearbyStoreAdapter;
     private String job_id;
     private CustomProgressDialog progressDialog;
@@ -59,13 +60,9 @@ public class NearbyStoreActivity extends BaseActivity implements NearbyStoreCont
         token = share.getString("token", "");
         latitude = share.getString("latitude", "");
         longitude = share.getString("longitude", "");
-        InitUI();
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
         nearbyStorePresenter = new NearbyStorePresenter(this);
+        InitUI();
+        LoadingDialogShow();
         nearbyStorePresenter.GetNearbyStore(token,longitude,latitude,limit,page+"");
     }
 
@@ -75,23 +72,21 @@ public class NearbyStoreActivity extends BaseActivity implements NearbyStoreCont
         nearbyStoreAdapter = new NearbyStoreAdapter(this,job_id);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setFootViewText("拼命加载中","已经全部");
+        nearbyStoreAdapter.setListAll(list);
+        mRecyclerView.setAdapter(nearbyStoreAdapter);
         mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
-                //加载更多
-                mRecyclerView.loadMoreComplete();//加载动画完成
-                mRecyclerView.refreshComplete();//刷新动画完成
+                page=1;
+                nearbyStorePresenter.GetNearbyStore(token,longitude,latitude,limit,page+"");
             }
 
             @Override
             public void onLoadMore() {
-                //加载更多
-                mRecyclerView.loadMoreComplete();//加载动画完成
-                mRecyclerView.refreshComplete();//刷新动画完成
+                page=page+1;
+                nearbyStorePresenter.GetNearbyStore(token,longitude,latitude,limit,page+"");
             }
         });
-        nearbyStoreAdapter.setListAll(list);
-        mRecyclerView.setAdapter(nearbyStoreAdapter);
         mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
@@ -108,14 +103,15 @@ public class NearbyStoreActivity extends BaseActivity implements NearbyStoreCont
 //                startActivity(new Intent(mContext, RecruitDetailActivity.class));
             }
         });
-        mRecyclerView.setRefreshing(true);//没有更多数据
     }
 
     @OnClick({R.id.nearby_story_img_back})
     public void  onViewClick(View view){
         switch (view.getId()){
             case R.id.nearby_story_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.nearby_story_img_back)) {
+                    finish();
+                }
                 break;
         }
     }
@@ -134,14 +130,28 @@ public class NearbyStoreActivity extends BaseActivity implements NearbyStoreCont
     }
 
     public void UpdateUI(int code, String msg, NearbyStoreBean.DataBeanX data){
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+     LoadingDialogClose();
         if (code==1){
-           list = data.getData();
-           nearbyStoreAdapter.setListAll(list);
-           nearbyStoreAdapter.notifyDataSetChanged();
+            if (page==1) {
+                list = data.getData();
+                nearbyStoreAdapter.setListAll(list);
+                nearbyStoreAdapter.notifyDataSetChanged();
+                mRecyclerView.refreshComplete();//加载动画完成
+            }else {
+                if (data.getData()!=null){
+                    if (data.getData().size()>0){
+                        list.addAll(data.getData());
+                        nearbyStoreAdapter.addItemsToLast(data.getData());
+                        nearbyStoreAdapter.notifyDataSetChanged();
+                        mRecyclerView.loadMoreComplete();//加载动画完成
+                    }else {
+                        page=page-1;
+                        //加载更多
+                        mRecyclerView.loadMoreComplete();//加载动画完成
+                        mRecyclerView.setNoMore(true);
+                    }
+                }
+            }
         }else if (code ==10001){
             ToastUtils.showToast(mContext,msg);
             startActivity(new Intent(mContext,LoginActivity.class));
@@ -149,5 +159,31 @@ public class NearbyStoreActivity extends BaseActivity implements NearbyStoreCont
         }else {
             ToastUtils.showToast(mContext,msg);
         }
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

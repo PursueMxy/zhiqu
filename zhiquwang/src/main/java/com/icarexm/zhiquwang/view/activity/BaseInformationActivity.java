@@ -26,6 +26,7 @@ import com.icarexm.zhiquwang.contract.BaseInformationContract;
 import com.icarexm.zhiquwang.custview.CircleImageView;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.BaseInformationPresenter;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.GifSizeFilter;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
@@ -85,11 +86,7 @@ public class BaseInformationActivity extends BaseActivity implements BaseInforma
                     }
                 });
         ButterKnife.bind(this);
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
+         LoadingDialogShow();
         baseInformationPresenter = new BaseInformationPresenter(this);
         baseInformationPresenter.GetBaseInfor(token);
     }
@@ -97,50 +94,57 @@ public class BaseInformationActivity extends BaseActivity implements BaseInforma
     public void  onViewClick(View view){
         switch (view.getId()){
             case R.id.base_information_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.base_information_img_back)) {
+                    finish();
+                }
                 break;
             case R.id.base_information_btn_confirm:
-                String userName = tv_name.getText().toString();
-                if (!userName.equals("")){
-                    baseInformationPresenter.GetUpdateUser(token,userName,url);
-                }else {
-                    ToastUtils.showToast(mContext,"用户名不能为空");
+                if (!ButtonUtils.isFastDoubleClick(R.id.base_information_btn_confirm)) {
+                    String userName = tv_name.getText().toString();
+                    if (!userName.equals("")) {
+                        baseInformationPresenter.GetUpdateUser(token, userName, url);
+                    } else {
+                        ToastUtils.showToast(mContext, "用户名不能为空");
+                    }
                 }
                 break;
             case R.id.base_information_img_avatar:
-                try {
-                Matisse.from(this)
-                        .choose(MimeType.ofImage(), false)
-                        .countable(true)
-                        .capture(true)
-                        .captureStrategy(new CaptureStrategy(true, "com.icarexm.zhiquwang.fileprovider", "test"))
-                        .maxSelectable(1)
-                        .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
-                        .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.dp_110))
-                        .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR)
-                        .thumbnailScale(0.85f)
-                        .imageEngine(new GlideEngine())
-                        .showSingleMediaType(true)
-                        .originalEnable(true)
-                        .maxOriginalSize(10)
-                        .autoHideToolbarOnSingleTap(true)
-                        .forResult(REQUEST_CODE); }catch (Exception e){
-                    //权限申请
-                    ToastUtils.showToast(mContext,"请允许权限");
-                    XXPermissions.with(this)
-                            .request(new OnPermission() {
+                if (!ButtonUtils.isFastDoubleClick(R.id.base_information_img_avatar)) {
+                    try {
+                        Matisse.from(this)
+                                .choose(MimeType.ofImage(), false)
+                                .countable(true)
+                                .capture(true)
+                                .captureStrategy(new CaptureStrategy(true, "com.icarexm.zhiquwang.fileprovider", "test"))
+                                .maxSelectable(1)
+                                .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
+                                .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.dp_110))
+                                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR)
+                                .thumbnailScale(0.85f)
+                                .imageEngine(new GlideEngine())
+                                .showSingleMediaType(true)
+                                .originalEnable(true)
+                                .maxOriginalSize(10)
+                                .autoHideToolbarOnSingleTap(true)
+                                .forResult(REQUEST_CODE);
+                    } catch (Exception e) {
+                        //权限申请
+                        ToastUtils.showToast(mContext, "请允许权限");
+                        XXPermissions.with(this)
+                                .request(new OnPermission() {
 
-                                @Override
-                                public void hasPermission(List<String> granted, boolean isAll) {
+                                             @Override
+                                             public void hasPermission(List<String> granted, boolean isAll) {
 
-                                }
+                                             }
 
-                                @Override
-                                public void noPermission(List<String> denied, boolean quick) {
+                                             @Override
+                                             public void noPermission(List<String> denied, boolean quick) {
 
-                                }
-                            }
-                            );
+                                             }
+                                         }
+                                );
+                    }
                 }
                 break;
 
@@ -189,10 +193,7 @@ public class BaseInformationActivity extends BaseActivity implements BaseInforma
     }
 
     public void UpdateUI(int code, String msg, BaseInforBean.DataBean data){
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+      LoadingDialogClose();
         if (code==1){
             tv_is_auth.setText(data.getIs_auth());
             tv_mobile.setText(data.getMobile());
@@ -221,6 +222,32 @@ public class BaseInformationActivity extends BaseActivity implements BaseInforma
             finish();
         }else {
             ToastUtils.showToast(mContext,msg);
+        }
+
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
         }
 
     }

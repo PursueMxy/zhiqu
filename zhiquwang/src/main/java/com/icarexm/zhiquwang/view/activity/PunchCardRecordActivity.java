@@ -29,6 +29,7 @@ import com.icarexm.zhiquwang.custview.calender.InnerGridView;
 import com.icarexm.zhiquwang.custview.calender.OnSignedSuccess;
 import com.icarexm.zhiquwang.custview.calender.SignDate;
 import com.icarexm.zhiquwang.presenter.PunchCardRecordPresenter;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.DateUtils;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 
@@ -78,11 +79,7 @@ public class PunchCardRecordActivity extends BaseActivity implements PunchCardRe
         week = DateUtils.getWeek(todayDate);
         todayHour = DateUtils.getTodayHour();
         InitUI();
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
+       LoadingDialogShow();
         punchCardRecordPresenter = new PunchCardRecordPresenter(this);
         punchCardRecordPresenter.GetRepairInfo(token);
 
@@ -99,7 +96,9 @@ public class PunchCardRecordActivity extends BaseActivity implements PunchCardRe
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.punch_card_record_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.punch_card_record_img_back)) {
+                    finish();
+                }
                 break;
 
         }
@@ -242,10 +241,7 @@ public class PunchCardRecordActivity extends BaseActivity implements PunchCardRe
     }
 
     public void UpdateUI(int code, String msg, RepairInfoBean.DataBean data){
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+        LoadingDialogClose();
         if (code==1){
             monthList.clear();
             monthList.addAll(data.getMonth());
@@ -272,5 +268,32 @@ public class PunchCardRecordActivity extends BaseActivity implements PunchCardRe
         }else {
             tv_stopTime.setText("打卡时间" + end_time + "（下班打卡）");
         }
+    }
+
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

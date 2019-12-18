@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -21,7 +22,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.VersionBean;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.utils.AppDownloadManager;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.ClearCacheManager;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.SysUtil;
@@ -45,6 +48,8 @@ public class SetActivity extends BaseActivity {
     private int versionCode;
     private String versionName;
     private String version_name;
+    private CustomProgressDialog progressDialog;
+    private SharedPreferences share;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +57,7 @@ public class SetActivity extends BaseActivity {
         setContentView(R.layout.activity_set);
         ButterKnife.bind(this);
         mContext = getApplicationContext();
+        share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         versionCode = getVersionCode();
         versionName = getVersionName();
         tv_versionName.setText(versionName);
@@ -74,45 +80,64 @@ public class SetActivity extends BaseActivity {
     public  void onViewClick(View view){
         switch (view.getId()) {
             case R.id.set_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.set_img_back)) {
+                    finish();
+                }
                 break;
             case R.id.set_rl_clean_cache:
-                ClearCacheManager.clearAllCache(SetActivity.this);
-                ToastUtils.showToast(mContext, "清除成功");
-                tv_clean_cache.setText("0.0B");
+                if (!ButtonUtils.isFastDoubleClick(R.id.set_rl_clean_cache)) {
+                    ClearCacheManager.clearAllCache(SetActivity.this);
+                    ToastUtils.showToast(mContext, "清除成功");
+                    tv_clean_cache.setText("0.0B");
+                }
                 break;
             case R.id.set_rl_change_password:
-                startActivity(new Intent(mContext, ChangePasswordActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.set_rl_change_password)) {
+                    startActivity(new Intent(mContext, ChangePasswordActivity.class));
+                }
                 break;
             case R.id.set_rl_contact_us:
-                startActivity(new Intent(mContext, ContactUsActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.set_rl_contact_us)) {
+                    startActivity(new Intent(mContext, ContactUsActivity.class));
+                }
                 break;
             case R.id.set_rl_feedback:
-                startActivity(new Intent(mContext, FeedBackActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.set_rl_change_password)) {
+                    startActivity(new Intent(mContext, FeedBackActivity.class));
+                }
                 break;
             case R.id.set_rl_about:
-                startActivity(new Intent(mContext, AboutActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.set_rl_about)) {
+                    startActivity(new Intent(mContext, AboutActivity.class));
+                }
                 break;
             case R.id.set_rl_messageset:
-//                Intent intent = new Intent(Settings.ACTION_SETTINGS);
-//                startActivity(intent);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BASE) {
-                    // 进入设置系统应用权限界面
-                    Intent intent = new Intent(Settings.ACTION_SETTINGS);
-                    startActivity(intent);
-                    return;
-                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {// 运行系统在5.x环境使用
-                    // 进入设置系统应用权限界面
-                    Intent intent = new Intent(Settings.ACTION_SETTINGS);
-                    startActivity(intent);
-                    return;
+                if (!ButtonUtils.isFastDoubleClick(R.id.set_rl_messageset)) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BASE) {
+                        // 进入设置系统应用权限界面
+                        Intent intent = new Intent(Settings.ACTION_SETTINGS);
+                        startActivity(intent);
+                        return;
+                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {// 运行系统在5.x环境使用
+                        // 进入设置系统应用权限界面
+                        Intent intent = new Intent(Settings.ACTION_SETTINGS);
+                        startActivity(intent);
+                        return;
+                    }
                 }
                 break;
             case R.id.set_btn_out_login:
-                startActivity(new Intent(mContext,LoginActivity.class));
+                if (!ButtonUtils.isFastDoubleClick(R.id.set_btn_out_login)) {
+                    SharedPreferences.Editor editor = share.edit();
+                    editor.putString("token","");
+                    editor.commit();//提交
+                    startActivity(new Intent(mContext, LoginActivity.class));
+                }
                 break;
             case R.id.set_rl_check_update:
-                InitApkVersion();
+                if (!ButtonUtils.isFastDoubleClick(R.id.set_rl_check_update)) {
+                    InitApkVersion();
+                }
                 break;
         }
     }
@@ -227,6 +252,32 @@ public class SetActivity extends BaseActivity {
             }
         });
         builder.show();
+
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
 
     }
 }

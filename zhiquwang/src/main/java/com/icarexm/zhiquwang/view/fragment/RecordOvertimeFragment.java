@@ -21,6 +21,7 @@ import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.OverTimeBean;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.icarexm.zhiquwang.view.activity.BaseActivity;
@@ -76,24 +77,14 @@ public class RecordOvertimeFragment extends Fragment implements View.OnClickList
     }
 
     private void InitData() {
-        try {
-            if (progressDialog == null){
-                progressDialog = CustomProgressDialog.createDialog(mContext);
-            }
-            progressDialog.show();
-        }catch (Exception e){
-            progressDialog = null;
-        }
+       LoadingDialogShow();
         OkGo.<String>post(RequstUrl.URL.Overtime)
                 .params("token",token)
                 .params("type",TypeOfWork)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        if (progressDialog != null){
-                            progressDialog.dismiss();
-                            progressDialog = null;
-                        }
+                       LoadingDialogClose();
                             OverTimeBean overTimeBean = new GsonBuilder().create().fromJson(response.body(), OverTimeBean.class);
                             if (overTimeBean.getCode()==1){
                                 if (TypeOfWork.equals("1")){
@@ -111,8 +102,12 @@ public class RecordOvertimeFragment extends Fragment implements View.OnClickList
                                     }
                                 }
                             }else if (overTimeBean.getCode() ==10001){
-                                startActivity(new Intent( getActivity(), LoginActivity.class));
-                                getActivity().finish();
+                                try {
+                                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                                    getActivity().finish();
+                                }catch (Exception e){
+
+                                }
                             }
                     }
                 });
@@ -149,52 +144,68 @@ public class RecordOvertimeFragment extends Fragment implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.fm_record_overtime_tv_set_basepay:
-                Intent intent4 = new Intent(mContext, BasePayActivity.class);
-                intent4.putExtra("Base_Type",TypeOfWork);
-                startActivity(intent4);
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_record_overtime_tv_set_basepay)) {
+                    Intent intent4 = new Intent(mContext, BasePayActivity.class);
+                    intent4.putExtra("Base_Type", TypeOfWork);
+                    startActivity(intent4);
+                }
                 break;
             case R.id.fm_record_overtime_two_tv_set_basepay:
-                Intent intent5 = new Intent(mContext, BasePayActivity.class);
-                intent5.putExtra("Base_Type",TypeOfWork);
-                startActivity(intent5);
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_record_overtime_two_tv_set_basepay)) {
+                    Intent intent5 = new Intent(mContext, BasePayActivity.class);
+                    intent5.putExtra("Base_Type", TypeOfWork);
+                    startActivity(intent5);
+                }
                 break;
             case R.id.fm_record_overtime_overtime_statistics:
-                Intent intent = new Intent(mContext, OvertimeStatisticsActivity.class);
-                intent.putExtra("TypeOfWork",TypeOfWork);
-                startActivity(intent);
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_record_overtime_overtime_statistics)) {
+                    Intent intent = new Intent(mContext, OvertimeStatisticsActivity.class);
+                    intent.putExtra("TypeOfWork", TypeOfWork);
+                    startActivity(intent);
+                }
                 break;
             case R.id.fm_record_overtime_overtime_approval:
-                Intent intent1 = new Intent(mContext, OvertimeApprovalActivity.class);
-                intent1.putExtra("TypeOfWork",TypeOfWork);
-                startActivity(intent1);
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_record_overtime_overtime_approval)) {
+                    Intent intent1 = new Intent(mContext, OvertimeApprovalActivity.class);
+                    intent1.putExtra("TypeOfWork", TypeOfWork);
+                    startActivity(intent1);
+                }
                 break;
             case R.id.fm_record_overtime_overtime_two_tv_approval:
-                Intent intent2 = new Intent(mContext, OvertimeApprovalActivity.class);
-                intent2.putExtra("TypeOfWork",TypeOfWork);
-                startActivity(intent2);
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_record_overtime_overtime_two_tv_approval)) {
+                    Intent intent2 = new Intent(mContext, OvertimeApprovalActivity.class);
+                    intent2.putExtra("TypeOfWork", TypeOfWork);
+                    startActivity(intent2);
+                }
                 break;
             case R.id.fm_record_overtime_overtime_two_tv_statistics:
-                Intent intent3 = new Intent(mContext, OvertimeStatisticsActivity.class);
-                intent3.putExtra("TypeOfWork",TypeOfWork);
-                startActivity(intent3);
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_record_overtime_overtime_two_tv_statistics)) {
+                    Intent intent3 = new Intent(mContext, OvertimeStatisticsActivity.class);
+                    intent3.putExtra("TypeOfWork", TypeOfWork);
+                    startActivity(intent3);
+                }
                 break;
             case R.id.fm_record_overtime_two_tv_title:
-                TypeOfWork="1";
-                rl_typeTwo.setVisibility(View.GONE);
-                rl_typeOne.setVisibility(View.VISIBLE);
-                SharedPreferences.Editor editor = share.edit();
-                editor.putString("TypeOfWork",TypeOfWork);
-                editor.commit();//提交
-                InitData();
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_record_overtime_two_tv_title)) {
+                    TypeOfWork = "1";
+                    rl_typeTwo.setVisibility(View.GONE);
+                    rl_typeOne.setVisibility(View.VISIBLE);
+                    SharedPreferences.Editor editor = share.edit();
+                    editor.putString("TypeOfWork", TypeOfWork);
+                    editor.commit();//提交
+                    InitData();
+                }
                 break;
             case R.id.fm_record_overtime_tv_title:
-                TypeOfWork="2";
-                rl_typeOne.setVisibility(View.GONE);
-                rl_typeTwo.setVisibility(View.VISIBLE);
-                SharedPreferences.Editor editor1 = share.edit();
-                editor1.putString("TypeOfWork",TypeOfWork);
-                editor1.commit();//提交
-                InitData();
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_record_overtime_tv_title)) {
+                    TypeOfWork = "2";
+                    rl_typeOne.setVisibility(View.GONE);
+                    rl_typeTwo.setVisibility(View.VISIBLE);
+                    SharedPreferences.Editor editor1 = share.edit();
+                    editor1.putString("TypeOfWork", TypeOfWork);
+                    editor1.commit();//提交
+                    InitData();
+                }
                 break;
         }
     }
@@ -203,5 +214,29 @@ public class RecordOvertimeFragment extends Fragment implements View.OnClickList
         InitData();
     }
 
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
 
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(mContext);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
+    }
 }

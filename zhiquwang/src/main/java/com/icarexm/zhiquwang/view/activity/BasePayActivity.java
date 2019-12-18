@@ -27,6 +27,7 @@ import com.icarexm.zhiquwang.contract.BasePayContract;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.NoScrollListView;
 import com.icarexm.zhiquwang.presenter.BasePayPresenter;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 
 import org.litepal.LitePal;
@@ -70,11 +71,7 @@ public class BasePayActivity extends BaseActivity implements BasePayContract.Vie
         Intent intent = getIntent();
         Base_Type = intent.getStringExtra("Base_Type");
         InitUI();
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
+       LoadingDialogShow();
         basePayPresenter = new BasePayPresenter(this);
         basePayPresenter.GetOvertimeInfo(token,Base_Type);
     }
@@ -94,22 +91,26 @@ public class BasePayActivity extends BaseActivity implements BasePayContract.Vie
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.base_pay_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.base_pay_img_back)) {
+                    finish();
+                }
                 break;
             case R.id.base_pay_btn_confirm:
-                pay = edt_pay.getText().toString();
-                all.clear();
-                addSubsidyList.clear();
-                all = LitePal.findAll(LiteSubsidyBean.class);
-                for (int a=0;a< all.size();a++){
-                    Log.e("生活会sdfd",all.get(a).getPrice()+"和"+all.get(a).getSubsidy_name()+"加"+all.get(a).getSubsidy_id());
-                 addSubsidyList.add(new SubsidyBean(all.get(a).getSubsidy_id(),all.get(a).getSubsidy_name(),Integer.parseInt(all.get(a).getPrice())));
-                 }
-                String Subsidy = new GsonBuilder().create().toJson(addSubsidyList);
-                if (!pay.equals("")){
-                    basePayPresenter.GetsetOvertime(token,Base_Type, pay,Subsidy);
-                }else {
-                    ToastUtils.showToast(mContext,"底薪不能为空");
+                if (!ButtonUtils.isFastDoubleClick(R.id.base_pay_btn_confirm)) {
+                    pay = edt_pay.getText().toString();
+                    all.clear();
+                    addSubsidyList.clear();
+                    all = LitePal.findAll(LiteSubsidyBean.class);
+                    for (int a = 0; a < all.size(); a++) {
+                        Log.e("生活会sdfd", all.get(a).getPrice() + "和" + all.get(a).getSubsidy_name() + "加" + all.get(a).getSubsidy_id());
+                        addSubsidyList.add(new SubsidyBean(all.get(a).getSubsidy_id(), all.get(a).getSubsidy_name(), Integer.parseInt(all.get(a).getPrice())));
+                    }
+                    String Subsidy = new GsonBuilder().create().toJson(addSubsidyList);
+                    if (!pay.equals("")) {
+                        basePayPresenter.GetsetOvertime(token, Base_Type, pay, Subsidy);
+                    } else {
+                        ToastUtils.showToast(mContext, "底薪不能为空");
+                    }
                 }
                 break;
         }
@@ -129,10 +130,7 @@ public class BasePayActivity extends BaseActivity implements BasePayContract.Vie
     }
 
     public void UpdateUI(int code, String msg, BasePayBean.DataBean data){
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+     LoadingDialogClose();
         if (code==1){
             subsidy_list = data.getSubsidy();
             LitePal.deleteAll(LiteSubsidyBean.class);
@@ -223,6 +221,32 @@ public class BasePayActivity extends BaseActivity implements BasePayContract.Vie
             }
 
             return inflate;
+        }
+
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
         }
 
     }

@@ -15,6 +15,7 @@ import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.contract.BusinessCooperationContract;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.BusinessCooperationPresenter;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 
 import butterknife.BindView;
@@ -44,11 +45,7 @@ public class BusinessCooperationActivity extends BaseActivity implements Busines
         SharedPreferences share  =getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
         ButterKnife.bind(this);
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
+        LoadingDialogShow();
         businessCooperationPresenter = new BusinessCooperationPresenter(this);
         businessCooperationPresenter.GetCooperation(token);
     }
@@ -57,25 +54,29 @@ public class BusinessCooperationActivity extends BaseActivity implements Busines
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.business_cooperation_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.business_cooperation_img_back)) {
+                    finish();
+                }
                 break;
             case R.id.business_cooperation_btn_confirm:
-                String company = edt_company.getText().toString();
-                String mobile = edt_mobile.getText().toString();
-                String need= edt_need.getText().toString();
-                if (!company.equals("")){
-                    if (!mobile.equals("")){
-                        if (!need.equals("")){
-                           businessCooperationPresenter.GetDoCooperation(token,company,mobile,need);
-                        }else {
-                            ToastUtils.showToast(mContext,"合作需求不能为空");
-                        }
+                if (!ButtonUtils.isFastDoubleClick(R.id.business_cooperation_btn_confirm)) {
+                    String company = edt_company.getText().toString();
+                    String mobile = edt_mobile.getText().toString();
+                    String need = edt_need.getText().toString();
+                    if (!company.equals("")) {
+                        if (!mobile.equals("")) {
+                            if (!need.equals("")) {
+                                businessCooperationPresenter.GetDoCooperation(token, company, mobile, need);
+                            } else {
+                                ToastUtils.showToast(mContext, "合作需求不能为空");
+                            }
 
-                    }else {
-                        ToastUtils.showToast(mContext,"联系人不能为空");
+                        } else {
+                            ToastUtils.showToast(mContext, "联系人不能为空");
+                        }
+                    } else {
+                        ToastUtils.showToast(mContext, "公司名称不能为空");
                     }
-                }else {
-                    ToastUtils.showToast(mContext,"公司名称不能为空");
                 }
                 break;
 
@@ -96,10 +97,7 @@ public class BusinessCooperationActivity extends BaseActivity implements Busines
     }
 
     public void UpdateUI(int code,String msg,String mobile){
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+       LoadingDialogClose();
         if (code==1) {
             tv_mobile.setText(mobile);
         }else if (code ==10001){
@@ -109,10 +107,7 @@ public class BusinessCooperationActivity extends BaseActivity implements Busines
         }
     }
     public void UpdateUI(int code,String msg){
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+       LoadingDialogClose();
         if (code==1){
             ToastUtils.showToast(mContext,msg);
             finish();
@@ -123,5 +118,31 @@ public class BusinessCooperationActivity extends BaseActivity implements Busines
         }else {
             ToastUtils.showToast(mContext,msg);
         }
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

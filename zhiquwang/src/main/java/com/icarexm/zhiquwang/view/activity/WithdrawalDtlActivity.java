@@ -18,6 +18,7 @@ import com.icarexm.zhiquwang.bean.SeeFundBean;
 import com.icarexm.zhiquwang.contract.WithdrawalDtlContract;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.WithdrawalDtlPresenter;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.zhouyou.recyclerview.XRecyclerView;
 
@@ -48,13 +49,9 @@ public class WithdrawalDtlActivity extends BaseActivity implements WithdrawalDtl
         token = share.getString("token", "");
         mContext = getApplicationContext();
         ButterKnife.bind(this);
-        InitUI();
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
         withdrawalDtlPresenter = new WithdrawalDtlPresenter(this);
+        InitUI();
+        LoadingDialogShow();
         withdrawalDtlPresenter.GetSeeFund(token,"1");
 
     }
@@ -62,7 +59,9 @@ public class WithdrawalDtlActivity extends BaseActivity implements WithdrawalDtl
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.withdrawal_dtl_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.withdrawal_dtl_img_back)) {
+                    finish();
+                }
                 break;
         }
     }
@@ -85,7 +84,6 @@ public class WithdrawalDtlActivity extends BaseActivity implements WithdrawalDtl
             @Override
             public void onRefresh() {
                 //加载更多
-                mRecyclerView.loadMoreComplete();//加载动画完成
                 mRecyclerView.refreshComplete();//刷新动画完成
             }
 
@@ -93,7 +91,7 @@ public class WithdrawalDtlActivity extends BaseActivity implements WithdrawalDtl
             public void onLoadMore() {
                 //加载更多
                 mRecyclerView.loadMoreComplete();//加载动画完成
-                mRecyclerView.refreshComplete();//刷新动画完成
+                mRecyclerView.setNoMore(true);
             }
         });
         mRecyclerView.setAdapter(commissionAdapter);
@@ -106,10 +104,7 @@ public class WithdrawalDtlActivity extends BaseActivity implements WithdrawalDtl
     }
 
     public void Update(int code, String msg, SeeFundBean.DataBeanX data){
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+        LoadingDialogClose();
         if (code==1) {
             SeeFundBean.DataBeanX.ListBean list = data.getList();
             dataList = list.getData();
@@ -122,5 +117,31 @@ public class WithdrawalDtlActivity extends BaseActivity implements WithdrawalDtl
             startActivity(new Intent(mContext,LoginActivity.class));
             finish();
         }
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

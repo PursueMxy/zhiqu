@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.PublicResultBean;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.lzy.okgo.OkGo;
@@ -34,6 +36,7 @@ public class FeedBackActivity extends BaseActivity {
     private Context mContext;
     private SharedPreferences share;
     private String token;
+    private CustomProgressDialog progressDialog;
 
 
     @Override
@@ -68,31 +71,35 @@ public class FeedBackActivity extends BaseActivity {
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.feedback_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.feedback_img_back)) {
+                    finish();
+                }
                 break;
             case R.id.feedback_btn_confirm:
-                String content = edt_content.getText().toString();
-                if (!content.equals("")){
-                    OkGo.<String>post(RequstUrl.URL.SbmitIdea)
-                            .params("token", token)
-                            .params("content",content)
-                            .execute(new StringCallback() {
-                                @Override
-                                public void onSuccess(Response<String> response) {
-                                    PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
-                                    if (resultBean.getCode()==1){
-                                        finish();
-                                    }else if (resultBean.getCode() ==10001){
-                                        ToastUtils.showToast(mContext,resultBean.getMsg());
-                                        startActivity(new Intent(mContext,LoginActivity.class));
-                                        finish();
-                                    }else {
-                                        ToastUtils.showToast(mContext,resultBean.getMsg());
+                if (!ButtonUtils.isFastDoubleClick(R.id.feedback_btn_confirm)) {
+                    String content = edt_content.getText().toString();
+                    if (!content.equals("")) {
+                        OkGo.<String>post(RequstUrl.URL.SbmitIdea)
+                                .params("token", token)
+                                .params("content", content)
+                                .execute(new StringCallback() {
+                                    @Override
+                                    public void onSuccess(Response<String> response) {
+                                        PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
+                                        if (resultBean.getCode() == 1) {
+                                            finish();
+                                        } else if (resultBean.getCode() == 10001) {
+                                            ToastUtils.showToast(mContext, resultBean.getMsg());
+                                            startActivity(new Intent(mContext, LoginActivity.class));
+                                            finish();
+                                        } else {
+                                            ToastUtils.showToast(mContext, resultBean.getMsg());
+                                        }
                                     }
-                                }
-                            });
-                }else {
-                    ToastUtils.showToast(mContext,"请输入反馈内容");
+                                });
+                    } else {
+                        ToastUtils.showToast(mContext, "请输入反馈内容");
+                    }
                 }
                 break;
 
@@ -105,5 +112,31 @@ public class FeedBackActivity extends BaseActivity {
             finish();
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

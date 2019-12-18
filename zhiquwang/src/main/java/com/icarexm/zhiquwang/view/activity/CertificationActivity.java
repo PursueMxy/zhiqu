@@ -3,10 +3,12 @@ package com.icarexm.zhiquwang.view.activity;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,6 +31,7 @@ import com.icarexm.zhiquwang.bean.UploadImgBean;
 import com.icarexm.zhiquwang.contract.CertificationContract;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.CertificationPresenter;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.GifSizeFilter;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
@@ -103,11 +106,7 @@ public class CertificationActivity extends BaseActivity implements Certification
                 });
         SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
+        LoadingDialogShow();
         certificationPresenter = new CertificationPresenter(this);
         certificationPresenter.GetCertification(token);
     }
@@ -118,104 +117,116 @@ public class CertificationActivity extends BaseActivity implements Certification
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.certification_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.certification_img_back)) {
+                    finish();
+                }
                 break;
             case R.id.certification_btn_submit:
-                String car_number= edt_car_number.getText().toString();
-                String username = edt_username.getText().toString();
-                if (!username.equals("")){
-                    if (!car_number.equals("")) {
-                        if(!frondurl.equals("")){
-                          if (!reverseurl.equals("")){
-                              certificationPresenter.GetdoAutoNym(token,username,frondurl,reverseurl,car_number);
-                          }else {
-                              ToastUtils.showToast(mContext,"身份证反面不能为空");
-                          }
-                        }else {
-                            ToastUtils.showToast(mContext,"身份证正面不能为空");
+                if (!ButtonUtils.isFastDoubleClick(R.id.certification_btn_submit)) {
+                    String car_number = edt_car_number.getText().toString();
+                    String username = edt_username.getText().toString();
+                    if (!username.equals("")) {
+                        if (!car_number.equals("")) {
+                            if (!frondurl.equals("")) {
+                                if (!reverseurl.equals("")) {
+                                    certificationPresenter.GetdoAutoNym(token, username, frondurl, reverseurl, car_number);
+                                } else {
+                                    ToastUtils.showToast(mContext, "身份证反面不能为空");
+                                }
+                            } else {
+                                ToastUtils.showToast(mContext, "身份证正面不能为空");
+                            }
+                        } else {
+                            ToastUtils.showToast(mContext, "身份证号不能为空");
                         }
                     } else {
-                        ToastUtils.showToast(mContext, "身份证号不能为空");
+                        ToastUtils.showToast(mContext, "姓名不能为空");
                     }
-                }else {
-                    ToastUtils.showToast(mContext, "姓名不能为空");
                 }
                 break;
             case R.id.certification_img_card_frond:
-                try {
-                Matisse.from(this)
-                        .choose(MimeType.ofImage(), false)
-                        .countable(true)
-                        .capture(true)
-                        .captureStrategy(new CaptureStrategy(true, "com.icarexm.zhiquwang.fileprovider", "test"))
-                        .maxSelectable(1)
-                        .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
-                        .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.dp_110))
-                        .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-                        .thumbnailScale(0.85f)
-                        .imageEngine(new GlideEngine())
-                        .showSingleMediaType(true)
-                        .originalEnable(true)
-                        .maxOriginalSize(10)
-                        .autoHideToolbarOnSingleTap(true)
-                        .forResult(FRONT_CODE);
-                }catch (Exception e){
-                    //权限申请
-                    ToastUtils.showToast(mContext,"请允许权限");
-                    XXPermissions.with(this)
-                            .request(new OnPermission() {
+                if (!ButtonUtils.isFastDoubleClick(R.id.certification_img_card_frond)) {
+                    try {
+                        Matisse.from(this)
+                                .choose(MimeType.ofImage(), false)
+                                .countable(true)
+                                .capture(true)
+                                .captureStrategy(new CaptureStrategy(true, "com.icarexm.zhiquwang.fileprovider", "test"))
+                                .maxSelectable(1)
+                                .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
+                                .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.dp_110))
+                                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+                                .thumbnailScale(0.85f)
+                                .imageEngine(new GlideEngine())
+                                .showSingleMediaType(true)
+                                .originalEnable(true)
+                                .maxOriginalSize(10)
+                                .autoHideToolbarOnSingleTap(true)
+                                .forResult(FRONT_CODE);
+                    } catch (Exception e) {
+                        //权限申请
+                        ToastUtils.showToast(mContext, "请允许权限");
+                        XXPermissions.with(this)
+                                .request(new OnPermission() {
 
-                                @Override
-                                public void hasPermission(List<String> granted, boolean isAll) {
+                                    @Override
+                                    public void hasPermission(List<String> granted, boolean isAll) {
 
-                                }
+                                    }
 
-                                @Override
-                                public void noPermission(List<String> denied, boolean quick) {
+                                    @Override
+                                    public void noPermission(List<String> denied, boolean quick) {
 
-                                }
-                            });
+                                    }
+                                });
+                    }
                 }
                 break;
             case R.id.certification_img_card_reverse:
-                try {
-                Matisse.from(this)
-                        .choose(MimeType.ofImage(), false)
-                        .countable(true)
-                        .capture(true)
-                        .captureStrategy(new CaptureStrategy(true, "com.icarexm.zhiquwang.fileprovider", "test"))
-                        .maxSelectable(1)
-                        .addFilter(new GifSizeFilter(320, 320, 5* Filter.K * Filter.K))
-                        .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.dp_110))
-                        .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-                        .thumbnailScale(0.85f)
-                        .imageEngine(new GlideEngine())
-                        .showSingleMediaType(true)
-                        .originalEnable(true)
-                        .maxOriginalSize(10)
-                        .autoHideToolbarOnSingleTap(true)
-                        .forResult(REVERSE_CODE);
-                }catch (Exception e){
-                    //权限申请
-                    ToastUtils.showToast(mContext,"请允许权限");
-                    XXPermissions.with(this)
-                            .request(new OnPermission() {
+                if (!ButtonUtils.isFastDoubleClick(R.id.certification_img_card_reverse)) {
+                    try {
+                        Matisse.from(this)
+                                .choose(MimeType.ofImage(), false)
+                                .countable(true)
+                                .capture(true)
+                                .captureStrategy(new CaptureStrategy(true, "com.icarexm.zhiquwang.fileprovider", "test"))
+                                .maxSelectable(1)
+                                .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
+                                .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.dp_110))
+                                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+                                .thumbnailScale(0.85f)
+                                .imageEngine(new GlideEngine())
+                                .showSingleMediaType(true)
+                                .originalEnable(true)
+                                .maxOriginalSize(10)
+                                .autoHideToolbarOnSingleTap(true)
+                                .forResult(REVERSE_CODE);
+                    } catch (Exception e) {
+                        //权限申请
+                        ToastUtils.showToast(mContext, "请允许权限");
+                        XXPermissions.with(this)
+                                .request(new OnPermission() {
 
-                                @Override
-                                public void hasPermission(List<String> granted, boolean isAll) {
+                                    @Override
+                                    public void hasPermission(List<String> granted, boolean isAll) {
 
-                                }
+                                    }
 
-                                @Override
-                                public void noPermission(List<String> denied, boolean quick) {
+                                    @Override
+                                    public void noPermission(List<String> denied, boolean quick) {
 
-                                }
-                            });
+                                    }
+                                });
+                    }
                 }
                 break;
             case R.id.certification_img_dlt_front:
+                frondurl="";
+                Glide.with(mContext).load(imageTranslateUri(R.mipmap.ic_img_add)).into(img_card_frond);
                 break;
             case R.id.certification_img_dlt_reverse:
+                reverseurl="";
+                Glide.with(mContext).load(imageTranslateUri(R.mipmap.ic_img_add)).into(img_card_reverse);
                 break;
 
         }
@@ -277,10 +288,7 @@ public class CertificationActivity extends BaseActivity implements Certification
     }
 
     public void UpdateUI(int code, String msg, CertificationBean.DataBean dataBean){
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+       LoadingDialogClose();
         if (code==1){
             int audit = dataBean.getAudit();
             if (audit==0){
@@ -336,10 +344,7 @@ public class CertificationActivity extends BaseActivity implements Certification
     }
 
     public void UpdateUI(int code,String msg){
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+       LoadingDialogClose();
      if (code==1){
        finish();
          ToastUtils.showToast(mContext,msg);
@@ -350,5 +355,42 @@ public class CertificationActivity extends BaseActivity implements Certification
      }else {
          ToastUtils.showToast(mContext,msg);
      }
+    }
+
+    private String imageTranslateUri(int resId) {
+
+        Resources r = getResources();
+        Uri uri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"
+                + r.getResourcePackageName(resId) + "/"
+                + r.getResourceTypeName(resId) + "/"
+                + r.getResourceEntryName(resId));
+
+        return uri.toString();
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

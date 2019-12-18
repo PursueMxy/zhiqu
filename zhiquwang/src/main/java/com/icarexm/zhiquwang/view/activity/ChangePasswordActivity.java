@@ -12,7 +12,9 @@ import android.widget.EditText;
 
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.contract.ChangePasswordContract;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.ChangePasswordPresenter;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 
 import butterknife.BindView;
@@ -32,6 +34,7 @@ public class ChangePasswordActivity extends BaseActivity implements ChangePasswo
     private ChangePasswordPresenter changePasswordPresenter;
     private String newpassword;
     private SharedPreferences share;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,24 +51,28 @@ public class ChangePasswordActivity extends BaseActivity implements ChangePasswo
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.change_psw_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.change_psw_img_back)) {
+                    finish();
+                }
                 break;
             case R.id.change_psw_btn_confirm:
-                String password= edt_password.getText().toString();
-                newpassword = edt_newpassword.getText().toString();
-                String repassword= edt_repassword.getText().toString();
-                if (!password.equals("")){
-                    if (!newpassword.equals("")){
-                       if (repassword.equals(newpassword)){
-                       changePasswordPresenter.GetChangePassword(token,password, newpassword,repassword);
-                        }else {
-                           ToastUtils.showToast(mContext,"两次密码输入不一致");
-                       }
-                    }else {
-                        ToastUtils.showToast(mContext,"新密码不能为空");
+                if (!ButtonUtils.isFastDoubleClick(R.id.change_psw_btn_confirm)) {
+                    String password = edt_password.getText().toString();
+                    newpassword = edt_newpassword.getText().toString();
+                    String repassword = edt_repassword.getText().toString();
+                    if (!password.equals("")) {
+                        if (!newpassword.equals("")) {
+                            if (repassword.equals(newpassword)) {
+                                changePasswordPresenter.GetChangePassword(token, password, newpassword, repassword);
+                            } else {
+                                ToastUtils.showToast(mContext, "两次密码输入不一致");
+                            }
+                        } else {
+                            ToastUtils.showToast(mContext, "新密码不能为空");
+                        }
+                    } else {
+                        ToastUtils.showToast(mContext, "密码不能为空");
                     }
-                }else {
-                    ToastUtils.showToast(mContext,"密码不能为空");
                 }
                 break;
 
@@ -97,5 +104,31 @@ public class ChangePasswordActivity extends BaseActivity implements ChangePasswo
             startActivity(new Intent(mContext,LoginActivity.class));
             finish();
         }
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

@@ -18,6 +18,7 @@ import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.MyBankBean;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.NoScrollListView;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.lzy.okgo.OkGo;
@@ -52,11 +53,7 @@ public class BankListActivity extends BaseActivity {
         SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
         ButterKnife.bind(this);
-        //加载页添加
-        if (progressDialog == null){
-            progressDialog = CustomProgressDialog.createDialog(this);
-        }
-        progressDialog.show();
+        LoadingDialogShow();
         InitData();
         InitUI();
     }
@@ -87,10 +84,7 @@ public class BankListActivity extends BaseActivity {
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        if (progressDialog != null){
-                            progressDialog.dismiss();
-                            progressDialog = null;
-                        }
+                       LoadingDialogClose();
                         MyBankBean myBankBean = new GsonBuilder().create().fromJson(response.body(), MyBankBean.class);
                         if (myBankBean.getCode()==1){
                             bankList = myBankBean.getData();
@@ -108,12 +102,16 @@ public class BankListActivity extends BaseActivity {
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.bank_list_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.bank_list_img_back)) {
+                    finish();
+                }
                 break;
             case R.id.bank_list_rl_add:
-                Intent intent = new Intent(mContext, AddBankCardActivity.class);
-                intent.putExtra("type","20001");
-                startActivityForResult(intent,20001);
+                if (!ButtonUtils.isFastDoubleClick(R.id.bank_list_rl_add)) {
+                    Intent intent = new Intent(mContext, AddBankCardActivity.class);
+                    intent.putExtra("type", "20001");
+                    startActivityForResult(intent, 20001);
+                }
                 break;
         }
     }
@@ -151,5 +149,31 @@ public class BankListActivity extends BaseActivity {
         if (requestCode==ADDBANK&&resultCode==ADDBANK){
             InitData();
         }
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

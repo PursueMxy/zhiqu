@@ -10,9 +10,10 @@
        android:layout_width="match_parent"
        android:layout_height="@dimen/dp_80">
       <ImageView
+          android:padding="@dimen/dp_10"
           android:id="@+id/recruit_img_back"
-          android:layout_marginLeft="@dimen/dp_15"
-          android:layout_marginBottom="@dimen/dp_18"
+          android:layout_marginLeft="@dimen/dp_5"
+          android:layout_marginBottom="@dimen/dp_8"
           android:layout_alignParentBottom="true"
           android:src="@mipmap/ic_left_white"
           android:layout_width="wrap_content"

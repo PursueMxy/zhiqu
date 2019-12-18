@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import com.icarexm.zhiquwang.MainActivity;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.GuidePageAdapter;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.view.fragment.GuideOneFragment;
 import com.icarexm.zhiquwang.view.fragment.GuideThreeFragment;
 import com.icarexm.zhiquwang.view.fragment.GuideTwoFragment;
@@ -31,6 +32,7 @@ public class GuidePageActivity extends BaseActivity implements ViewPager.OnPageC
     private ImageView[] dots;
     private int currentIndex;
     private SharedPreferences share;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +123,32 @@ public class GuidePageActivity extends BaseActivity implements ViewPager.OnPageC
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
 
     }
 }

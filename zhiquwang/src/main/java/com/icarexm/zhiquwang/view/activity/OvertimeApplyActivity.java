@@ -7,11 +7,15 @@ import android.view.KeyEvent;
 import android.view.View;
 
 import com.icarexm.zhiquwang.R;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class OvertimeApplyActivity extends BaseActivity {
+
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +28,9 @@ public class OvertimeApplyActivity extends BaseActivity {
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.overtime_apply_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.overtime_apply_img_back)) {
+                    finish();
+                }
                 break;
 
         }
@@ -36,5 +42,31 @@ public class OvertimeApplyActivity extends BaseActivity {
             finish();
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }

@@ -27,7 +27,9 @@ import com.icarexm.zhiquwang.bean.RegionBean;
 import com.icarexm.zhiquwang.bean.UploadImgBean;
 import com.icarexm.zhiquwang.custview.BottomDialog;
 import com.icarexm.zhiquwang.custview.CircleImageView;
+import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.mywheel.MyWheelView;
+import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.GifSizeFilter;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
@@ -67,7 +69,7 @@ public class UpdateBaseInforActivity extends BaseActivity {
      TextView tv_nickname;
      @BindView(R.id.update_base_tv_mobile)
      TextView tv_mobile;
-     @BindView(R.id.base_information_img_avatar)
+     @BindView(R.id.update_base_img_avatar)
     CircleImageView img_avatar;
     private Context mContext;
     private static final String[] AGEGROUP = new String[]{"博士","硕士","本科","大专", "高中","中专","初中及以下"};
@@ -97,6 +99,7 @@ public class UpdateBaseInforActivity extends BaseActivity {
     private String education;
     private String mobile;
     private static final int REQUEST_CODE=1001;
+    private CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -213,87 +216,102 @@ public class UpdateBaseInforActivity extends BaseActivity {
 
     @OnClick({R.id.update_base_infor_img_back,R.id.update_base_infor_rl_education,R.id.update_base_rl_time,
             R.id.update_base_rl_sex,R.id.update_base_rl_address,R.id.update_base_btn_confirm,
-        R.id.base_information_img_avatar})
+        R.id.update_base_img_avatar})
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.update_base_infor_img_back:
-                finish();
+                if (!ButtonUtils.isFastDoubleClick(R.id.update_base_infor_img_back)) {
+                    finish();
+                }
                 break;
             case R.id.update_base_infor_rl_education:
-                EducationDialog();
+                if (!ButtonUtils.isFastDoubleClick(R.id.update_base_infor_rl_education)) {
+                    EducationDialog();
+                }
                 break;
             case R.id.update_base_rl_time:
-                BirthDateDialog();
+                if (!ButtonUtils.isFastDoubleClick(R.id.set_reminder_img_back)) {
+                    BirthDateDialog();
+                }
                 break;
             case R.id.update_base_rl_sex:
-                SexDialog();
+                if (!ButtonUtils.isFastDoubleClick(R.id.update_base_rl_sex)) {
+                    SexDialog();
+                }
                 break;
             case R.id.update_base_rl_address:
-               AddressDialog();
+                if (!ButtonUtils.isFastDoubleClick(R.id.update_base_rl_address)) {
+                    AddressDialog();
+                }
                 break;
-            case R.id.base_information_img_avatar:
-                try{
-                Matisse.from(this)
-                        .choose(MimeType.ofImage(), false)
-                        .countable(true)
-                        .capture(true)
-                        .captureStrategy(new CaptureStrategy(true, "com.icarexm.zhiquwang.fileprovider", "test"))
-                        .maxSelectable(1)
-                        .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
-                        .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.dp_110))
-                        .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR)
-                        .thumbnailScale(0.85f)
-                        .imageEngine(new GlideEngine())
-                        .showSingleMediaType(true)
-                        .originalEnable(true)
-                        .maxOriginalSize(10)
-                        .autoHideToolbarOnSingleTap(true)
-                        .forResult(REQUEST_CODE); }catch (Exception e){
-                    //权限申请
-                    ToastUtils.showToast(mContext,"请允许权限");
-                    XXPermissions.with(this)
-                            .request(new OnPermission() {
+            case R.id.update_base_img_avatar:
+                if (!ButtonUtils.isFastDoubleClick(R.id.update_base_img_avatar)) {
+                    try {
+                        Matisse.from(this)
+                                .choose(MimeType.ofImage(), false)
+                                .countable(true)
+                                .capture(true)
+                                .captureStrategy(new CaptureStrategy(true, "com.icarexm.zhiquwang.fileprovider", "test"))
+                                .maxSelectable(1)
+                                .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
+                                .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.dp_110))
+                                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR)
+                                .thumbnailScale(0.85f)
+                                .imageEngine(new GlideEngine())
+                                .showSingleMediaType(true)
+                                .originalEnable(true)
+                                .maxOriginalSize(10)
+                                .autoHideToolbarOnSingleTap(true)
+                                .forResult(REQUEST_CODE);
+                    } catch (Exception e) {
+                        //权限申请
+                        ToastUtils.showToast(mContext, "请允许权限");
+                        XXPermissions.with(this)
+                                .request(new OnPermission() {
 
-                                @Override
-                                public void hasPermission(List<String> granted, boolean isAll) {
+                                    @Override
+                                    public void hasPermission(List<String> granted, boolean isAll) {
 
-                                }
+                                    }
 
-                                @Override
-                                public void noPermission(List<String> denied, boolean quick) {
+                                    @Override
+                                    public void noPermission(List<String> denied, boolean quick) {
 
-                                }
-                            });
+                                    }
+                                });
+                    }
                 }
                 break;
             case R.id.update_base_btn_confirm:
-                String sex= tv_sex.getText().toString();
-                String address = tv_address.getText().toString();
-                String birth_date= tv_birth_date.getText().toString();
-                String education = tv_education.getText().toString();
-                if (!address.equals("")){
-                    if (!sex.equals("")){
-                       if (!birth_date.equals("")){
-                           if (!education.equals("")){
-                               Intent intent = new Intent(mContext, MyResumeActivity.class);
-                               intent.putExtra("sex",sex);
-                               intent.putExtra("address",address);
-                               intent.putExtra("birth_date",birth_date);
-                               intent.putExtra("education",education);
-                               intent.putExtra("avatar",avatar);
-                               setResult(BASEINFOCODE,intent);
-                               finish();
-                           }else {
-                               ToastUtils.showToast(mContext,"学历不能为空");
-                           }
-                       }else {
-                           ToastUtils.showToast(mContext,"出生年月不能为空");
-                       }
-                    }else {
-                        ToastUtils.showToast(mContext,"性别不能为空");
+                if (!ButtonUtils.isFastDoubleClick(R.id.update_base_btn_confirm)) {
+                    String sex = tv_sex.getText().toString();
+                    String address = tv_address.getText().toString();
+                    String birth_date = tv_birth_date.getText().toString();
+                    String education = tv_education.getText().toString();
+                    if (!address.equals("")) {
+                        if (!sex.equals("")) {
+                            if (!birth_date.equals("")) {
+                                if (!education.equals("")) {
+                                    Intent intent = new Intent(mContext, MyResumeActivity.class);
+                                    intent.putExtra("sex", sex);
+                                    intent.putExtra("address", address);
+                                    intent.putExtra("birth_date", birth_date);
+                                    intent.putExtra("education", education);
+                                    intent.putExtra("avatar", avatar);
+                                    setResult(BASEINFOCODE, intent);
+                                    finish();
+                                } else {
+                                    ToastUtils.showToast(mContext, "学历不能为空");
+                                }
+                            } else {
+                                ToastUtils.showToast(mContext, "出生年月不能为空");
+                            }
+                        } else {
+                            ToastUtils.showToast(mContext, "性别不能为空");
+                        }
+                    } else {
+                        ToastUtils.showToast(mContext, "地址不能为空");
                     }
-                }else {
-                    ToastUtils.showToast(mContext,"地址不能为空");
                 }
                 break;
         }
@@ -315,6 +333,7 @@ public class UpdateBaseInforActivity extends BaseActivity {
                 RegionBean regionBean = jsonData.get(selectedIndex);
                 cityList(regionBean.citys);
                 groupwva_two.setItems(CityList,0);
+                CityName= CityList.get(0);
             }
         });
         groupwva_two.setOnItemSelectedListener(new MyWheelView.OnItemSelectedListener() {
@@ -435,6 +454,7 @@ public class UpdateBaseInforActivity extends BaseActivity {
     }
 
     private void SexDialog() {
+        sex="男";
         final BottomDialog SexDialog = new BottomDialog(this, R.style.ActionSheetDialogStyle);
         View Sexinflate = LayoutInflater.from(mContext).inflate(R.layout.dialog_bottom_education, null);
         TextView tv_title =Sexinflate.findViewById(R.id.dialog_bottom_education_tv_title);
@@ -503,5 +523,31 @@ public class UpdateBaseInforActivity extends BaseActivity {
                 default:
             }
         }
+    }
+
+    //显示刷新数据
+    public void LoadingDialogShow(){
+        try {
+
+            if (progressDialog == null) {
+                progressDialog = CustomProgressDialog.createDialog(this);
+            }
+            progressDialog.show();
+        }catch (Exception e){
+
+        }
+    }
+
+    //关闭刷新
+    public void LoadingDialogClose(){
+        try {
+            if (progressDialog != null){
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+        }catch (Exception e){
+
+        }
+
     }
 }
