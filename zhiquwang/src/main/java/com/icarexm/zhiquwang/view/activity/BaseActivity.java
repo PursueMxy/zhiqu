@@ -26,7 +26,6 @@ public class BaseActivity extends AppCompatActivity {
 
     private void initBar(int color) {
         Window window = getWindow();
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             //5.0 以上直接设置状态栏颜色
             window.setStatusBarColor(color);

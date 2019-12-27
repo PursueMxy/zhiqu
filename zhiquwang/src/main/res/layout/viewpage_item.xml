@@ -12,12 +12,6 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
       />
-    <com.icarexm.zhiquwang.custview.CustomVideoView
-        android:visibility="gone"
-        android:id="@+id/view_pager_video"
-        android:padding="@dimen/dp_2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
     <ImageView
         android:visibility="gone"
         android:id="@+id/view_pager_img_play"

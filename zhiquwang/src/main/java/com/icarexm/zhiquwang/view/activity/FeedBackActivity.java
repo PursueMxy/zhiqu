@@ -52,7 +52,8 @@ public class FeedBackActivity extends BaseActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 //这个方法被调用，说明在s字符串中，从start位置开始的count个字符即将被长度为after的新文本所取代。
                 // 在这个方法里面改变s，会报错。
-                tv_textNumber.setText((start+1)+"");
+                String s1 = edt_content.getText().toString();
+                tv_textNumber.setText((s1+1)+"");
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -87,8 +88,10 @@ public class FeedBackActivity extends BaseActivity {
                                     public void onSuccess(Response<String> response) {
                                         PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);
                                         if (resultBean.getCode() == 1) {
+                                            ToastUtils.showToast(mContext, resultBean.getMsg());
                                             finish();
                                         } else if (resultBean.getCode() == 10001) {
+                                            ToastUtils.showToast(mContext, resultBean.getMsg());
                                             ToastUtils.showToast(mContext, resultBean.getMsg());
                                             startActivity(new Intent(mContext, LoginActivity.class));
                                             finish();

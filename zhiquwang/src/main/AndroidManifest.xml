@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="Iandroid.permission.NSTALL_NON_MARKET_APPS"/>
+    <uses-permission android:name="Iandroid.permission.NSTALL_NON_MARKET_APPS" />
     <uses-permission
         android:name="android.permission.READ_LOGS"
         tools:ignore="ProtectedPermissions" /> <!-- 地图权限 -->
@@ -30,7 +30,8 @@
         android:protectionLevel="signature" /> <!-- Required -->
     <uses-permission android:name="com.icarexm.zhiquwang.permission.JPUSH_MESSAGE" />
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+    <uses-permission
+        android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 用于开启 debug 版本的应用在 6.0 系统上的层叠窗口权限 -->
@@ -38,6 +39,7 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -47,104 +49,149 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".view.activity.BankListActivity"  android:launchMode="singleTask"></activity>
+        <activity android:name=".view.activity.EntryEnterpriseActivity"></activity>
+        <activity
+            android:name=".view.activity.BankListActivity"
+            android:launchMode="singleTask" />
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="a3943e611480b87c48027607be918ad4" />
 
-        <activity android:name=".view.activity.LunchActivity">
-        </activity>
-        <activity android:name=".view.activity.OvertimeApprovalActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.SetReminderActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.PunchCardRecordActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.AddWorkHistoryActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.AttendanceCardActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.OvertimeApplyActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.BusinessCooperationActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.MyToJoinActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.CertificationActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.UpdateBaseInforActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.FeedBackActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.ChangePasswordActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.AboutActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.ContactUsActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.SetActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.InviteAwardActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.WithdrawalDtlActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.EntryAwardActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.AddBankCardActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.CashWithdrawalActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.MyWalletActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.MyResumeActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.DistributionPosterActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.CommissionActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.MyTeamActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.DistributionTeamActivity"
+        <activity android:name=".view.activity.LunchActivity"></activity>
+        <activity
+            android:name=".view.activity.OvertimeApprovalActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".view.activity.MyJobSearchActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.BaseInformationActivity"
+        <activity
+            android:name=".view.activity.SetReminderActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".view.activity.OvertimeStatisticsActivity"
+        <activity
+            android:name=".view.activity.PunchCardRecordActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".view.activity.BasePayActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.BaseActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.MessageActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.FamousRecruitmentActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.NearbyStoreActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.RecruitDetailActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:launchMode="singleTask"/>
-        <activity android:name=".view.activity.RecruitActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.HomeActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:launchMode="singleTask" />
-        <activity android:name=".view.activity.EditPersonalActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.UserAgreementActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".view.activity.ResetPasswordActivity"
-            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".view.activity.AddWorkHistoryActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.AttendanceCardActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.OvertimeApplyActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.BusinessCooperationActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.MyToJoinActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.CertificationActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.UpdateBaseInforActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.FeedBackActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.ChangePasswordActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.AboutActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.ContactUsActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.SetActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.InviteAwardActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.WithdrawalDtlActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.EntryAwardActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.AddBankCardActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.CashWithdrawalActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.MyWalletActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.MyResumeActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.DistributionPosterActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.CommissionActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.MyTeamActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.DistributionTeamActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.MyJobSearchActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.BaseInformationActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.OvertimeStatisticsActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.BasePayActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.BaseActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.MessageActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.FamousRecruitmentActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.NearbyStoreActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.RecruitDetailActivity"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.RecruitActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.HomeActivity"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.EditPersonalActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.UserAgreementActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.ResetPasswordActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".view.activity.LogonActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:launchMode="singleTask" />
-        <activity android:name=".view.activity.LoginActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:launchMode="singleTask"/>
-        <activity android:name=".view.activity.GuidePageActivity"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.LoginActivity"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".view.activity.GuidePageActivity"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -152,16 +199,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"
-            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".MainActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".wxapi.WXEntryActivity"
-            android:permission="com.tencent.mm.plugin.permission.SEND"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:launchMode="singleTask"
+            android:permission="com.tencent.mm.plugin.permission.SEND"
             android:screenOrientation="portrait"
             android:taskAffinity="net.sourceforge.simcpux" />
+
         <service android:name="com.amap.api.location.APSService" />
 
         <provider
@@ -198,28 +247,26 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="com.icarexm.zhiquwang" />
             </intent-filter>
-        </activity>
-
-        <!-- Required SDK 核心功能-->
+        </activity> <!-- Required SDK 核心功能 -->
         <!-- 可配置 android:process 参数将 PushService 放在其他进程中 -->
         <service
             android:name="cn.jpush.android.service.PushService"
             android:enabled="true"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.REGISTER" />
                 <action android:name="cn.jpush.android.intent.REPORT" />
                 <action android:name="cn.jpush.android.intent.PushService" />
                 <action android:name="cn.jpush.android.intent.PUSH_TIME" />
             </intent-filter>
-        </service>
-        <!-- Required SDK 核心功能-->
+        </service> <!-- Required SDK 核心功能 -->
         <receiver
             android:name="cn.jpush.android.service.PushReceiver"
-            android:enabled="true" >
+            android:enabled="true">
             <intent-filter android:priority="1000">
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
-                <category android:name="com.icarexm.zhiquwang"/>
+
+                <category android:name="com.icarexm.zhiquwang" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.USER_PRESENT" />
@@ -229,10 +276,10 @@
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
                 <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
                 <data android:scheme="package" />
             </intent-filter>
-        </receiver>
-        <!-- Required SDK 核心功能-->
+        </receiver> <!-- Required SDK 核心功能 -->
         <service
             android:name=".MyPushService"
             android:enabled="true"
@@ -243,24 +290,26 @@
             </intent-filter>
         </service>
 
-        <receiver android:name=".MyPushReceiver"
+        <receiver
+            android:name=".MyPushReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
-                <!--Required 用户注册 SDK 的 intent-->
+
+                <!-- Required 用户注册 SDK 的 intent -->
                 <action android:name="cn.jpush.android.intent.REGISTRATION" />
-                <!--Required 用户接收 SDK 消息的 intent-->
+                <!-- Required 用户接收 SDK 消息的 intent -->
                 <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
-                <!--Required 用户接收 SDK 通知栏信息的 intent-->
+                <!-- Required 用户接收 SDK 通知栏信息的 intent -->
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
-                <!--Required 用户打开自定义通知栏的 intent-->
+                <!-- Required 用户打开自定义通知栏的 intent -->
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
                 <!-- 接收网络变化 连接/断开 since 1.6.3 -->
                 <action android:name="cn.jpush.android.intent.CONNECTION" />
+
                 <category android:name="com.icarexm.zhiquwang" />
             </intent-filter>
-        </receiver>
-        <!--Required SDK核心功能 since 3.3.0-->
+        </receiver> <!-- Required SDK核心功能 since 3.3.0 -->
         <activity
             android:name="cn.jpush.android.service.JNotifyActivity"
             android:exported="true"
@@ -268,28 +317,31 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.JNotifyActivity" />
+
                 <category android:name="com.icarexm.zhiquwang" />
             </intent-filter>
-        </activity>
-
-        <!-- Required. For publish channel feature -->
-        <!-- JPUSH_CHANNEL 是为了方便开发者统计 APK 分发渠道。-->
+        </activity> <!-- Required. For publish channel feature -->
+        <!-- JPUSH_CHANNEL 是为了方便开发者统计 APK 分发渠道。 -->
         <!-- 例如: -->
         <!-- 发到 Google Play 的 APK 可以设置为 google-play; -->
         <!-- 发到其他市场的 APK 可以设置为 xxx-market。 -->
-        <meta-data android:name="JPUSH_CHANNEL" android:value="developer-default"/>
-        <!-- Required. AppKey copied from Portal -->
-        <meta-data android:name="JPUSH_APPKEY" android:value="bb59c28466c26a4d43ac56d7"/>
+        <meta-data
+            android:name="JPUSH_CHANNEL"
+            android:value="developer-default" /> <!-- Required. AppKey copied from Portal -->
+        <meta-data
+            android:name="JPUSH_APPKEY"
+            android:value="bb59c28466c26a4d43ac56d7" />
 
-        <receiver android:name=".NotificationClickReceiver"
-            android:exported="false"
-            android:enabled="true">
+        <receiver
+            android:name=".NotificationClickReceiver"
+            android:enabled="true"
+            android:exported="false">
             <intent-filter>
-                <action android:name="cn.jpush.android.intent.REGISTRATION" /> <!--Required  用户注册SDK的intent-->
-                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" /> <!--Required  用户接收SDK消息的intent-->
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" /> <!--Required  用户接收SDK通知栏信息的intent-->
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" /> <!--Required  用户打开自定义通知栏的intent-->
-                <action android:name="cn.jpush.android.intent.CONNECTION" /><!-- 接收网络变化 连接/断开 since 1.6.3 -->
+                <action android:name="cn.jpush.android.intent.REGISTRATION" /> <!-- Required  用户注册SDK的intent -->
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" /> <!-- Required  用户接收SDK消息的intent -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" /> <!-- Required  用户接收SDK通知栏信息的intent -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" /> <!-- Required  用户打开自定义通知栏的intent -->
+                <action android:name="cn.jpush.android.intent.CONNECTION" /> <!-- 接收网络变化 连接/断开 since 1.6.3 -->
                 <category android:name="com.icarexm.zhiquwang" />
             </intent-filter>
         </receiver>

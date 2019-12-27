@@ -1,32 +1,35 @@
 package com.icarexm.zhiquwang.view.activity;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Rect;
+import android.graphics.PixelFormat;
+import android.media.MediaMetadataRetriever;
+import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.MediaController;
 import android.widget.TextView;
 
 import com.google.gson.GsonBuilder;
@@ -56,21 +59,10 @@ import com.icarexm.zhiquwang.wxapi.WXEntryActivity;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
-import com.tencent.mm.opensdk.modelbase.BaseReq;
-import com.tencent.mm.opensdk.modelbase.BaseResp;
-import com.tencent.mm.opensdk.modelmsg.SendAuth;
-import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
-import com.tencent.mm.opensdk.modelmsg.WXAppExtendObject;
-import com.tencent.mm.opensdk.modelmsg.WXImageObject;
-import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
-import com.tencent.mm.opensdk.modelmsg.WXTextObject;
-import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
-import com.tencent.mm.opensdk.openapi.IWXAPI;
-import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
-import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -118,8 +110,11 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
     ListView list_tuijian;
     @BindView(R.id.recruit_dtl_tv_title)
     TextView tv_title;
+    @BindView(R.id.recruit_dtl_video)
+    CustomVideoView videoView;
+    @BindView(R.id.recruit_dtl_img_one)
+    ImageView recruit_dtl_img_one;
     private int CurrentItem=0;
-    private int DELAYMILLIS=10000;
     private ViewPagerAdapter viewPagerAdapter;
     private IndicatorAdapter indicatorAdapter;
     private View dialog_callphone;
@@ -148,12 +143,19 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
     private String enterprise_name;
     private String inviteUrl;
     private String zone_name="";
+    /**
+     * 发送本地广播的action
+     */
+    public static final String LOCAL_BROADCAST = "com.zhkj.syyj.LOCAL_BROADCAST_COLLECT";
+    private LocalBroadcastManager localBroadcastManager;
+    private LocalReceiver localReceiver;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recruit_detail);
+        getWindow().setFormat(PixelFormat.TRANSLUCENT);
         mContext = getApplicationContext();
         Intent intent = getIntent();
         job_id = intent.getStringExtra("job_id");
@@ -259,34 +261,15 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
     }
 
     private void InitUI() {
+        localBroadcastManager = LocalBroadcastManager.getInstance(mContext);
+        localReceiver = new LocalReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(LOCAL_BROADCAST);   //添加action
+        localBroadcastManager.registerReceiver(localReceiver, intentFilter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
         indicatorAdapter = new IndicatorAdapter(mContext, img_arr, CurrentItem, have_video);
         recyclerView.setAdapter(indicatorAdapter);
-        recruit_dtl_viewPage.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            // 当前页面被滑动时调用
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
-            }
-            // 当新的页面被选中时调用
-            @Override
-            public void onPageSelected(int position) {
-                CurrentItem=position;
-                indicatorAdapter.refreshData(CurrentItem);
-                indicatorAdapter.notifyDataSetChanged();
-                viewPagerAdapter.refreshData(CurrentItem);
-                if (CurrentItem==0&&have_video==2){
-                    viewPagerAdapter.notifyDataSetChanged();
-                }
-                super.onPageSelected(position);
-            }
-            // 当滑动状态改变时调用
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                super.onPageScrollStateChanged(state);
-            }
-        });
         myAdapter = new MyAdapter();
         list_tuijian.setAdapter(myAdapter);
         list_tuijian.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -296,6 +279,50 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
                 Intent intent = new Intent(mContext, RecruitDetailActivity.class);
                 intent.putExtra("job_id",homeDataList.get(position).getJob_id()+"");
                 startActivity(intent);
+            }
+        });
+
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                // imageView.setVisibility(View.GONE);
+                mediaPlayer.setLooping(true);
+                mediaPlayer.setOnInfoListener(new MediaPlayer.OnInfoListener() {
+                    @Override
+                    public boolean onInfo(MediaPlayer mediaPlayer, int what, int i1) {
+
+                        //开始播放时，就把显示第一帧的ImageView gone 掉
+                        if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
+                            // video started; hide the placeholder.
+                            recruit_dtl_img_one.setVisibility(View.GONE);
+                            //videoView.seekTo(0);
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+            }
+        });
+
+        videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int
+                    extra) {
+                videoView.stopPlayback(); //播放异常，则停止播放，防止弹窗使界面阻塞
+                Log.e("播放","播放异常");
+                return true;
+            }
+        });
+        //设置点击事件，OnClickListener不好用
+        videoView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (videoView.isPlaying()){
+                    videoView.pause();
+                }else {
+                    videoView.start();
+                }
+                return false;
             }
         });
     }
@@ -370,8 +397,6 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
         });
 
     }
-
-
 
     private void imperdectDialog(int code,String msg){
         AlertDialog.Builder builder = new AlertDialog.Builder(RecruitDetailActivity.this);
@@ -487,6 +512,29 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
             have_video = dataBean.getHave_video();
             viewPagerAdapter = new ViewPagerAdapter(this, img_arr, recruit_dtl_viewPage, have_video);
             recruit_dtl_viewPage.setAdapter(viewPagerAdapter);
+            recruit_dtl_viewPage.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+                // 当前页面被滑动时调用
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                    super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                }
+                // 当新的页面被选中时调用
+                @Override
+                public void onPageSelected(int position) {
+                    CurrentItem=position;
+                    indicatorAdapter.refreshData(CurrentItem);
+                    indicatorAdapter.notifyDataSetChanged();
+                     if (CurrentItem>0){
+                         videoView.setVisibility(View.GONE);
+                     }
+                    super.onPageSelected(position);
+                }
+                // 当滑动状态改变时调用
+                @Override
+                public void onPageScrollStateChanged(int state) {
+                    super.onPageScrollStateChanged(state);
+                }
+            });
             indicatorAdapter.refreshData( img_arr, CurrentItem, have_video);
             indicatorAdapter.refreshData(CurrentItem);
             indicatorAdapter.notifyDataSetChanged();
@@ -614,6 +662,59 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
             ToastUtils.showToast(mContext,"您尚未安装地图或地图版本过低");
         }
     }
+
+
+    private class LocalReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if(!action.equals(LOCAL_BROADCAST)){
+                return ;
+            }
+            boolean queryCity = intent.getBooleanExtra("collect",false);  //判断是否需要调用查询城市
+            Log.e("执行了",queryCity+"哈哈哈哈");
+            //如果是接收到需要查询城市信息的广播   则去执行该方法
+            if(queryCity){
+                if (have_video==2) {
+                    String s = img_arr.get(0);
+                    Bitmap netVideoBitmap = getNetVideoBitmap(s);
+                    videoView.setVisibility(View.VISIBLE);
+                    recruit_dtl_img_one.setVisibility(View.VISIBLE);
+                    recruit_dtl_img_one.setImageBitmap(netVideoBitmap);
+                    Uri uri = Uri.parse(s);
+                        MediaController localMediaController = new MediaController(RecruitDetailActivity.this);
+                        videoView.setMediaController(localMediaController);
+                        videoView.setVideoURI(uri);
+                        videoView.start();
+                        MediaController mc = new MediaController(RecruitDetailActivity.this);
+                        videoView.setMediaController(mc);
+                    } else {
+                        videoView.setVisibility(View.GONE);
+                    }
+            }
+
+        }
+    }
+
+
+    //获取网络视频第一帧
+    public static Bitmap getNetVideoBitmap(String videoUrl) {
+        Bitmap bitmap = null;
+
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        try {
+            //根据url获取缩略图
+            retriever.setDataSource(videoUrl, new HashMap());
+            //获得第一帧图片
+            bitmap = retriever.getFrameAtTime();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } finally {
+            retriever.release();
+        }
+        return bitmap;
+    }
+
     //显示刷新数据
     public void LoadingDialogShow(){
         try {

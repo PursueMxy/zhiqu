@@ -7,6 +7,7 @@
     tools:context=".view.activity.RecruitDetailActivity">
 
       <ScrollView
+          android:layout_marginTop="@dimen/dp_65"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:scrollbars="none">
@@ -23,13 +24,26 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent">
       </androidx.viewpager2.widget.ViewPager2>
-            <androidx.recyclerview.widget.RecyclerView
+       <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recruit_dtl_rcv_indicator"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="@dimen/dp_15"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+            <com.icarexm.zhiquwang.custview.CustomVideoView
+                android:visibility="gone"
+                android:id="@+id/recruit_dtl_video"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <ImageView
+                android:visibility="gone"
+                android:scaleType="fitXY"
+                android:id="@+id/recruit_dtl_img_one"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
       </RelativeLayout>
 
          <RelativeLayout
@@ -390,7 +404,7 @@
             </LinearLayout>
       </ScrollView>
     <RelativeLayout
-        android:background="#00000000"
+        android:background="#FFFFFF"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_65">
         <TextView
@@ -401,7 +415,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="职位名称"
-            android:textColor="@color/white"
+            android:textColor="@color/ff000000"
             android:textSize="@dimen/sp_17"
             />
         <ImageView
@@ -411,15 +425,18 @@
             android:layout_marginBottom="@dimen/dp_1"
             android:layout_marginLeft="@dimen/dp_5"
             android:layout_width="wrap_content"
-            android:src="@mipmap/ic_left_white"
+            android:src="@mipmap/ic_left_black"
             android:layout_height="wrap_content"/>
 
         <ImageView
             android:id="@+id/recruit_dtl_img_invite_url"
             android:src="@mipmap/ic_invite_url"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/dp_11"
-            android:layout_marginRight="@dimen/dp_15"
+            android:layout_marginBottom="@dimen/dp_6"
+            android:layout_marginRight="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_5"
+            android:paddingRight="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_5"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

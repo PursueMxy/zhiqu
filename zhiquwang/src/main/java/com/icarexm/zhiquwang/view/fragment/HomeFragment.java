@@ -174,6 +174,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private AreaAdapter areaAdapter;
     private CityAdapter cityAdapter;
     private  boolean IsCity=false;
+    private String city_id;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -233,6 +234,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                                 environment.add(0,new HomeBannerBean.DataBean.OptionListBean.EnvironmentBean(999999,"全部"));
                                 environmentAdapter.notifyDataSetChanged();
                                 if (data.getIs_open()==1){
+                                    for (int a=0;a<citydataList.size();a++){
+                                        if (cityName.equals(citydataList.get(a).getArea_name())){
+                                            city_id=citydataList.get(a).getArea_id()+"";
+                                            area_id=city_id;
+                                        }
+                                    }
                                 }else if (data.getIs_open()==2){
                                 cityName="厦门市";
                                 tv_cityname.setText(cityName);
@@ -249,7 +256,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                                 startActivity(new Intent(mContext, LoginActivity.class));
                                 getActivity().finish();
                             }catch (Exception e){
-
                             }
                         }
 
@@ -422,7 +428,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 area_id=area_list.get(i).getArea_id()+"";
                 if (area_id.equals("999999")){
-                    area_id="";
+                    area_id= city_id;
                 }
                 rl_city.setVisibility(View.GONE);
                 IsArea=true;
@@ -497,6 +503,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 top_rl_city.setVisibility(View.GONE);
                 cityName = citydataList.get(i).getArea_name();
+                city_id = citydataList.get(i).getArea_id()+"";
+                area_id =citydataList.get(i).getArea_id()+"";
                 tv_cityname.setText(cityName);
                 InitData();
             }
@@ -750,6 +758,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         top_rl_city.setVisibility(View.GONE);
                         IsCity = !IsCity;
                     }
+                }else {
+                    ToastUtils.showToast(mContext,"请不要重复点击");
                 }
                 break;
         }

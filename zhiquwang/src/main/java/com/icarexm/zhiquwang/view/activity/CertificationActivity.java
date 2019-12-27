@@ -222,10 +222,12 @@ public class CertificationActivity extends BaseActivity implements Certification
                 break;
             case R.id.certification_img_dlt_front:
                 frondurl="";
+                img_dlt_front.setVisibility(View.GONE);
                 Glide.with(mContext).load(imageTranslateUri(R.mipmap.ic_img_add)).into(img_card_frond);
                 break;
             case R.id.certification_img_dlt_reverse:
                 reverseurl="";
+                img_dlt_reverse.setVisibility(View.GONE);
                 Glide.with(mContext).load(imageTranslateUri(R.mipmap.ic_img_add)).into(img_card_reverse);
                 break;
 
@@ -248,6 +250,7 @@ public class CertificationActivity extends BaseActivity implements Certification
                 List<Uri> uris = Matisse.obtainResult(data);
                 if (uris.size()>0) {
                     Glide.with(this).load(uris.get(0)).into(img_card_frond);
+                    img_dlt_front.setVisibility(View.VISIBLE);
                     List<String> strings = Matisse.obtainPathResult(data);
                     File file = new File(strings.get(0));//实例化数据库文件
                     OkGo.<String>post(RequstUrl.URL.UploadImg)
@@ -260,11 +263,13 @@ public class CertificationActivity extends BaseActivity implements Certification
                                     frondurl = DataBean.getUrl();
                                 }
                             });
+
                 }
             }else if (requestCode==REVERSE_CODE){
                 List<Uri> uris = Matisse.obtainResult(data);
                 if (uris.size()>0) {
                     Glide.with(this).load(uris.get(0)).into(img_card_reverse);
+                    img_dlt_reverse.setVisibility(View.VISIBLE);
                     List<String> strings = Matisse.obtainPathResult(data);
                     File file = new File(strings.get(0));//实例化数据库文件
                     OkGo.<String>post(RequstUrl.URL.UploadImg)
@@ -275,6 +280,7 @@ public class CertificationActivity extends BaseActivity implements Certification
                                     UploadImgBean uploadImgBean = new GsonBuilder().create().fromJson(response.body(), UploadImgBean.class);
                                     UploadImgBean.DataBean DataBean= uploadImgBean.getData();
                                     reverseurl = DataBean.getUrl();
+                                    img_dlt_reverse.setVisibility(View.VISIBLE);
                                 }
                             });
                 }
@@ -299,8 +305,8 @@ public class CertificationActivity extends BaseActivity implements Certification
                 rl_TypeTwo.setVisibility(View.GONE);
                 btn_submit.setVisibility(View.VISIBLE);
                 rl_TypeOne.setVisibility(View.VISIBLE);
-                img_dlt_front.setVisibility(View.VISIBLE);
-                img_dlt_reverse.setVisibility(View.VISIBLE);
+                img_dlt_front.setVisibility(View.GONE);
+                img_dlt_reverse.setVisibility(View.GONE);
             }else if (audit==1){
                 rl_TypeOne.setVisibility(View.GONE);
                 rl_TypeTwo.setVisibility(View.VISIBLE);

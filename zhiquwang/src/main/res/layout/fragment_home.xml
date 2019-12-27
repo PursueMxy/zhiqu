@@ -36,11 +36,13 @@
 
     <TextView
         android:id="@+id/fm_home_tv_cityname"
-        android:layout_marginTop="@dimen/dp_38"
+        android:layout_marginTop="@dimen/dp_33"
         android:layout_marginLeft="@dimen/dp_15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="厦门市"
+        android:paddingTop="@dimen/dp_5"
+        android:paddingBottom="@dimen/dp_5"
         android:drawablePadding="@dimen/dp_3"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_14"
