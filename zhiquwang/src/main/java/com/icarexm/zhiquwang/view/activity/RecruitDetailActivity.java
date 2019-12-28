@@ -23,7 +23,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
@@ -32,12 +31,11 @@ import android.widget.ListView;
 import android.widget.MediaController;
 import android.widget.TextView;
 
+import com.danikula.videocache.HttpProxyCacheServer;
 import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.MyApplication;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.IndicatorAdapter;
-import com.icarexm.zhiquwang.adapter.OnItemClickListener;
-import com.icarexm.zhiquwang.adapter.RecruitAdapter;
 import com.icarexm.zhiquwang.adapter.ViewPagerAdapter;
 import com.icarexm.zhiquwang.bean.HomeDataBean;
 import com.icarexm.zhiquwang.bean.InviteUrlBean;
@@ -49,12 +47,10 @@ import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.CustomVideoView;
 import com.icarexm.zhiquwang.custview.LabelsView;
 import com.icarexm.zhiquwang.presenter.RecruitDetailPresenter;
-import com.icarexm.zhiquwang.utils.AppContUtils;
 import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.MxyUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
-import com.icarexm.zhiquwang.utils.WxUtil;
 import com.icarexm.zhiquwang.wxapi.WXEntryActivity;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
@@ -149,6 +145,7 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
     public static final String LOCAL_BROADCAST = "com.zhkj.syyj.LOCAL_BROADCAST_COLLECT";
     private LocalBroadcastManager localBroadcastManager;
     private LocalReceiver localReceiver;
+    private HttpProxyCacheServer proxy;
 
 
     @Override
@@ -261,6 +258,35 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
     }
 
     private void InitUI() {
+        proxy = MyApplication.getProxy(getApplicationContext());
+        //设置视频控制器,组件可以控制视频的播放，暂停，快进，组件，不需要你实现
+       videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+
+            }
+        });
+       videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int
+                    extra) {
+               videoView.stopPlayback(); //播放异常，则停止播放，防止弹窗使界面阻塞
+               videoView.setVisibility(View.GONE);
+                return true;
+            }
+        });
+       videoView.setOnInfoListener(new MediaPlayer.OnInfoListener() {
+            @Override
+            public boolean onInfo(MediaPlayer mp, int what, int extra) {
+                if(what==MediaPlayer.MEDIA_INFO_BUFFERING_START ){
+                    //                   加载中
+                }else{
+                    //播放中
+                }
+                return true;
+
+            }
+        });
         localBroadcastManager = LocalBroadcastManager.getInstance(mContext);
         localReceiver = new LocalReceiver();
         IntentFilter intentFilter = new IntentFilter();
@@ -665,6 +691,9 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
 
 
     private class LocalReceiver extends BroadcastReceiver {
+
+        private String proxyUrl;
+
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -681,13 +710,14 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
                     videoView.setVisibility(View.VISIBLE);
                     recruit_dtl_img_one.setVisibility(View.VISIBLE);
                     recruit_dtl_img_one.setImageBitmap(netVideoBitmap);
-                    Uri uri = Uri.parse(s);
-                        MediaController localMediaController = new MediaController(RecruitDetailActivity.this);
-                        videoView.setMediaController(localMediaController);
-                        videoView.setVideoURI(uri);
-                        videoView.start();
-                        MediaController mc = new MediaController(RecruitDetailActivity.this);
-                        videoView.setMediaController(mc);
+                    MediaController localMediaController = new MediaController(RecruitDetailActivity.this);
+                    videoView.setMediaController(localMediaController);
+                    proxyUrl = proxy.getProxyUrl(s);
+                    videoView.setVideoPath(proxyUrl);
+                    videoView.requestFocus();//让VideiView获取焦点
+                    videoView.start();
+                    MediaController mc = new MediaController(RecruitDetailActivity.this);
+                    videoView.setMediaController(mc);
                     } else {
                         videoView.setVisibility(View.GONE);
                     }

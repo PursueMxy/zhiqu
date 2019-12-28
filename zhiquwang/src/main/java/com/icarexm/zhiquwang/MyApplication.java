@@ -1,7 +1,9 @@
 package com.icarexm.zhiquwang;
 
 import android.app.Application;
+import android.content.Context;
 
+import com.danikula.videocache.HttpProxyCacheServer;
 import com.icarexm.zhiquwang.utils.AppContUtils;
 import com.icarexm.zhiquwang.utils.Density;
 import com.icarexm.zhiquwang.wxapi.WXEntryActivity;
@@ -16,7 +18,8 @@ import cn.jpush.android.api.JPushInterface;
 public class MyApplication extends Application {
 
     public static IWXAPI iwxapi;
-
+    //全局初始化一个本地代理服务器
+    private HttpProxyCacheServer proxy;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -33,5 +36,14 @@ public class MyApplication extends Application {
         // 将该app注册到微信
         api.registerApp(AppContUtils.WX_APP_ID);
         iwxapi = WXEntryActivity.InitWeiXin(this, AppContUtils.WX_APP_ID);
+    }
+
+    public static HttpProxyCacheServer getProxy(Context context) {
+        MyApplication app = ( MyApplication) context.getApplicationContext();
+        return app.proxy == null ? (app.proxy = app.newProxy()) : app.proxy;
+    }
+
+    private HttpProxyCacheServer newProxy() {
+        return new HttpProxyCacheServer(this);
     }
 }
