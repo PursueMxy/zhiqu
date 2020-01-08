@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -70,8 +71,8 @@ public class BankListActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(mContext, CashWithdrawalActivity.class);
                 intent.putExtra("bank_id",bankList.get(i).getBank_id()+"");
-                intent.putExtra("bank_name",bankList.get(i).getBank_name());
-                intent.putExtra("bank_num",bankList.get(i).getBank_num());
+                intent.putExtra("bank_name",bankList.get(i).getBank_name()+"");
+                intent.putExtra("bank_num",bankList.get(i).getBank_num()+"");
                 setResult(BANKLIST,intent);
                 finish();
             }
@@ -110,7 +111,7 @@ public class BankListActivity extends BaseActivity {
                 if (!ButtonUtils.isFastDoubleClick(R.id.bank_list_rl_add)) {
                     Intent intent = new Intent(mContext, AddBankCardActivity.class);
                     intent.putExtra("type", "20001");
-                    startActivityForResult(intent, 20001);
+                    startActivityForResult(intent,ADDBANK );
                 }
                 break;
         }

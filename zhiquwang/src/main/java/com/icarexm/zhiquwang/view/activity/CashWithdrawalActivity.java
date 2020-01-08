@@ -52,6 +52,7 @@ public class CashWithdrawalActivity extends BaseActivity implements CashWithdraw
     private int bank_id=0;
     private String balance;
     private int BANKLIST=22222;
+    private int ADDBANK=20001;
     private CustomProgressDialog progressDialog;
 
     @Override
@@ -70,14 +71,14 @@ public class CashWithdrawalActivity extends BaseActivity implements CashWithdraw
         cashWithdrawalPresenter.GetWithdrawal(token);
         tv_withdrawal.setText("(最少提现"+withdrawal+"元)");
     }
-    @OnClick({R.id.cash_withdrawal_tv_add_bank_card,R.id.cash_withdrawal_img_back,R.id.cash_withdrawal_btn_cash,R.id.cash_withdrawal_rl_bank})
+    @OnClick({R.id.cash_withdrawal_rl_nobank,R.id.cash_withdrawal_img_back,R.id.cash_withdrawal_btn_cash,R.id.cash_withdrawal_rl_bank})
     public void onViewClick(View view){
         switch (view.getId()){
-            case R.id.cash_withdrawal_tv_add_bank_card:
+            case R.id.cash_withdrawal_rl_nobank:
                 if (!ButtonUtils.isFastDoubleClick(R.id.cash_withdrawal_tv_add_bank_card)) {
                     Intent intent = new Intent(mContext, AddBankCardActivity.class);
                     intent.putExtra("type", "10001");
-                    startActivity(intent);
+                    startActivityForResult(intent,ADDBANK);
                 }
                 break;
             case R.id.cash_withdrawal_img_back:
@@ -125,10 +126,7 @@ public class CashWithdrawalActivity extends BaseActivity implements CashWithdraw
     }
 
     public void BankList(int code, String msg, List<MyBankBean.DataBean> data){
-        if (progressDialog != null){
-            progressDialog.dismiss();
-            progressDialog = null;
-        }
+        LoadingDialogClose();
         if (code==1){
             banklist=data;
             if (banklist.size()>0){
@@ -166,11 +164,14 @@ public class CashWithdrawalActivity extends BaseActivity implements CashWithdraw
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode==BANKLIST&&resultCode==BANKLIST){
-          bank_id=Integer.parseInt(data.getStringExtra("bank_id"));
+            bank_id=Integer.parseInt(data.getStringExtra("bank_id"));
             String bank_name = data.getStringExtra("bank_name");
             String bank_num = data.getStringExtra("bank_num");
             tv_bank_name.setText(bank_name);
             tv_bank_num.setText("账号："+bank_num );
+        }else if (requestCode==ADDBANK&&requestCode==ADDBANK){
+            LoadingDialogShow();
+            cashWithdrawalPresenter.GetWithdrawal(token);
         }
     }
 

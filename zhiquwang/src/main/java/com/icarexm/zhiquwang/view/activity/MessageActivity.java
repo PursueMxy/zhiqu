@@ -37,7 +37,7 @@ public class MessageActivity extends BaseActivity implements MessageContract.Vie
     private MessagePresenter messagePresenter;
     private String token;
     private String limit="20";
-    private int page=0;
+    private int page=1;
     private List<MessageBean.DataBeanX.DataBean> dataBeanList=new ArrayList<>();
     private MessageAdapter messageAdapter;
     private CustomProgressDialog progressDialog;

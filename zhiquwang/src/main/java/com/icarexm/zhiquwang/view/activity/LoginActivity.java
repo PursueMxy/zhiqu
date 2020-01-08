@@ -2,7 +2,6 @@ package com.icarexm.zhiquwang.view.activity;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,13 +9,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Path;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -25,16 +21,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hjq.permissions.OnPermission;
 import com.hjq.permissions.XXPermissions;
-import com.icarexm.zhiquwang.MainActivity;
 import com.icarexm.zhiquwang.MyApplication;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.VersionBean;
 import com.icarexm.zhiquwang.contract.LoginContract;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.LoginPresenter;
-import com.icarexm.zhiquwang.utils.AppDownloadManager;
 import com.icarexm.zhiquwang.utils.ButtonUtils;
-import com.icarexm.zhiquwang.utils.ExampleUtil;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.icarexm.zhiquwang.wxapi.WXEntryActivity;
@@ -72,7 +65,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     private String type="";
     private int versionCode;
     private String version_name;
-    private AppDownloadManager mDownloadManager;
     private CustomProgressDialog progressDialog;
 
     @Override
@@ -103,7 +95,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
 
                     }
                 });
-        mDownloadManager = new AppDownloadManager(LoginActivity.this);
         versionCode = getVersionCode();
         try {
            if (token!=null){
@@ -202,43 +193,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     }
 
 
-    //显示对话框操作
-    protected void showUpdateDialog() {
-        // TODO Auto-generated method stub
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        //设置左上角图标
-        builder.setIcon(R.mipmap.ic_logo);
-        builder.setTitle("版本更新");
-        //设置描述内容
-        builder.setMessage("部分功能优化");
-        builder.setPositiveButton("立即更新", new DialogInterface.OnClickListener(){
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // 下载apk，apk的链接地址，downloadUrl
-                mDownloadManager.downloadApk("http://zqw.kuaishanghd.com/android/zqw.apk", "版本更新"+version_name, "部分功能优化");
-            }
-
-        });
-        //消极按钮
-        builder.setNegativeButton("稍后再说 ", new DialogInterface.OnClickListener(){
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // 取消对话框，进入主界面
-                dialog.dismiss();
-            }
-        });
-        //点击取消事件监听
-        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                // 即使用户点击取消，也要进入应用程序主界面
-                dialog.dismiss();
-            }
-        });
-        builder.show();
-
-    }
 
 
     //登录数据返回
@@ -333,26 +287,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     };
 
 
-    private void InitApkVersion() {
-        OkGo.<String>post(RequstUrl.URL.CheckAndroid)
-                .params("code",versionCode)
-                .execute(new StringCallback() {
-
-
-                    @Override
-                    public void onSuccess(Response<String> response) {
-                        String body = response.body();
-                        GsonBuilder builder = new GsonBuilder();
-                        Gson gson = builder.create();
-                        final VersionBean version = gson.fromJson(body, VersionBean.class);
-                        if (version.getCode()==1) {
-                            VersionBean.DataBean data = version.getData();
-                            version_name = data.getName();
-                            showUpdateDialog();
-                        }
-                    }
-                });
-    }
     /**
      * 返回版本号
      * @return
@@ -400,17 +334,10 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     @Override
     public void onResume() {
         super.onResume();
-        if (mDownloadManager != null) {
-            mDownloadManager.resume();
-        }
     }
      @Override
     public void onPause() {
         super.onPause();
-        if (mDownloadManager != null) {
-            mDownloadManager.onPause();
-        }
-
     }
 
     //显示刷新数据

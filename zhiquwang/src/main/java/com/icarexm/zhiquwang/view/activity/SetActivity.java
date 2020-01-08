@@ -1,16 +1,13 @@
 package com.icarexm.zhiquwang.view.activity;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -18,12 +15,15 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import com.allenliu.versionchecklib.v2.AllenVersionChecker;
+import com.allenliu.versionchecklib.v2.builder.DownloadBuilder;
+import com.allenliu.versionchecklib.v2.builder.NotificationBuilder;
+import com.allenliu.versionchecklib.v2.builder.UIData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.VersionBean;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
-import com.icarexm.zhiquwang.utils.AppDownloadManager;
 import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.ClearCacheManager;
 import com.icarexm.zhiquwang.utils.RequstUrl;
@@ -165,7 +165,29 @@ public class SetActivity extends BaseActivity {
                         if (version.getCode() == 1) {
                             VersionBean.DataBean data = version.getData();
                             version_name = data.getName();
-                            showUpdateDialog();
+//                            showUpdateDialog();
+                            DownloadBuilder builderLodawn=AllenVersionChecker
+                                    .getInstance()
+                                    .downloadOnly(
+                                            UIData.create()
+                                                    .setDownloadUrl("http://zqw.kuaishanghd.com/android/zqw.apk")
+                                                    .setTitle("功能升级")
+                                                    .setContent("部分功能优化")
+
+                                       );
+//                            builderLodawn.setSilentDownload(true);
+//                            builderLodawn.setShowDownloadingDialog(false);
+                            builderLodawn.setApkName("zhiquwang");
+                            builderLodawn.setForceRedownload(true);
+                            builderLodawn.setNotificationBuilder(
+                                    NotificationBuilder.create()
+                                            .setRingtone(true)
+                                            .setIcon(R.mipmap.ic_logo)
+                                            .setTicker("职趣网")
+                                            .setContentTitle("版本升级")
+                                            .setContentText("部分功能优化")
+                            );
+                            builderLodawn.executeMission(mContext);
                         }else {
                             ToastUtils.showToast(mContext,version.getMsg());
                         }
@@ -217,43 +239,6 @@ public class SetActivity extends BaseActivity {
             return null;
         }
 
-    //显示对话框操作
-    protected void showUpdateDialog() {
-        // TODO Auto-generated method stub
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        //设置左上角图标
-        builder.setIcon(R.mipmap.ic_logo);
-        builder.setTitle("版本更新");
-        //设置描述内容
-        builder.setMessage("");
-        builder.setPositiveButton("立即更新", new DialogInterface.OnClickListener(){
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // 下载apk，apk的链接地址，downloadUrl
-                new AppDownloadManager(SetActivity.this).downloadApk("http://zqw.kuaishanghd.com/android/zqw.apk", "版本更新"+version_name, "部分功能优化");
-            }
-
-        });
-        //消极按钮
-        builder.setNegativeButton("稍后再说 ", new DialogInterface.OnClickListener(){
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // 取消对话框，进入主界面
-                dialog.dismiss();
-            }
-        });
-        //点击取消事件监听
-        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                // 即使用户点击取消，也要进入应用程序主界面
-                dialog.dismiss();
-            }
-        });
-        builder.show();
-
-    }
 
     //显示刷新数据
     public void LoadingDialogShow(){

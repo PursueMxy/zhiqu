@@ -53,7 +53,7 @@ public class RecruitActivity extends BaseActivity {
     private SharedPreferences share;
     private String token;
     private String limit="20";
-    private int page=0;
+    private int page=1;
     private FRAdapter frAdapter;
     private String sequence="";
     private CustomProgressDialog progressDialog;
@@ -92,7 +92,6 @@ public class RecruitActivity extends BaseActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    Log.i("---","搜索操作执行");
                     String sequence= edt_content.getText().toString();
                     SearchData(sequence);
                 }
@@ -108,18 +107,14 @@ public class RecruitActivity extends BaseActivity {
             @Override
             public void onRefresh() {
                 //加载更多
-                page=0;
+                page=1;
                 SearchData(sequence);
-                mRecyclerView.refreshComplete();//刷新动画完成
             }
 
             @Override
             public void onLoadMore() {
                 page=page+1;
                 SearchData(sequence);
-                //加载更多
-                mRecyclerView.loadMoreComplete();//加载动画完成
-                mRecyclerView.setNoMore(true);
             }
         });
         frAdapter.setListAll(homeDataLists);
@@ -169,16 +164,27 @@ public class RecruitActivity extends BaseActivity {
                             List<HomeDataBean.DataBeanX.DataBean> homeDataList = data.getData();
                             if (homeDataList.size()>0) {
                                 homeDataLists=homeDataList;
-                                if (page == 0) {
+                                if (page == 1) {
                                     frAdapter.setListAll(homeDataLists);
                                     frAdapter.notifyDataSetChanged();
+                                    mRecyclerView.refreshComplete();//刷新动画完成
                                 } else {
                                     frAdapter.addItemsToLast(homeDataLists);
                                     frAdapter.notifyDataSetChanged();
+                                    mRecyclerView.loadMoreComplete();//加载动画完成
                                 }
                             }else {
-                                page=0;
-                                mRecyclerView.refreshComplete();//刷新动画完成
+                                if (page==1){
+                                    homeDataLists.clear();
+                                    frAdapter.setListAll(homeDataLists);
+                                    frAdapter.notifyDataSetChanged();
+                                    mRecyclerView.refreshComplete();//刷新动画完成
+                                }else {
+                                    page = 1;
+                                    mRecyclerView.loadMoreComplete();//加载动画完成
+                                    //加载更多
+                                    mRecyclerView.setNoMore(true);
+                                }
                             }
                         }
                     }

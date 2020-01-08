@@ -57,6 +57,7 @@
           android:layout_height="wrap_content"
           android:hint="请输入手机号码"
           android:textColor="@color/ffa5a5a5"
+          android:maxLength="11"
           android:textSize="15sp"
           />
 

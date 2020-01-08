@@ -179,5 +179,7 @@ public class RequstUrl {
         //版本升级
         public static String CheckAndroid=HOST+"/api/checkAndroid";
 
+        //当前职位信息
+        public static String CurrentEnterprise=HOST+"/api/currentEnterprise";
     }
 }

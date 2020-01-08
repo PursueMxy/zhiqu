@@ -139,7 +139,7 @@
         android:layout_marginLeft="@dimen/dp_15"
         android:layout_marginRight="@dimen/dp_15"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_132">
+        android:layout_height="@dimen/dp_176">
         <RelativeLayout
             android:id="@+id/fm_min_rl_myjobsearch"
             android:layout_width="match_parent"
@@ -162,6 +162,37 @@
                 android:src="@mipmap/ic_right_gray"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+        </RelativeLayout>
+        <View
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_1"
+            android:background="@color/fff2f2f2"/>
+
+        <RelativeLayout
+            android:id="@+id/fm_min_rl_entry_enterprise"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_45">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:drawableLeft="@mipmap/ic_entry_enterprise"
+                android:drawablePadding="@dimen/dp_10"
+                android:text="入职企业"
+                android:textColor="@color/ff4e4d4d"
+                android:textSize="@dimen/sp_14" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dp_15"
+                android:src="@mipmap/ic_right_gray" />
         </RelativeLayout>
         <View
             android:layout_marginLeft="@dimen/dp_10"

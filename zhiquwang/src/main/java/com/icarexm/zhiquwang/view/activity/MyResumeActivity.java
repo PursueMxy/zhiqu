@@ -240,6 +240,11 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
 
     public void UpdateUI(int code,String msg){
         ToastUtils.showToast(mContext,msg);
+        if (code==1){
+            Intent intent = new Intent(mContext, HomeActivity.class);
+            intent.putExtra("currentItems","3");
+            startActivity(intent);
+        }
     }
 
 

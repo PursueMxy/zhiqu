@@ -191,7 +191,7 @@ public class CertificationActivity extends BaseActivity implements Certification
                                 .capture(true)
                                 .captureStrategy(new CaptureStrategy(true, "com.icarexm.zhiquwang.fileprovider", "test"))
                                 .maxSelectable(1)
-                                .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
+//                                .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
                                 .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.dp_110))
                                 .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
                                 .thumbnailScale(0.85f)
@@ -327,8 +327,8 @@ public class CertificationActivity extends BaseActivity implements Certification
                 edt_username.setText(info.getReal_name());
                 frondurl=info.getCard_front();
                 reverseurl=info.getCard_reverse();
-                Glide.with(mContext).load(RequstUrl.URL.HOST+info.getCard_front()).into(img_card_frond);
-                Glide.with(mContext).load(RequstUrl.URL.HOST+info.getCard_reverse()).into(img_card_reverse);
+                Glide.with(mContext).load(RequstUrl.URL.HOST+info.getCard_front()).placeholder(R.mipmap.ic_img_add).into(img_card_frond);
+                Glide.with(mContext).load(RequstUrl.URL.HOST+info.getCard_reverse()).placeholder(R.mipmap.ic_img_add).into(img_card_reverse);
             }else if (audit==3){
                 edt_username.setEnabled(true);
                 edt_car_number.setEnabled(true);

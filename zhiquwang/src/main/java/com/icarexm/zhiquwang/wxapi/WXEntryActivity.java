@@ -78,15 +78,22 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         ButterKnife.bind(this);
         edt_mobile.setText(mobile);
         edt_password.setText(password);
+        wxapi.handleIntent(getIntent(), this);
     }
 
-
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        wxapi = WXAPIFactory.createWXAPI(this, AppContUtils.WX_APP_ID, true);
+        wxapi.registerApp(AppContUtils.WX_APP_ID);
+        wxapi.handleIntent(getIntent(), this);
+    }
 
     public static IWXAPI InitWeiXin(Context context , @NonNull String weixin_app_id){
         if(TextUtils.isEmpty(weixin_app_id)){
-//            Toast.makeText(context.getApplicationContext(),"微信appID不能为空",Toast.LENGTH_LONG).show();
+            Toast.makeText(context.getApplicationContext(),"微信appID不能为空",Toast.LENGTH_LONG).show();
         }
-        wxapi = WXAPIFactory.createWXAPI(context, weixin_app_id, true);
+        wxapi = WXAPIFactory.createWXAPI(context, weixin_app_id, false);
         wxapi.registerApp(weixin_app_id);
         return wxapi;
     }
@@ -97,8 +104,9 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         }
         SendAuth.Req req = new SendAuth.Req();
         req.scope = "snsapi_userinfo";
-        req.state = "wechat_sdk_demo_test";
+        req.state = "com_icarexm_zhiquwang_wxapi";
         api.sendReq(req);
+
     }
 
 
@@ -107,7 +115,6 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
             //初始化一个WXWebpageObject，填写url
             WXWebpageObject webpage = new WXWebpageObject();
             webpage.webpageUrl = url;
-
             //用 WXWebpageObject 对象初始化一个 WXMediaMessage 对象
             WXMediaMessage msg = new WXMediaMessage(webpage);
             msg.title = "求职就用职趣网！";

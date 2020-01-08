@@ -35,6 +35,7 @@ import com.icarexm.zhiquwang.view.activity.BusinessCooperationActivity;
 import com.icarexm.zhiquwang.view.activity.CertificationActivity;
 import com.icarexm.zhiquwang.view.activity.DistributionTeamActivity;
 import com.icarexm.zhiquwang.view.activity.EditPersonalActivity;
+import com.icarexm.zhiquwang.view.activity.EntryEnterpriseActivity;
 import com.icarexm.zhiquwang.view.activity.LoginActivity;
 import com.icarexm.zhiquwang.view.activity.MessageActivity;
 import com.icarexm.zhiquwang.view.activity.MyJobSearchActivity;
@@ -123,6 +124,7 @@ public class MinFragment extends Fragment implements View.OnClickListener {
       inflate.findViewById(R.id.fm_min_rl_to_join).setOnClickListener(this);
       inflate.findViewById(R.id.fm_min_rl_businessCooperation).setOnClickListener(this);
       inflate.findViewById(R.id.fm_min_message).setOnClickListener(this);
+      inflate.findViewById(R.id.fm_min_rl_entry_enterprise).setOnClickListener(this);
         img_avatar = inflate.findViewById(R.id.fm_min_img_head);
         tv_nickname = inflate.findViewById(R.id.fm_min_tv_nickname);
         tv_address = inflate.findViewById(R.id.fm_min_tv_address);
@@ -180,6 +182,11 @@ public class MinFragment extends Fragment implements View.OnClickListener {
             case R.id.fm_min_message:
                 if (!ButtonUtils.isFastDoubleClick(R.id.fm_min_message)) {
                     startActivity(new Intent(mContext, MessageActivity.class));
+                }
+                break;
+            case R.id.fm_min_rl_entry_enterprise:
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_min_message)) {
+                    startActivity(new Intent(mContext, EntryEnterpriseActivity.class));
                 }
                 break;
         }

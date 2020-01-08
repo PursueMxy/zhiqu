@@ -53,6 +53,7 @@ import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.MxyUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
+import com.icarexm.zhiquwang.view.activity.EditPersonalActivity;
 import com.icarexm.zhiquwang.view.activity.FamousRecruitmentActivity;
 import com.icarexm.zhiquwang.view.activity.HomeActivity;
 import com.icarexm.zhiquwang.view.activity.LoginActivity;
@@ -311,6 +312,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                             }catch (Exception e){
 
                             }
+                        }else if (homeDataBean.getCode() ==10002){
+                            try {
+                                startActivity(new Intent(mContext, EditPersonalActivity.class));
+                                getActivity().finish();
+                            }catch (Exception e){
+
+                            }
                         }
                     }
                 });
@@ -415,6 +423,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 intent.putExtra("zone_id",zone_list.get(i).getZone_id()+"");
                 intent.putExtra("zone_name",zone_list.get(i).getZone_name());
                 intent.putExtra("city_name",cityName);
+                intent.putExtra("city_id",city_id);
                 startActivity(intent);
             }
         });

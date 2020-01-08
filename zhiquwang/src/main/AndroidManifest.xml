@@ -39,6 +39,7 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android:permission.com.tencent.mm.plugin.permission.SEND"/>
 
     <application
         android:name=".MyApplication"
@@ -207,12 +208,10 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:launchMode="singleTask"
-            android:permission="com.tencent.mm.plugin.permission.SEND"
             android:screenOrientation="portrait"
             android:taskAffinity="net.sourceforge.simcpux" />
 
         <service android:name="com.amap.api.location.APSService" />
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.icarexm.zhiquwang.fileprovider"
@@ -221,7 +220,8 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths_public" />
-        </provider> <!-- 若您的业务中有使用极光富媒体功能，或者极光早上好功能，需要把此 Activity 的 exported 修改成 true 覆盖 jcenter 上的组件。 -->
+        </provider>
+        <!-- 若您的业务中有使用极光富媒体功能，或者极光早上好功能，需要把此 Activity 的 exported 修改成 true 覆盖 jcenter 上的组件。 -->
         <activity
             android:name="cn.jpush.android.ui.PopWinActivity"
             android:exported="true"

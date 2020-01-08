@@ -120,7 +120,7 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
     private String token;
     private String job_id;
     private int limit=20;
-    private int page=0;
+    private int page=1;
     private String area_id;
     private String salary_id;
     private String age_id;
@@ -186,7 +186,6 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        job_id = intent.getStringExtra("job_id");
         recruitDetailPresenter.GetJobDetail(token,job_id);
     }
 
@@ -217,6 +216,7 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
                 }
                 break;
             case R.id.recruit_dtl_btn_one_key_enroll:
+                Log.e("token",token+"和"+job_id);
                 if (!ButtonUtils.isFastDoubleClick(R.id.recruit_dtl_btn_one_key_enroll)) {
                     OkGo.<String>post(RequstUrl.URL.applicationInfo)
                             .params("token", token)
@@ -224,7 +224,6 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
                             .execute(new StringCallback() {
                                 private int code;
                                 private String msg;
-
                                 @Override
                                 public void onSuccess(Response<String> response) {
                                     PublicResultBean resultBean = new GsonBuilder().create().fromJson(response.body(), PublicResultBean.class);

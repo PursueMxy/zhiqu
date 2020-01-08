@@ -11,6 +11,7 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.GsonBuilder;
@@ -37,12 +38,15 @@ public class AddBankCardActivity extends BaseActivity implements AddBankCardCont
     TextView edt_bank_name;
     @BindView(R.id.add_bank_card_edt_bank_num)
     EditText edt_bank_num;
+    @BindView(R.id.add_bank_card_rl_bank_name)
+    RelativeLayout rl_bank_name;
     private AddBankCardPresenter addBankCardPresenter;
     private Context mContext;
     private String token;
     private String type;
     private int ADDBANK=20001;
     private CustomProgressDialog progressDialog;
+    private boolean isCarName=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +72,13 @@ public class AddBankCardActivity extends BaseActivity implements AddBankCardCont
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.toString().length()>12) {
+                if (isCarName){
                     GetBank(charSequence.toString());
+                }
+               if (charSequence.toString().length()<16){
+                   if (!isCarName) {
+                       GetBank(charSequence.toString());
+                   }
                 }
             }
 
@@ -88,8 +97,11 @@ public class AddBankCardActivity extends BaseActivity implements AddBankCardCont
                     public void onSuccess(Response<String> response) {
                         PublicCodeBean publicCodeBean = new GsonBuilder().create().fromJson(response.body(), PublicCodeBean.class);
                         if (publicCodeBean.getCode()==1){
+                            isCarName = false;
                             edt_bank_name.setText(publicCodeBean.getMsg());
+                            rl_bank_name.setVisibility(View.VISIBLE);
                         }else {
+                            isCarName = true;
                             edt_bank_name.setText("");
                         }
                     }
@@ -117,9 +129,9 @@ public class AddBankCardActivity extends BaseActivity implements AddBankCardCont
                     if (!bank_user.equals("")) {
                         if (!bank_num.equals("")) {
                             if (!bank_name.equals("")) {
-                                addBankCardPresenter.GetAddCard(token, bank_user, bank_num, bank_name);
+                                addBankCardPresenter.GetAddCard(token, bank_user, bank_name, bank_num);
                             } else {
-                                ToastUtils.showToast(mContext, "银行名称不能为空");
+                                ToastUtils.showToast(mContext, "请检查银行卡是否输入有误");
                             }
                         } else {
                             ToastUtils.showToast(mContext, "卡号不能为空");
@@ -149,6 +161,10 @@ public class AddBankCardActivity extends BaseActivity implements AddBankCardCont
         if (code==1){
             if (type.equals("20001")){
                 Intent intent = new Intent(mContext, BankListActivity.class);
+                setResult(ADDBANK,intent);
+                finish();
+            }else if (type.equals("10001")){
+                Intent intent = new Intent(mContext,CashWithdrawalActivity.class);
                 setResult(ADDBANK,intent);
                 finish();
             }else {

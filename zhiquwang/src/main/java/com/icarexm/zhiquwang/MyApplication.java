@@ -32,7 +32,7 @@ public class MyApplication extends Application {
     }
 
     private void InitWeixin() {
-        final IWXAPI api = WXAPIFactory.createWXAPI(getApplicationContext(), null,true);
+        final IWXAPI api = WXAPIFactory.createWXAPI(getApplicationContext(), null,false);
         // 将该app注册到微信
         api.registerApp(AppContUtils.WX_APP_ID);
         iwxapi = WXEntryActivity.InitWeiXin(this, AppContUtils.WX_APP_ID);

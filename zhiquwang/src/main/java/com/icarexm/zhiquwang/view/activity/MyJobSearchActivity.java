@@ -39,7 +39,7 @@ public class MyJobSearchActivity extends BaseActivity implements MyJobSearchCont
     private MyJobSearchPresenter myJobSearchPresenter;
     private String token;
     private String limit="20";
-    private int page=0;
+    private int page=1;
     private List<JobSearchBean.DataBeanX.DataBean> dataList=new ArrayList<>();
     private MyJobSearchAdapter myJobSearchAdapter;
     private CustomProgressDialog progressDialog;
@@ -68,14 +68,16 @@ public class MyJobSearchActivity extends BaseActivity implements MyJobSearchCont
             @Override
             public void onRefresh() {
                 //加载更多
-                mRecyclerView.refreshComplete();//刷新动画完成
+                page=1;
+                myJobSearchPresenter.GetMyJob(token,limit,page+"");
             }
 
             @Override
             public void onLoadMore() {
                 //加载更多
+                page=page+1;
+                myJobSearchPresenter.GetMyJob(token,limit,page+"");
                 mRecyclerView.loadMoreComplete();//加载动画完成
-                mRecyclerView.setNoMore(true);
             }
         });
         mRecyclerView.setAdapter(myJobSearchAdapter);
@@ -127,9 +129,26 @@ public class MyJobSearchActivity extends BaseActivity implements MyJobSearchCont
     public void UpdateUI(int code, String msg, JobSearchBean.DataBeanX data){
        LoadingDialogClose();
         if (code==1){
-            dataList = data.getData();
-            myJobSearchAdapter.setListAll(dataList);
-            myJobSearchAdapter.notifyDataSetChanged();
+            List<JobSearchBean.DataBeanX.DataBean> dataBeanList= data.getData();
+            if (page==1) {
+                dataList = dataBeanList;
+                myJobSearchAdapter.setListAll(dataList);
+                myJobSearchAdapter.notifyDataSetChanged();
+                mRecyclerView.refreshComplete();//刷新动画完成
+            }else {
+                if (dataBeanList.size()>0){
+                    dataList.addAll(dataBeanList);
+                    myJobSearchAdapter.addItemsToLast(dataBeanList);
+                    myJobSearchAdapter.notifyDataSetChanged();
+                    mRecyclerView.loadMoreComplete();//加载动画完成
+                }else {
+                    dataList.addAll(dataBeanList);
+                    myJobSearchAdapter.addItemsToLast(dataBeanList);
+                    myJobSearchAdapter.notifyDataSetChanged();
+                    mRecyclerView.refreshComplete();//刷新动画完成
+                    mRecyclerView.setNoMore(true);
+                }
+            }
         }else if (code ==10001){
             ToastUtils.showToast(mContext,msg);
             startActivity(new Intent(mContext,LoginActivity.class));

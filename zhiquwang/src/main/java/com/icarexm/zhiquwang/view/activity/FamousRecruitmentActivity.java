@@ -90,7 +90,7 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
     private FamousRecruitmentPresenter famousRecruitmentPresenter;
     private SharedPreferences share;
     private int limit=20;
-    private int page=0;
+    private int page=1;
     private String token;
     private String area_id;
     private String salary_id;
@@ -117,6 +117,7 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
     private List<HomeBannerBean.DataBean.OptionListBean.EnvironmentBean> environment=new ArrayList<>();
     private List<HomeBannerBean.DataBean.OptionListBean.VocationBean> vocation=new ArrayList<>();
     private CustomProgressDialog progressDialog;
+    private String city_id;
 
 
     @Override
@@ -130,6 +131,8 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
         zone_id = intent.getStringExtra("zone_id");
         zone_name = intent.getStringExtra("zone_name");
         city_name = intent.getStringExtra("city_name");
+        city_id = intent.getStringExtra("city_id");
+        area_id=city_id;
         ButterKnife.bind(this);
         famousRecruitmentPresenter = new FamousRecruitmentPresenter(this);
         InitUI();
@@ -148,15 +151,17 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
         mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
-                //加载更多
+                famousRecruitmentPresenter.GetHomeData(token,limit+"",page+"",zone_id,area_id,salary_id,age_id,vocation_id,environment_id,job_id);
                 mRecyclerView.refreshComplete();//刷新动画完成
             }
 
             @Override
             public void onLoadMore() {
+                page=page+1;
+                famousRecruitmentPresenter.GetHomeData(token,limit+"",page+"",zone_id,area_id,salary_id,age_id,vocation_id,environment_id,job_id);
                 //加载更多
                 mRecyclerView.loadMoreComplete();//加载动画完成
-                mRecyclerView.setNoMore(true);
+//                mRecyclerView.setNoMore(true);
             }
         });
         frAdapter.setListAll(homeDataList);
@@ -398,7 +403,7 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 area_id=area_list.get(i).getArea_id()+"";
                 if (area_id.equals("999999")){
-                    area_id="";
+                    area_id=city_id;
                 }
                 rl_city.setVisibility(View.GONE);
                 IsArea=true;
@@ -495,7 +500,19 @@ public class FamousRecruitmentActivity extends BaseActivity implements FamousRec
     public  void UpdateUI(int code,String msg, HomeDataBean.DataBeanX data){
        LoadingDialogClose();
       if (code==1){
-          homeDataList = data.getData();
+          List<HomeDataBean.DataBeanX.DataBean> homeDataLists = data.getData();
+          try {
+              if (homeDataLists.size()!=20){
+                  mRecyclerView.setNoMore(true);
+              }
+          }catch (Exception e){
+              mRecyclerView.setNoMore(true);
+          }
+          if (page==1){
+              homeDataList=homeDataLists;
+          }else {
+              homeDataList.addAll(homeDataLists);
+          }
           frAdapter.setListAll(homeDataList);
           frAdapter.notifyDataSetChanged();
       }else if (code ==10001){

@@ -37,7 +37,7 @@ public class MyTeamActivity extends BaseActivity implements MyTeamContract.View 
     private MyTeamPresenter myTeamPresenter;
     private String token;
     private String limit="20";
-    private int page=0;
+    private int page=1;
     private CustomProgressDialog progressDialog;
     private List<MyTeanBean.DataBeanX.DataBean> dataBeanList=new ArrayList<>();
     private MyTeamAdapter myTeamAdapter;
