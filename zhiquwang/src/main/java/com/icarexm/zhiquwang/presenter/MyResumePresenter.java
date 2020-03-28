@@ -30,9 +30,9 @@ public class MyResumePresenter implements MyResumeContract.Presenter {
 
     //保存个人信息
     public void GetAddResume(String token,String avatar,String real_name,String sex,String birth,String city,
-                            String education,String personal_introduce,String experience){
+                            String education,String personal_introduce,String experience,String money){
             myResumeModel.PostaddResume(this,token,avatar,real_name,sex,birth,city,education,
-                    personal_introduce,experience);
+                    personal_introduce,experience,money);
     }
 
     //保存个人信息返回

@@ -51,6 +51,8 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
     ImageView img_acatar;
     @BindView(R.id.my_resume_edt_personal_introduce)
     EditText edt_personal_introduce;
+    @BindView(R.id.my_resume_edt_money)
+    EditText edt_money;
     private int  ADDWORKHISTORY=5120;
     private int  BASEINFOCODE=5121;
     private List<ResumeBean.DataBean.ExperienceBean> addResumeList=new ArrayList<>();
@@ -136,7 +138,8 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
             case R.id.my_resume_btn_confirm:
                 if (!ButtonUtils.isFastDoubleClick(R.id.my_resume_btn_confirm)) {
                     String personal_introduce = edt_personal_introduce.getText().toString();
-                    myResumePresenter.GetAddResume(token, avatar, real_name, sex, birth, city, education, personal_introduce, experience);
+                    String money= edt_money.getText().toString();
+                    myResumePresenter.GetAddResume(token, avatar, real_name, sex, birth, city, education, personal_introduce, experience,money);
                 }
                   break;
         }
@@ -196,8 +199,9 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
     public void  UpdateUI(int code,String msg, ResumeBean.DataBean data){
        LoadingDialogClose();
         if (code==1){
-         tv_name.setText(data.getUser_name());
+          tv_name.setText(data.getUser_name());
           tv_education.setText(data.getEducation());
+          edt_money.setText(data.getMoney());
           Glide.with(mContext).load(RequstUrl.URL.HOST+data.getAvatar()).into(img_acatar);
           avatar = data.getAvatar();
           real_name = data.getUser_name();

@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -32,6 +34,7 @@ import com.icarexm.zhiquwang.custview.mywheel.MyWheelView;
 import com.icarexm.zhiquwang.presenter.OvertimeStatisticsPresenter;
 import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.DateUtils;
+import com.icarexm.zhiquwang.utils.TextViewUtil;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 
 import java.text.ParseException;
@@ -53,6 +56,10 @@ public class OvertimeStatisticsActivity extends BaseActivity implements Overtime
     TextView tv_money;
     @BindView(R.id.overtime_statistics_total_day)
     TextView tv_total_day;
+    @BindView(R.id.overtime_statistics_total_price)
+    TextView tv_total_price;
+    @BindView(R.id.overtime_statistics_total_hour)
+    TextView tv_total_hour;
     private String token;
     private OvertimeStatisticsPresenter overtimeStatisticsPresenter;
     private String typeOfWork;
@@ -196,9 +203,9 @@ public class OvertimeStatisticsActivity extends BaseActivity implements Overtime
         BirthDateInflate.findViewById(R.id.dialog_bottom_img_opt).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tv_time.setText( SltYear+SltMonth);
+                tv_time.setText(SltYear+SltMonth);
                 try {
-                    long times = DateUtils.dateYearMoth(SltYear + SltMonth);
+                    long times = DateUtils.dateYearMoth(SltYear+ SltMonth);
                     overtimeStatisticsPresenter.GetRecords(token, typeOfWork,times+"");
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -221,7 +228,18 @@ public class OvertimeStatisticsActivity extends BaseActivity implements Overtime
             total_info = data.getTotal_info();
             initExpandableListViewData(total_info);
             tv_money.setText(data.getTotal_price()+"");
-            tv_total_day.setText("加班"+data.getTotal_day()+"天 共"+data.getTotal_time()+"小时");
+            String content="加班"+ data.getTotal_day()+"天";
+            String keyStr=data.getTotal_day()+"";
+            SpannableString spannableString = TextViewUtil.setSpanColorStr(content, keyStr, 0Xff00b6ce);
+            String content1="共"+data.getTotal_time() +"小时";
+            String keyStr1=data.getTotal_time() +"";
+            SpannableString spannableString1 = TextViewUtil.setSpanColorStr(content1, keyStr1, 0Xff00b6ce);
+            tv_total_day.setText(spannableString);
+            tv_total_hour.setText(spannableString1);
+            String content2="总收入：¥ "+data.getPrice();
+            String keyStr2="¥ "+data.getPrice();
+            SpannableString spannableString2 = TextViewUtil.setSpanColorStr(content2, keyStr2, 0Xff00b6ce);
+            tv_total_price.setText(spannableString2);
         } else if (code ==10001){
             ToastUtils.showToast(mContext,message);
             startActivity(new Intent(mContext,LoginActivity.class));

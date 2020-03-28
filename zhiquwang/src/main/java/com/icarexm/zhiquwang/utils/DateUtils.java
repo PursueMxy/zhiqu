@@ -31,6 +31,18 @@ public class DateUtils {
         return format.format(new Date());
     }
 
+    public static String getMonthDateInt() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM",
+                Locale.getDefault());
+        return format.format(new Date());
+    }
+    public static int getYearDateInt() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy",
+                Locale.getDefault());
+        return Integer.parseInt(format.format(new Date()))+1;
+    }
+
+
     public static String getTodayDateHour() {
         SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm",
                 Locale.getDefault());

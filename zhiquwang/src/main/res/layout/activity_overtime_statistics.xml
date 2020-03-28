@@ -78,21 +78,46 @@
               android:textSize="@dimen/sp_30"
               />
       </RelativeLayout>
-
-    <TextView
-        android:id="@+id/overtime_statistics_total_day"
-        android:layout_marginTop="@dimen/dp_20"
-        android:layout_below="@+id/overtime_statistics_rl_one"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="加班0天 共 0小时"
-        android:textColor="#ff28292d"
-        android:textSize="19sp"
-        />
-
+ <RelativeLayout
+     android:layout_centerHorizontal="true"
+     android:layout_below="@+id/overtime_statistics_rl_one"
+     android:gravity="center"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content">
+     <TextView
+         android:id="@+id/overtime_statistics_total_day"
+         android:layout_marginTop="@dimen/dp_20"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="加班0天"
+         android:textColor="#ff28292d"
+         android:textSize="19sp"/>
+     <TextView
+         android:layout_marginLeft="@dimen/dp_3"
+         android:layout_toRightOf="@+id/overtime_statistics_total_day"
+         android:id="@+id/overtime_statistics_total_hour"
+         android:layout_marginTop="@dimen/dp_20"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="共 0小时"
+         android:textColor="#ff28292d"
+         android:textSize="19sp"/>
+ </RelativeLayout>
 </RelativeLayout>
-                <ExpandableListView
+    <TextView
+    android:id="@+id/overtime_statistics_total_price"
+    android:layout_marginTop="@dimen/dp_10"
+    android:layout_below="@+id/overtime_statistics_rl_one"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="总收入："
+    android:textColor="#ff28292d"
+    android:textSize="17sp"
+    />
+
+
+    <ExpandableListView
                     android:layout_marginTop="@dimen/dp_20"
                     android:childDivider="#ededed"
                     android:id="@+id/overtime_statistics_elv"

@@ -277,7 +277,6 @@ public class MyWheelView extends View {
         // 修改这个值可以改变滑行速度
         int velocityFling = 15;
         mFuture = mExecutor.scheduleWithFixedDelay(new InertiaTimerTask(this, velocityY), 0, velocityFling, TimeUnit.MILLISECONDS);
-        Log.i("wangpeiming", "scrollBy: ");
     }
 
     public void cancelFuture() {

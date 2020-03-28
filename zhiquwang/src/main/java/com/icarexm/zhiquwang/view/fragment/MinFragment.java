@@ -27,6 +27,7 @@ import com.icarexm.zhiquwang.bean.MineBean;
 import com.icarexm.zhiquwang.custview.CircleImageView;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.ShadowDrawable;
+import com.icarexm.zhiquwang.presenter.QueryWagesPresenter;
 import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
@@ -43,6 +44,7 @@ import com.icarexm.zhiquwang.view.activity.MyResumeActivity;
 import com.icarexm.zhiquwang.view.activity.MyTeamActivity;
 import com.icarexm.zhiquwang.view.activity.MyToJoinActivity;
 import com.icarexm.zhiquwang.view.activity.MyWalletActivity;
+import com.icarexm.zhiquwang.view.activity.QueryWagesActivity;
 import com.icarexm.zhiquwang.view.activity.SetActivity;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
@@ -125,6 +127,7 @@ public class MinFragment extends Fragment implements View.OnClickListener {
       inflate.findViewById(R.id.fm_min_rl_businessCooperation).setOnClickListener(this);
       inflate.findViewById(R.id.fm_min_message).setOnClickListener(this);
       inflate.findViewById(R.id.fm_min_rl_entry_enterprise).setOnClickListener(this);
+      inflate.findViewById(R.id.fm_min_rl_query_wages).setOnClickListener(this);
         img_avatar = inflate.findViewById(R.id.fm_min_img_head);
         tv_nickname = inflate.findViewById(R.id.fm_min_tv_nickname);
         tv_address = inflate.findViewById(R.id.fm_min_tv_address);
@@ -187,6 +190,11 @@ public class MinFragment extends Fragment implements View.OnClickListener {
             case R.id.fm_min_rl_entry_enterprise:
                 if (!ButtonUtils.isFastDoubleClick(R.id.fm_min_message)) {
                     startActivity(new Intent(mContext, EntryEnterpriseActivity.class));
+                }
+                break;
+            case R.id.fm_min_rl_query_wages:
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_min_rl_query_wages)){
+                    startActivity(new Intent(mContext, QueryWagesActivity.class));
                 }
                 break;
         }

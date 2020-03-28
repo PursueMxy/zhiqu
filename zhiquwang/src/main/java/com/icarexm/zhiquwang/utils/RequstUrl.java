@@ -181,5 +181,8 @@ public class RequstUrl {
 
         //当前职位信息
         public static String CurrentEnterprise=HOST+"/api/currentEnterprise";
+
+        //查询工资
+        public static  String honorariumSearch=HOST+"/api/honorariumSearch";
     }
 }

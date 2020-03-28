@@ -230,7 +230,7 @@ public class UpdateBaseInforActivity extends BaseActivity {
                 }
                 break;
             case R.id.update_base_rl_time:
-                if (!ButtonUtils.isFastDoubleClick(R.id.set_reminder_img_back)) {
+                if (!ButtonUtils.isFastDoubleClick(R.id.update_base_rl_time)) {
                     BirthDateDialog();
                 }
                 break;

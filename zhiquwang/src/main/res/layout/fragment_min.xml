@@ -4,7 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.fragment.MinFragment">
-
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="none">
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -139,7 +142,7 @@
         android:layout_marginLeft="@dimen/dp_15"
         android:layout_marginRight="@dimen/dp_15"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_176">
+        android:layout_height="@dimen/dp_275">
         <RelativeLayout
             android:id="@+id/fm_min_rl_myjobsearch"
             android:layout_width="match_parent"
@@ -255,6 +258,64 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </RelativeLayout>
+        <View
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_1"
+            android:background="@color/fff2f2f2"/>
+        <RelativeLayout
+            android:id="@+id/fm_min_rl_query_wages"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_45">
+            <TextView
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:drawablePadding="@dimen/dp_10"
+                android:drawableLeft="@mipmap/ic_wages"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="查询工资"
+                android:textColor="@color/ff4e4d4d"
+                android:textSize="@dimen/sp_14"/>
+
+            <ImageView
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dp_15"
+                android:src="@mipmap/ic_right_gray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+        <View
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_1"
+            android:background="@color/fff2f2f2"/>
+        <RelativeLayout
+            android:id="@+id/fm_min_rl_message"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_45">
+            <TextView
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:drawablePadding="@dimen/dp_10"
+                android:drawableLeft="@mipmap/ic_message_one"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="聊天信息"
+                android:textColor="@color/ff4e4d4d"
+                android:textSize="@dimen/sp_14"/>
+
+            <ImageView
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dp_15"
+                android:src="@mipmap/ic_right_gray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -351,4 +412,5 @@
              android:layout_height="wrap_content" />
      </RelativeLayout>
 </RelativeLayout>
+</ScrollView>
 </FrameLayout>

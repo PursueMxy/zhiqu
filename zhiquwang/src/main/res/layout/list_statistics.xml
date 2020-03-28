@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="￥0.00"
-            android:textColor="#ff01c5a6"
+            android:textColor="#ff00b6ce"
             android:textSize="@dimen/sp_19"
             />
     </RelativeLayout>

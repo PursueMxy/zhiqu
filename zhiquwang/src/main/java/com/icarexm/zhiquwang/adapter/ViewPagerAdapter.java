@@ -117,7 +117,6 @@ public class ViewPagerAdapter  extends RecyclerView.Adapter<ViewPagerAdapter.Vie
         }
     }
 
-
     //获取网络视频第一帧
     public static Bitmap getNetVideoBitmap(String videoUrl) {
         Bitmap bitmap = null;

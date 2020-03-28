@@ -27,7 +27,7 @@ public class MyResumeModel implements MyResumeContract.Model {
      * 保存个人简历
      */
     public void PostaddResume(MyResumePresenter myResumePresenter,String token,String avatar,String real_name,String sex,String birth,String city,
-                              String education,String personal_introduce,String experience){
+                              String education,String personal_introduce,String experience,String money){
           OkGo.<String>post(RequstUrl.URL.AddResume)
                   .params("token",token)
                   .params("avatar",avatar)
@@ -38,6 +38,7 @@ public class MyResumeModel implements MyResumeContract.Model {
                   .params("education",education)
                   .params("personal_introduce",personal_introduce)
                   .params("experience",experience)
+                  .params("money",money)
                   .execute(new StringCallback() {
                       @Override
                       public void onSuccess(Response<String> response) {

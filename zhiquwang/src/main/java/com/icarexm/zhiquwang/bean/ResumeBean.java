@@ -8,7 +8,7 @@ public class ResumeBean {
     /**
      * code : 1
      * msg : 获取成功
-     * data : {"mobile":"15306987579","avatar":"http://192.168.1.22:8080/uploads/20191119/d9a7d60b9ccbbcc59e2261ded6117d1b.jpg","sex":"男","birth":"1993年01","city":"福建厦门市","education":"本科","personal_introduce":"5877","experience":[{"company_name":"2588","job_content":"丰富","job_end":"2017-11-21","job_start":"2016-11-21","leave_cause":"1"},{"company_name":"点的","job_content":"2588","job_end":"2018-11-21","job_start":"2017-11-21","leave_cause":"f"}],"user_name":"黑铁5","age":"26岁","login_time_text":""}
+     * data : {"money":"50000.00","mobile":"15306987579","avatar":"/uploads/20191206/41f13f8bee25b1d28ca8ec6e5966106c.jpg","sex":"男","birth":"1993年01","city":"福建厦门市","education":"本科","personal_introduce":"谢谢唱个歌哼哼唧唧","experience":[{"company_name":"add","job_content":"Sdf","job_end":"2019.12.30","job_start":"2019.12.30","leave_cause":"Sdf"},{"company_name":"2558","job_content":"8855","job_end":"2019-12-30","job_start":"2019-12-30","leave_cause":"996"}],"user_name":"黑铁5","age":"27岁","login_time_text":""}
      */
 
     private int code;
@@ -41,19 +41,21 @@ public class ResumeBean {
 
     public static class DataBean {
         /**
+         * money : 50000.00
          * mobile : 15306987579
-         * avatar : http://192.168.1.22:8080/uploads/20191119/d9a7d60b9ccbbcc59e2261ded6117d1b.jpg
+         * avatar : /uploads/20191206/41f13f8bee25b1d28ca8ec6e5966106c.jpg
          * sex : 男
          * birth : 1993年01
          * city : 福建厦门市
          * education : 本科
-         * personal_introduce : 5877
-         * experience : [{"company_name":"2588","job_content":"丰富","job_end":"2017-11-21","job_start":"2016-11-21","leave_cause":"1"},{"company_name":"点的","job_content":"2588","job_end":"2018-11-21","job_start":"2017-11-21","leave_cause":"f"}]
+         * personal_introduce : 谢谢唱个歌哼哼唧唧
+         * experience : [{"company_name":"add","job_content":"Sdf","job_end":"2019.12.30","job_start":"2019.12.30","leave_cause":"Sdf"},{"company_name":"2558","job_content":"8855","job_end":"2019-12-30","job_start":"2019-12-30","leave_cause":"996"}]
          * user_name : 黑铁5
-         * age : 26岁
+         * age : 27岁
          * login_time_text :
          */
 
+        private String money;
         private String mobile;
         private String avatar;
         private String sex;
@@ -65,6 +67,14 @@ public class ResumeBean {
         private String age;
         private String login_time_text;
         private List<ExperienceBean> experience;
+
+        public String getMoney() {
+            return money;
+        }
+
+        public void setMoney(String money) {
+            this.money = money;
+        }
 
         public String getMobile() {
             return mobile;
@@ -156,11 +166,11 @@ public class ResumeBean {
 
         public static class ExperienceBean {
             /**
-             * company_name : 2588
-             * job_content : 丰富
-             * job_end : 2017-11-21
-             * job_start : 2016-11-21
-             * leave_cause : 1
+             * company_name : add
+             * job_content : Sdf
+             * job_end : 2019.12.30
+             * job_start : 2019.12.30
+             * leave_cause : Sdf
              */
 
             private String company_name;

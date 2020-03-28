@@ -8,7 +8,7 @@ public class StatisticsBean {
     /**
      * code : 1
      * msg : 获取成功
-     * data : {"total_price":51.64,"total_time":6,"total_day":4,"total_info":[{"classes_id":2,"classes_name":"白班","price":0,"hours":0,"info":[{"festival_id":3,"festival_name":"中秋","price":0,"hours":0},{"festival_id":4,"festival_name":"工作日","price":0,"hours":0},{"festival_id":2,"festival_name":"国庆","price":0,"hours":0}]},{"classes_id":4,"classes_name":"中班","price":0,"hours":0,"info":[{"festival_id":3,"festival_name":"中秋","price":0,"hours":0},{"festival_id":4,"festival_name":"工作日","price":0,"hours":0},{"festival_id":2,"festival_name":"国庆","price":0,"hours":0}]},{"classes_id":3,"classes_name":"夜班","price":51.64,"hours":6,"info":[{"festival_id":3,"festival_name":"中秋","price":0,"hours":0},{"festival_id":4,"festival_name":"工作日","price":51.64,"hours":6},{"festival_id":2,"festival_name":"国庆","price":0,"hours":0}]}]}
+     * data : {"total_price":0,"total_time":0,"total_day":0,"total_info":[{"classes_id":2,"classes_name":"白班","price":0,"hours":0,"info":[{"festival_id":3,"festival_name":"正常工作日","price":0,"hours":0},{"festival_id":2,"festival_name":"周末","price":0,"hours":0},{"festival_id":4,"festival_name":"节假日","price":0,"hours":0}]},{"classes_id":4,"classes_name":"中班","price":0,"hours":0,"info":[{"festival_id":3,"festival_name":"正常工作日","price":0,"hours":0},{"festival_id":2,"festival_name":"周末","price":0,"hours":0},{"festival_id":4,"festival_name":"节假日","price":0,"hours":0}]},{"classes_id":3,"classes_name":"夜班","price":0,"hours":0,"info":[{"festival_id":3,"festival_name":"正常工作日","price":0,"hours":0},{"festival_id":2,"festival_name":"周末","price":0,"hours":0},{"festival_id":4,"festival_name":"节假日","price":0,"hours":0}]}],"price":"0.00"}
      */
 
     private int code;
@@ -41,39 +41,49 @@ public class StatisticsBean {
 
     public static class DataBean {
         /**
-         * total_price : 51.64
-         * total_time : 6
-         * total_day : 4
-         * total_info : [{"classes_id":2,"classes_name":"白班","price":0,"hours":0,"info":[{"festival_id":3,"festival_name":"中秋","price":0,"hours":0},{"festival_id":4,"festival_name":"工作日","price":0,"hours":0},{"festival_id":2,"festival_name":"国庆","price":0,"hours":0}]},{"classes_id":4,"classes_name":"中班","price":0,"hours":0,"info":[{"festival_id":3,"festival_name":"中秋","price":0,"hours":0},{"festival_id":4,"festival_name":"工作日","price":0,"hours":0},{"festival_id":2,"festival_name":"国庆","price":0,"hours":0}]},{"classes_id":3,"classes_name":"夜班","price":51.64,"hours":6,"info":[{"festival_id":3,"festival_name":"中秋","price":0,"hours":0},{"festival_id":4,"festival_name":"工作日","price":51.64,"hours":6},{"festival_id":2,"festival_name":"国庆","price":0,"hours":0}]}]
+         * total_price : 0
+         * total_time : 0
+         * total_day : 0
+         * total_info : [{"classes_id":2,"classes_name":"白班","price":0,"hours":0,"info":[{"festival_id":3,"festival_name":"正常工作日","price":0,"hours":0},{"festival_id":2,"festival_name":"周末","price":0,"hours":0},{"festival_id":4,"festival_name":"节假日","price":0,"hours":0}]},{"classes_id":4,"classes_name":"中班","price":0,"hours":0,"info":[{"festival_id":3,"festival_name":"正常工作日","price":0,"hours":0},{"festival_id":2,"festival_name":"周末","price":0,"hours":0},{"festival_id":4,"festival_name":"节假日","price":0,"hours":0}]},{"classes_id":3,"classes_name":"夜班","price":0,"hours":0,"info":[{"festival_id":3,"festival_name":"正常工作日","price":0,"hours":0},{"festival_id":2,"festival_name":"周末","price":0,"hours":0},{"festival_id":4,"festival_name":"节假日","price":0,"hours":0}]}]
+         * price : 0.00
          */
 
-        private double total_price;
-        private double total_time;
-        private double total_day;
+        private int total_price;
+        private int total_time;
+        private int total_day;
+        private String price;
         private List<TotalInfoBean> total_info;
 
-        public double getTotal_price() {
+        public int getTotal_price() {
             return total_price;
         }
 
-        public void setTotal_price(double total_price) {
+        public void setTotal_price(int total_price) {
             this.total_price = total_price;
         }
 
-        public double getTotal_time() {
+        public int getTotal_time() {
             return total_time;
         }
 
-        public void setTotal_time(double total_time) {
+        public void setTotal_time(int total_time) {
             this.total_time = total_time;
         }
 
-        public double getTotal_day() {
+        public int getTotal_day() {
             return total_day;
         }
 
-        public void setTotal_day(double total_day) {
+        public void setTotal_day(int total_day) {
             this.total_day = total_day;
+        }
+
+        public String getPrice() {
+            return price;
+        }
+
+        public void setPrice(String price) {
+            this.price = price;
         }
 
         public List<TotalInfoBean> getTotal_info() {
@@ -90,13 +100,13 @@ public class StatisticsBean {
              * classes_name : 白班
              * price : 0
              * hours : 0
-             * info : [{"festival_id":3,"festival_name":"中秋","price":0,"hours":0},{"festival_id":4,"festival_name":"工作日","price":0,"hours":0},{"festival_id":2,"festival_name":"国庆","price":0,"hours":0}]
+             * info : [{"festival_id":3,"festival_name":"正常工作日","price":0,"hours":0},{"festival_id":2,"festival_name":"周末","price":0,"hours":0},{"festival_id":4,"festival_name":"节假日","price":0,"hours":0}]
              */
 
             private int classes_id;
             private String classes_name;
-            private double price;
-            private double hours;
+            private int price;
+            private int hours;
             private List<InfoBean> info;
 
             public int getClasses_id() {
@@ -115,19 +125,19 @@ public class StatisticsBean {
                 this.classes_name = classes_name;
             }
 
-            public double getPrice() {
+            public int getPrice() {
                 return price;
             }
 
-            public void setPrice(double price) {
+            public void setPrice(int price) {
                 this.price = price;
             }
 
-            public double getHours() {
+            public int getHours() {
                 return hours;
             }
 
-            public void setHours(double hours) {
+            public void setHours(int hours) {
                 this.hours = hours;
             }
 
@@ -142,15 +152,15 @@ public class StatisticsBean {
             public static class InfoBean {
                 /**
                  * festival_id : 3
-                 * festival_name : 中秋
+                 * festival_name : 正常工作日
                  * price : 0
                  * hours : 0
                  */
 
                 private int festival_id;
                 private String festival_name;
-                private double price;
-                private double hours;
+                private int price;
+                private int hours;
 
                 public int getFestival_id() {
                     return festival_id;
@@ -168,19 +178,19 @@ public class StatisticsBean {
                     this.festival_name = festival_name;
                 }
 
-                public double getPrice() {
+                public int getPrice() {
                     return price;
                 }
 
-                public void setPrice(double price) {
+                public void setPrice(int price) {
                     this.price = price;
                 }
 
-                public double getHours() {
+                public int getHours() {
                     return hours;
                 }
 
-                public void setHours(double hours) {
+                public void setHours(int hours) {
                     this.hours = hours;
                 }
             }
