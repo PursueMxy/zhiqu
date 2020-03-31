@@ -41,7 +41,7 @@ public class UserAgreementActivity extends BaseActivity {
         setContentView(R.layout.activity_user_agreement);
         mContext = getApplicationContext();
         ButterKnife.bind(this);
-      LoadingDialogShow();
+        LoadingDialogShow();
         InitData();
     }
 

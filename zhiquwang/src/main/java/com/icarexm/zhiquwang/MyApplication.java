@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.danikula.videocache.HttpProxyCacheServer;
+import com.icarexm.zhiquwang.chatroom.MainChatRoom;
 import com.icarexm.zhiquwang.utils.AppContUtils;
 import com.icarexm.zhiquwang.utils.Density;
 import com.icarexm.zhiquwang.wxapi.WXEntryActivity;
@@ -29,6 +30,7 @@ public class MyApplication extends Application {
         LitePal.initialize(this);
         Density.setDensity(this, 360);//375为UI提供设计图的宽度
         CrashReport.initCrashReport(getApplicationContext(),"27985782b5", false);
+        MainChatRoom.init();
     }
 
     private void InitWeixin() {
@@ -46,4 +48,6 @@ public class MyApplication extends Application {
     private HttpProxyCacheServer newProxy() {
         return new HttpProxyCacheServer(this);
     }
+
+
 }

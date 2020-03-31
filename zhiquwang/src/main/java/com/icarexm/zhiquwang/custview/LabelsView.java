@@ -185,8 +185,6 @@ public class LabelsView extends ViewGroup implements View.OnClickListener {
             label.add("Label 3");
             label.add("Label 4");
             label.add("Label 5");
-            label.add("Label 6");
-            label.add("Label 7");
             setLabels(label);
         }
     }

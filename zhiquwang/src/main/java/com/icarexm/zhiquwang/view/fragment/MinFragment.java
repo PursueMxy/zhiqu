@@ -34,11 +34,13 @@ import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.icarexm.zhiquwang.view.activity.BaseInformationActivity;
 import com.icarexm.zhiquwang.view.activity.BusinessCooperationActivity;
 import com.icarexm.zhiquwang.view.activity.CertificationActivity;
+import com.icarexm.zhiquwang.view.activity.CustomerChatActivity;
 import com.icarexm.zhiquwang.view.activity.DistributionTeamActivity;
 import com.icarexm.zhiquwang.view.activity.EditPersonalActivity;
 import com.icarexm.zhiquwang.view.activity.EntryEnterpriseActivity;
 import com.icarexm.zhiquwang.view.activity.LoginActivity;
 import com.icarexm.zhiquwang.view.activity.MessageActivity;
+import com.icarexm.zhiquwang.view.activity.MessageListActivity;
 import com.icarexm.zhiquwang.view.activity.MyJobSearchActivity;
 import com.icarexm.zhiquwang.view.activity.MyResumeActivity;
 import com.icarexm.zhiquwang.view.activity.MyTeamActivity;
@@ -128,6 +130,7 @@ public class MinFragment extends Fragment implements View.OnClickListener {
       inflate.findViewById(R.id.fm_min_message).setOnClickListener(this);
       inflate.findViewById(R.id.fm_min_rl_entry_enterprise).setOnClickListener(this);
       inflate.findViewById(R.id.fm_min_rl_query_wages).setOnClickListener(this);
+      inflate.findViewById(R.id.fm_min_rl_customer_chat).setOnClickListener(this);
         img_avatar = inflate.findViewById(R.id.fm_min_img_head);
         tv_nickname = inflate.findViewById(R.id.fm_min_tv_nickname);
         tv_address = inflate.findViewById(R.id.fm_min_tv_address);
@@ -195,6 +198,11 @@ public class MinFragment extends Fragment implements View.OnClickListener {
             case R.id.fm_min_rl_query_wages:
                 if (!ButtonUtils.isFastDoubleClick(R.id.fm_min_rl_query_wages)){
                     startActivity(new Intent(mContext, QueryWagesActivity.class));
+                }
+                break;
+            case R.id.fm_min_rl_customer_chat:
+                if (!ButtonUtils.isFastDoubleClick(R.id.fm_min_rl_customer_chat)){
+                    startActivity(new Intent(mContext, MessageListActivity.class));
                 }
                 break;
         }

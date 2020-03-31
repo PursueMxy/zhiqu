@@ -189,13 +189,15 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
         recruitDetailPresenter.GetJobDetail(token,job_id);
     }
 
-    @OnClick({R.id.recruit_dtl_tv_wechat,R.id.recruit_dtl_tv_nearby_store,R.id.recruit_dtl_tv_callPhone,R.id.recruit_dtl_btn_one_key_enroll
+    @OnClick({R.id.recruit_dtl_tv_service_chat,R.id.recruit_dtl_tv_nearby_store,R.id.recruit_dtl_tv_callPhone,R.id.recruit_dtl_btn_one_key_enroll
     ,R.id.recruit_dtl_img_back,R.id.recruit_dtl_tv_address,R.id.recruit_dtl_img_invite_url})
     public void onViewClick(View view){
         switch (view.getId()){
-            case R.id.recruit_dtl_tv_wechat:
-                if (!ButtonUtils.isFastDoubleClick(R.id.recruit_dtl_tv_wechat)) {
-                    WechatDialog();
+            case R.id.recruit_dtl_tv_service_chat:
+                if (!ButtonUtils.isFastDoubleClick(R.id.recruit_dtl_tv_service_chat)) {
+                    Intent intent = new Intent(mContext, CustomerChatActivity.class);
+                    intent.putExtra("job_id",job_id);
+                    startActivity(intent);
                 }
                 break;
             case R.id.recruit_dtl_tv_nearby_store:

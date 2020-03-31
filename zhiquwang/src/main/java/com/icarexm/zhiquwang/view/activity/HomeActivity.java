@@ -25,6 +25,7 @@ import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.MyViewPager;
 import com.icarexm.zhiquwang.view.fragment.ClockInFragment;
 import com.icarexm.zhiquwang.view.fragment.HomeFragment;
+import com.icarexm.zhiquwang.view.fragment.MessageFragment;
 import com.icarexm.zhiquwang.view.fragment.MinFragment;
 import com.icarexm.zhiquwang.view.fragment.RecordOvertimeFragment;
 
@@ -129,7 +130,7 @@ public class HomeActivity extends BaseActivity {
                }else if (currentPosition==1){
                    recordOvertimeFragment.UpdateUI();
                }else if (currentPosition==2){
-                   clockInFragment.UpdateUI();
+//                   clockInFragment.UpdateUI();
                }else if (currentPosition==3){
                    minFragment.UpdateUI();
                }

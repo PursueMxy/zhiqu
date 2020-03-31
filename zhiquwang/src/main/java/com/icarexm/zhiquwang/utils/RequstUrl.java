@@ -184,5 +184,14 @@ public class RequstUrl {
 
         //查询工资
         public static  String honorariumSearch=HOST+"/api/honorariumSearch";
+
+        //获取联系人列表
+        public static String phoneGetChatList=HOST+"/api/phoneGetChatList";
+
+        //进入聊天
+        public static String phoneCreateChat=HOST+"/api/phoneCreateChat";
+
+        //获取聊天日志
+        public static String phoneGetChatRecord=HOST+"/api/phoneGetChatRecord";
     }
 }

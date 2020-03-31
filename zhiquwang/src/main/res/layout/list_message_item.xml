@@ -8,25 +8,58 @@
     android:layout_marginTop="@dimen/dp_10"
     >
       <ImageView
+          android:id="@+id/list_message_item_img"
           android:layout_marginLeft="@dimen/dp_10"
           android:layout_centerVertical="true"
           android:layout_width="@dimen/dp_38"
           android:layout_height="@dimen/dp_38"
           android:src="@mipmap/ic_avatar"/>
     <TextView
-        android:id="@+id/list_message_item_service"
-        android:layout_width="wrap_content"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_toRightOf="@+id/list_message_item_img"
+        android:id="@+id/list_message_item_tv_service_name"
+        android:layout_width="@dimen/dp_50"
         android:layout_height="wrap_content"
-        android:text="客服名称XX"
         android:textColor="#ff4e4d4d"
         android:textSize="15sp"
+        android:layout_marginTop="@dimen/dp_5"
         />
     <TextView
-        android:layout_toRightOf="@+id/list_message_item_service"
-        android:layout_width="197dp"
-        android:layout_height="16dp"
-        android:text="企业名称XX... · 职位名称XXX..."
+        android:id="@+id/list_message_item_tv_job_name"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_toRightOf="@+id/list_message_item_tv_service_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textColor="#ffa5a5a5"
         android:textSize="12sp"
+        />
+
+    <TextView
+        android:id="@+id/list_message_item_tv_content"
+        android:layout_marginTop="@dimen/dp_5"
+        android:layout_below="@+id/list_message_item_tv_service_name"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_toRightOf="@+id/list_message_item_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="#ffa5a5a5"
+        android:textSize="12sp"
+        />
+
+    <TextView
+        android:id="@+id/list_message_item_tv_date"
+        android:layout_marginBottom="@dimen/dp_5"
+        android:layout_marginRight="@dimen/dp_15"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="01-13 05:02"
+        android:textColor="#ffb5b5b5"
+        android:textSize="10sp"
         />
 </RelativeLayout>

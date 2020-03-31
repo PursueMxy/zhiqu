@@ -294,7 +294,7 @@
             android:layout_height="@dimen/dp_1"
             android:background="@color/fff2f2f2"/>
         <RelativeLayout
-            android:id="@+id/fm_min_rl_message"
+            android:id="@+id/fm_min_rl_customer_chat"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_45">
             <TextView
