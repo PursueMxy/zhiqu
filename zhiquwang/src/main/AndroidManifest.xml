@@ -51,7 +51,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".view.activity.CustomerChatActivity"
-           ></activity>
+            ></activity>
         <activity android:name=".view.activity.MessageListActivity" />
         <activity android:name=".view.activity.WagesDetailActivity" />
         <activity android:name=".view.activity.QueryWagesActivity" />

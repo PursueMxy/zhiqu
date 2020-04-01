@@ -9,7 +9,7 @@
     <RelativeLayout
         android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_64">
+        android:layout_height="@dimen/dp_60">
         <ImageView
             android:padding="@dimen/dp_10"
             android:id="@+id/add_work_history_img_back"

@@ -10,7 +10,7 @@
         android:id="@+id/set_reminder_rl_top"
         android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_64">
+        android:layout_height="@dimen/dp_60">
         <ImageView
             android:padding="@dimen/dp_10"
             android:id="@+id/set_reminder_img_back"

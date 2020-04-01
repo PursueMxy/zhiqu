@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -44,6 +45,7 @@ import com.icarexm.zhiquwang.utils.GifSizeFilter;
 import com.icarexm.zhiquwang.utils.IConstants;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
+import com.icarexm.zhiquwang.view.dialog.ImgBoostDialog;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
@@ -68,7 +70,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CustomerChatActivity extends BaseActivity implements Observer, AppSocket.SendOnItemClick, CustomerChatContract.View {
+public class CustomerChatActivity extends BaseActivity implements Observer, AppSocket.SendOnItemClick, CustomerChatContract.View, CustomerChatAdapter.ImageOnClickListtener {
 
     @BindView(R.id.customer_chat_recycler)
     XRecyclerView mRecyclerView;
@@ -92,8 +94,9 @@ public class CustomerChatActivity extends BaseActivity implements Observer, AppS
     private List<String> word_list;
     private boolean is_sendchat=false;
     private static final int REQUEST_CODE=1001;
-    private int limit=10;
+    private int limit=20;
     private int page=1;
+
 
 
     @Override
@@ -118,7 +121,6 @@ public class CustomerChatActivity extends BaseActivity implements Observer, AppS
 
     private void InitUI() {
         labelsView.setMaxLines(1);
-//        labelsView.setLabels(chat_list);
         View chat_head = getLayoutInflater().inflate(R.layout.chat_head_item, null);
         tv_position = chat_head.findViewById(R.id.chat_head_item_tv_position);
         tv_salary = chat_head.findViewById(R.id.chat_head_item_tv_salary);
@@ -131,11 +133,14 @@ public class CustomerChatActivity extends BaseActivity implements Observer, AppS
         mRecyclerView.setFootViewText("拼命加载中","已经全部");
         mRecyclerView.addHeaderView(chat_head);
         mRecyclerView.setLoadingMoreEnabled(false);
+        mRecyclerView.setLoadingMoreEnabled(false);
         mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
                 //加载更多
                 mRecyclerView.refreshComplete();//刷新动画完成
+               page=++page;
+                customerChatPresenter.phoneGetChatRecord(token,dataBean.getChat_id()+"",limit,page);
             }
 
             @Override
@@ -152,7 +157,7 @@ public class CustomerChatActivity extends BaseActivity implements Observer, AppS
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
                 outRect.set(0
-                        , 30
+                        , 20
                         , 0
                         , 0);
             }
@@ -163,12 +168,6 @@ public class CustomerChatActivity extends BaseActivity implements Observer, AppS
                 String word = word_list.get(position);
                 String msg = new GsonBuilder().create().toJson(new SendChatBean(dataBean.getChat_id() + "", dataBean.getUser_id() + "", dataBean.getAdmin_id() + "", dataBean.getJob_id() + "",
                         word, "1", dataBean.getUser_avatar()));
-                ChatMessageBean.NameValuePairsBean nameValuePairsBean = new ChatMessageBean.NameValuePairsBean(dataBean.getChat_id(), dataBean.getUser_id(), dataBean.getAdmin_id() + "", dataBean.getJob_id(), 1585652699,
-                        word, 1, dataBean.getUser_avatar(), 1);
-                chat_list.add(nameValuePairsBean);
-                customerChatAdapter.setListAll(chat_list);
-                customerChatAdapter.notifyDataSetChanged();
-                mRecyclerView.smoothScrollToPosition( chat_list.size()- 1);
                 AppSocket.getInstance().sendMessage(msg);
                 if (!is_sendchat) {
                     AppSocket.getInstance().ChatBackcall();
@@ -176,11 +175,21 @@ public class CustomerChatActivity extends BaseActivity implements Observer, AppS
                 }
             }
         });
+        chat_head.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, RecruitDetailActivity.class);
+                intent.putExtra("job_id",dataBean.getJob_id()+"");
+                intent.putExtra("zone_name",dataBean.getJob_name());
+                startActivity(intent);
+                finish();
+            }
+        });
+        customerChatAdapter.setImageOnClickListtener(this);
     }
 
     private void UserInit(String user_id) {
         AppSocket.getInstance().addUser(new GsonBuilder().create().toJson(new UserInitBean(user_id)));
-
     }
 
     @Override
@@ -193,20 +202,19 @@ public class CustomerChatActivity extends BaseActivity implements Observer, AppS
             case R.id.customer_chat_img_send_message:
                 String  content= edt_content.getText().toString();
                 if (!content.equals("")) {
+                    long currentTime = System.currentTimeMillis()/1000;
                     String msg = new GsonBuilder().create().toJson(new SendChatBean(dataBean.getChat_id() + "", dataBean.getUser_id() + "", dataBean.getAdmin_id() + "", dataBean.getJob_id() + "",
                             content, "1", dataBean.getUser_avatar()));
-                    ChatMessageBean.NameValuePairsBean nameValuePairsBean = new ChatMessageBean.NameValuePairsBean(dataBean.getChat_id(), dataBean.getUser_id(), dataBean.getAdmin_id() + "", dataBean.getJob_id(), 1585652699,
-                            content, 1, dataBean.getUser_avatar(), 1);
-                    chat_list.add(nameValuePairsBean);
-                    customerChatAdapter.setListAll(chat_list);
-                    customerChatAdapter.notifyDataSetChanged();
-                    mRecyclerView.smoothScrollToPosition( chat_list.size()- 1);
                     AppSocket.getInstance().sendMessage(msg);
                     if (!is_sendchat) {
                         AppSocket.getInstance().ChatBackcall();
                         is_sendchat=true;
                     }
                     edt_content.setText("");
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(view,InputMethodManager.SHOW_FORCED);
+
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
                 }else {
                     ToastUtils.showToast(mContext,"消息不能为空" );
                 }
@@ -256,15 +264,11 @@ public class CustomerChatActivity extends BaseActivity implements Observer, AppS
     }
 
     @Override
-    public void updateMessage(String content) {
+    public void updateMessage() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ChatMessageBean chatMessageBean = new GsonBuilder().create().fromJson(content, ChatMessageBean.class);
-                customerChatAdapter.addItemToLast(chatMessageBean.getNameValuePairs());
-                chat_list.add(chatMessageBean.getNameValuePairs());
-                customerChatAdapter.notifyDataSetChanged();
-                mRecyclerView.smoothScrollToPosition( chat_list.size()- 1);
+                customerChatPresenter.phoneGetChatRecord(token,dataBean.getChat_id()+"",limit,page);
             }
         });
     }
@@ -278,6 +282,7 @@ public class CustomerChatActivity extends BaseActivity implements Observer, AppS
     public void updateCreateChat(int code, String msg, CreatChatBean.DataBean data) {
          if (data!=null){
              dataBean=data;
+             page=1;
              customerChatPresenter.phoneGetChatRecord(token,data.getChat_id()+"",limit,page);
              tv_title.setText(data.getAdmin_name());
              UserInit(data.getUser_id()+"");
@@ -300,23 +305,43 @@ public class CustomerChatActivity extends BaseActivity implements Observer, AppS
 
     @Override
     public void UpdateChatLog(int code, String msg, ChatLogListBean.DataBeanX data) {
-        if (code==1){
-            List<ChatLogListBean.DataBeanX.DataBean> dataList = data.getData();
-            for (int a=dataList.size()-1;a>0;a--){
-                String avatar;
-                if ( dataList.get(a).getSide()==1){
-                    avatar=dataList.get(a).getAdmin_avatar();
+            if (code==1){
+                if (page==1) {
+                    chat_list.clear();
+                    List<ChatLogListBean.DataBeanX.DataBean> dataList = data.getData();
+                    for (int a = dataList.size() - 1; a > -1; a--) {
+                        String avatar;
+                        if (dataList.get(a).getSide() == 2) {
+                            avatar = dataList.get(a).getAdmin_avatar();
+                        } else {
+                            avatar = dataList.get(a).getUser_avatar();
+                        }
+                        long currentTime = System.currentTimeMillis() / 1000;
+                        ChatMessageBean.NameValuePairsBean nameValuePairsBean = new ChatMessageBean.NameValuePairsBean(dataList.get(a).getChat_id(), dataList.get(a).getUser_id(), dataList.get(a).getAdmin_id() + "", dataList.get(a).getJob_id(), dataList.get(a).getTime(),
+                                dataList.get(a).getContent(), dataList.get(a).getType(), avatar, dataList.get(a).getSide());
+                        chat_list.add(nameValuePairsBean);
+                    }
+                    customerChatAdapter.setListAll(chat_list);
+                    mRecyclerView.setAdapter(customerChatAdapter);
+                    mRecyclerView.smoothScrollToPosition(chat_list.size() + 1);
+                    page = 1;
                 }else {
-                    avatar=dataList.get(a).getUser_avatar();
+                    List<ChatLogListBean.DataBeanX.DataBean> dataList = data.getData();
+                    for (int a = dataList.size() - 1; a > -1; a--) {
+                        String avatar;
+                        if (dataList.get(a).getSide() == 2) {
+                            avatar = dataList.get(a).getAdmin_avatar();
+                        } else {
+                            avatar = dataList.get(a).getUser_avatar();
+                        }
+                        ChatMessageBean.NameValuePairsBean nameValuePairsBean = new ChatMessageBean.NameValuePairsBean(dataList.get(a).getChat_id(), dataList.get(a).getUser_id(), dataList.get(a).getAdmin_id() + "", dataList.get(a).getJob_id(), dataList.get(a).getTime(),
+                                dataList.get(a).getContent(), dataList.get(a).getType(), avatar, dataList.get(a).getSide());
+                        chat_list.add(0,nameValuePairsBean);
+                    }
+                    customerChatAdapter.setListAll(chat_list);
+                    mRecyclerView.setAdapter(customerChatAdapter);
                 }
-                ChatMessageBean.NameValuePairsBean nameValuePairsBean = new ChatMessageBean.NameValuePairsBean(dataList.get(a).getChat_id(),dataList.get(a).getUser_id(), dataList.get(a).getAdmin_id() + "", dataList.get(a).getJob_id(), 1585652699,
-                        dataList.get(a).getContent(), dataList.get(a).getType(), avatar, dataList.get(a).getSide());
-                chat_list.add(nameValuePairsBean);
             }
-            customerChatAdapter.setListAll(chat_list);
-            customerChatAdapter.notifyDataSetChanged();
-            mRecyclerView.smoothScrollToPosition(chat_list.size()- 1);
-        }
     }
 
 
@@ -340,11 +365,6 @@ public class CustomerChatActivity extends BaseActivity implements Observer, AppS
                                          String avatar = DataBean.getUrl();
                                         String msg = new GsonBuilder().create().toJson(new SendChatBean(dataBean.getChat_id() + "", dataBean.getUser_id() + "", dataBean.getAdmin_id() + "", dataBean.getJob_id() + "",
                                                 avatar, "2", dataBean.getUser_avatar()));
-                                        ChatMessageBean.NameValuePairsBean nameValuePairsBean = new ChatMessageBean.NameValuePairsBean(dataBean.getChat_id(), dataBean.getUser_id(), dataBean.getAdmin_id() + "", dataBean.getJob_id(), 1585652699,
-                                                avatar, 2, dataBean.getUser_avatar(), 1);
-                                        chat_list.add(nameValuePairsBean);
-                                        customerChatAdapter.notifyDataSetChanged();
-                                        mRecyclerView.smoothScrollToPosition( chat_list.size()- 1);
                                         AppSocket.getInstance().sendMessage(msg);
                                     }
                                 });
@@ -353,5 +373,12 @@ public class CustomerChatActivity extends BaseActivity implements Observer, AppS
                 default:
             }
         }
+    }
+
+
+
+    @Override
+    public void ImageDialog(String url) {
+        new ImgBoostDialog(this,url).show();
     }
 }

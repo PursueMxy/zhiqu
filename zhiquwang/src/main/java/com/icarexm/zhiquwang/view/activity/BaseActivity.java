@@ -12,6 +12,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.icarexm.zhiquwang.R;
+import com.icarexm.zhiquwang.utils.StatusBarUtil;
 
 import butterknife.ButterKnife;
 
@@ -22,6 +23,9 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
         initBar(R.color.colorAc);
+        View base_top = findViewById(R.id.base_top);
+        int height = StatusBarUtil.getStatusHeight(this);
+        margin(base_top,0,height,0,0);
     }
 
     private void initBar(int color) {
@@ -51,6 +55,15 @@ public class BaseActivity extends AppCompatActivity {
         // 获得状态栏高度
         int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
         return context.getResources().getDimensionPixelSize(resourceId);
+    }
+
+
+    public void margin(View v, int l, int t, int r, int b) {
+        if (v.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+            p.setMargins(l, t, r, b);
+            v.requestLayout();
+        }
     }
 
 

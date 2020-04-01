@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
@@ -30,7 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MessageListActivity extends AppCompatActivity implements MessageListContract.View {
+public class MessageListActivity extends BaseActivity implements MessageListContract.View {
 
     @BindView(R.id.message_list_recycler)
     XRecyclerView mRecyclerView;
@@ -102,6 +103,7 @@ public class MessageListActivity extends AppCompatActivity implements MessageLis
 
     @Override
     public void UpdateMessageList(int code, String msg, List<ChatListBean.DataBean> dataBeanList) {
+        timeHandler.postDelayed(timeRunnable,2000);
         if (code==1) {
             messageList = dataBeanList;
             messageListAdapter.setListAll(messageList);
@@ -117,4 +119,19 @@ public class MessageListActivity extends AppCompatActivity implements MessageLis
                 break;
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        timeHandler.removeCallbacks(timeRunnable);
+    }
+
+    //防止多次点击获取验证码
+    Handler timeHandler=new Handler();
+    Runnable timeRunnable=new Runnable() {
+        @Override
+        public void run() {
+            messageListPresenter.phoneGetChatList(token);
+        }
+    };
 }

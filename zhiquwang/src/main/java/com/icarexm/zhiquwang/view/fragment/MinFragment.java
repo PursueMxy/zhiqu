@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.BaseInforBean;
+import com.icarexm.zhiquwang.bean.ChatListBean;
 import com.icarexm.zhiquwang.bean.MineBean;
 import com.icarexm.zhiquwang.custview.CircleImageView;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
@@ -70,6 +72,7 @@ public class MinFragment extends Fragment implements View.OnClickListener {
     private AMapLocationClient mLocationClient;
     private String district;
     private CustomProgressDialog progressDialog;
+    private TextView tv_unread;
 
     public MinFragment() {
         // Required empty public constructor
@@ -85,6 +88,7 @@ public class MinFragment extends Fragment implements View.OnClickListener {
          cityName = share.getString("cityName", "");
         View inflate = inflater.inflate(R.layout.fragment_min, container, false);
         InitUI(inflate);
+        LoadingDialogShow();
         InitData();
         return inflate;
     }
@@ -93,7 +97,6 @@ public class MinFragment extends Fragment implements View.OnClickListener {
 
 
     private void InitData() {
-        LoadingDialogShow();
         OkGo.<String>post(RequstUrl.URL.mine)
                 .params("token",token)
                 .execute(new StringCallback() {
@@ -105,6 +108,13 @@ public class MinFragment extends Fragment implements View.OnClickListener {
                             MineBean.DataBean data = mineBean.getData();
                             tv_nickname.setText(data.getUsername());
                             Glide.with(mContext).load(RequstUrl.URL.HOST+data.getAvatar()).into(img_avatar);
+                            if (data.getUnread_num()>0){
+                                tv_unread.setVisibility(View.VISIBLE);
+                                tv_unread.setText(data.getUnread_num()+"");
+                            }else {
+                                tv_unread.setVisibility(View.GONE);
+                            }
+                            timeHandler.postDelayed(timeRunnable,3000);
                         }else if (mineBean.getCode() ==10001){
                             try {
                                 startActivity(new Intent(mContext, LoginActivity.class));
@@ -134,6 +144,7 @@ public class MinFragment extends Fragment implements View.OnClickListener {
         img_avatar = inflate.findViewById(R.id.fm_min_img_head);
         tv_nickname = inflate.findViewById(R.id.fm_min_tv_nickname);
         tv_address = inflate.findViewById(R.id.fm_min_tv_address);
+        tv_unread = inflate.findViewById(R.id.fm_min_tv_unread);
         tv_address.setText(cityName);
     }
 
@@ -237,5 +248,20 @@ public class MinFragment extends Fragment implements View.OnClickListener {
 
         }
 
+    }
+
+    //防止多次点击获取验证码
+    Handler timeHandler=new Handler();
+    Runnable timeRunnable=new Runnable() {
+        @Override
+        public void run() {
+            InitData();
+        }
+    };
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        timeHandler.removeCallbacks(timeRunnable);
     }
 }

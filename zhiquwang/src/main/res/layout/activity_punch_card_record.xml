@@ -8,7 +8,7 @@
     tools:context=".view.activity.PunchCardRecordActivity">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_64">
+        android:layout_height="@dimen/dp_60">
         <ImageView
             android:padding="@dimen/dp_10"
             android:id="@+id/punch_card_record_img_back"

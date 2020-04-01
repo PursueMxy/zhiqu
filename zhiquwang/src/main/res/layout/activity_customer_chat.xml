@@ -31,10 +31,10 @@
             android:layout_height="wrap_content"/>
     </RelativeLayout>
     <com.zhouyou.recyclerview.XRecyclerView
+        android:layout_marginBottom="@dimen/dp_15"
         android:layout_below="@+id/customer_chat_rl_top"
         android:layout_above="@+id/customer_chat_rl_bottom"
         android:id="@+id/customer_chat_recycler"
-        android:layout_marginTop="@dimen/dp_15"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
     <RelativeLayout
@@ -68,6 +68,7 @@
             app:wordMargin="@dimen/dp_10"/>
 
         <EditText
+            android:padding="@dimen/dp_7"
             android:id="@+id/customer_chat_edt_content"
             android:hint="请输入文字"
             android:textSize="@dimen/sp_14"
@@ -75,11 +76,8 @@
             android:textColor="@color/ffb5b5b5"
             android:layout_marginLeft="@dimen/dp_15"
             android:layout_marginTop="@dimen/dp_40"
-            android:gravity="left|center"
-            android:paddingLeft="@dimen/dp_10"
-            android:paddingRight="@dimen/dp_10"
             android:layout_width="@dimen/dp_250"
-            android:layout_height="@dimen/dp_40"
+            android:layout_height="wrap_content"
             android:background="@drawable/bg_edt_gray"/>
         <ImageView
             android:scaleType="fitXY"

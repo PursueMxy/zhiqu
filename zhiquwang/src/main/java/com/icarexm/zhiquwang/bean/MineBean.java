@@ -2,10 +2,11 @@ package com.icarexm.zhiquwang.bean;
 
 public class MineBean {
 
+
     /**
      * code : 1
      * msg : success
-     * data : {"username":"黑铁5","real_name":"黑铁5","mobile":"15306987579","avatar":"/uploads/20191119/d9a7d60b9ccbbcc59e2261ded6117d1b.jpg","city":"福建厦门市","login_time_text":""}
+     * data : {"user_id":3,"username":"黑铁5","real_name":"黑铁5","mobile":"15306987579","avatar":"/uploads/20191206/41f13f8bee25b1d28ca8ec6e5966106c.jpg","city":"福建厦门市","unread_num":0,"login_time_text":""}
      */
 
     private int code;
@@ -38,20 +39,32 @@ public class MineBean {
 
     public static class DataBean {
         /**
+         * user_id : 3
          * username : 黑铁5
          * real_name : 黑铁5
          * mobile : 15306987579
-         * avatar : /uploads/20191119/d9a7d60b9ccbbcc59e2261ded6117d1b.jpg
+         * avatar : /uploads/20191206/41f13f8bee25b1d28ca8ec6e5966106c.jpg
          * city : 福建厦门市
+         * unread_num : 0
          * login_time_text :
          */
 
+        private int user_id;
         private String username;
         private String real_name;
         private String mobile;
         private String avatar;
         private String city;
+        private int unread_num;
         private String login_time_text;
+
+        public int getUser_id() {
+            return user_id;
+        }
+
+        public void setUser_id(int user_id) {
+            this.user_id = user_id;
+        }
 
         public String getUsername() {
             return username;
@@ -91,6 +104,14 @@ public class MineBean {
 
         public void setCity(String city) {
             this.city = city;
+        }
+
+        public int getUnread_num() {
+            return unread_num;
+        }
+
+        public void setUnread_num(int unread_num) {
+            this.unread_num = unread_num;
         }
 
         public String getLogin_time_text() {

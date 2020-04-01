@@ -4,10 +4,11 @@ import java.util.List;
 
 public class ChatListBean {
 
+
     /**
      * code : 1
      * msg : success
-     * data : [{"chat_id":23,"job_id":29,"user_id":3,"avatar":"/uploads/20200331/a8f6be4db006dcdbc32c51a203d03f8a.jpg","nickname":"JinJuan","job_name":"达运包吃住美女多","enterprise_name":"达运电子精密有限公司","unread_num":3,"chat_record":"刚刚干活"}]
+     * data : [{"chat_id":42,"job_id":30,"user_id":3,"avatar":"/uploads/20200401/7fdfa118dd6ef5762aa778f4c0922f2a.jpg","nickname":"大帅测试","job_name":"测试职位测试职位测试职位","time":1585723744,"enterprise_name":"测试企业测试企业","unread_num":0,"chat_record":"我"},{"chat_id":46,"job_id":19,"user_id":3,"avatar":"/uploads/20200331/a8f6be4db006dcdbc32c51a203d03f8a.jpg","nickname":"JinJuan","job_name":"天马包住月薪5000","time":1585723727,"enterprise_name":"厦门天马微电子股份有限公司","unread_num":0,"chat_record":"闺女"},{"chat_id":47,"job_id":13,"user_id":3,"avatar":"/uploads/20200331/a8f6be4db006dcdbc32c51a203d03f8a.jpg","nickname":"JinJuan","job_name":"天马高薪招聘普工入职满30天立返500元","time":1585719406,"enterprise_name":"厦门天马微电子股份有限公司","unread_num":0,"chat_record":"/uploads/20200401/4086176b4d4aac2bda0d44d83a16c4a6.jpg"},{"chat_id":45,"job_id":26,"user_id":3,"avatar":"/uploads/20200331/a8f6be4db006dcdbc32c51a203d03f8a.jpg","nickname":"JinJuan","job_name":"翔安乾照光电20元/时","time":1585717351,"enterprise_name":"厦门乾照光电股份有限公司","unread_num":0,"chat_record":"7777"},{"chat_id":43,"job_id":29,"user_id":3,"avatar":"/uploads/20200331/a8f6be4db006dcdbc32c51a203d03f8a.jpg","nickname":"JinJuan","job_name":"达运包吃住美女多","time":1585716232,"enterprise_name":"达运电子精密有限公司","unread_num":0,"chat_record":"561156"}]
      */
 
     private int code;
@@ -40,15 +41,16 @@ public class ChatListBean {
 
     public static class DataBean {
         /**
-         * chat_id : 23
-         * job_id : 29
+         * chat_id : 42
+         * job_id : 30
          * user_id : 3
-         * avatar : /uploads/20200331/a8f6be4db006dcdbc32c51a203d03f8a.jpg
-         * nickname : JinJuan
-         * job_name : 达运包吃住美女多
-         * enterprise_name : 达运电子精密有限公司
-         * unread_num : 3
-         * chat_record : 刚刚干活
+         * avatar : /uploads/20200401/7fdfa118dd6ef5762aa778f4c0922f2a.jpg
+         * nickname : 大帅测试
+         * job_name : 测试职位测试职位测试职位
+         * time : 1585723744
+         * enterprise_name : 测试企业测试企业
+         * unread_num : 0
+         * chat_record : 我
          */
 
         private int chat_id;
@@ -57,6 +59,7 @@ public class ChatListBean {
         private String avatar;
         private String nickname;
         private String job_name;
+        private int time;
         private String enterprise_name;
         private int unread_num;
         private String chat_record;
@@ -107,6 +110,14 @@ public class ChatListBean {
 
         public void setJob_name(String job_name) {
             this.job_name = job_name;
+        }
+
+        public int getTime() {
+            return time;
+        }
+
+        public void setTime(int time) {
+            this.time = time;
         }
 
         public String getEnterprise_name() {

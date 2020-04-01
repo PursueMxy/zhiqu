@@ -22,6 +22,8 @@ import com.lzy.okgo.model.Response;
 
 import org.junit.Before;
 
+import java.lang.annotation.ElementType;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -129,22 +131,36 @@ public class WagesDetailActivity extends AppCompatActivity implements SeleteMoth
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
-                        QueryWagesBean queryWagesBean = new GsonBuilder().create().fromJson(response.body(), QueryWagesBean.class);
-                        if (queryWagesBean.getCode()==1) {
-                            InitUI(queryWagesBean.getData());
-                        }else {
-                            ToastUtils.showToast(mContext,"数据为空");
-                            tv_month_price.setText("数据为空");
-                            tv_base_price.setText("数据为空");
-                            tv_hour_price.setText("数据为空");
-                            tv_hour.setText("数据为空");
-                            tv_extra_price.setText("数据为空");
-                            tv_dudy_day.setText("数据为空");
-                            tv_subsidy.setText("数据为空");
-                            tv_deduct_price.setText("数据为空");
-                            tv_tax_before.setText("数据为空");
-                            tv_actual_price.setText("数据为空");
-                        }
+                            QueryWagesBean queryWagesBean = new GsonBuilder().create().fromJson(response.body(), QueryWagesBean.class);
+                            if (queryWagesBean.getCode() == 1) {
+                               try {
+                                   InitUI(queryWagesBean.getData());
+                               }catch (Exception e){
+                                   ToastUtils.showToast(mContext, "数据为空");
+                                   tv_month_price.setText("数据为空");
+                                   tv_base_price.setText("数据为空");
+                                   tv_hour_price.setText("数据为空");
+                                   tv_hour.setText("数据为空");
+                                   tv_extra_price.setText("数据为空");
+                                   tv_dudy_day.setText("数据为空");
+                                   tv_subsidy.setText("数据为空");
+                                   tv_deduct_price.setText("数据为空");
+                                   tv_tax_before.setText("数据为空");
+                                   tv_actual_price.setText("数据为空");
+                               }
+                            } else {
+                                ToastUtils.showToast(mContext, "数据为空");
+                                tv_month_price.setText("数据为空");
+                                tv_base_price.setText("数据为空");
+                                tv_hour_price.setText("数据为空");
+                                tv_hour.setText("数据为空");
+                                tv_extra_price.setText("数据为空");
+                                tv_dudy_day.setText("数据为空");
+                                tv_subsidy.setText("数据为空");
+                                tv_deduct_price.setText("数据为空");
+                                tv_tax_before.setText("数据为空");
+                                tv_actual_price.setText("数据为空");
+                            }
                     }
                 });
     }

@@ -62,7 +62,10 @@ public class AppSocket extends BaseSocket {
         mSocket.emit(IConstants.NEW_MESSAGE, content, new Ack() {
             @Override
             public void call(Object... args) {
-                Log.e("发送消息",new GsonBuilder().create().toJson(args));
+//                Log.e("发送消息",new GsonBuilder().create().toJson(args));
+                if (mSendOnClick!=null){
+                    mSendOnClick.updateMessage();
+                }
             }
         });
     }
@@ -76,7 +79,7 @@ public class AppSocket extends BaseSocket {
             public void call(Object... args) {
                 JSONObject newMessage = (JSONObject) args[0];
                 if (mSendOnClick!=null){
-                    mSendOnClick.updateMessage(new GsonBuilder().create().toJson(newMessage));
+                    mSendOnClick.updateMessage();
                 }
             }
         });
@@ -112,7 +115,7 @@ public class AppSocket extends BaseSocket {
     }
 
     public  interface  SendOnItemClick{
-       void updateMessage(String content);
+       void updateMessage();
     }
 
 }
