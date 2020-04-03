@@ -37,8 +37,8 @@ public class EmitterEvent {
         emitterEventMap.put(Socket.EVENT_RECONNECTING, null);
 
         emitterEventMap.put(IConstants.LOGIN, null);
-        emitterEventMap.put(IConstants.NEW_MESSAGE, null);
-        emitterEventMap.put(IConstants.USER_JOINED, null);
+//        emitterEventMap.put(IConstants.NEW_MESSAGE, null);
+//        emitterEventMap.put(IConstants.USER_JOINED, null);
         emitterEventMap.put(IConstants.USER_LEFT, null);
         emitterEventMap.put(IConstants.TYPING, null);
         emitterEventMap.put(IConstants.STOP_TYPING, null);
@@ -54,7 +54,6 @@ public class EmitterEvent {
                 @Override
                 public void call(Object... args) {
                     emitterListener.emitterListenerResut(event, args);
-                    emitterListener.requestSocketResult(event, args);
                 }
             };
             emitterEventMap.put(event, listener);

@@ -3,6 +3,7 @@ package com.icarexm.zhiquwang.socket;
 import android.util.Log;
 
 import com.google.gson.GsonBuilder;
+import com.icarexm.zhiquwang.bean.ChatMessageBean;
 import com.icarexm.zhiquwang.utils.IConstants;
 
 import org.json.JSONException;
@@ -62,10 +63,7 @@ public class AppSocket extends BaseSocket {
         mSocket.emit(IConstants.NEW_MESSAGE, content, new Ack() {
             @Override
             public void call(Object... args) {
-//                Log.e("发送消息",new GsonBuilder().create().toJson(args));
-                if (mSendOnClick!=null){
-                    mSendOnClick.updateMessage();
-                }
+
             }
         });
     }
@@ -78,8 +76,10 @@ public class AppSocket extends BaseSocket {
             @Override
             public void call(Object... args) {
                 JSONObject newMessage = (JSONObject) args[0];
+                String s = new GsonBuilder().create().toJson(newMessage);
+                ChatMessageBean.NameValuePairsBean nameValuePairsBean = new GsonBuilder().create().fromJson(s, ChatMessageBean.NameValuePairsBean.class);
                 if (mSendOnClick!=null){
-                    mSendOnClick.updateMessage();
+                    mSendOnClick.updateMessage(nameValuePairsBean);
                 }
             }
         });
@@ -115,7 +115,7 @@ public class AppSocket extends BaseSocket {
     }
 
     public  interface  SendOnItemClick{
-       void updateMessage();
+       void updateMessage(ChatMessageBean.NameValuePairsBean nameValuePairsBean);
     }
 
 }

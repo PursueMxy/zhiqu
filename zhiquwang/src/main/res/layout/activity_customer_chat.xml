@@ -31,42 +31,46 @@
             android:layout_height="wrap_content"/>
     </RelativeLayout>
     <com.zhouyou.recyclerview.XRecyclerView
-        android:layout_marginBottom="@dimen/dp_15"
         android:layout_below="@+id/customer_chat_rl_top"
         android:layout_above="@+id/customer_chat_rl_bottom"
         android:id="@+id/customer_chat_recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"/>
     <RelativeLayout
+        android:id="@+id/customer_chat_rl_bottom"
         android:background="@color/white"
         android:layout_alignParentBottom="true"
-        android:id="@+id/customer_chat_rl_bottom"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_90">
-        <TextView
-            android:layout_marginLeft="@dimen/dp_15"
-            android:layout_marginTop="@dimen/dp_12"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="我想"
-            android:textColor="#ff4e4d4d"
-            android:textSize="12sp"
-            />
-        <com.icarexm.zhiquwang.custview.LabelsView
-            android:id="@+id/customer_label"
-            android:layout_marginTop="@dimen/dp_12"
-            android:layout_marginLeft="@dimen/dp_50"
+        android:layout_height="@dimen/dp_95">
+        <RelativeLayout
+            android:layout_marginTop="@dimen/dp_7"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:labelTextSize="@dimen/sp_11"
-            app:labelTextPaddingBottom="@dimen/dp_1"
-            app:labelTextPaddingLeft="@dimen/dp_6"
-            app:labelTextPaddingRight="@dimen/dp_6"
-            app:labelTextPaddingTop="@dimen/dp_1"
-            app:labelBackground="@drawable/bg_edt_gray"
-            app:labelTextColor="@color/ffa5a5a5"
-            app:wordMargin="@dimen/dp_10"/>
-
+            android:layout_height="@dimen/dp_40">
+            <TextView
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:layout_marginTop="@dimen/dp_12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我想"
+                android:textColor="#ff4e4d4d"
+                android:textSize="12sp"
+                />
+            <com.icarexm.zhiquwang.custview.LabelsView
+                android:layout_centerVertical="true"
+                android:id="@+id/customer_label"
+                android:layout_marginLeft="@dimen/dp_50"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:labelTextSize="@dimen/sp_11"
+                app:labelTextPaddingBottom="@dimen/dp_1"
+                app:labelTextPaddingLeft="@dimen/dp_5"
+                app:labelTextPaddingRight="@dimen/dp_5"
+                app:labelTextPaddingTop="@dimen/dp_1"
+                app:labelBackground="@drawable/bg_edt_gray"
+                app:labelTextColor="@color/ffa5a5a5"
+                app:wordMargin="@dimen/dp_3"/>
+        </RelativeLayout>
         <EditText
             android:padding="@dimen/dp_7"
             android:id="@+id/customer_chat_edt_content"
@@ -75,7 +79,7 @@
             android:textColorHint="@color/ffb5b5b5"
             android:textColor="@color/ffb5b5b5"
             android:layout_marginLeft="@dimen/dp_15"
-            android:layout_marginTop="@dimen/dp_40"
+            android:layout_marginTop="@dimen/dp_53"
             android:layout_width="@dimen/dp_250"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_edt_gray"/>
@@ -85,14 +89,14 @@
             android:layout_marginRight="@dimen/dp_10"
             android:layout_toLeftOf="@+id/customer_chat_img_send_message"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/dp_21"
+            android:layout_marginBottom="@dimen/dp_13"
             android:layout_width="@dimen/dp_22"
             android:layout_height="@dimen/dp_18"
             android:src="@mipmap/ic_send_msg"/>
         <ImageView
             android:scaleType="fitXY"
             android:id="@+id/customer_chat_img_send_message"
-            android:layout_marginBottom="@dimen/dp_20"
+            android:layout_marginBottom="@dimen/dp_12"
             android:layout_marginRight="@dimen/dp_15"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"

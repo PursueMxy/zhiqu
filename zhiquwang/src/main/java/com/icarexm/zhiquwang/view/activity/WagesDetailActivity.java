@@ -72,16 +72,20 @@ public class WagesDetailActivity extends AppCompatActivity implements SeleteMoth
         token = share.getString("token", "");
         Intent intent = getIntent();
         String content = intent.getStringExtra("content");
+        String monthDateInt = intent.getStringExtra("monthDateInt");
+        tv_time.setText(monthDateInt);
         QueryWagesBean  queryWagesBean = new GsonBuilder().create().fromJson(content, QueryWagesBean.class);
         ButterKnife.bind(this);
-        InitUI(queryWagesBean.getData());
+        InitUI(queryWagesBean);
     }
 
-    private void InitUI(QueryWagesBean.DataBean data) {
-        name = data.getName();
-        card = data.getCard();
-        num = data.getNum();
-        tv_company.setText(data.getCompany());
+    private void InitUI(QueryWagesBean queryWagesBean) {
+          if (queryWagesBean.getCode()==1){
+              QueryWagesBean.DataBean data = queryWagesBean.getData();
+              name = data.getName();
+            card = data.getCard();
+            num = data.getNum();
+            tv_company.setText(data.getCompany());
             tv_month_price.setText(data.getMonth_price());
             tv_base_price.setText(data.getBase_price());
             tv_hour_price.setText(data.getHour_price());
@@ -94,6 +98,20 @@ public class WagesDetailActivity extends AppCompatActivity implements SeleteMoth
             tv_actual_price.setText(data.getActual_price());
             tv_time.setText(data.getMonth());
             month = data.getMonth();
+        }else {
+            tv_company.setText("数据为空");
+            tv_month_price.setText("数据为空");
+            tv_base_price.setText("数据为空");
+            tv_hour_price.setText("数据为空");
+            tv_hour.setText("数据为空");
+            tv_extra_price.setText("数据为空");
+            tv_dudy_day.setText("数据为空");
+            tv_subsidy.setText("数据为空");
+            tv_deduct_price.setText("数据为空");
+            tv_tax_before.setText("数据为空");
+            tv_actual_price.setText("数据为空");
+        }
+
     }
 
     @OnClick({R.id.wages_detail_img_back,R.id.wages_detail_tv_time})
@@ -133,23 +151,10 @@ public class WagesDetailActivity extends AppCompatActivity implements SeleteMoth
                     public void onSuccess(Response<String> response) {
                             QueryWagesBean queryWagesBean = new GsonBuilder().create().fromJson(response.body(), QueryWagesBean.class);
                             if (queryWagesBean.getCode() == 1) {
-                               try {
-                                   InitUI(queryWagesBean.getData());
-                               }catch (Exception e){
-                                   ToastUtils.showToast(mContext, "数据为空");
-                                   tv_month_price.setText("数据为空");
-                                   tv_base_price.setText("数据为空");
-                                   tv_hour_price.setText("数据为空");
-                                   tv_hour.setText("数据为空");
-                                   tv_extra_price.setText("数据为空");
-                                   tv_dudy_day.setText("数据为空");
-                                   tv_subsidy.setText("数据为空");
-                                   tv_deduct_price.setText("数据为空");
-                                   tv_tax_before.setText("数据为空");
-                                   tv_actual_price.setText("数据为空");
-                               }
-                            } else {
+                                   InitUI(queryWagesBean);
+                            } else  {
                                 ToastUtils.showToast(mContext, "数据为空");
+                                tv_company.setText("数据为空");
                                 tv_month_price.setText("数据为空");
                                 tv_base_price.setText("数据为空");
                                 tv_hour_price.setText("数据为空");

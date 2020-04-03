@@ -130,6 +130,7 @@ public class SetActivity extends BaseActivity {
                 if (!ButtonUtils.isFastDoubleClick(R.id.set_btn_out_login)) {
                     SharedPreferences.Editor editor = share.edit();
                     editor.putString("token","");
+                    editor.putString("on_send","false");
                     editor.commit();//提交
                     startActivity(new Intent(mContext, LoginActivity.class));
                 }

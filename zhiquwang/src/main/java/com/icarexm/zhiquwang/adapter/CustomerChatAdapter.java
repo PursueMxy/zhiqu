@@ -48,8 +48,7 @@ public class CustomerChatAdapter extends HelperRecyclerViewAdapter<ChatMessageBe
         if (item.getSide()==1){
             ImageView img_right = viewHolder.getView(R.id.list_customer_img_right);
             TextView right_tv_content = viewHolder.getView(R.id.list_customer_right_tv_content);
-           SketchImageView right_img_one = viewHolder.getView(R.id.list_customer_right_img_one);
-            right_img_one.setZoomEnabled(true);
+            ImageView right_img_one = viewHolder.getView(R.id.list_customer_right_img_one);
             Glide.with(mContext).load(RequstUrl.URL.HOST+item.getAvatar()).circleCrop().into(img_right);
             if (item.getType()==1) {
                 right_img_one.setVisibility(View.GONE);
@@ -58,7 +57,6 @@ public class CustomerChatAdapter extends HelperRecyclerViewAdapter<ChatMessageBe
             }else {
                 right_img_one.setVisibility(View.VISIBLE);
                 right_tv_content.setVisibility(View.GONE);
-//                right_img_one.displayImage(RequstUrl.URL.HOST+item.getContent());
                 Glide.with(mContext).load(RequstUrl.URL.HOST+item.getContent()).into(right_img_one);
             }
             right_img_one.setOnClickListener(new View.OnClickListener() {

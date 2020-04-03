@@ -66,6 +66,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     private int versionCode;
     private String version_name;
     private CustomProgressDialog progressDialog;
+    private String on_send;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         token = share.getString("token", "");
         mobile = share.getString("mobile", "");
         password = share.getString("password", "");
+        on_send = share.getString("on_send", "");
         loginPresenter = new LoginPresenter(this);
         mContext = getApplicationContext();
         ButterKnife.bind(this);
@@ -98,9 +100,11 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         versionCode = getVersionCode();
         try {
            if (token!=null){
-               if (!token.equals("")) {
+                   SharedPreferences.Editor editor = share.edit();
+                   editor.putString("on_send","true");
+                   editor.commit();//提交
                    startActivity(new Intent(mContext, HomeActivity.class));
-               }
+
            }
         }catch (Exception e){
 
@@ -112,6 +116,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         super.onNewIntent(intent);
         SharedPreferences.Editor editor = share.edit();
         editor.putString("token","");
+        editor.putString("on_send","true");
         editor.commit();//提交
         token = share.getString("token", "");
         try {
@@ -203,6 +208,9 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
             editor.putString("mobile",mobile);
             editor.putString("password",password);
             editor.putString("token",data);
+            if (on_send.equals("")) {
+                editor.putString("on_send", "true");
+            }
             editor.commit();//提交
             // 调用 JPush 接口来设置别名。
             setAlias(other);
@@ -212,6 +220,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
             editor.putString("mobile",mobile);
             editor.putString("password",password);
             editor.putString("token",data);
+            editor.putString("on_send","true");
             editor.commit();//提交
             setAlias(other);
         }else if (code ==10001){

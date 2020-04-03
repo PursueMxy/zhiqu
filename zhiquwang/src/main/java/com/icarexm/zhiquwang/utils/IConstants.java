@@ -7,7 +7,7 @@ package com.icarexm.zhiquwang.utils;
  */
 public interface IConstants {
 
-    String CHAT_SERVER_URL = "http://zqw.lippngu.top:2020";
+    String CHAT_SERVER_URL = "http://zqw.kuaishanghd.com:2022";
 
 
     // 用户注册

@@ -32,6 +32,7 @@ public class QueryWagesActivity extends BaseActivity implements QueryWagesContra
     EditText edt_job_number;
     private QueryWagesPresenter queryWagesPresenter;
     private String token;
+    private String monthDateInt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,14 +50,14 @@ public class QueryWagesActivity extends BaseActivity implements QueryWagesContra
         switch (view.getId()){
             case R.id.query_wages_btn_confirm:
                 if (!ButtonUtils.isFastDoubleClick(R.id.query_wages_btn_confirm)) {
-                    String monthDateInt = DateUtils.getMonthDateInt();
+                    monthDateInt = DateUtils.getMonthDateInt();
                     String name = edt_name.getText().toString();
                     String card = edt_card.getText().toString();
                     String job_number = edt_job_number.getText().toString();
                     if (!name.equals("")) {
                         if (!card.equals("")) {
                             if (!job_number.equals("")) {
-                                queryWagesPresenter.honorariumSearch(token, name, card, job_number,monthDateInt);
+                                queryWagesPresenter.honorariumSearch(token, name, card, job_number, monthDateInt);
                             } else {
                                 ToastUtils.showToast(mContext, "工号不能为空");
                             }
@@ -81,9 +82,10 @@ public class QueryWagesActivity extends BaseActivity implements QueryWagesContra
 
     @Override
     public void UpdateWages(QueryWagesBean queryWagesBean,String content) {
-        if (queryWagesBean.getCode()==1){
+        if (queryWagesBean.getCode()!=0){
             Intent intent = new Intent(mContext, WagesDetailActivity.class);
             intent.putExtra("content",content);
+            intent.putExtra("monthDateInt",monthDateInt);
             startActivity(intent);
         }else {
             ToastUtils.showToast(mContext,queryWagesBean.getMsg());

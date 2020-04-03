@@ -267,6 +267,7 @@ public class LogonActivity extends BaseActivity implements LogonContract.View {
             editor.putString("mobile",mobile);
             editor.putString("password",password);
             editor.putString("token",data);
+            editor.putString("on_send", "true");
             editor.commit();//提交
             startActivity(new Intent(mContext,HomeActivity.class));
         }

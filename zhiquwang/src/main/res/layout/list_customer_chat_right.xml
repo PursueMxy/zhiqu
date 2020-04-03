@@ -23,11 +23,12 @@
         android:gravity="center|left"
         android:textSize="@dimen/sp_16"
         android:text=""/>
-    <me.panpf.sketch.SketchImageView
+    <ImageView
         android:visibility="gone"
+        android:layout_marginRight="@dimen/dp_10"
         android:layout_toLeftOf="@+id/list_customer_img_right"
         android:id="@+id/list_customer_right_img_one"
         android:layout_width="@dimen/dp_150"
-        android:layout_height="@dimen/dp_150"/>
+        android:layout_height="wrap_content"/>
 
 </RelativeLayout>
