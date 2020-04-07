@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hjq.permissions.OnPermission;
+import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
 import com.icarexm.zhiquwang.MyApplication;
 import com.icarexm.zhiquwang.R;
@@ -85,8 +86,10 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         edt_password.setText(password);
         //权限申请
         XXPermissions.with(this)
+                .constantRequest()
+                .permission(Permission.CAMERA,Permission.WRITE_EXTERNAL_STORAGE,Permission.READ_EXTERNAL_STORAGE,Permission.ACCESS_FINE_LOCATION,
+                 Permission.ACCESS_COARSE_LOCATION,Permission.READ_CALENDAR)
                 .request(new OnPermission() {
-
                     @Override
                     public void hasPermission(List<String> granted, boolean isAll) {
 

@@ -19,6 +19,7 @@ import com.amap.api.location.AMapLocationListener;
 import com.chaychan.library.BottomBarItem;
 import com.chaychan.library.BottomBarLayout;
 import com.hjq.permissions.OnPermission;
+import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
@@ -59,8 +60,9 @@ public class HomeActivity extends BaseActivity {
         ButterKnife.bind(this);
         //权限申请
         XXPermissions.with(this)
+                .permission(Permission.CAMERA,Permission.WRITE_EXTERNAL_STORAGE,Permission.READ_EXTERNAL_STORAGE,Permission.ACCESS_FINE_LOCATION,
+                        Permission.ACCESS_COARSE_LOCATION,Permission.READ_CALENDAR)
                 .request(new OnPermission() {
-
                     @Override
                     public void hasPermission(List<String> granted, boolean isAll) {
 

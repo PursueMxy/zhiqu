@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.gson.GsonBuilder;
 import com.hjq.permissions.OnPermission;
+import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.adapter.CustomerChatAdapter;
@@ -259,6 +260,8 @@ public class CustomerChatActivity extends BaseActivity implements Observer, AppS
                         //权限申请
                         ToastUtils.showToast(mContext, "请允许权限");
                         XXPermissions.with(this)
+                                .permission(Permission.CAMERA,Permission.WRITE_EXTERNAL_STORAGE,Permission.READ_EXTERNAL_STORAGE,Permission.ACCESS_FINE_LOCATION,
+                                        Permission.ACCESS_COARSE_LOCATION,Permission.READ_CALENDAR)
                                 .request(new OnPermission() {
 
                                     @Override

@@ -48,17 +48,17 @@ public class StatisticsBean {
          * price : 0.00
          */
 
-        private int total_price;
+        private double total_price;
         private int total_time;
         private int total_day;
         private String price;
         private List<TotalInfoBean> total_info;
 
-        public int getTotal_price() {
+        public double getTotal_price() {
             return total_price;
         }
 
-        public void setTotal_price(int total_price) {
+        public void setTotal_price(double total_price) {
             this.total_price = total_price;
         }
 

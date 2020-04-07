@@ -21,6 +21,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.hjq.permissions.OnPermission;
+import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.RegionBean;
@@ -117,8 +118,9 @@ public class UpdateBaseInforActivity extends BaseActivity {
         ButterKnife.bind(this);
         //权限申请
         XXPermissions.with(this)
+                .permission(Permission.CAMERA,Permission.WRITE_EXTERNAL_STORAGE,Permission.READ_EXTERNAL_STORAGE,Permission.ACCESS_FINE_LOCATION,
+                        Permission.ACCESS_COARSE_LOCATION,Permission.READ_CALENDAR)
                 .request(new OnPermission() {
-
                     @Override
                     public void hasPermission(List<String> granted, boolean isAll) {
 
@@ -267,6 +269,8 @@ public class UpdateBaseInforActivity extends BaseActivity {
                         //权限申请
                         ToastUtils.showToast(mContext, "请允许权限");
                         XXPermissions.with(this)
+                                .permission(Permission.CAMERA,Permission.WRITE_EXTERNAL_STORAGE,Permission.READ_EXTERNAL_STORAGE,Permission.ACCESS_FINE_LOCATION,
+                                        Permission.ACCESS_COARSE_LOCATION,Permission.READ_CALENDAR)
                                 .request(new OnPermission() {
 
                                     @Override

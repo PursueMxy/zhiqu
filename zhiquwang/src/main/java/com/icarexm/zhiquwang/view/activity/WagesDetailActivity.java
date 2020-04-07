@@ -13,6 +13,7 @@ import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.QueryWagesBean;
 import com.icarexm.zhiquwang.presenter.QueryWagesPresenter;
+import com.icarexm.zhiquwang.utils.DateUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.icarexm.zhiquwang.view.dialog.SeleteMothDialog;
@@ -56,12 +57,14 @@ public class WagesDetailActivity extends AppCompatActivity implements SeleteMoth
     TextView tv_time;
 
 
-    private String month;
+    private String month="";
     private Context mContext;
-    private String token;
-    private String name;
-    private String card;
-    private String num;
+    private String token="";
+    private String name="";
+    private String card="";
+    private String num="";
+    private String monthDateInt="";
+    private String content="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,15 +74,16 @@ public class WagesDetailActivity extends AppCompatActivity implements SeleteMoth
         SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
         Intent intent = getIntent();
-        String content = intent.getStringExtra("content");
-        String monthDateInt = intent.getStringExtra("monthDateInt");
-        tv_time.setText(monthDateInt);
+        content = intent.getStringExtra("content");
+        monthDateInt = DateUtils.getMonthDateInt();
         QueryWagesBean  queryWagesBean = new GsonBuilder().create().fromJson(content, QueryWagesBean.class);
         ButterKnife.bind(this);
         InitUI(queryWagesBean);
     }
 
     private void InitUI(QueryWagesBean queryWagesBean) {
+        try {
+            tv_time.setText(monthDateInt);
           if (queryWagesBean.getCode()==1){
               QueryWagesBean.DataBean data = queryWagesBean.getData();
               name = data.getName();
@@ -110,8 +114,22 @@ public class WagesDetailActivity extends AppCompatActivity implements SeleteMoth
             tv_deduct_price.setText("数据为空");
             tv_tax_before.setText("数据为空");
             tv_actual_price.setText("数据为空");
+              month=monthDateInt;
         }
-
+        }catch (Exception e){
+            tv_company.setText("数据为空");
+            tv_month_price.setText("数据为空");
+            tv_base_price.setText("数据为空");
+            tv_hour_price.setText("数据为空");
+            tv_hour.setText("数据为空");
+            tv_extra_price.setText("数据为空");
+            tv_dudy_day.setText("数据为空");
+            tv_subsidy.setText("数据为空");
+            tv_deduct_price.setText("数据为空");
+            tv_tax_before.setText("数据为空");
+            tv_actual_price.setText("数据为空");
+            month=monthDateInt;
+        }
     }
 
     @OnClick({R.id.wages_detail_img_back,R.id.wages_detail_tv_time})
@@ -121,7 +139,7 @@ public class WagesDetailActivity extends AppCompatActivity implements SeleteMoth
                 finish();
                 break;
             case R.id.wages_detail_tv_time:
-                ToastUtils.showToast(mContext,month.substring(0,4));
+                month=tv_time.getText().toString();
                 SeleteMothDialog seleteMothDialog = new SeleteMothDialog(this, Integer.parseInt(month.substring(0, 4)));
                 seleteMothDialog.show();
                 seleteMothDialog.setDateOnClickListtener(this);
@@ -149,9 +167,10 @@ public class WagesDetailActivity extends AppCompatActivity implements SeleteMoth
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
+                        try {
                             QueryWagesBean queryWagesBean = new GsonBuilder().create().fromJson(response.body(), QueryWagesBean.class);
                             if (queryWagesBean.getCode() == 1) {
-                                   InitUI(queryWagesBean);
+                                InitUI(queryWagesBean);
                             } else  {
                                 ToastUtils.showToast(mContext, "数据为空");
                                 tv_company.setText("数据为空");
@@ -166,6 +185,19 @@ public class WagesDetailActivity extends AppCompatActivity implements SeleteMoth
                                 tv_tax_before.setText("数据为空");
                                 tv_actual_price.setText("数据为空");
                             }
+                        }catch (Exception e){
+                            tv_company.setText("数据为空");
+                            tv_month_price.setText("数据为空");
+                            tv_base_price.setText("数据为空");
+                            tv_hour_price.setText("数据为空");
+                            tv_hour.setText("数据为空");
+                            tv_extra_price.setText("数据为空");
+                            tv_dudy_day.setText("数据为空");
+                            tv_subsidy.setText("数据为空");
+                            tv_deduct_price.setText("数据为空");
+                            tv_tax_before.setText("数据为空");
+                            tv_actual_price.setText("数据为空");
+                        }
                     }
                 });
     }

@@ -6,6 +6,14 @@
     android:layout_height="match_parent"
     android:background="@drawable/FFFAFAFA"
     tools:context=".view.activity.LoginActivity">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+           >
+
     <RelativeLayout
         android:background="@mipmap/ic_login_top"
         android:layout_width="match_parent"
@@ -29,6 +37,7 @@
             />
     </RelativeLayout>
      <LinearLayout
+         android:id="@+id/login_ll_input"
       android:layout_marginRight="@dimen/dp_15"
       android:layout_marginLeft="@dimen/dp_15"
       android:layout_marginTop="@dimen/dp_212"
@@ -148,8 +157,9 @@
 
   </LinearLayout>
     <Button
+        android:layout_below="@+id/login_ll_input"
         android:id="@+id/login_btn_start"
-        android:layout_marginTop="@dimen/dp_424"
+        android:layout_marginTop="@dimen/dp_22_5"
         android:layout_marginRight="@dimen/dp_40"
         android:layout_marginLeft="@dimen/dp_40"
         android:text="登 录"
@@ -210,4 +220,6 @@
            android:id="@+id/login_img_wechat"
            android:layout_width="@dimen/dp_52"
            android:layout_height="@dimen/dp_52" />
+        </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -28,9 +29,9 @@ public class SeleteMothDialog extends Dialog {
     private List<String> YearList=new ArrayList<>();
     private List<String> MonthList=new ArrayList<>();
     private int StartYear=2015;
-    private int StopYear=2020;
-    private String SltYear="2015";
-    private String SltMonth="0";
+    private int StopYear;
+    private String SltYear;
+    private String SltMonth="01";
     private int slt_year;
     @BindView(R.id.dialog_bottom_tv_title)
     TextView tv_title;
@@ -46,6 +47,7 @@ public class SeleteMothDialog extends Dialog {
         StopYear=DateUtils.getYearDateInt();
         this.mContext=context;
         this.slt_year=slt_year;
+        this.SltYear=slt_year+"";
     }
 
     @Override
@@ -65,7 +67,7 @@ public class SeleteMothDialog extends Dialog {
         for (int a=0;a<BIRTH_MONTH.length;a++){
             MonthList.add(BIRTH_MONTH[a]);
         }
-        wheel_year.setItems(YearList,StopYear-slt_year);
+        wheel_year.setItems(YearList,slt_year- Integer.parseInt(YearList.get(0)));
         wheel_month.setItems(MonthList,0);
         wheel_year.setOnItemSelectedListener(new MyWheelView.OnItemSelectedListener() {
             @Override

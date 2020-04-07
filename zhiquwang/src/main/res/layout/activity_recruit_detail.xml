@@ -269,7 +269,7 @@
                         android:layout_marginLeft="@dimen/dp_10"
                         android:layout_below="@+id/recruit_dtl_ask_tv_education"
                         android:id="@+id/recruit_dtl_ask_tv_workingLife"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="工作年限："
                         android:textColor="@color/ff4e4d4d"

@@ -18,6 +18,7 @@ import android.widget.EditText;
 import com.bumptech.glide.Glide;
 import com.google.gson.GsonBuilder;
 import com.hjq.permissions.OnPermission;
+import com.hjq.permissions.Permission;
 import com.hjq.permissions.XXPermissions;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.PublicResultBean;
@@ -67,6 +68,8 @@ public class EditPersonalActivity extends BaseActivity {
         setContentView(R.layout.activity_edit_personal);
         //权限申请
         XXPermissions.with(this)
+                .permission(Permission.CAMERA,Permission.WRITE_EXTERNAL_STORAGE,Permission.READ_EXTERNAL_STORAGE,Permission.ACCESS_FINE_LOCATION,
+                        Permission.ACCESS_COARSE_LOCATION,Permission.READ_CALENDAR)
                 .request(new OnPermission() {
 
                     @Override
@@ -146,6 +149,8 @@ public class EditPersonalActivity extends BaseActivity {
                         //权限申请
                         ToastUtils.showToast(mContext, "请允许权限");
                         XXPermissions.with(this)
+                                .permission(Permission.CAMERA,Permission.WRITE_EXTERNAL_STORAGE,Permission.READ_EXTERNAL_STORAGE,Permission.ACCESS_FINE_LOCATION,
+                                        Permission.ACCESS_COARSE_LOCATION,Permission.READ_CALENDAR)
                                 .request(new OnPermission() {
 
                                     @Override

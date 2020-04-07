@@ -39,7 +39,7 @@
         <TextView
             android:id="@+id/query_wages_tv_name"
             android:gravity="center"
-            android:layout_marginLeft="@dimen/dp_33"
+            android:layout_marginLeft="@dimen/dp_32"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="姓名："
@@ -49,7 +49,7 @@
         <EditText
             android:id="@+id/query_wages_edt_name"
             android:paddingLeft="@dimen/dp_10"
-            android:layout_marginLeft="@dimen/dp_100"
+            android:layout_marginLeft="@dimen/dp_101"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
@@ -67,7 +67,7 @@
         <TextView
             android:id="@+id/query_wages_tv_card"
             android:gravity="center"
-            android:layout_marginLeft="@dimen/dp_33"
+            android:layout_marginLeft="@dimen/dp_32"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="身份证号："
@@ -78,7 +78,7 @@
             android:maxLength="18"
             android:id="@+id/query_wages_edt_card"
             android:paddingLeft="@dimen/dp_10"
-            android:layout_marginLeft="@dimen/dp_100"
+            android:layout_marginLeft="@dimen/dp_101"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"
@@ -96,7 +96,7 @@
         <TextView
             android:id="@+id/query_wages_tv_job_number"
             android:gravity="center"
-            android:layout_marginLeft="@dimen/dp_33"
+            android:layout_marginLeft="@dimen/dp_32"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="工号："
@@ -106,7 +106,7 @@
         <EditText
             android:id="@+id/query_wages_edt_job_number"
             android:paddingLeft="@dimen/dp_10"
-            android:layout_marginLeft="@dimen/dp_100"
+            android:layout_marginLeft="@dimen/dp_101"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white"

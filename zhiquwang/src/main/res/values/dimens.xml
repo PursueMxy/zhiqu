@@ -405,6 +405,7 @@
     <dimen name="dp_725">725dp</dimen>
     <dimen name="dp_764">764dp</dimen>
     <dimen name="dp_803">803dp</dimen>
+    <dimen name="dp_22_5">-22.5dp</dimen>
     <!-- font size,you can add if there is no one -->
     <dimen name="sp_6">6sp</dimen>
     <dimen name="sp_7">7sp</dimen>

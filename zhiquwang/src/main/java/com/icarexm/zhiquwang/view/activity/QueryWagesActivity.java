@@ -42,6 +42,7 @@ public class QueryWagesActivity extends BaseActivity implements QueryWagesContra
         SharedPreferences share = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         token = share.getString("token", "");
         ButterKnife.bind(this);
+        monthDateInt = DateUtils.getMonthDateInt();
         queryWagesPresenter = new QueryWagesPresenter(this);
     }
 
