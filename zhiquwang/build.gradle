@@ -7,9 +7,9 @@ android {
         applicationId "com.icarexm.zhiquwang"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 19
+        versionCode 20
 
-        versionName "1.1.8"
+        versionName "1.1.9"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             // 设置支持的SO库架构

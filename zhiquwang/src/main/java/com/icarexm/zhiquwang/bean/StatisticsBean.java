@@ -49,8 +49,8 @@ public class StatisticsBean {
          */
 
         private double total_price;
-        private int total_time;
-        private int total_day;
+        private double total_time;
+        private double total_day;
         private String price;
         private List<TotalInfoBean> total_info;
 
@@ -62,19 +62,19 @@ public class StatisticsBean {
             this.total_price = total_price;
         }
 
-        public int getTotal_time() {
+        public double getTotal_time() {
             return total_time;
         }
 
-        public void setTotal_time(int total_time) {
+        public void setTotal_time(double total_time) {
             this.total_time = total_time;
         }
 
-        public int getTotal_day() {
+        public double getTotal_day() {
             return total_day;
         }
 
-        public void setTotal_day(int total_day) {
+        public void setTotal_day(double total_day) {
             this.total_day = total_day;
         }
 
@@ -103,17 +103,17 @@ public class StatisticsBean {
              * info : [{"festival_id":3,"festival_name":"正常工作日","price":0,"hours":0},{"festival_id":2,"festival_name":"周末","price":0,"hours":0},{"festival_id":4,"festival_name":"节假日","price":0,"hours":0}]
              */
 
-            private int classes_id;
+            private double classes_id;
             private String classes_name;
-            private int price;
-            private int hours;
+            private double price;
+            private double hours;
             private List<InfoBean> info;
 
-            public int getClasses_id() {
+            public double getClasses_id() {
                 return classes_id;
             }
 
-            public void setClasses_id(int classes_id) {
+            public void setClasses_id(double classes_id) {
                 this.classes_id = classes_id;
             }
 
@@ -125,19 +125,19 @@ public class StatisticsBean {
                 this.classes_name = classes_name;
             }
 
-            public int getPrice() {
+            public double getPrice() {
                 return price;
             }
 
-            public void setPrice(int price) {
+            public void setPrice(double price) {
                 this.price = price;
             }
 
-            public int getHours() {
+            public double getHours() {
                 return hours;
             }
 
-            public void setHours(int hours) {
+            public void setHours(double hours) {
                 this.hours = hours;
             }
 
@@ -157,16 +157,16 @@ public class StatisticsBean {
                  * hours : 0
                  */
 
-                private int festival_id;
+                private double festival_id;
                 private String festival_name;
-                private int price;
-                private int hours;
+                private double price;
+                private double hours;
 
-                public int getFestival_id() {
+                public double getFestival_id() {
                     return festival_id;
                 }
 
-                public void setFestival_id(int festival_id) {
+                public void setFestival_id(double festival_id) {
                     this.festival_id = festival_id;
                 }
 
@@ -178,19 +178,19 @@ public class StatisticsBean {
                     this.festival_name = festival_name;
                 }
 
-                public int getPrice() {
+                public double getPrice() {
                     return price;
                 }
 
-                public void setPrice(int price) {
+                public void setPrice(double price) {
                     this.price = price;
                 }
 
-                public int getHours() {
+                public double getHours() {
                     return hours;
                 }
 
-                public void setHours(int hours) {
+                public void setHours(double hours) {
                     this.hours = hours;
                 }
             }

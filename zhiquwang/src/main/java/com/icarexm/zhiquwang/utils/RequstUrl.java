@@ -193,5 +193,8 @@ public class RequstUrl {
 
         //获取聊天日志
         public static String phoneGetChatRecord=HOST+"/api/phoneGetChatRecord";
+
+        //获取分享海报
+        public static String getPoster=HOST+"/api/getPoster";
     }
 }

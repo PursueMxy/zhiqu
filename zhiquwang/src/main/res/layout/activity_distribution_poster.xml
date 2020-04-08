@@ -5,19 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.activity.DistributionPosterActivity">
-    <RelativeLayout
-        android:background="@drawable/ic_poster"
+
+    <ImageView
+        android:id="@+id/distribution_poster_img_poster"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <WebView
-            android:id="@+id/distribution_poster_webview"
-            android:layout_width="@dimen/dp_112"
-            android:layout_height="@dimen/dp_112"
-            android:scrollbars="none" />
-        </RelativeLayout>
-
+        android:scaleType="centerCrop"
+       />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_65">
