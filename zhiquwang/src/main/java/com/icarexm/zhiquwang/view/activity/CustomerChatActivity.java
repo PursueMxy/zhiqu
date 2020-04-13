@@ -318,6 +318,8 @@ public class CustomerChatActivity extends BaseActivity implements Observer, AppS
                  word_list.add(word.get(a).getWord());
              }
              labelsView.setLabels(word_list);
+         }else {
+
          }
     }
 
@@ -406,7 +408,7 @@ public class CustomerChatActivity extends BaseActivity implements Observer, AppS
     }
 
     public void  ScrollLoading(){
-        new Handler().postDelayed(new Runnable() {
+        tv_title.postDelayed(new Runnable() {
             @Override
             public void run() {
                 mRecyclerView.smoothScrollToPosition(chat_list.size()+1);

@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.ChatMessageBean;
+import com.icarexm.zhiquwang.utils.DateUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.icarexm.zhiquwang.view.dialog.ImgBoostDialog;
@@ -34,8 +35,8 @@ import me.panpf.sketch.SketchImageView;
 
 public class CustomerChatAdapter extends HelperRecyclerViewAdapter<ChatMessageBean.NameValuePairsBean> {
     public Context mContext;
-    private float beforeScale=1.0f;//之前的伸缩值
-    private float nowScale;//当前的伸缩值
+    private int lasttime=0;//之前的伸缩值
+
 
     public CustomerChatAdapter(Context context) {
         super(context,R.layout.list_customer_chat_item,R.layout.list_customer_chat_right,R.layout.list_customer_chat_item);
@@ -50,6 +51,7 @@ public class CustomerChatAdapter extends HelperRecyclerViewAdapter<ChatMessageBe
             TextView right_tv_content = viewHolder.getView(R.id.list_customer_right_tv_content);
             ImageView right_img_one = viewHolder.getView(R.id.list_customer_right_img_one);
             Glide.with(mContext).load(RequstUrl.URL.HOST+item.getAvatar()).circleCrop().into(img_right);
+            TextView tv_time = viewHolder.getView(R.id.list_customer_right_tv_time);
             if (item.getType()==1) {
                 right_img_one.setVisibility(View.GONE);
                 right_tv_content.setVisibility(View.VISIBLE);
@@ -65,7 +67,19 @@ public class CustomerChatAdapter extends HelperRecyclerViewAdapter<ChatMessageBe
                     mImageOnClickListtener.ImageDialog(RequstUrl.URL.HOST+item.getContent());
                 }
             });
+              if (position==0){
+                  tv_time.setVisibility(View.VISIBLE);
+                  tv_time.setText(DateUtils.timeStamp2Time2(item.getTime() + ""));
+              }else {
+                  if (item.getTime() - lasttime > 600) {
+                      tv_time.setVisibility(View.VISIBLE);
+                      tv_time.setText(DateUtils.timeStamp2Time2(item.getTime() + ""));
+                  } else {
+                      tv_time.setVisibility(View.GONE);
+                  }
+              }
         }else if(item.getSide()==2){
+            TextView tv_time = viewHolder.getView(R.id.list_customer_left_tv_time);
             ImageView img_left = viewHolder.getView(R.id.list_customer_chat_img_left);
             TextView left_tv_content= viewHolder.getView(R.id.list_customer_chat_left_tv_content);
             ImageView left_img_one = viewHolder.getView(R.id.list_customer_chat_left_img_one);
@@ -85,12 +99,21 @@ public class CustomerChatAdapter extends HelperRecyclerViewAdapter<ChatMessageBe
                         mImageOnClickListtener.ImageDialog(RequstUrl.URL.HOST+item.getContent());
                     }
                 });
+            if (position==0){
+                tv_time.setVisibility(View.VISIBLE);
+                tv_time.setText(DateUtils.timeStamp2Time2(item.getTime() + ""));
+            }else {
+                if (item.getTime() - lasttime > 600) {
+                    tv_time.setVisibility(View.VISIBLE);
+                    tv_time.setText(DateUtils.timeStamp2Time2(item.getTime() + ""));
+                } else {
+                    tv_time.setVisibility(View.GONE);
+                }
+            }
         }else {
 
         }
-
-
-
+        lasttime=item.getTime();
     }
 
     @Override

@@ -41,11 +41,12 @@
         android:background="@color/white"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_95">
+        android:layout_height="wrap_content">
         <RelativeLayout
+            android:id="@+id/customer_chat_rl_label"
             android:layout_marginTop="@dimen/dp_7"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_40">
+            android:layout_height="wrap_content">
             <TextView
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/dp_15"
@@ -71,37 +72,43 @@
                 app:labelTextColor="@color/ffa5a5a5"
                 app:wordMargin="@dimen/dp_3"/>
         </RelativeLayout>
-        <EditText
-            android:padding="@dimen/dp_7"
-            android:id="@+id/customer_chat_edt_content"
-            android:hint="请输入文字"
-            android:textSize="@dimen/sp_14"
-            android:textColorHint="@color/ffb5b5b5"
-            android:textColor="@color/ffb5b5b5"
-            android:layout_marginLeft="@dimen/dp_15"
-            android:layout_marginTop="@dimen/dp_53"
-            android:layout_width="@dimen/dp_250"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_edt_gray"/>
-        <ImageView
-            android:scaleType="fitXY"
-            android:id="@+id/customer_chat_img_send_img"
-            android:layout_marginRight="@dimen/dp_10"
-            android:layout_toLeftOf="@+id/customer_chat_img_send_message"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/dp_13"
-            android:layout_width="@dimen/dp_22"
-            android:layout_height="@dimen/dp_18"
-            android:src="@mipmap/ic_send_msg"/>
-        <ImageView
-            android:scaleType="fitXY"
-            android:id="@+id/customer_chat_img_send_message"
-            android:layout_marginBottom="@dimen/dp_12"
-            android:layout_marginRight="@dimen/dp_15"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_width="@dimen/dp_22"
-            android:layout_height="@dimen/dp_23"
-            android:src="@mipmap/ic_send_chat"/>
+        <RelativeLayout
+            android:layout_below="@+id/customer_chat_rl_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:layout_toLeftOf="@+id/customer_chat_img_send_img"
+                android:padding="@dimen/dp_7"
+                android:id="@+id/customer_chat_edt_content"
+                android:hint="请输入文字"
+                android:textSize="@dimen/sp_14"
+                android:textColorHint="@color/ffb5b5b5"
+                android:textColor="@color/ffb5b5b5"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_marginBottom="@dimen/dp_8"
+                android:layout_marginRight="@dimen/dp_10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_edt_gray"/>
+            <ImageView
+                android:layout_centerVertical="true"
+                android:scaleType="fitXY"
+                android:id="@+id/customer_chat_img_send_img"
+                android:layout_marginRight="@dimen/dp_10"
+                android:layout_toLeftOf="@+id/customer_chat_img_send_message"
+                android:layout_width="@dimen/dp_22"
+                android:layout_height="@dimen/dp_18"
+                android:src="@mipmap/ic_send_msg"/>
+            <ImageView
+                android:layout_centerVertical="true"
+                android:scaleType="fitXY"
+                android:id="@+id/customer_chat_img_send_message"
+                android:layout_marginRight="@dimen/dp_15"
+                android:layout_alignParentRight="true"
+                android:layout_width="@dimen/dp_22"
+                android:layout_height="@dimen/dp_23"
+                android:src="@mipmap/ic_send_chat"/>
+        </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>
