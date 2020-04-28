@@ -9,6 +9,8 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -46,6 +48,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import top.zibin.luban.CompressionPredicate;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 public class BaseInformationActivity extends BaseActivity implements BaseInformationContract.View {
 
@@ -123,7 +128,7 @@ public class BaseInformationActivity extends BaseActivity implements BaseInforma
                                 .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
                                 .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.dp_110))
                                 .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR)
-                                .thumbnailScale(0.85f)
+                                .thumbnailScale(0.5f)
                                 .imageEngine(new GlideEngine())
                                 .showSingleMediaType(true)
                                 .originalEnable(true)
@@ -134,6 +139,8 @@ public class BaseInformationActivity extends BaseActivity implements BaseInforma
                         //权限申请
                         ToastUtils.showToast(mContext, "请允许权限");
                         XXPermissions.with(this)
+                                .permission(Permission.CAMERA,Permission.WRITE_EXTERNAL_STORAGE,Permission.READ_EXTERNAL_STORAGE,Permission.ACCESS_FINE_LOCATION,
+                                        Permission.ACCESS_COARSE_LOCATION,Permission.READ_CALENDAR)
                                 .request(new OnPermission() {
 
                                              @Override
@@ -175,19 +182,35 @@ public class BaseInformationActivity extends BaseActivity implements BaseInforma
                 case REQUEST_CODE:
                     List<Uri> uris = Matisse.obtainResult(data);
                     if (uris.size()>0) {
-                        Glide.with(this).load(uris.get(0)).into(img_avatar);
                         List<String> strings = Matisse.obtainPathResult(data);
                         File file = new File(strings.get(0));//实例化数据库文件
-                        OkGo.<String>post(RequstUrl.URL.UploadImg)
-                                .params("img",file)
-                                .execute(new StringCallback() {
+                        Luban.with(this)
+                                .load(file)
+                                .ignoreBy(100)
+                                .setTargetDir(getPath())
+                                .filter(new CompressionPredicate() {
                                     @Override
-                                    public void onSuccess(Response<String> response) {
-                                        UploadImgBean uploadImgBean = new GsonBuilder().create().fromJson(response.body(), UploadImgBean.class);
-                                        UploadImgBean.DataBean DataBean= uploadImgBean.getData();
-                                        url = DataBean.getUrl();
+                                    public boolean apply(String path) {
+                                        return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
                                     }
-                                });
+                                })
+                                .setCompressListener(new OnCompressListener() {
+                                    @Override
+                                    public void onStart() {
+                                        // TODO 压缩开始前调用，可以在方法内启动 loading UI
+                                    }
+
+                                    @Override
+                                    public void onSuccess(File file) {
+                                        // TODO 压缩成功后调用，返回压缩后的图片文件
+                                        UserAvatar(file);
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        // TODO 当压缩过程出现问题时调用
+                                    }
+                                }).launch();
                     }
                     break;
                 default:
@@ -253,5 +276,29 @@ public class BaseInformationActivity extends BaseActivity implements BaseInforma
 
         }
 
+    }
+
+    private String getPath() {
+        String path = Environment.getExternalStorageDirectory() + "/zqw/image/";
+        File file = new File(path);
+        if (file.mkdirs()) {
+            return path;
+        }
+        return path;
+    }
+
+    //上传头像
+    public void UserAvatar(File file){
+        OkGo.<String>post(RequstUrl.URL.UploadImg)
+                .params("img",file)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        UploadImgBean uploadImgBean = new GsonBuilder().create().fromJson(response.body(), UploadImgBean.class);
+                        UploadImgBean.DataBean DataBean= uploadImgBean.getData();
+                        url = DataBean.getUrl();
+                        Glide.with(mContext).load(RequstUrl.URL.HOST+url).into(img_avatar);
+                    }
+                });
     }
 }

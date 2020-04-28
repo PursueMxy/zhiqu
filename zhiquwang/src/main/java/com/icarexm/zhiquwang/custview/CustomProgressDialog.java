@@ -2,7 +2,10 @@ package com.icarexm.zhiquwang.custview;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.Gravity;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,6 +19,11 @@ public class CustomProgressDialog extends Dialog {
     public CustomProgressDialog(Context context){
         super(context);
         this.context = context;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     public CustomProgressDialog(Context context, int theme) {

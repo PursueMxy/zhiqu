@@ -11,6 +11,8 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -22,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.GsonBuilder;
 import com.hjq.permissions.OnPermission;
 import com.hjq.permissions.Permission;
@@ -34,6 +37,7 @@ import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.presenter.CertificationPresenter;
 import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.GifSizeFilter;
+import com.icarexm.zhiquwang.utils.MxyUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.lzy.okgo.OkGo;
@@ -51,6 +55,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import top.zibin.luban.CompressionPredicate;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 public class CertificationActivity extends BaseActivity implements CertificationContract.View {
 
@@ -93,6 +100,8 @@ public class CertificationActivity extends BaseActivity implements Certification
         mContext = getApplicationContext();
         //权限申请
         XXPermissions.with(this)
+                .permission(Permission.CAMERA,Permission.WRITE_EXTERNAL_STORAGE,Permission.READ_EXTERNAL_STORAGE,Permission.ACCESS_FINE_LOCATION,
+                        Permission.ACCESS_COARSE_LOCATION,Permission.READ_CALENDAR)
                 .request(new OnPermission() {
 
                     @Override
@@ -208,6 +217,8 @@ public class CertificationActivity extends BaseActivity implements Certification
                         //权限申请
                         ToastUtils.showToast(mContext, "请允许权限");
                         XXPermissions.with(this)
+                                .permission(Permission.CAMERA,Permission.WRITE_EXTERNAL_STORAGE,Permission.READ_EXTERNAL_STORAGE,Permission.ACCESS_FINE_LOCATION,
+                                        Permission.ACCESS_COARSE_LOCATION,Permission.READ_CALENDAR)
                                 .request(new OnPermission() {
 
                                     @Override
@@ -252,40 +263,70 @@ public class CertificationActivity extends BaseActivity implements Certification
             if (requestCode==FRONT_CODE){
                 List<Uri> uris = Matisse.obtainResult(data);
                 if (uris.size()>0) {
-                    Glide.with(this).load(uris.get(0)).into(img_card_frond);
-                    img_dlt_front.setVisibility(View.VISIBLE);
                     List<String> strings = Matisse.obtainPathResult(data);
                     File file = new File(strings.get(0));//实例化数据库文件
-                    OkGo.<String>post(RequstUrl.URL.UploadImg)
-                            .params("img",file)
-                            .execute(new StringCallback() {
+                    Luban.with(this)
+                            .load(file)
+                            .ignoreBy(100)
+                            .setTargetDir(getPath())
+                            .filter(new CompressionPredicate() {
                                 @Override
-                                public void onSuccess(Response<String> response) {
-                                    UploadImgBean uploadImgBean = new GsonBuilder().create().fromJson(response.body(), UploadImgBean.class);
-                                    UploadImgBean.DataBean DataBean= uploadImgBean.getData();
-                                    frondurl = DataBean.getUrl();
+                                public boolean apply(String path) {
+                                    return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
                                 }
-                            });
+                            })
+                            .setCompressListener(new OnCompressListener() {
+                                @Override
+                                public void onStart() {
+                                    // TODO 压缩开始前调用，可以在方法内启动 loading UI
+                                }
+
+                                @Override
+                                public void onSuccess(File file) {
+                                    // TODO 压缩成功后调用，返回压缩后的图片文件
+                                    CardImageFront(file);
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    // TODO 当压缩过程出现问题时调用
+                                }
+                            }).launch();
 
                 }
             }else if (requestCode==REVERSE_CODE){
                 List<Uri> uris = Matisse.obtainResult(data);
                 if (uris.size()>0) {
-                    Glide.with(this).load(uris.get(0)).into(img_card_reverse);
-                    img_dlt_reverse.setVisibility(View.VISIBLE);
                     List<String> strings = Matisse.obtainPathResult(data);
                     File file = new File(strings.get(0));//实例化数据库文件
-                    OkGo.<String>post(RequstUrl.URL.UploadImg)
-                            .params("img",file)
-                            .execute(new StringCallback() {
+                    Luban.with(this)
+                            .load(file)
+                            .ignoreBy(100)
+                            .setTargetDir(getPath())
+                            .filter(new CompressionPredicate() {
                                 @Override
-                                public void onSuccess(Response<String> response) {
-                                    UploadImgBean uploadImgBean = new GsonBuilder().create().fromJson(response.body(), UploadImgBean.class);
-                                    UploadImgBean.DataBean DataBean= uploadImgBean.getData();
-                                    reverseurl = DataBean.getUrl();
-                                    img_dlt_reverse.setVisibility(View.VISIBLE);
+                                public boolean apply(String path) {
+                                    return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
                                 }
-                            });
+                            })
+                            .setCompressListener(new OnCompressListener() {
+                                @Override
+                                public void onStart() {
+                                    // TODO 压缩开始前调用，可以在方法内启动 loading UI
+                                }
+
+                                @Override
+                                public void onSuccess(File file) {
+                                    // TODO 压缩成功后调用，返回压缩后的图片文件
+                                    CardImageReverse(file);
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    // TODO 当压缩过程出现问题时调用
+                                }
+                            }).launch();
+
                 }
             }
         }
@@ -330,8 +371,10 @@ public class CertificationActivity extends BaseActivity implements Certification
                 edt_username.setText(info.getReal_name());
                 frondurl=info.getCard_front();
                 reverseurl=info.getCard_reverse();
-                Glide.with(mContext).load(RequstUrl.URL.HOST+info.getCard_front()).placeholder(R.mipmap.ic_img_add).into(img_card_frond);
-                Glide.with(mContext).load(RequstUrl.URL.HOST+info.getCard_reverse()).placeholder(R.mipmap.ic_img_add).into(img_card_reverse);
+                Glide.with(mContext).load(RequstUrl.URL.HOST+info.getCard_front()).placeholder(R.mipmap.ic_img_add)
+                        .into(img_card_frond);
+                Glide.with(mContext).load(RequstUrl.URL.HOST+info.getCard_reverse()).placeholder(R.mipmap.ic_img_add)
+                        .into(img_card_reverse);
             }else if (audit==3){
                 edt_username.setEnabled(true);
                 edt_car_number.setEnabled(true);
@@ -401,5 +444,46 @@ public class CertificationActivity extends BaseActivity implements Certification
 
         }
 
+    }
+
+    //身份证正面
+    public void CardImageFront(File file){
+        OkGo.<String>post(RequstUrl.URL.UploadImg)
+                .params("img",file)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        UploadImgBean uploadImgBean = new GsonBuilder().create().fromJson(response.body(), UploadImgBean.class);
+                        UploadImgBean.DataBean DataBean= uploadImgBean.getData();
+                        frondurl = DataBean.getUrl();
+                        img_dlt_front.setVisibility(View.VISIBLE);
+                        Glide.with(mContext).load(RequstUrl.URL.HOST+frondurl).into(img_card_frond);
+                    }
+                });
+    }
+
+    //身份证反面
+    public void CardImageReverse(File file){
+        OkGo.<String>post(RequstUrl.URL.UploadImg)
+                .params("img",file)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        UploadImgBean uploadImgBean = new GsonBuilder().create().fromJson(response.body(), UploadImgBean.class);
+                        UploadImgBean.DataBean DataBean= uploadImgBean.getData();
+                        reverseurl = DataBean.getUrl();
+                        Glide.with(mContext).load(RequstUrl.URL.HOST+reverseurl).dontAnimate().into(img_card_reverse);
+                        img_dlt_reverse.setVisibility(View.VISIBLE);
+                    }
+                });
+    }
+
+    private String getPath() {
+        String path = Environment.getExternalStorageDirectory() + "/zqw/image/";
+        File file = new File(path);
+        if (file.mkdirs()) {
+            return path;
+        }
+        return path;
     }
 }

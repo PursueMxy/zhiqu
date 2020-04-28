@@ -52,6 +52,7 @@ public class CustomerChatAdapter extends HelperRecyclerViewAdapter<ChatMessageBe
             ImageView right_img_one = viewHolder.getView(R.id.list_customer_right_img_one);
             Glide.with(mContext).load(RequstUrl.URL.HOST+item.getAvatar()).circleCrop().into(img_right);
             TextView tv_time = viewHolder.getView(R.id.list_customer_right_tv_time);
+            Log.e("item.getTime",item.getTime()+"");
             if (item.getType()==1) {
                 right_img_one.setVisibility(View.GONE);
                 right_tv_content.setVisibility(View.VISIBLE);

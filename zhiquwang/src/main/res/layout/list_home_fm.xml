@@ -97,7 +97,7 @@
             android:id="@+id/list_home_fm_tv_label_price"
             android:gravity="center|left"
             android:layout_width="@dimen/dp_130"
-            android:layout_height="@dimen/dp_28"
+            android:layout_height="@dimen/dp_26"
             android:text=""
             android:textColor="@color/white"
             android:textSize="@dimen/sp_8"

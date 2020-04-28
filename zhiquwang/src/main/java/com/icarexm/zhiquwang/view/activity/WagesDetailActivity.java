@@ -75,6 +75,9 @@ public class WagesDetailActivity extends AppCompatActivity implements SeleteMoth
         token = share.getString("token", "");
         Intent intent = getIntent();
         content = intent.getStringExtra("content");
+        num = intent.getStringExtra("job_number");
+        name = intent.getStringExtra("name");
+        card = intent.getStringExtra("card");
         monthDateInt = DateUtils.getMonthDateInt();
         QueryWagesBean  queryWagesBean = new GsonBuilder().create().fromJson(content, QueryWagesBean.class);
         ButterKnife.bind(this);
@@ -85,8 +88,8 @@ public class WagesDetailActivity extends AppCompatActivity implements SeleteMoth
         try {
             tv_time.setText(monthDateInt);
           if (queryWagesBean.getCode()==1){
-              QueryWagesBean.DataBean data = queryWagesBean.getData();
-              name = data.getName();
+            QueryWagesBean.DataBean data = queryWagesBean.getData();
+            name = data.getName();
             card = data.getCard();
             num = data.getNum();
             tv_company.setText(data.getCompany());
@@ -114,7 +117,7 @@ public class WagesDetailActivity extends AppCompatActivity implements SeleteMoth
             tv_deduct_price.setText("数据为空");
             tv_tax_before.setText("数据为空");
             tv_actual_price.setText("数据为空");
-              month=monthDateInt;
+            month=monthDateInt;
         }
         }catch (Exception e){
             tv_company.setText("数据为空");

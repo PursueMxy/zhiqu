@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -114,7 +115,10 @@ public class MyToJoinActivity extends BaseActivity implements MyToJoinContract.V
                             for (int b=0;b<area_list.size();b++){
                                 CityList.add(area_list.get(b).getArea_name());
                             }
-                            groupwva_two.setItems(CityList,0);
+                            if (CityList.size()>0) {
+                                groupwva_two.setItems(CityList, 0);
+                                CityName=CityList.get(0);
+                            }
                         }
                     }
                 });
@@ -237,6 +241,10 @@ public class MyToJoinActivity extends BaseActivity implements MyToJoinContract.V
         groupwva_one.setItems(provinceList,0);
         groupwva_two = BirthDateInflate.findViewById(R.id.dialog_bottom_wheel_two);
         groupwva_two.setItems(Arrays.asList(SltNull),0);
+        if (city_list.get(0)!=null) {
+            ProvinceName = city_list.get(0).getArea_name();
+            GetArea(city_list.get(0).getArea_id() + "");
+        }
         groupwva_one.setOnItemSelectedListener(new MyWheelView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(int selectedIndex, String item) {
@@ -259,7 +267,7 @@ public class MyToJoinActivity extends BaseActivity implements MyToJoinContract.V
         BirthDateInflate.findViewById(R.id.dialog_bottom_img_opt).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!CityName.equals("")) {
+                if (CityName!=null) {
                     tv_area.setText(ProvinceName + CityName);
                     age_groupDialog.dismiss();
                 }else {

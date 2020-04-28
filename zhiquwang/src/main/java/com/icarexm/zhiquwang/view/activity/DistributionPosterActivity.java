@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -23,14 +24,18 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.GsonBuilder;
+import com.icarexm.zhiquwang.MyApplication;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.InviteQrBean;
+import com.icarexm.zhiquwang.bean.InviteUrlBean;
 import com.icarexm.zhiquwang.bean.PosterBean;
+import com.icarexm.zhiquwang.custview.BottomDialog;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.icarexm.zhiquwang.view.dialog.ImgSaveDialog;
+import com.icarexm.zhiquwang.wxapi.WXEntryActivity;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
@@ -57,6 +62,7 @@ public class DistributionPosterActivity extends BaseActivity {
     private CustomProgressDialog progressDialog;
     private String qr_code="";
     private String poster_url="";
+    private String inviteUrl;
 
     @SuppressLint("JavascriptInterface")
     @Override
@@ -67,15 +73,6 @@ public class DistributionPosterActivity extends BaseActivity {
         token = share.getString("token", "");
         mContext = getApplicationContext();
         ButterKnife.bind(this);
-//        //设置可自由缩放网页、JS生效
-//        webview.setOnTouchListener((v, event) -> (event.getAction() == MotionEvent.ACTION_MOVE));
-//        WebSettings webSettings = webview.getSettings();
-//        webview.loadUrl(webUrl);
-//        //1. 设置于JS交互的权限
-//        webSettings.setJavaScriptEnabled(true);
-//        //2. 将Java对象映射到JS对象
-//        webview.addJavascriptInterface(DistributionPosterActivity.this, "jsObject");
-//        webview.loadUrl("javascript:callJS('"+ qr_code +"')");
         InitData();
         img_poster.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -94,34 +91,33 @@ public class DistributionPosterActivity extends BaseActivity {
 
     private void InitData() {
         LoadingDialogShow();
+        InitDataUrl();
         OkGo.<String>post(RequstUrl.URL.getPoster)
                 .params("token",token)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(Response<String> response) {
                         LoadingDialogClose();
-                        Log.e("海报",response.body());
                         PosterBean posterBean = new GsonBuilder().create().fromJson(response.body(), PosterBean.class);
                         if (posterBean.getCode()==1){
                             poster_url=RequstUrl.URL.HOST+posterBean.getData().getPoster_url();
                             Glide.with(mContext).load(poster_url).into(img_poster);
                         }
-//                        InviteQrBean inviteQrBean = new GsonBuilder().create().fromJson(response.body(), InviteQrBean.class);
-//                        if (inviteQrBean.getCode()==1){
-//                            InviteQrBean.DataBean data = inviteQrBean.getData();
-//                            qr_code = data.getQr_code();
-//                            webview.loadUrl("javascript:callJS('"+ qr_code +"')");
-//                        }
                     }
                 });
     }
 
-    @OnClick({R.id.distribution_poster_img_back})
+    @OnClick({R.id.distribution_poster_img_back,R.id.distribution_poster_img_invite_url})
     public void onViewClick(View view){
         switch (view.getId()){
             case R.id.distribution_poster_img_back:
                 if (!ButtonUtils.isFastDoubleClick(R.id.distribution_poster_img_back)) {
                     finish();
+                }
+                break;
+            case R.id.distribution_poster_img_invite_url:
+                if (!ButtonUtils.isFastDoubleClick(R.id.recruit_dtl_img_invite_url)) {
+                    WechatDialog();
                 }
                 break;
         }
@@ -161,4 +157,44 @@ public class DistributionPosterActivity extends BaseActivity {
 
     }
 
+    //转发微信弹出窗
+    public void  WechatDialog(){
+        final BottomDialog bottomDialog = new BottomDialog(this, R.style.ActionSheetDialogStyle);
+        View inflate = LayoutInflater.from(mContext).inflate(R.layout.dialog_wechat_share, null);
+        inflate.findViewById(R.id.dialog_wechat_share_btn_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomDialog.dismiss();
+            }
+        });
+        inflate.findViewById(R.id.dialog_wechat_share_tv_friend).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                WXEntryActivity.ShareWeixin(mContext, MyApplication.iwxapi, inviteUrl,0);
+
+            }
+        });
+        inflate.findViewById(R.id.dialog_wechat_share_tv_monments).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                WXEntryActivity.ShareWeixin(mContext,MyApplication.iwxapi, inviteUrl,1);
+            }
+        });
+        bottomDialog.setContentView(inflate);
+        bottomDialog.show();
+    }
+
+    private void InitDataUrl() {
+        OkGo.<String>post(RequstUrl.URL.inviteUrl)
+                .params("token",token)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        InviteUrlBean inviteUrlBean = new GsonBuilder().create().fromJson(response.body(), InviteUrlBean.class);
+                        if(inviteUrlBean.getCode()==1){
+                            inviteUrl = inviteUrlBean.getData().getUrl();
+                        }
+                    }
+                });
+    }
 }

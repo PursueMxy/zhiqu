@@ -13,7 +13,9 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -71,6 +73,9 @@ import java.util.Observer;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import top.zibin.luban.CompressionPredicate;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 public class CustomerChatActivity extends BaseActivity implements Observer, AppSocket.SendOnItemClick, CustomerChatContract.View, CustomerChatAdapter.ImageOnClickListtener {
 
@@ -178,7 +183,7 @@ public class CustomerChatActivity extends BaseActivity implements Observer, AppS
                 String word = word_list.get(position);
                 long currentTime = System.currentTimeMillis()/1000;
                 String msg = new GsonBuilder().create().toJson(new SendChatBean(dataBean.getChat_id() + "", dataBean.getUser_id() + "", dataBean.getAdmin_id() + "", dataBean.getJob_id() + "",
-                        word, "1", dataBean.getUser_avatar()));
+                        word, "1", dataBean.getUser_avatar(),currentTime+""));
                 ChatMessageBean.NameValuePairsBean nameValuePairsBean = new ChatMessageBean.NameValuePairsBean(dataBean.getChat_id(), dataBean.getUser_id(), dataBean.getAdmin_id() + "", dataBean.getJob_id(), (int)currentTime ,
                         word, 1, dataBean.getUser_avatar(), 1);
                 chat_list.add(nameValuePairsBean);
@@ -215,9 +220,10 @@ public class CustomerChatActivity extends BaseActivity implements Observer, AppS
             case R.id.customer_chat_img_send_message:
                 String  content= edt_content.getText().toString();
                 if (!content.equals("")) {
-                    long currentTime = System.currentTimeMillis()/1000;
+                    String s= System.currentTimeMillis()/1000+"";
+                    int currentTime = Integer.parseInt(s);
                     String msg = new GsonBuilder().create().toJson(new SendChatBean(dataBean.getChat_id() + "", dataBean.getUser_id() + "", dataBean.getAdmin_id() + "", dataBean.getJob_id() + "",
-                            content, "1", dataBean.getUser_avatar()));
+                            content, "1", dataBean.getUser_avatar(),currentTime+""));
                     ChatMessageBean.NameValuePairsBean nameValuePairsBean = new ChatMessageBean.NameValuePairsBean(dataBean.getChat_id(), dataBean.getUser_id(), dataBean.getAdmin_id() + "", dataBean.getJob_id(), (int)currentTime ,
                             content, 1, dataBean.getUser_avatar(), 1);
                     chat_list.add(nameValuePairsBean);
@@ -239,7 +245,6 @@ public class CustomerChatActivity extends BaseActivity implements Observer, AppS
             case R.id.customer_chat_img_send_img:
                 if (!ButtonUtils.isFastDoubleClick(R.id.customer_chat_img_send_img)) {
                     try {
-
                         Matisse.from(this)
                                 .choose(MimeType.ofImage(), false)
                                 .countable(true)
@@ -375,31 +380,63 @@ public class CustomerChatActivity extends BaseActivity implements Observer, AppS
                     if (uris.size()>0) {
                         List<String> strings = Matisse.obtainPathResult(data);
                         File file = new File(strings.get(0));//实例化数据库文件
-                        OkGo.<String>post(RequstUrl.URL.UploadImg)
-                                .params("img",file)
-                                .execute(new StringCallback() {
+                        Luban.with(this)
+                                .load(file)
+                                .ignoreBy(100)
+                                .setTargetDir(getPath())
+                                .filter(new CompressionPredicate() {
                                     @Override
-                                    public void onSuccess(Response<String> response) {
-                                        int currentTime = (int)System.currentTimeMillis() / 1000;
-                                        UploadImgBean uploadImgBean = new GsonBuilder().create().fromJson(response.body(), UploadImgBean.class);
-                                        UploadImgBean.DataBean DataBean= uploadImgBean.getData();
-                                         String avatar = DataBean.getUrl();
-                                        String msg = new GsonBuilder().create().toJson(new SendChatBean(dataBean.getChat_id() + "", dataBean.getUser_id() + "", dataBean.getAdmin_id() + "", dataBean.getJob_id() + "",
-                                                avatar, "2", dataBean.getUser_avatar()));
-                                        ChatMessageBean.NameValuePairsBean nameValuePairsBean = new ChatMessageBean.NameValuePairsBean(dataBean.getChat_id(), dataBean.getUser_id(), dataBean.getAdmin_id() + "", dataBean.getJob_id(), currentTime,
-                                                avatar, 2, dataBean.getUser_avatar(), 1);
-                                        customerChatAdapter.addItemToLast(nameValuePairsBean);
-                                        customerChatAdapter.notifyDataSetChanged();
-                                        chat_list.add(nameValuePairsBean);
-                                        AppSocket.getInstance().sendMessage(msg);
-                                        ScrollLoading();
+                                    public boolean apply(String path) {
+                                        return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
                                     }
-                                });
+                                })
+                                .setCompressListener(new OnCompressListener() {
+                                    @Override
+                                    public void onStart() {
+                                        // TODO 压缩开始前调用，可以在方法内启动 loading UI
+                                    }
+
+                                    @Override
+                                    public void onSuccess(File file) {
+                                        // TODO 压缩成功后调用，返回压缩后的图片文件
+                                        UploadImg(file);
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        // TODO 当压缩过程出现问题时调用
+                                    }
+                                }).launch();
+
                     }
                     break;
                 default:
             }
         }
+    }
+
+    private void UploadImg(File file) {
+        OkGo.<String>post(RequstUrl.URL.UploadImg)
+                .params("img",file)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        String s= System.currentTimeMillis()/1000+"";
+                        int currentTime = Integer.parseInt(s);
+                        UploadImgBean uploadImgBean = new GsonBuilder().create().fromJson(response.body(), UploadImgBean.class);
+                        UploadImgBean.DataBean DataBean= uploadImgBean.getData();
+                        String avatar = DataBean.getUrl();
+                        String msg = new GsonBuilder().create().toJson(new SendChatBean(dataBean.getChat_id() + "", dataBean.getUser_id() + "", dataBean.getAdmin_id() + "", dataBean.getJob_id() + "",
+                                avatar, "2", dataBean.getUser_avatar(),currentTime+""));
+                        ChatMessageBean.NameValuePairsBean nameValuePairsBean = new ChatMessageBean.NameValuePairsBean(dataBean.getChat_id(), dataBean.getUser_id(), dataBean.getAdmin_id() + "", dataBean.getJob_id(), currentTime,
+                                avatar, 2, dataBean.getUser_avatar(), 1);
+                        customerChatAdapter.addItemToLast(nameValuePairsBean);
+                        customerChatAdapter.notifyDataSetChanged();
+                        chat_list.add(nameValuePairsBean);
+                        AppSocket.getInstance().sendMessage(msg);
+                        ScrollLoading();
+                    }
+                });
     }
 
     @Override
@@ -414,5 +451,14 @@ public class CustomerChatActivity extends BaseActivity implements Observer, AppS
                 mRecyclerView.smoothScrollToPosition(chat_list.size()+1);
             }
         },200);
+    }
+
+    private String getPath() {
+        String path = Environment.getExternalStorageDirectory() + "/zqw/image/";
+        File file = new File(path);
+        if (file.mkdirs()) {
+            return path;
+        }
+        return path;
     }
 }

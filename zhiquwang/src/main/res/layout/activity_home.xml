@@ -29,8 +29,8 @@
             app:iconNormal="@mipmap/ic_home_normal"
             app:textColorNormal="@color/item_normal"
             app:textColorSelected="@color/item_slt"
-            app:itemTextSize="8sp"
-            app:itemMarginTop="3dp"></com.chaychan.library.BottomBarItem>
+            app:itemTextSize="@dimen/sp_10"
+            app:itemMarginTop="@dimen/dp_3"></com.chaychan.library.BottomBarItem>
         <com.chaychan.library.BottomBarItem
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -40,8 +40,8 @@
             app:itemText="记加班"
             app:textColorNormal="@color/item_normal"
             app:textColorSelected="@color/item_slt"
-            app:itemTextSize="8sp"
-            app:itemMarginTop="3dp"></com.chaychan.library.BottomBarItem>
+            app:itemTextSize="@dimen/sp_10"
+            app:itemMarginTop="@dimen/dp_3"></com.chaychan.library.BottomBarItem>
         <com.chaychan.library.BottomBarItem
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -51,8 +51,8 @@
             app:itemText="打卡"
             app:textColorNormal="@color/item_normal"
             app:textColorSelected="@color/item_slt"
-            app:itemTextSize="8sp"
-            app:itemMarginTop="3dp"></com.chaychan.library.BottomBarItem>
+            app:itemTextSize="@dimen/sp_10"
+            app:itemMarginTop="@dimen/dp_3"></com.chaychan.library.BottomBarItem>
         <com.chaychan.library.BottomBarItem
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -62,8 +62,8 @@
             app:itemText="我的"
             app:textColorNormal="@color/item_normal"
             app:textColorSelected="@color/item_slt"
-            app:itemTextSize="8sp"
-            app:itemMarginTop="3dp"></com.chaychan.library.BottomBarItem>
+            app:itemTextSize="@dimen/sp_10"
+            app:itemMarginTop="@dimen/dp_3"></com.chaychan.library.BottomBarItem>
 
     </com.chaychan.library.BottomBarLayout>
 </LinearLayout>

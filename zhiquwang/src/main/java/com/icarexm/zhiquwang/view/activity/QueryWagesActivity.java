@@ -33,6 +33,9 @@ public class QueryWagesActivity extends BaseActivity implements QueryWagesContra
     private QueryWagesPresenter queryWagesPresenter;
     private String token;
     private String monthDateInt;
+    private String name;
+    private String card;
+    private String job_number;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +55,9 @@ public class QueryWagesActivity extends BaseActivity implements QueryWagesContra
             case R.id.query_wages_btn_confirm:
                 if (!ButtonUtils.isFastDoubleClick(R.id.query_wages_btn_confirm)) {
                     monthDateInt = DateUtils.getMonthDateInt();
-                    String name = edt_name.getText().toString();
-                    String card = edt_card.getText().toString();
-                    String job_number = edt_job_number.getText().toString();
+                    name = edt_name.getText().toString();
+                    card = edt_card.getText().toString();
+                    job_number = edt_job_number.getText().toString();
                     if (!name.equals("")) {
                         if (!card.equals("")) {
                             if (!job_number.equals("")) {
@@ -86,6 +89,9 @@ public class QueryWagesActivity extends BaseActivity implements QueryWagesContra
         if (queryWagesBean.getCode()!=0){
             Intent intent = new Intent(mContext, WagesDetailActivity.class);
             intent.putExtra("content",content);
+            intent.putExtra("name",name);
+            intent.putExtra("card",card);
+            intent.putExtra("job_number",job_number);
             intent.putExtra("monthDateInt",monthDateInt);
             startActivity(intent);
         }else {

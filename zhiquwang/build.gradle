@@ -1,15 +1,23 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        debug {
+            storeFile file('D:\\打包文件\\icarexm.jks')
+            storePassword 'icare123'
+            keyAlias = 'icare'
+            keyPassword 'icare123'
+        }
+    }
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.icarexm.zhiquwang"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 21
+        versionCode 24
 
-        versionName "1.1.10"
+        versionName "1.1.13"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         ndk {
             // 设置支持的SO库架构
@@ -95,6 +103,8 @@ dependencies {
     implementation 'com.github.AlexLiuSheng:CheckVersionLib:2.2.3'
 
     implementation 'me.panpf:sketch:2.7.1'
+
+    implementation 'top.zibin:Luban:1.1.8'
     implementation('io.socket:socket.io-client:1.0.0') {
         exclude group: 'org.json', module: 'json'
     }

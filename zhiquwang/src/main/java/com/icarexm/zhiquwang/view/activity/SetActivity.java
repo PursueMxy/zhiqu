@@ -213,7 +213,6 @@ public class SetActivity extends BaseActivity {
                                                         .setDownloadUrl("http://zqw.kuaishanghd.com/android/zqw.apk")
                                                         .setTitle("功能升级")
                                                         .setContent("部分功能优化")
-
                                         );
                                 builderLodawn.setApkName("zhiquwang");
                                 builderLodawn.setForceRedownload(true);

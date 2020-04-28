@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_40">
         <TextView
-            android:text="姓名："
+            android:text="姓        名"
             android:gravity="right|center"
             android:layout_centerVertical="true"
             android:textSize="@dimen/sp_13"
@@ -44,7 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_40">
         <TextView
-            android:text="联系方式："
+            android:text="联系方式"
             android:gravity="right|center"
             android:layout_centerVertical="true"
             android:textSize="@dimen/sp_13"

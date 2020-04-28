@@ -34,6 +34,8 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 import com.lzy.okgo.request.PostRequest;
 
+import java.text.DecimalFormat;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -54,7 +56,7 @@ public class RecordOvertimeFragment extends Fragment implements View.OnClickList
     private CustomProgressDialog progressDialog;
     private TextView tv_set_basepay;
     private TextView two_tv_set_basepay;
-
+    DecimalFormat dataFormat = new DecimalFormat( "0.00");
     public RecordOvertimeFragment() {
         // Required empty public constructor
     }
@@ -88,15 +90,15 @@ public class RecordOvertimeFragment extends Fragment implements View.OnClickList
                             OverTimeBean overTimeBean = new GsonBuilder().create().fromJson(response.body(), OverTimeBean.class);
                             if (overTimeBean.getCode()==1){
                                 if (TypeOfWork.equals("1")){
-                                    tv_salary.setText(overTimeBean.getData().getPrice()+"");
+                                    tv_salary.setText(dataFormat.format(overTimeBean.getData().getPrice())+"");
                                     tv_hour.setText(overTimeBean.getData().getHours()+"H");
-                                    tv_price.setText(overTimeBean.getData().getOver_price()+"");
+                                    tv_price.setText(dataFormat.format(overTimeBean.getData().getOver_price())+"");
                                     if (!overTimeBean.getData().getBase_pay().equals("")){
                                         tv_set_basepay.setText("基本工资:\n"+overTimeBean.getData().getBase_pay());
                                     }
                                 }else if (TypeOfWork.equals("2")){
                                     two_tv_dt.setText(overTimeBean.getData().getHours()+"H");
-                                    two_tv_salary.setText(overTimeBean.getData().getPrice()+"");
+                                    two_tv_salary.setText(dataFormat.format(overTimeBean.getData().getPrice())+"");
                                     if (!overTimeBean.getData().getBase_pay().equals("")){
                                         two_tv_set_basepay.setText("小时工资:\n"+overTimeBean.getData().getBase_pay());
                                     }

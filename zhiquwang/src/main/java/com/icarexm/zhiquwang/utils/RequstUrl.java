@@ -47,6 +47,9 @@ public class RequstUrl {
         //银行卡列表
         public static String  myBank=HOST+"/api/myBank";
 
+        //删除银行卡
+        public static String delBank=HOST+"/api/delBank";
+
         //提现
         public static String doWithdrawal=HOST+"/api/doWithdrawal";
 
@@ -196,5 +199,8 @@ public class RequstUrl {
 
         //获取分享海报
         public static String getPoster=HOST+"/api/getPoster";
+
+        //是否已经填写基础信息
+        public static String whetherBase=HOST+"/api/whetherBase";
     }
 }

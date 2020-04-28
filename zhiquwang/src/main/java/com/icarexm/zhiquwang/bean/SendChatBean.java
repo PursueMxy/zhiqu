@@ -8,6 +8,7 @@ public class SendChatBean {
     private String content;
     private String type;
     private String avatar;
+    private String time;
 
     public String getChat_id() {
         return chat_id;
@@ -65,7 +66,15 @@ public class SendChatBean {
         this.avatar = avatar;
     }
 
-    public SendChatBean(String chat_id, String user_id, String admin_id, String job_id, String content, String type, String avatar) {
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public SendChatBean(String chat_id, String user_id, String admin_id, String job_id, String content, String type, String avatar,String time) {
         this.chat_id = chat_id;
         this.user_id = user_id;
         this.admin_id = admin_id;
@@ -73,5 +82,6 @@ public class SendChatBean {
         this.content = content;
         this.type = type;
         this.avatar = avatar;
+        this.time=time;
     }
 }

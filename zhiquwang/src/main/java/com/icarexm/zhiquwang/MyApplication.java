@@ -2,6 +2,8 @@ package com.icarexm.zhiquwang;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.icarexm.zhiquwang.chatroom.MainChatRoom;
@@ -24,11 +26,16 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        //设置字体不随系统变大而变大
+        Resources res = super.getResources();
+        Configuration config = new Configuration();
+        config.setToDefaults();
+        res.updateConfiguration(config, res.getDisplayMetrics());
         InitWeixin();
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
         LitePal.initialize(this);
-        Density.setDensity(this, 360);//375为UI提供设计图的宽度
+        Density.setDensity(this, 360);
         CrashReport.initCrashReport(getApplicationContext(),"27985782b5", false);
         MainChatRoom.init();
     }

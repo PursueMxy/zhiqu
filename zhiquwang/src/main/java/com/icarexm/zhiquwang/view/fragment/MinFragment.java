@@ -67,7 +67,7 @@ public class MinFragment extends Fragment implements View.OnClickListener {
     private CircleImageView img_avatar;
     private double start_latitude;
     private double start_longitude;
-    private String cityName;
+    private String cityName="厦门市";
     private SharedPreferences share;
     private AMapLocationClient mLocationClient;
     private String district;
@@ -82,11 +82,11 @@ public class MinFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View inflate = inflater.inflate(R.layout.fragment_min, container, false);
         mContext = getContext();
         share = mContext.getSharedPreferences("userInfo",Context.MODE_PRIVATE);
         token = share.getString("token", "");
-         cityName = share.getString("cityName", "");
-        View inflate = inflater.inflate(R.layout.fragment_min, container, false);
+        cityName = share.getString("cityName", "");
         InitUI(inflate);
         LoadingDialogShow();
         InitData();
@@ -97,34 +97,36 @@ public class MinFragment extends Fragment implements View.OnClickListener {
 
 
     private void InitData() {
-        OkGo.<String>post(RequstUrl.URL.mine)
-                .params("token",token)
-                .execute(new StringCallback() {
-                    @Override
-                    public void onSuccess(Response<String> response) {
-                        LoadingDialogClose();
-                        MineBean mineBean = new GsonBuilder().create().fromJson(response.body(), MineBean.class);
-                        if (mineBean.getCode()==1){
-                            MineBean.DataBean data = mineBean.getData();
-                            tv_nickname.setText(data.getUsername());
-                            Glide.with(mContext).load(RequstUrl.URL.HOST+data.getAvatar()).into(img_avatar);
-                            if (data.getUnread_num()>0){
-                                tv_unread.setVisibility(View.VISIBLE);
-                                tv_unread.setText(data.getUnread_num()+"");
-                            }else {
-                                tv_unread.setVisibility(View.GONE);
-                            }
-                            timeHandler.postDelayed(timeRunnable,3000);
-                        }else if (mineBean.getCode() ==10001){
-                            try {
-                                startActivity(new Intent(mContext, LoginActivity.class));
-                                getActivity().finish();
-                            }catch (Exception e){
+        try {
+            OkGo.<String>post(RequstUrl.URL.mine)
+                    .params("token", token)
+                    .execute(new StringCallback() {
+                        @Override
+                        public void onSuccess(Response<String> response) {
+                            LoadingDialogClose();
+                            MineBean mineBean = new GsonBuilder().create().fromJson(response.body(), MineBean.class);
+                            if (mineBean.getCode() == 1) {
+                                MineBean.DataBean data = mineBean.getData();
+                                tv_nickname.setText(data.getUsername());
+                                Glide.with(mContext).load(RequstUrl.URL.HOST + data.getAvatar()).into(img_avatar);
+                                if (data.getUnread_num() > 0) {
+                                    tv_unread.setVisibility(View.VISIBLE);
+                                    tv_unread.setText(data.getUnread_num() + "");
+                                } else {
+                                    tv_unread.setVisibility(View.GONE);
+                                }
+//                                timeHandler.postDelayed(timeRunnable, 50000);
+                            } else if (mineBean.getCode() == 10001) {
+                                try {
+                                    startActivity(new Intent(mContext, LoginActivity.class));
+                                    getActivity().finish();
+                                } catch (Exception e) {
 
+                                }
                             }
                         }
-                    }
-                });
+                    });
+        }catch (Exception e){}
     }
 
     private void InitUI(View inflate) {
@@ -145,7 +147,16 @@ public class MinFragment extends Fragment implements View.OnClickListener {
         tv_nickname = inflate.findViewById(R.id.fm_min_tv_nickname);
         tv_address = inflate.findViewById(R.id.fm_min_tv_address);
         tv_unread = inflate.findViewById(R.id.fm_min_tv_unread);
-        tv_address.setText(cityName);
+        if (!cityName.equals("")) {
+            tv_address.setText(cityName);
+        }else {
+            cityName = share.getString("cityName", "");
+            if (!cityName.equals("")) {
+                tv_address.setText("厦门市");
+            }else {
+                tv_address.setText(cityName);
+            }
+        }
     }
 
     @Override

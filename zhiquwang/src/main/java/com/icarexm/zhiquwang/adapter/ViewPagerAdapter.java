@@ -1,5 +1,6 @@
 package com.icarexm.zhiquwang.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -27,7 +28,10 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.bumptech.glide.Glide;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.custview.CustomVideoView;
+import com.icarexm.zhiquwang.utils.ToastUtils;
 import com.icarexm.zhiquwang.view.activity.RecruitDetailActivity;
+import com.icarexm.zhiquwang.view.dialog.ImgBoostDialog;
+import com.icarexm.zhiquwang.view.dialog.ImgSaveDialog;
 
 import java.util.HashMap;
 import java.util.List;
@@ -92,6 +96,12 @@ public class ViewPagerAdapter  extends RecyclerView.Adapter<ViewPagerAdapter.Vie
             }
         });
 
+        holder.pager_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new ImgBoostDialog( mContext,animal).show();
+            }
+        });
     }
 
     public void refreshData(int heatNum){

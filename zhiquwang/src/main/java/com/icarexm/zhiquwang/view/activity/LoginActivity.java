@@ -64,8 +64,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
     private SharedPreferences share;
     private String token;
     private String type="";
-    private int versionCode;
-    private String version_name;
     private CustomProgressDialog progressDialog;
     private String on_send;
 
@@ -84,23 +82,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View {
         ButterKnife.bind(this);
         edt_mobile.setText(mobile);
         edt_password.setText(password);
-        //权限申请
-        XXPermissions.with(this)
-                .constantRequest()
-                .permission(Permission.CAMERA,Permission.WRITE_EXTERNAL_STORAGE,Permission.READ_EXTERNAL_STORAGE,Permission.ACCESS_FINE_LOCATION,
-                 Permission.ACCESS_COARSE_LOCATION,Permission.READ_CALENDAR)
-                .request(new OnPermission() {
-                    @Override
-                    public void hasPermission(List<String> granted, boolean isAll) {
-
-                    }
-
-                    @Override
-                    public void noPermission(List<String> denied, boolean quick) {
-
-                    }
-                });
-        versionCode = getVersionCode();
         try {
            if (token!=null){
                    SharedPreferences.Editor editor = share.edit();

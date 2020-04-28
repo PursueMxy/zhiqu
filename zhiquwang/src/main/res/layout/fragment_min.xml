@@ -61,7 +61,7 @@
             android:layout_below="@+id/fm_min_tv_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
+            android:text="厦门市"
             android:textColor="@color/FFF6FBFD"
             android:textSize="@dimen/sp_14"
             />

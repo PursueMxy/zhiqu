@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -55,6 +57,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import top.zibin.luban.CompressionPredicate;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 public class UpdateBaseInforActivity extends BaseActivity {
 
@@ -512,16 +517,33 @@ public class UpdateBaseInforActivity extends BaseActivity {
                         Glide.with(this).load(uris.get(0)).into(img_avatar);
                         List<String> strings = Matisse.obtainPathResult(data);
                         File file = new File(strings.get(0));//实例化数据库文件
-                        OkGo.<String>post(RequstUrl.URL.UploadImg)
-                                .params("img",file)
-                                .execute(new StringCallback() {
+                        Luban.with(this)
+                                .load(file)
+                                .ignoreBy(100)
+                                .setTargetDir(getPath())
+                                .filter(new CompressionPredicate() {
                                     @Override
-                                    public void onSuccess(Response<String> response) {
-                                        UploadImgBean uploadImgBean = new GsonBuilder().create().fromJson(response.body(), UploadImgBean.class);
-                                        UploadImgBean.DataBean DataBean= uploadImgBean.getData();
-                                        avatar = DataBean.getUrl();
+                                    public boolean apply(String path) {
+                                        return !(TextUtils.isEmpty(path) || path.toLowerCase().endsWith(".gif"));
                                     }
-                                });
+                                })
+                                .setCompressListener(new OnCompressListener() {
+                                    @Override
+                                    public void onStart() {
+                                        // TODO 压缩开始前调用，可以在方法内启动 loading UI
+                                    }
+
+                                    @Override
+                                    public void onSuccess(File file) {
+                                        // TODO 压缩成功后调用，返回压缩后的图片文件
+                                        UploadImg(file);
+                                    }
+
+                                    @Override
+                                    public void onError(Throwable e) {
+                                        // TODO 当压缩过程出现问题时调用
+                                    }
+                                }).launch();
                     }
                     break;
                 default:
@@ -553,5 +575,27 @@ public class UpdateBaseInforActivity extends BaseActivity {
 
         }
 
+    }
+
+    public void UploadImg(File file){
+        OkGo.<String>post(RequstUrl.URL.UploadImg)
+                .params("img",file)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        UploadImgBean uploadImgBean = new GsonBuilder().create().fromJson(response.body(), UploadImgBean.class);
+                        UploadImgBean.DataBean DataBean= uploadImgBean.getData();
+                        avatar = DataBean.getUrl();
+                    }
+                });
+    }
+
+    private String getPath() {
+        String path = Environment.getExternalStorageDirectory() + "/zqw/image/";
+        File file = new File(path);
+        if (file.mkdirs()) {
+            return path;
+        }
+        return path;
     }
 }

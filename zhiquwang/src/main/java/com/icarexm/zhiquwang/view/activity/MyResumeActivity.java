@@ -23,6 +23,7 @@ import com.icarexm.zhiquwang.adapter.MyResumeAdapter;
 import com.icarexm.zhiquwang.adapter.OnItemClickListener;
 import com.icarexm.zhiquwang.adapter.TodayHeatAdapter;
 import com.icarexm.zhiquwang.bean.AddResumeBean;
+import com.icarexm.zhiquwang.bean.PublicCodeBean;
 import com.icarexm.zhiquwang.bean.ResumeBean;
 import com.icarexm.zhiquwang.contract.MyResumeContract;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
@@ -30,6 +31,9 @@ import com.icarexm.zhiquwang.presenter.MyResumePresenter;
 import com.icarexm.zhiquwang.utils.ButtonUtils;
 import com.icarexm.zhiquwang.utils.RequstUrl;
 import com.icarexm.zhiquwang.utils.ToastUtils;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.lzy.okgo.model.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -130,9 +134,7 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
                 break;
             case R.id.my_resume_add_workHistory:
                 if (!ButtonUtils.isFastDoubleClick(R.id.my_resume_add_workHistory)) {
-                    Intent intent = new Intent(mContext, AddWorkHistoryActivity.class);
-                    intent.putExtra("type", "add");
-                    startActivityForResult(intent, ADDWORKHISTORY);
+                    whetherBase();
                 }
                 break;
             case R.id.my_resume_btn_confirm:
@@ -188,6 +190,7 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
                 avatar=data.getStringExtra("avatar");
                 tv_education.setText(age+education);
                 Glide.with(mContext).load(RequstUrl.URL.HOST+avatar).into(img_acatar);
+                myResumePresenter.GetAddResume(token, avatar, real_name, sex, birth, city, education,"", experience,"");
             }
     }
 
@@ -212,7 +215,7 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
           age = data.getAge();
           mobile = data.getMobile();
           tv_education.setText(age+"·"+education);
-            edt_personal_introduce.setText(data.getPersonal_introduce());
+          edt_personal_introduce.setText(data.getPersonal_introduce());
           addResumeList = data.getExperience();
           experience = new GsonBuilder().create().toJson(addResumeList);
           myResumeAdapter = new MyResumeAdapter(mContext,addResumeList);
@@ -244,11 +247,11 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
 
     public void UpdateUI(int code,String msg){
         ToastUtils.showToast(mContext,msg);
-        if (code==1){
-            Intent intent = new Intent(mContext, HomeActivity.class);
-            intent.putExtra("currentItems","3");
-            startActivity(intent);
-        }
+//        if (code==1){
+//            Intent intent = new Intent(mContext, HomeActivity.class);
+//            intent.putExtra("currentItems","3");
+//            startActivity(intent);
+//        }
     }
 
 
@@ -276,5 +279,26 @@ public class MyResumeActivity extends BaseActivity implements MyResumeContract.V
 
         }
 
+    }
+
+    /**
+     * 是否添加基本信息
+     */
+    public void whetherBase(){
+        OkGo.<String>post(RequstUrl.URL.whetherBase)
+               .params("token",token).execute(new StringCallback() {
+            @Override
+            public void onSuccess(Response<String> response) {
+                Log.e("返回",response.body());
+                PublicCodeBean publicCodeBean = new GsonBuilder().create().fromJson(response.body(), PublicCodeBean.class);
+                if (publicCodeBean.getCode()==1){
+                    Intent intent = new Intent(mContext, AddWorkHistoryActivity.class);
+                    intent.putExtra("type", "add");
+                    startActivityForResult(intent, ADDWORKHISTORY);
+                }else {
+                    ToastUtils.showToast(mContext,publicCodeBean.getMsg());
+                }
+            }
+        });
     }
 }

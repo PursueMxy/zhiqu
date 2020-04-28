@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#F9F8FD"
     tools:context=".view.activity.QueryWagesActivity">
     <RelativeLayout
         android:background="@color/white"
@@ -35,26 +36,29 @@
         android:layout_marginRight="@dimen/dp_15"
         android:layout_marginTop="@dimen/dp_30"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_40">
+        android:layout_height="wrap_content">
         <TextView
+            android:layout_centerVertical="true"
             android:id="@+id/query_wages_tv_name"
             android:gravity="center"
             android:layout_marginLeft="@dimen/dp_32"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="姓名："
+            android:layout_height="wrap_content"
+            android:text="姓        名"
             android:textColor="#ff4e4d4d"
-            android:textSize="14sp"
+            android:textSize="@dimen/sp_14"
             />
         <EditText
             android:id="@+id/query_wages_edt_name"
             android:paddingLeft="@dimen/dp_10"
-            android:layout_marginLeft="@dimen/dp_101"
+            android:paddingTop="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_5"
+            android:layout_marginLeft="@dimen/dp_110"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/white"
             android:hint="请输入姓名"
-            android:textSize="14sp"
+            android:textSize="@dimen/sp_14"
             android:textColor="@color/ff000000"
             android:textColorHint="@color/ffb5b5b5"/>
     </RelativeLayout>
@@ -63,55 +67,62 @@
         android:layout_marginRight="@dimen/dp_15"
         android:layout_marginTop="@dimen/dp_30"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_40">
+        android:layout_height="wrap_content">
         <TextView
             android:id="@+id/query_wages_tv_card"
             android:gravity="center"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dp_32"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="身份证号："
+            android:layout_height="wrap_content"
+            android:text="身份证号"
             android:textColor="#ff4e4d4d"
-            android:textSize="14sp"
+            android:textSize="@dimen/sp_14"
             />
         <EditText
+            android:paddingTop="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_5"
             android:maxLength="18"
             android:id="@+id/query_wages_edt_card"
             android:paddingLeft="@dimen/dp_10"
-            android:layout_marginLeft="@dimen/dp_101"
+            android:layout_marginLeft="@dimen/dp_110"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/white"
             android:hint="请输入身份证号"
-            android:textSize="14sp"
+            android:textSize="@dimen/sp_14"
             android:textColor="@color/ff000000"
             android:textColorHint="@color/ffb5b5b5"/>
     </RelativeLayout>
 
     <RelativeLayout
+        android:visibility="gone"
         android:layout_marginRight="@dimen/dp_15"
         android:layout_marginTop="@dimen/dp_30"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_40">
+        android:layout_height="wrap_content">
         <TextView
             android:id="@+id/query_wages_tv_job_number"
             android:gravity="center"
             android:layout_marginLeft="@dimen/dp_32"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="工号："
+            android:layout_height="wrap_content"
+            android:text="工        号"
+            android:layout_centerVertical="true"
             android:textColor="#ff4e4d4d"
-            android:textSize="14sp"
+            android:textSize="@dimen/sp_14"
             />
         <EditText
+            android:paddingTop="@dimen/dp_5"
+            android:paddingBottom="@dimen/dp_5"
             android:id="@+id/query_wages_edt_job_number"
             android:paddingLeft="@dimen/dp_10"
-            android:layout_marginLeft="@dimen/dp_101"
+            android:layout_marginLeft="@dimen/dp_110"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/white"
             android:hint="请输入工号"
-            android:textSize="14sp"
+            android:textSize="@dimen/sp_14"
             android:textColor="@color/ff000000"
             android:textColorHint="@color/ffb5b5b5"/>
     </RelativeLayout>

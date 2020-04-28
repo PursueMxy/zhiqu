@@ -1,13 +1,13 @@
 package com.icarexm.zhiquwang.view.activity;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.google.gson.GsonBuilder;
 import com.icarexm.zhiquwang.R;
 import com.icarexm.zhiquwang.bean.MyBankBean;
+import com.icarexm.zhiquwang.bean.PublicCodeBean;
 import com.icarexm.zhiquwang.custview.CustomProgressDialog;
 import com.icarexm.zhiquwang.custview.NoScrollListView;
 import com.icarexm.zhiquwang.utils.ButtonUtils;
@@ -66,6 +67,28 @@ public class BankListActivity extends BaseActivity {
     private void InitUI() {
         myAdapter = new MyAdapter();
         lv_banks.setAdapter(myAdapter);
+        lv_banks.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                new AlertDialog.Builder(BankListActivity.this)
+                        .setTitle("确认删除银行卡")
+                        .setMessage("卡号:"+bankList.get(position).getBank_num())
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                delBank(bankList.get(position).getBank_id());
+                            }
+                        })
+                        .show();
+                return true;
+            }
+        });
         lv_banks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -94,6 +117,23 @@ public class BankListActivity extends BaseActivity {
                             ToastUtils.showToast(mContext,myBankBean.getMsg());
                             startActivity(new Intent(mContext,LoginActivity.class));
                             finish();
+                        }
+                    }
+                });
+    }
+
+    private void  delBank(int bank_id){
+        OkGo.<String>post(RequstUrl.URL.delBank)
+                .params("token",token)
+                .params("bank_id",bank_id)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        PublicCodeBean publicCodeBean = new GsonBuilder().create().fromJson(response.body(), PublicCodeBean.class);
+                        if (publicCodeBean.getCode()==1){
+                            InitData();
+                        }else {
+                            ToastUtils.showToast(BankListActivity.this,publicCodeBean.getMsg());
                         }
                     }
                 });

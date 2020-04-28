@@ -18,11 +18,14 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
@@ -161,7 +164,6 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
         token = share.getString("token", "");
         ButterKnife.bind(this);
         InitUI();
-        LoadingDialogShow();
         InitDataUrl();
         recruitDetailPresenter = new RecruitDetailPresenter(this);
         recruitDetailPresenter.GetJobDetail(token,job_id);
@@ -352,6 +354,7 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
                 return false;
             }
         });
+
     }
 
     //转发微信弹出窗
@@ -511,6 +514,11 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         alertDialog = builder.setView(dialog_callphone)
                 .create();
+        Window window =  alertDialog.getWindow();
+        WindowManager.LayoutParams params = window.getAttributes();
+        params.width = WindowManager.LayoutParams.MATCH_PARENT;
+        params.gravity = Gravity.CENTER;// 显示在底部
+        window.setAttributes(params);
         alertDialog.show();
     }
 
@@ -529,7 +537,6 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
 
    //返回数据跟新UI
     public void UpdateUI(int code, String msg, JobDetailBean.DataBean dataBean){
-        LoadingDialogClose();
         if (code==1){
             latitude = dataBean.getLatitude();
             longitude = dataBean.getLongitude();
@@ -565,6 +572,7 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
             indicatorAdapter.refreshData( img_arr, CurrentItem, have_video);
             indicatorAdapter.refreshData(CurrentItem);
             indicatorAdapter.notifyDataSetChanged();
+
             List<JobDetailBean.DataBean.LabelArrBean> label_arr = dataBean.getLabel_arr();
             ArrayList<String> label = new ArrayList<>();
             try {
@@ -746,29 +754,5 @@ public class RecruitDetailActivity extends BaseActivity implements RecruitDetail
         return bitmap;
     }
 
-    //显示刷新数据
-    public void LoadingDialogShow(){
-        try {
 
-            if (progressDialog == null) {
-                progressDialog = CustomProgressDialog.createDialog(this);
-            }
-            progressDialog.show();
-        }catch (Exception e){
-
-        }
-    }
-
-    //关闭刷新
-    public void LoadingDialogClose(){
-        try {
-            if (progressDialog != null){
-                progressDialog.dismiss();
-                progressDialog = null;
-            }
-        }catch (Exception e){
-
-        }
-
-    }
 }
